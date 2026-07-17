@@ -268,7 +268,8 @@
       "ESP": { name: "Spain", color: "#C53030" },
       "SWE": { name: "Sweden", color: "#3182CE" },
       "CHE": { name: "Switzerland", color: "#C53030" },
-      "TUR": { name: "Türkiye", color: "#C53030" }
+      "TUR": { name: "Türkiye", color: "#C53030" },
+      "CUW": { name: "Curaçao", color: "#002B7F" }
     };
 
     // --- Mock Match Schedule & Results ---
@@ -486,7 +487,13 @@
     }
 
     function getWCCodeFromMap(name, id) {
-      return numericToAlpha3[id] || null;
+      const alpha3 = numericToAlpha3[id] || null;
+      if (alpha3 === "GBR") {
+        // Map United Kingdom (GBR) to England (ENG) initially.
+        // Scotland (SCO) participates in logic and can take it by defeating ENG.
+        return "ENG";
+      }
+      return alpha3;
     }
 
     function getCountryColor(name, id) {
@@ -761,7 +768,7 @@
       "724": "ESP", "736": "SDN", "752": "SWE", "756": "CHE", "762": "TJK",
       "764": "THA", "788": "TUN", "792": "TUR", "800": "UGA", "804": "UKR",
       "807": "MKD", "818": "EGY", "826": "GBR", "840": "USA", "858": "URY",
-      "860": "UZB", "862": "VEN", "887": "YEM", "894": "ZMB", "716": "ZWE"
+      "860": "UZB", "862": "VEN", "887": "YEM", "894": "ZMB", "716": "ZWE", "531": "CUW"
     };
   </script>
 </body>
