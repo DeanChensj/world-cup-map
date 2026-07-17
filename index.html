@@ -221,119 +221,10 @@
     // --- Data Definitions ---
 
     // ISO A3 codes for 48 teams of 2026 World Cup with high contrast neon color options
-    const teamMetadata = {
-      "CAN": { name: "Canada", color: "#E53E3E" },
-      "MEX": { name: "Mexico", color: "#319795" },
-      "USA": { name: "United States", color: "#3182CE" },
-      "AUS": { name: "Australia", color: "#D69E2E" },
-      "IRQ": { name: "Iraq", color: "#2B6CB0" },
-      "IRN": { name: "Iran", color: "#38A169" },
-      "JPN": { name: "Japan", color: "#3b4a5e" },
-      "JOR": { name: "Jordan", color: "#C53030" },
-      "KOR": { name: "South Korea", color: "#DD6B20" },
-      "QAT": { name: "Qatar", color: "#7B341E" },
-      "SAU": { name: "Saudi Arabia", color: "#22543D" },
-      "UZB": { name: "Uzbekistan", color: "#2B6CB0" },
-      "DZA": { name: "Algeria", color: "#276749" },
-      "CPV": { name: "Cabo Verde", color: "#2C5282" },
-      "COD": { name: "Congo DR", color: "#2B6CB0" },
-      "CIV": { name: "Côte d'Ivoire", color: "#DD6B20" },
-      "EGY": { name: "Egypt", color: "#9B2C2C" },
-      "GHA": { name: "Ghana", color: "#D69E2E" },
-      "MAR": { name: "Morocco", color: "#9B2C2C" },
-      "SEN": { name: "Senegal", color: "#22543D" },
-      "ZAF": { name: "South Africa", color: "#276749" },
-      "TUN": { name: "Tunisia", color: "#C53030" },
-      "HTI": { name: "Haiti", color: "#2C5282" },
-      "PAN": { name: "Panama", color: "#C53030" },
-      "ARG": { name: "Argentina", color: "#4FD1C5" }, // Cyber Teal
-      "BRA": { name: "Brazil", color: "#ECC94B" }, // Yellow
-      "COL": { name: "Colombia", color: "#ECC94B" },
-      "ECU": { name: "Ecuador", color: "#D69E2E" },
-      "PRY": { name: "Paraguay", color: "#C53030" },
-      "URY": { name: "Uruguay", color: "#4299E1" },
-      "NZL": { name: "New Zealand", color: "#2d3748" },
-      "AUT": { name: "Austria", color: "#C53030" },
-      "BEL": { name: "Belgium", color: "#9B2C2C" },
-      "BIH": { name: "Bosnia & Herz.", color: "#2B6CB0" },
-      "HRV": { name: "Croatia", color: "#E53E3E" },
-      "CZE": { name: "Czechia", color: "#2B6CB0" },
-      "ENG": { name: "England", color: "#EDF2F7" },
-      "FRA": { name: "France", color: "#2B6CB0" },
-      "DEU": { name: "Germany", color: "#445063" },
-      "NLD": { name: "Netherlands", color: "#ED8936" }, // Orange
-      "NOR": { name: "Norway", color: "#C53030" },
-      "PRT": { name: "Portugal", color: "#276749" },
-      "SCO": { name: "Scotland", color: "#2B6CB0" },
-      "ESP": { name: "Spain", color: "#C53030" },
-      "SWE": { name: "Sweden", color: "#3182CE" },
-      "CHE": { name: "Switzerland", color: "#C53030" },
-      "TUR": { name: "Türkiye", color: "#C53030" },
-      "CUW": { name: "Curaçao", color: "#002B7F" }
-    };
+    let teamMetadata = {};
+    let matches = [];
 
-    // --- Mock Match Schedule & Results ---
-    const matches = [
-      // Day 1: June 11
-      { date: "2026-06-11", home: "USA", away: "SEN", winner: "USA", score: "2-1", stage: "Group Stage" },
-      { date: "2026-06-11", home: "CAN", away: "CIV", winner: "CAN", score: "1-0", stage: "Group Stage" },
-      // Day 2: June 12
-      { date: "2026-06-12", home: "MEX", away: "SWE", winner: "SWE", score: "0-2", stage: "Group Stage" },
-      { date: "2026-06-12", home: "ARG", away: "AUS", winner: "ARG", score: "3-0", stage: "Group Stage" },
-      // Day 3: June 13
-      { date: "2026-06-13", home: "BRA", away: "JPN", winner: "BRA", score: "2-0", stage: "Group Stage" },
-      { date: "2026-06-13", home: "FRA", away: "MAR", winner: "FRA", score: "2-1", stage: "Group Stage" },
-      // Day 4: June 14
-      { date: "2026-06-14", home: "DEU", away: "EGY", winner: "DEU", score: "3-1", stage: "Group Stage" },
-      { date: "2026-06-14", home: "ESP", away: "SAU", winner: "ESP", score: "4-0", stage: "Group Stage" },
-      // Day 5: June 15
-      { date: "2026-06-15", home: "ENG", away: "TUN", winner: "ENG", score: "2-0", stage: "Group Stage" },
-      { date: "2026-06-15", home: "NLD", away: "ECU", winner: "NLD", score: "1-0", stage: "Group Stage" },
-      // Day 6: June 16
-      { date: "2026-06-16", home: "PRT", away: "KOR", winner: "PRT", score: "2-1", stage: "Group Stage" },
-      { date: "2026-06-16", home: "URY", away: "IRQ", winner: "URY", score: "3-0", stage: "Group Stage" },
-      // Day 7: June 17
-      { date: "2026-06-17", home: "COL", away: "UZB", winner: "COL", score: "2-0", stage: "Group Stage" },
-      { date: "2026-06-17", home: "NOR", away: "ZAF", winner: "NOR", score: "1-0", stage: "Group Stage" },
-      // Day 8: June 18
-      { date: "2026-06-18", home: "BEL", away: "HTI", winner: "BEL", score: "4-1", stage: "Group Stage" },
-      { date: "2026-06-18", home: "HRV", away: "PAN", winner: "HRV", score: "2-0", stage: "Group Stage" },
-      
-      // Day 9: June 19
-      { date: "2026-06-19", home: "USA", away: "CAN", winner: "USA", score: "2-1", stage: "Group Stage" },
-      { date: "2026-06-19", home: "ARG", away: "SWE", winner: "ARG", score: "1-0", stage: "Group Stage" },
-      // Day 10: June 20
-      { date: "2026-06-20", home: "BRA", away: "FRA", winner: "BRA", score: "3-2", stage: "Group Stage" },
-      { date: "2026-06-20", home: "ESP", away: "DEU", winner: "ESP", score: "2-1", stage: "Group Stage" },
-      // Day 11: June 21
-      { date: "2026-06-21", home: "ENG", away: "NLD", winner: "ENG", score: "1-0", stage: "Group Stage" },
-      { date: "2026-06-21", home: "PRT", away: "URY", winner: "PRT", score: "2-1", stage: "Group Stage" },
-      // Day 12: June 22
-      { date: "2026-06-22", home: "COL", away: "NOR", winner: "COL", score: "3-1", stage: "Group Stage" },
-      { date: "2026-06-22", home: "BEL", away: "HRV", winner: "BEL", score: "2-1", stage: "Group Stage" },
-
-      // --- Knockouts: Round of 32 ---
-      { date: "2026-06-28", home: "USA", away: "COL", winner: "USA", score: "2-1", stage: "Round of 32" },
-      { date: "2026-06-29", home: "ARG", away: "BEL", winner: "ARG", score: "3-1", stage: "Round of 32" },
-      { date: "2026-06-30", home: "BRA", away: "PRT", winner: "BRA", score: "1-0", stage: "Round of 32" },
-      { date: "2026-07-01", home: "ESP", away: "ENG", winner: "ESP", score: "3-2", stage: "Round of 32" },
-
-      // --- Round of 16 ---
-      { date: "2026-07-05", home: "USA", away: "BRA", winner: "BRA", score: "1-2", stage: "Round of 16" },
-      { date: "2026-07-06", home: "ARG", away: "ESP", winner: "ARG", score: "2-1", stage: "Round of 16" },
-
-      // --- Quarterfinals ---
-      { date: "2026-07-10", home: "BRA", away: "ARG", winner: "ARG", score: "3-4", stage: "Quarterfinal" },
-
-      // --- Semifinals ---
-      { date: "2026-07-11", home: "JPN", away: "AUS", winner: "JPN", score: "2-0", stage: "Group Stage (Mock)" },
-      { date: "2026-07-14", home: "ARG", away: "JPN", winner: "ARG", score: "2-0", stage: "Semifinal" },
-
-      // --- Final ---
-      { date: "2026-07-19", home: "ARG", away: "ESP", winner: "ARG", score: "3-1", stage: "Final" }
-    ];
-
-    const dates = Array.from(new Set(matches.map(m => m.date))).sort();
+    let dates = [];
     let currentDateIndex = 0;
     let playbackInterval = null;
     let worldData = null;
@@ -358,7 +249,7 @@
       return `<img src="https://flagcdn.com/20x15/${code2}.png" class="w-5 h-3.5 object-cover rounded-sm border border-console-border/40 shadow-sm" alt="${code}" />`;
     }
 
-    let originalTeams = Object.keys(teamMetadata);
+    let originalTeams = [];
     
     // Lineage Tracking: originalCountry -> [owner1, owner2, ...]
     let countryLineage = {};
@@ -466,8 +357,16 @@
     svg.call(zoom);
 
     // Initialise and render Map elements
-    d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(data => {
-      worldData = topojson.feature(data, data.objects.countries);
+    Promise.all([
+      d3.json("data/world_cup_data.json"),
+      d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json")
+    ]).then(([wcData, mapData]) => {
+      teamMetadata = wcData.teams;
+      matches = wcData.matches;
+      dates = Array.from(new Set(matches.map(m => m.date))).sort();
+      originalTeams = Object.keys(teamMetadata);
+
+      worldData = topojson.feature(mapData, mapData.objects.countries);
       
       // Filter out Antarctica (id "010") to make the rest of the world render much larger
       worldData.features = worldData.features.filter(d => d.id !== "010");
