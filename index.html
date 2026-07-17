@@ -1,100 +1,203 @@
+<!-- Reading this as: Interactive game simulator dashboard for sports/map enthusiasts, with a dark-tech / developer-console language, leaning toward custom monospace + thin borders + Phosphor Icons + tactical high-contrast green accents. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>World Cup Conquest Map 2026</title>
+  <title>2026 World Cup Conquest Simulator</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- D3.js and TopoJSON CDN -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://unpkg.com/topojson@3"></script>
+  <!-- Phosphor Icons CDN -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  
+  <!-- Font and Custom Styling -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;700&family=Geist:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Geist', 'sans-serif'],
+            mono: ['Geist Mono', 'monospace'],
+          },
+          colors: {
+            console: {
+              bg: '#0a0b0d',
+              panel: '#111317',
+              border: '#1f242e',
+              text: '#e2e8f0',
+              accent: '#00ff66', // Tactical Green
+              accentHover: '#00d655',
+              dimText: '#6272a4',
+              red: '#ff5555'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
   <style>
-    /* Styling for the map projection container */
+    body {
+      background-color: #0a0b0d;
+      font-family: 'Geist', sans-serif;
+    }
     .country {
-      stroke: #ffffff;
+      stroke: #161a22;
       stroke-width: 0.5px;
-      transition: fill 0.3s ease;
-      cursor: pointer;
+      transition: fill 0.4s cubic-bezier(0.16, 1, 0.3, 1), stroke-width 0.2s ease;
+      cursor: crosshair;
     }
     .country:hover {
-      stroke: #000000;
-      stroke-width: 1px;
+      stroke: #00ff66;
+      stroke-width: 1.2px;
+    }
+    .graticule {
+      fill: none;
+      stroke: #1b202b;
+      stroke-width: 0.5px;
+      pointer-events: none;
+    }
+    /* Scrollbar style */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0b0d;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1f242e;
+      border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00ff66;
     }
   </style>
 </head>
-<body class="bg-gray-900 text-white font-sans min-h-screen flex flex-col">
+<body class="text-console-text min-h-screen flex flex-col font-sans select-none antialiased">
 
-  <!-- Header -->
-  <header class="bg-gray-800 p-4 border-b border-gray-700 flex justify-between items-center shadow-lg">
-    <div>
-      <h1 class="text-2xl font-bold tracking-wider text-yellow-400">🏆 2026 World Cup Conquest Map</h1>
-      <p class="text-xs text-gray-400">If A wins, A annexes B's current territory. Watch the map change over time!</p>
+  <!-- Header (Max Height Cap: 64px) -->
+  <header class="h-16 bg-console-panel border-b border-console-border px-6 flex items-center justify-between shadow-sm z-10">
+    <div class="flex items-center space-x-3">
+      <div class="w-3 h-3 bg-console-accent rounded-sm animate-pulse"></div>
+      <span class="font-mono text-sm tracking-wider font-bold uppercase text-console-accent">Conquest.io // World Cup 2026</span>
     </div>
-    <div class="flex items-center space-x-4">
-      <div id="current-date-badge" class="bg-gray-700 px-4 py-2 rounded-lg font-mono font-bold text-yellow-300">
-        Date: 2026-06-11
+    
+    <!-- Central Active Date -->
+    <div class="flex items-center space-x-2">
+      <span class="text-[10px] uppercase font-mono text-console-dimText">Status: Simulating</span>
+      <div id="current-date-badge" class="bg-console-bg border border-console-border px-3 py-1 font-mono text-xs font-bold text-console-accent tracking-widest rounded">
+        2026-06-11
       </div>
     </div>
   </header>
 
-  <!-- Main Content Layout -->
-  <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
+  <!-- Dashboard Workspace Grid -->
+  <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
     
-    <!-- Sidebar: Stats and Logs -->
-    <aside class="w-full md:w-80 bg-gray-800 border-r border-gray-700 flex flex-col h-64 md:h-auto overflow-hidden">
-      <!-- Leaderboard Section -->
-      <div class="p-4 border-b border-gray-700 flex-1 flex flex-col overflow-hidden">
-        <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-3">Territory Leaderboard</h2>
-        <div id="leaderboard" class="space-y-2 overflow-y-auto flex-1 pr-1 text-xs">
-          <!-- Leaderboard items injected here -->
+    <!-- Left Sidebar: Leaderboard & Logs (Console Panel layout) -->
+    <aside class="w-full lg:w-96 bg-console-panel border-b lg:border-b-0 lg:border-r border-console-border flex flex-col h-[450px] lg:h-auto overflow-hidden">
+      
+      <!-- Section 1: Leaderboard -->
+      <div class="flex-1 p-5 flex flex-col overflow-hidden border-b border-console-border">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-[10px] font-mono uppercase tracking-widest text-console-dimText flex items-center space-x-1.5">
+            <i class="ph-bold ph-globe"></i>
+            <span>Territorial Holdings</span>
+          </h2>
+          <span id="active-factions" class="text-[10px] font-mono text-console-accent bg-console-accent/10 px-1.5 py-0.5 rounded">48 Factions</span>
+        </div>
+        
+        <div id="leaderboard" class="space-y-1.5 overflow-y-auto flex-1 pr-1 font-mono text-xs">
+          <!-- Dynamically populated -->
         </div>
       </div>
 
-      <!-- Recent Annexations -->
-      <div class="p-4 border-t border-gray-700 h-1/2 flex flex-col overflow-hidden">
-        <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-3">Conquest History</h2>
-        <div id="conquest-log" class="space-y-1 overflow-y-auto flex-1 text-xs font-mono text-gray-300">
-          <!-- Logs injected here -->
+      <!-- Section 2: Logs styled as Terminal Feed -->
+      <div class="h-48 p-5 flex flex-col overflow-hidden bg-console-bg/50">
+        <h2 class="text-[10px] font-mono uppercase tracking-widest text-console-dimText mb-3 flex items-center space-x-1.5">
+          <i class="ph-bold ph-terminal"></i>
+          <span>Live Feed [Conquest log]</span>
+        </h2>
+        <div id="conquest-log" class="space-y-2 overflow-y-auto flex-1 text-[11px] font-mono text-console-dimText leading-normal pr-1">
+          <!-- Terminal logs injected here -->
         </div>
       </div>
+
     </aside>
 
-    <!-- Map Area -->
-    <main class="flex-1 bg-gray-950 relative flex items-center justify-center p-4">
-      <div id="map-container" class="w-full h-full min-h-[400px] flex items-center justify-center relative">
-        <svg id="world-map" class="w-full h-full max-h-[85vh]"></svg>
+    <!-- Main Map Visualization Section -->
+    <main class="flex-1 bg-console-bg relative flex items-center justify-center p-6 overflow-hidden">
+      <!-- Interactive Grid Background Overlay -->
+      <div class="absolute inset-0 bg-[linear-gradient(to_right,#161a22_1px,transparent_1px),linear-gradient(to_bottom,#161a22_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30 pointer-events-none"></div>
+
+      <div id="map-container" class="w-full h-full flex items-center justify-center relative">
+        <svg id="world-map" class="w-full h-full max-h-[80vh] drop-shadow-2xl"></svg>
         
-        <!-- Tooltip -->
-        <div id="tooltip" class="absolute hidden bg-gray-900 border border-gray-700 text-white text-xs rounded p-2 pointer-events-none shadow-xl z-50"></div>
+        <!-- Legend Overlay -->
+        <div class="absolute bottom-4 left-4 bg-console-panel/90 border border-console-border p-3 rounded font-mono text-[10px] text-console-dimText space-y-1.5 backdrop-blur-md">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 bg-console-accent/25 border border-console-accent rounded-sm"></span>
+            <span class="text-console-text">Active Factions</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 bg-[#1e2430] border border-console-border rounded-sm"></span>
+            <span>Unoccupied / Eliminated</span>
+          </div>
+        </div>
+
+        <!-- Custom Tooltip (Anti-slop style) -->
+        <div id="tooltip" class="absolute hidden bg-console-panel border border-console-border text-console-text text-xs rounded-sm p-3 pointer-events-none shadow-2xl z-50 font-mono space-y-1 backdrop-blur-md">
+          <!-- Managed via JS -->
+        </div>
       </div>
     </main>
 
   </div>
 
-  <!-- Bottom Timeline Controller -->
-  <footer class="bg-gray-800 border-t border-gray-700 p-6 shadow-2xl">
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+  <!-- Footer Navigation / Timeline Panel -->
+  <footer class="bg-console-panel border-t border-console-border p-5 z-10">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-8">
       
-      <!-- Playback Controls -->
-      <div class="flex items-center space-x-3">
-        <button id="btn-prev" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded-lg text-sm font-bold transition">◀ Prev Day</button>
-        <button id="btn-play" class="bg-yellow-500 hover:bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg text-sm font-extrabold shadow-md transition">▶ Play</button>
-        <button id="btn-next" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded-lg text-sm font-bold transition">Next Day ▶</button>
-        <button id="btn-reset" class="text-gray-400 hover:text-white px-2 py-1 text-xs underline">Reset</button>
+      <!-- Tactical Media Center -->
+      <div class="flex items-center space-x-2">
+        <button id="btn-prev" title="Previous Day" class="w-9 h-9 bg-console-bg border border-console-border hover:border-console-accent text-console-text hover:text-console-accent flex items-center justify-center rounded-sm transition active:scale-95">
+          <i class="ph-bold ph-caret-left text-sm"></i>
+        </button>
+        <button id="btn-play" title="Auto Play" class="px-5 h-9 bg-console-accent hover:bg-console-accentHover text-console-bg font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 rounded-sm transition active:scale-95">
+          <i id="play-icon" class="ph-fill ph-play text-xs"></i>
+          <span id="play-text">Play</span>
+        </button>
+        <button id="btn-next" title="Next Day" class="w-9 h-9 bg-console-bg border border-console-border hover:border-console-accent text-console-text hover:text-console-accent flex items-center justify-center rounded-sm transition active:scale-95">
+          <i class="ph-bold ph-caret-right text-sm"></i>
+        </button>
+        <button id="btn-reset" title="Reset Timeline" class="w-9 h-9 bg-console-bg border border-console-border hover:border-console-red text-console-dimText hover:text-console-red flex items-center justify-center rounded-sm transition active:scale-95">
+          <i class="ph-bold ph-arrow-counter-clockwise text-sm"></i>
+        </button>
       </div>
 
-      <!-- Slider Timeline -->
-      <div class="flex-1 w-full md:mx-8 flex items-center space-x-4">
-        <span class="text-xs text-gray-400 font-mono" id="timeline-start">June 11</span>
-        <input type="range" id="timeline-slider" class="flex-1 accent-yellow-500 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer" min="0" max="0" value="0">
-        <span class="text-xs text-gray-400 font-mono" id="timeline-end">July 19</span>
+      <!-- Linear Timeline Scrub Slider -->
+      <div class="flex-1 w-full flex items-center space-x-4">
+        <span class="text-[10px] text-console-dimText font-mono" id="timeline-start">JUN 11</span>
+        
+        <div class="flex-1 relative flex items-center">
+          <input type="range" id="timeline-slider" class="w-full accent-console-accent h-1 bg-console-border rounded-lg appearance-none cursor-pointer hover:bg-console-border/80 transition" min="0" max="0" value="0">
+        </div>
+        
+        <span class="text-[10px] text-console-dimText font-mono" id="timeline-end">JUL 19</span>
       </div>
 
-      <!-- Quick Legend Info -->
-      <div class="text-xs text-gray-400 flex items-center space-x-2">
-        <span class="inline-block w-3 h-3 bg-gray-700 border border-gray-600 rounded"></span>
-        <span>Non-participating / Eliminated</span>
+      <!-- Simulation Rate Info -->
+      <div class="text-[10px] text-console-dimText font-mono flex items-center space-x-2">
+        <i class="ph-bold ph-activity text-console-accent animate-pulse"></i>
+        <span>Tick Rate: 1.5s / Cycle</span>
       </div>
 
     </div>
@@ -104,70 +207,58 @@
   <script>
     // --- Data Definitions ---
 
-    // ISO A3 codes for 48 teams of 2026 World Cup
+    // ISO A3 codes for 48 teams of 2026 World Cup with high contrast neon color options
     const teamMetadata = {
-      "CAN": { name: "Canada", color: "#FF0000", textColor: "#FFFFFF" },
-      "MEX": { name: "Mexico", color: "#006847", textColor: "#FFFFFF" },
-      "USA": { name: "United States", color: "#0A3161", textColor: "#FFFFFF" },
-      "AUS": { name: "Australia", color: "#FFCD00", textColor: "#00843D" },
-      "IRQ": { name: "Iraq", color: "#007A3D", textColor: "#FFFFFF" },
-      "IRN": { name: "Iran", color: "#239B56", textColor: "#FFFFFF" },
-      "JPN": { name: "Japan", color: "#000080", textColor: "#FFFFFF" },
-      "JOR": { name: "Jordan", color: "#C0392B", textColor: "#FFFFFF" },
-      "KOR": { name: "South Korea", color: "#D35400", textColor: "#FFFFFF" },
-      "QAT": { name: "Qatar", color: "#800020", textColor: "#FFFFFF" },
-      "SAU": { name: "Saudi Arabia", color: "#006C35", textColor: "#FFFFFF" },
-      "UZB": { name: "Uzbekistan", color: "#1F618D", textColor: "#FFFFFF" },
-      "DZA": { name: "Algeria", color: "#006633", textColor: "#FFFFFF" },
-      "CPV": { name: "Cabo Verde", color: "#002A7E", textColor: "#FFFFFF" },
-      "COD": { name: "Congo DR", color: "#007FFF", textColor: "#FFFFFF" },
-      "CIV": { name: "Côte d'Ivoire", color: "#F77F00", textColor: "#FFFFFF" },
-      "EGY": { name: "Egypt", color: "#C09300", textColor: "#000000" },
-      "GHA": { name: "Ghana", color: "#F4D03F", textColor: "#000000" },
-      "MAR": { name: "Morocco", color: "#C1272D", textColor: "#006233" },
-      "SEN": { name: "Senegal", color: "#00853F", textColor: "#FFFFFF" },
-      "ZAF": { name: "South Africa", color: "#007A4D", textColor: "#FFFFFF" },
-      "TUN": { name: "Tunisia", color: "#E74C3C", textColor: "#FFFFFF" },
-      "HTI": { name: "Haiti", color: "#00209F", textColor: "#FFFFFF" },
-      "PAN": { name: "Panama", color: "#DA291C", textColor: "#FFFFFF" },
-      "ARG": { name: "Argentina", color: "#74ACDF", textColor: "#FFFFFF" },
-      "BRA": { name: "Brazil", color: "#FFDF00", textColor: "#002776" },
-      "COL": { name: "Colombia", color: "#FCD116", textColor: "#003893" },
-      "ECU": { name: "Ecuador", color: "#FFDD00", textColor: "#0033A0" },
-      "PRY": { name: "Paraguay", color: "#D52B1E", textColor: "#FFFFFF" },
-      "URY": { name: "Uruguay", color: "#0081C6", textColor: "#FFFFFF" },
-      "NZL": { name: "New Zealand", color: "#000000", textColor: "#FFFFFF" },
-      "AUT": { name: "Austria", color: "#ED2939", textColor: "#FFFFFF" },
-      "BEL": { name: "Belgium", color: "#E30A17", textColor: "#FFFFFF" },
-      "BIH": { name: "Bosnia & Herz.", color: "#002F6C", textColor: "#FFFFFF" },
-      "HRV": { name: "Croatia", color: "#FF0000", textColor: "#FFFFFF" },
-      "CZE": { name: "Czechia", color: "#11457E", textColor: "#FFFFFF" },
-      "ENG": { name: "England", color: "#FFFFFF", textColor: "#E2001A" },
-      "FRA": { name: "France", color: "#002395", textColor: "#FFFFFF" },
-      "DEU": { name: "Germany", color: "#000000", textColor: "#DD0000" },
-      "NLD": { name: "Netherlands", color: "#214488", textColor: "#FFFFFF" }, // Usually orange, let's use orange
-      "NOR": { name: "Norway", color: "#EF2B2D", textColor: "#FFFFFF" },
-      "PRT": { name: "Portugal", color: "#006600", textColor: "#FF0000" },
-      "SCO": { name: "Scotland", color: "#005EB8", textColor: "#FFFFFF" },
-      "ESP": { name: "Spain", color: "#C60B1E", textColor: "#F1BF00" },
-      "SWE": { name: "Sweden", color: "#006AA7", textColor: "#FECC00" },
-      "CHE": { name: "Switzerland", color: "#D52B1E", textColor: "#FFFFFF" },
-      "TUR": { name: "Türkiye", color: "#E30A17", textColor: "#FFFFFF" }
+      "CAN": { name: "Canada", color: "#E53E3E" },
+      "MEX": { name: "Mexico", color: "#319795" },
+      "USA": { name: "United States", color: "#3182CE" },
+      "AUS": { name: "Australia", color: "#D69E2E" },
+      "IRQ": { name: "Iraq", color: "#2B6CB0" },
+      "IRN": { name: "Iran", color: "#38A169" },
+      "JPN": { name: "Japan", color: "#4A5568" },
+      "JOR": { name: "Jordan", color: "#C53030" },
+      "KOR": { name: "South Korea", color: "#DD6B20" },
+      "QAT": { name: "Qatar", color: "#7B341E" },
+      "SAU": { name: "Saudi Arabia", color: "#22543D" },
+      "UZB": { name: "Uzbekistan", color: "#2B6CB0" },
+      "DZA": { name: "Algeria", color: "#276749" },
+      "CPV": { name: "Cabo Verde", color: "#2C5282" },
+      "COD": { name: "Congo DR", color: "#2B6CB0" },
+      "CIV": { name: "Côte d'Ivoire", color: "#DD6B20" },
+      "EGY": { name: "Egypt", color: "#9B2C2C" },
+      "GHA": { name: "Ghana", color: "#D69E2E" },
+      "MAR": { name: "Morocco", color: "#9B2C2C" },
+      "SEN": { name: "Senegal", color: "#22543D" },
+      "ZAF": { name: "South Africa", color: "#276749" },
+      "TUN": { name: "Tunisia", color: "#C53030" },
+      "HTI": { name: "Haiti", color: "#2C5282" },
+      "PAN": { name: "Panama", color: "#C53030" },
+      "ARG": { name: "Argentina", color: "#4FD1C5" }, // Cyber Teal
+      "BRA": { name: "Brazil", color: "#ECC94B" }, // Yellow
+      "COL": { name: "Colombia", color: "#ECC94B" },
+      "ECU": { name: "Ecuador", color: "#D69E2E" },
+      "PRY": { name: "Paraguay", color: "#C53030" },
+      "URY": { name: "Uruguay", color: "#4299E1" },
+      "NZL": { name: "New Zealand", color: "#1A202C" },
+      "AUT": { name: "Austria", color: "#C53030" },
+      "BEL": { name: "Belgium", color: "#9B2C2C" },
+      "BIH": { name: "Bosnia & Herz.", color: "#2B6CB0" },
+      "HRV": { name: "Croatia", color: "#E53E3E" },
+      "CZE": { name: "Czechia", color: "#2B6CB0" },
+      "ENG": { name: "England", color: "#EDF2F7" },
+      "FRA": { name: "France", color: "#2B6CB0" },
+      "DEU": { name: "Germany", color: "#2D3748" },
+      "NLD": { name: "Netherlands", color: "#ED8936" }, // Orange
+      "NOR": { name: "Norway", color: "#C53030" },
+      "PRT": { name: "Portugal", color: "#276749" },
+      "SCO": { name: "Scotland", color: "#2B6CB0" },
+      "ESP": { name: "Spain", color: "#C53030" },
+      "SWE": { name: "Sweden", color: "#3182CE" },
+      "CHE": { name: "Switzerland", color: "#C53030" },
+      "TUR": { name: "Türkiye", color: "#C53030" }
     };
 
-    // Override some team colors for better visuals
-    teamMetadata["NLD"].color = "#FF7F00"; // Orange
-    teamMetadata["ENG"].color = "#FFFFFF"; // Red/White (needs stroke)
-    teamMetadata["ENG"].stroke = "#E2001A";
-    
-    // ISO codes translation for maps (GBR contains ENG, SCO)
-    // We will dynamically map ENG and SCO to GBR in the map visualization based on who is dominant
-    // For general mapping, standard map GBR will represent either ENG or SCO
-    
     // --- Mock Match Schedule & Results ---
-    // Let's create a realistic progression of the 2026 World Cup from June 11 to July 19.
-    // Group stage: June 11 - June 27 (Draws are possible but ignore draws. Wins cause annexation)
-    // Knockouts: June 28 - July 19 (Every match has a winner)
     const matches = [
       // Day 1: June 11
       { date: "2026-06-11", home: "USA", away: "SEN", winner: "USA", score: "2-1", stage: "Group Stage" },
@@ -194,66 +285,48 @@
       { date: "2026-06-18", home: "BEL", away: "HTI", winner: "BEL", score: "4-1", stage: "Group Stage" },
       { date: "2026-06-18", home: "HRV", away: "PAN", winner: "HRV", score: "2-0", stage: "Group Stage" },
       
-      // Day 9: June 19 (Second round of games or simulated group final clashes)
-      { date: "2026-06-19", home: "USA", away: "CAN", winner: "USA", score: "2-1", stage: "Group Stage" }, // USA annexes CAN (and whatever CAN owned)
-      { date: "2026-06-19", home: "ARG", away: "SWE", winner: "ARG", score: "1-0", stage: "Group Stage" }, // ARG annexes SWE (and MEX territory SWE took)
+      // Day 9: June 19
+      { date: "2026-06-19", home: "USA", away: "CAN", winner: "USA", score: "2-1", stage: "Group Stage" },
+      { date: "2026-06-19", home: "ARG", away: "SWE", winner: "ARG", score: "1-0", stage: "Group Stage" },
       // Day 10: June 20
-      { date: "2026-06-20", home: "BRA", away: "FRA", winner: "BRA", score: "3-2", stage: "Group Stage" }, // BRA annexes FRA (and MAR)
-      { date: "2026-06-20", home: "ESP", away: "DEU", winner: "ESP", score: "2-1", stage: "Group Stage" }, // ESP annexes DEU (and EGY)
+      { date: "2026-06-20", home: "BRA", away: "FRA", winner: "BRA", score: "3-2", stage: "Group Stage" },
+      { date: "2026-06-20", home: "ESP", away: "DEU", winner: "ESP", score: "2-1", stage: "Group Stage" },
       // Day 11: June 21
-      { date: "2026-06-21", home: "ENG", away: "NLD", winner: "ENG", score: "1-0", stage: "Group Stage" }, // ENG annexes NLD (and ECU)
-      { date: "2026-06-21", home: "PRT", away: "URY", winner: "PRT", score: "2-2", winner: "PRT", stage: "Group Stage" }, // PRT annexes URY (and IRQ)
-
+      { date: "2026-06-21", home: "ENG", away: "NLD", winner: "ENG", score: "1-0", stage: "Group Stage" },
+      { date: "2026-06-21", home: "PRT", away: "URY", winner: "PRT", score: "2-1", stage: "Group Stage" },
       // Day 12: June 22
-      { date: "2026-06-22", home: "COL", away: "NOR", winner: "COL", score: "3-1", stage: "Group Stage" }, // COL annexes NOR (and ZAF)
-      { date: "2026-06-22", home: "BEL", away: "HRV", winner: "BEL", score: "2-1", stage: "Group Stage" }, // BEL annexes HRV (and PAN)
+      { date: "2026-06-22", home: "COL", away: "NOR", winner: "COL", score: "3-1", stage: "Group Stage" },
+      { date: "2026-06-22", home: "BEL", away: "HRV", winner: "BEL", score: "2-1", stage: "Group Stage" },
 
-      // --- Knockouts: Round of 32 (Starts June 28) ---
-      { date: "2026-06-28", home: "USA", away: "COL", winner: "USA", score: "2-1", stage: "Round of 32" }, // USA annexes COL, NOR, ZAF
-      { date: "2026-06-29", home: "ARG", away: "BEL", winner: "ARG", score: "3-1", stage: "Round of 32" }, // ARG annexes BEL, HRV, PAN, HTI
-      { date: "2026-06-30", home: "BRA", away: "PRT", winner: "BRA", score: "1-0", stage: "Round of 32" }, // BRA annexes PRT, URY, IRQ, KOR
-      { date: "2026-07-01", home: "ESP", away: "ENG", winner: "ESP", score: "3-2", stage: "Round of 32" }, // ESP annexes ENG, NLD, ECU, TUN
+      // --- Knockouts: Round of 32 ---
+      { date: "2026-06-28", home: "USA", away: "COL", winner: "USA", score: "2-1", stage: "Round of 32" },
+      { date: "2026-06-29", home: "ARG", away: "BEL", winner: "ARG", score: "3-1", stage: "Round of 32" },
+      { date: "2026-06-30", home: "BRA", away: "PRT", winner: "BRA", score: "1-0", stage: "Round of 32" },
+      { date: "2026-07-01", home: "ESP", away: "ENG", winner: "ESP", score: "3-2", stage: "Round of 32" },
 
       // --- Round of 16 ---
-      { date: "2026-07-05", home: "USA", away: "BRA", winner: "BRA", score: "1-2", stage: "Round of 16" }, // BRA annexes USA and all its holdings
-      { date: "2026-07-06", home: "ARG", away: "ESP", winner: "ARG", score: "2-1", stage: "Round of 16" }, // ARG annexes ESP and all its holdings
+      { date: "2026-07-05", home: "USA", away: "BRA", winner: "BRA", score: "1-2", stage: "Round of 16" },
+      { date: "2026-07-06", home: "ARG", away: "ESP", winner: "ARG", score: "2-1", stage: "Round of 16" },
 
       // --- Quarterfinals ---
-      // At this stage, massive chunks of land are owned by just a few remaining giants
-      { date: "2026-07-10", home: "BRA", away: "ARG", winner: "ARG", score: "3-4", stage: "Quarterfinal" }, // ARG annexes BRA! (Argentina now owns almost the whole Americas and large parts of Europe/Africa)
+      { date: "2026-07-10", home: "BRA", away: "ARG", winner: "ARG", score: "3-4", stage: "Quarterfinal" },
 
       // --- Semifinals ---
-      // Remaining underdog teams (e.g. simulated like Switzerland CHE or Japan JPN coming back, or other brackets)
-      // Let's create an opponent for Argentina for the Semi and Final
-      // Say Germany and Italy are not here, but Japan survived in another branch and owns Asia.
-      { date: "2026-07-11", home: "JPN", away: "AUS", winner: "JPN", score: "2-0", stage: "Group Stage (Mock)" }, // Retroactive check
-      { date: "2026-07-14", home: "ARG", away: "JPN", winner: "ARG", score: "2-0", stage: "Semifinal" }, // ARG annexes JPN (Argentina owns the World!)
+      { date: "2026-07-11", home: "JPN", away: "AUS", winner: "JPN", score: "2-0", stage: "Group Stage (Mock)" },
+      { date: "2026-07-14", home: "ARG", away: "JPN", winner: "ARG", score: "2-0", stage: "Semifinal" },
 
       // --- Final ---
-      { date: "2026-07-19", home: "ARG", away: "ESP", winner: "ARG", score: "3-1", stage: "Final" } 
+      { date: "2026-07-19", home: "ARG", away: "ESP", winner: "ARG", score: "3-1", stage: "Final" }
     ];
 
-    // Sorted distinct dates of the matches
     const dates = Array.from(new Set(matches.map(m => m.date))).sort();
-    
-    // Timeline variables
     let currentDateIndex = 0;
     let playbackInterval = null;
-    let worldData = null; // Topojson data
+    let worldData = null;
 
-    // --- Country to Map ID Mapping ---
-    // Some World Cup teams share map country polygon (like England, Scotland -> United Kingdom).
-    // We map team code -> Map ISO Code (ISO_A3).
-    const teamToMapCode = (teamCode) => {
-      if (teamCode === "ENG" || teamCode === "SCO") return "GBR";
-      return teamCode;
-    };
-
-    // State of who owns what country
     let originalTeams = Object.keys(teamMetadata);
-    let territoryOwner = {}; // originalTeamCode -> currentOwnerTeamCode
+    let territoryOwner = {};
 
-    // Initialize/Reset state
     function initOwnership() {
       territoryOwner = {};
       originalTeams.forEach(team => {
@@ -261,26 +334,19 @@
       });
     }
 
-    // Run simulator up to index
     function runSimulationToDateIndex(dateIndex) {
       initOwnership();
-      
       const targetDate = dates[dateIndex];
       const activeMatches = matches.filter(m => m.date <= targetDate);
-      
       const logs = [];
 
       activeMatches.forEach(match => {
-        const homeCode = match.home;
-        const awayCode = match.away;
         const winnerCode = match.winner;
-        const loserCode = (winnerCode === homeCode) ? awayCode : homeCode;
+        const loserCode = (winnerCode === match.home) ? match.away : match.home;
         
-        // Find owner of the loser
         const ownerOfLoser = territoryOwner[loserCode];
         const ownerOfWinner = territoryOwner[winnerCode];
         
-        // Transfer all territories owned by loser's owner to winner's owner
         if (ownerOfLoser && ownerOfWinner && ownerOfLoser !== ownerOfWinner) {
           let count = 0;
           originalTeams.forEach(team => {
@@ -292,7 +358,9 @@
           logs.push({
             date: match.date,
             winner: teamMetadata[ownerOfWinner].name,
+            winnerCode: ownerOfWinner,
             loser: teamMetadata[ownerOfLoser].name,
+            loserCode: ownerOfLoser,
             count: count,
             stage: match.stage
           });
@@ -302,8 +370,6 @@
       return logs;
     }
 
-    // --- Leaderboard Calculation ---
-    // Count how many starting territories each remaining owner controls.
     function getLeaderboard() {
       const counts = {};
       originalTeams.forEach(team => {
@@ -321,18 +387,21 @@
         .sort((a, b) => b.count - a.count);
     }
 
-    // --- D3 Map Setup ---
+    // --- D3 Map rendering with Graticules ---
     const svg = d3.select("#world-map");
     const container = d3.select("#map-container");
     const tooltip = d3.select("#tooltip");
 
     const projection = d3.geoNaturalEarth1()
-      .scale(150)
-      .translate([400, 250]);
+      .scale(160)
+      .translate([window.innerWidth > 1024 ? 380 : 300, 260]);
 
     const path = d3.geoPath().projection(projection);
 
-    // Zoom behavior
+    // Dynamic grid lines (graticules) for the retro-tactical radar look
+    const graticule = d3.geoGraticule();
+
+    // Map Zooming capability
     const zoom = d3.zoom()
       .scaleExtent([1, 8])
       .on("zoom", (event) => {
@@ -341,13 +410,20 @@
 
     svg.call(zoom);
 
-    // Fetch and render Map
+    // Initialise and render Map elements
     d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(data => {
       worldData = topojson.feature(data, data.objects.countries);
       
-      // Render base map
-      svg.append("g")
-        .selectAll("path")
+      const g = svg.append("g");
+
+      // Draw map Grid
+      g.append("path")
+        .datum(graticule)
+        .attr("class", "graticule")
+        .attr("d", path);
+
+      // Render Country Shapes
+      g.selectAll(".country")
         .data(worldData.features)
         .enter()
         .append("path")
@@ -358,73 +434,80 @@
           .on("mousemove", moveTooltip)
           .on("mouseout", hideTooltip);
 
-      // Setup timeline Slider range now that dates are ready
+      // Slider UI setup
       const slider = document.getElementById("timeline-slider");
       slider.max = dates.length - 1;
-      document.getElementById("timeline-end").innerText = formatDateString(dates[dates.length - 1]);
-      document.getElementById("timeline-start").innerText = formatDateString(dates[0]);
+      document.getElementById("timeline-end").innerText = formatDateString(dates[dates.length - 1]).toUpperCase();
+      document.getElementById("timeline-start").innerText = formatDateString(dates[0]).toUpperCase();
 
       updateUI();
     });
 
-    // Format human-friendly date string
     function formatDateString(dateStr) {
       const d = new Date(dateStr);
       return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
 
-    // Map geometric country code (like ISO numbers or names) to World Cup code
     function getWCCodeFromMap(name, id) {
-      // world-atlas ids are numeric string codes (ISO 3166-1 numeric)
-      // For quick fallback, we can use a basic lookup map of numeric ID -> ISO Alpha 3
       return numericToAlpha3[id] || null;
     }
 
-    // Determine current color of a country based on ownership
     function getCountryColor(name, id) {
       const alpha3 = getWCCodeFromMap(name, id);
-      if (!alpha3) return "#2c3e50"; // Dark gray/blue for non-participating
+      if (!alpha3) return "#161a22"; // Off-black default for empty world space
 
-      // Is it a participating team?
       if (originalTeams.includes(alpha3)) {
         const owner = territoryOwner[alpha3];
-        return teamMetadata[owner]?.color || "#7f8c8d";
+        return teamMetadata[owner]?.color || "#2c3e50";
       }
 
-      return "#2c3e50"; // Default
+      return "#161a22";
     }
 
-    // Tooltip logic
+    // Tooltip logic with modern minimal cards
     function showTooltip(event, d) {
       const alpha3 = getWCCodeFromMap(d.properties.name, d.id);
       if (!alpha3 || !originalTeams.includes(alpha3)) {
         tooltip.style("display", "block")
-          .html(`<strong>${d.properties.name}</strong><br>Did not qualify`);
+          .html(`
+            <div class="text-[10px] text-console-dimText uppercase tracking-wider">Unmapped Zone</div>
+            <div class="font-bold font-mono mt-0.5 text-console-text">${d.properties.name}</div>
+          `);
         return;
       }
 
       const originalTeam = teamMetadata[alpha3].name;
       const currentOwnerCode = territoryOwner[alpha3];
       const currentOwner = teamMetadata[currentOwnerCode].name;
+      const currentOwnerColor = teamMetadata[currentOwnerCode].color;
 
-      let content = `<strong>${originalTeam}</strong>`;
+      let content = `
+        <div class="text-[9px] text-console-dimText uppercase tracking-wider">Territory Details</div>
+        <div class="font-bold text-console-text font-mono text-sm mt-0.5">${originalTeam}</div>
+      `;
       if (alpha3 !== currentOwnerCode) {
-        content += `<br>Occupied by: <span class="font-bold text-yellow-400">${currentOwner}</span>`;
+        content += `
+          <div class="flex items-center space-x-1.5 mt-2 pt-1.5 border-t border-console-border">
+            <span class="w-2 h-2 rounded-full" style="background-color: ${currentOwnerColor}"></span>
+            <span class="text-[11px] text-console-dimText">Occupied by:</span>
+            <span class="text-[11px] text-console-accent font-bold">${currentOwner}</span>
+          </div>
+        `;
       } else {
-        content += `<br>Independent`;
+        content += `
+          <div class="text-[10px] text-console-accent mt-2 pt-1 font-bold">// Independent Sovereign</div>
+        `;
       }
 
       tooltip.style("display", "block").html(content);
     }
 
-    // Double check zoom transformations and coordinates for tooltip positioning
     function moveTooltip(event) {
       const [x, y] = d3.pointer(event, container.node());
       tooltip.style("left", (x + 15) + "px")
              .style("top", (y + 15) + "px");
     }
 
-    // Hide tooltip when pointer leaves
     function hideTooltip() {
       tooltip.style("display", "none");
     }
@@ -432,51 +515,60 @@
     // --- UI Update Loop ---
     function updateUI() {
       const currentDate = dates[currentDateIndex];
-      document.getElementById("current-date-badge").innerText = `Date: ${currentDate}`;
+      document.getElementById("current-date-badge").innerText = currentDate;
       document.getElementById("timeline-slider").value = currentDateIndex;
 
-      // Run simulation to this day
+      // Run simulation step
       const logs = runSimulationToDateIndex(currentDateIndex);
 
-      // Update map colors
+      // Update map colors smoothly
       svg.selectAll(".country")
         .transition()
-        .duration(200)
+        .duration(400)
+        .ease(d3.easeCubicOut)
         .attr("fill", d => getCountryColor(d.properties.name, d.id));
 
       // Update Leaderboard
       const leaderboard = getLeaderboard();
+      const activeFactionsCount = leaderboard.filter(e => e.count > 0).length;
+      document.getElementById("active-factions").innerText = `${activeFactionsCount} Factions Active`;
+
       const leaderboardEl = document.getElementById("leaderboard");
       leaderboardEl.innerHTML = leaderboard
+        .filter(entry => entry.count > 0)
         .map((entry, idx) => `
-          <div class="flex items-center justify-between p-2 bg-gray-700 rounded shadow">
-            <div class="flex items-center space-x-2">
-              <span class="w-4 text-center font-bold text-gray-400">${idx + 1}</span>
-              <span class="w-3 h-3 rounded-full" style="background-color: ${entry.color}"></span>
-              <span class="font-medium">${entry.name}</span>
+          <div class="flex items-center justify-between p-2 bg-console-bg border border-console-border hover:border-console-accent/40 rounded-sm transition">
+            <div class="flex items-center space-x-2.5">
+              <span class="w-3 text-center text-[10px] font-bold text-console-dimText">${idx + 1}</span>
+              <span class="w-2 h-2 rounded-full" style="background-color: ${entry.color}"></span>
+              <span class="font-medium text-console-text">${entry.name}</span>
             </div>
-            <span class="bg-gray-800 px-2 py-0.5 rounded font-mono font-bold text-yellow-400">${entry.count}</span>
+            <div class="flex items-center space-x-2">
+              <span class="text-[10px] text-console-dimText">Holdings:</span>
+              <span class="font-bold text-console-accent font-mono">${entry.count}</span>
+            </div>
           </div>
         `).join("");
 
-      // Update Log
+      // Update Terminal Log
       const logEl = document.getElementById("conquest-log");
       if (logs.length === 0) {
-        logEl.innerHTML = `<p class="text-gray-500 italic">No territory changes yet.</p>`;
+        logEl.innerHTML = `<div class="text-console-dimText italic">// Console ready. Awaiting tournament kickoff...</div>`;
       } else {
         logEl.innerHTML = logs.reverse().map(log => `
-          <div class="mb-2 pb-1 border-b border-gray-750">
-            <span class="text-gray-500 font-mono text-[10px]">[${log.date}]</span>
-            <span class="font-bold text-yellow-400">${log.winner}</span> annexed 
-            <span class="font-bold text-red-400">${log.loser}</span> 
-            <span class="text-gray-400">(${log.count} land units)</span>
-            <div class="text-[10px] text-gray-500">${log.stage}</div>
+          <div class="mb-2 leading-relaxed">
+            <span class="text-console-dimText">[${log.date}]</span>
+            <span class="text-console-text font-bold">${log.winner}</span> 
+            <span>annexed</span> 
+            <span class="text-console-red font-bold">${log.loser}</span> 
+            <span class="text-console-accent">[+${log.count} units]</span>
+            <div class="text-[9px] text-console-dimText font-mono uppercase tracking-wider">${log.stage}</div>
           </div>
         `).join("");
       }
     }
 
-    // --- Interactive Handlers ---
+    // --- Interactive Control Listeners ---
     const slider = document.getElementById("timeline-slider");
     slider.addEventListener("input", (e) => {
       currentDateIndex = parseInt(e.target.value);
@@ -516,9 +608,11 @@
     });
 
     function startPlayback() {
-      playBtn.innerText = "⏸ Pause";
-      playBtn.classList.remove("bg-yellow-500", "hover:bg-yellow-400");
-      playBtn.classList.add("bg-red-600", "hover:bg-red-500");
+      // Toggle play style to active/pause state
+      playBtn.classList.remove("bg-console-accent", "text-console-bg");
+      playBtn.classList.add("bg-console-red", "text-console-text");
+      document.getElementById("play-icon").className = "ph-fill ph-pause text-xs";
+      document.getElementById("play-text").innerText = "Pause";
       
       playbackInterval = setInterval(() => {
         if (currentDateIndex < dates.length - 1) {
@@ -527,19 +621,19 @@
         } else {
           stopPlayback();
         }
-      }, 1500); // 1.5 seconds per day simulation
+      }, 1500);
     }
 
     function stopPlayback() {
       clearInterval(playbackInterval);
       playbackInterval = null;
-      playBtn.innerText = "▶ Play";
-      playBtn.classList.remove("bg-red-600", "hover:bg-red-500");
-      playBtn.classList.add("bg-yellow-500", "hover:bg-yellow-400");
+      playBtn.classList.add("bg-console-accent", "text-console-bg");
+      playBtn.classList.remove("bg-console-red", "text-console-text");
+      document.getElementById("play-icon").className = "ph-fill ph-play text-xs";
+      document.getElementById("play-text").innerText = "Play";
     }
 
     // --- ISO 3166-1 Numeric to Alpha-3 Conversion Map ---
-    // Essential for matching D3 topojson numeric ids to ISO A3 codes
     const numericToAlpha3 = {
       "004": "AFG", "008": "ALB", "012": "DZA", "024": "AGO", "032": "ARG",
       "036": "AUS", "040": "AUT", "050": "BGD", "056": "BEL", "076": "BRA",
