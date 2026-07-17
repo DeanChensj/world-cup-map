@@ -290,12 +290,15 @@
 
       activeMatches.forEach(match => {
         const winnerCode = match.winner;
+        if (!winnerCode) return; // Skip draws
+
         const loserCode = (winnerCode === match.home) ? match.away : match.home;
         
         const ownerOfLoser = getCurrentOwner(loserCode);
         const ownerOfWinner = getCurrentOwner(winnerCode);
         
-        if (ownerOfLoser && ownerOfWinner && ownerOfLoser !== ownerOfWinner) {
+        if (ownerOfWinner !== ownerOfLoser) {
+          // Standard Annexation
           let count = 0;
           originalTeams.forEach(team => {
             if (getCurrentOwner(team) === ownerOfLoser) {
@@ -316,6 +319,31 @@
           // Trigger massive conquest visual alert banner on active play
           if (count >= 4 && match.date === targetDate) {
             triggerAlert(`[EVENT]: ${teamMetadata[ownerOfWinner].name.toUpperCase()} annexed ${teamMetadata[ownerOfLoser].name.toUpperCase()} (+${count} sectors)`);
+          }
+        } else {
+          // Rebellion check: if the winner overthrows their supreme master
+          if (ownerOfWinner === loserCode) {
+            let count = 0;
+            originalTeams.forEach(team => {
+              if (getCurrentOwner(team) === loserCode) {
+                countryLineage[team].push(winnerCode);
+                count++;
+              }
+            });
+            logs.push({
+              date: match.date,
+              winner: teamMetadata[winnerCode].name,
+              winnerCode: winnerCode,
+              loser: teamMetadata[loserCode].name,
+              loserCode: loserCode,
+              count: count,
+              stage: `${match.stage} (Rebellion)`
+            });
+
+            // Trigger rebellion visual alert banner on active play
+            if (count >= 4 && match.date === targetDate) {
+              triggerAlert(`[REBELLION]: ${teamMetadata[winnerCode].name.toUpperCase()} overthrew ${teamMetadata[loserCode].name.toUpperCase()} (+${count} sectors)`);
+            }
           }
         }
       });

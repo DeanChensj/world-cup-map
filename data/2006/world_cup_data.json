@@ -2,7 +2,7 @@
   "teams": {
     "AGO": {
       "name": "Angola",
-      "color": "#E2E8F0"
+      "color": "#FC8181"
     },
     "ARG": {
       "name": "Argentina",
@@ -10,7 +10,7 @@
     },
     "AUS": {
       "name": "Australia",
-      "color": "#38A169"
+      "color": "#319795"
     },
     "BRA": {
       "name": "Brazil",
@@ -18,7 +18,7 @@
     },
     "CRI": {
       "name": "Costa Rica",
-      "color": "#3182CE"
+      "color": "#38A169"
     },
     "HRV": {
       "name": "Croatia",
@@ -26,15 +26,15 @@
     },
     "CZE": {
       "name": "Czech Republic",
-      "color": "#63B3ED"
+      "color": "#A0AEC0"
     },
     "CIV": {
       "name": "Côte d'Ivoire",
-      "color": "#319795"
+      "color": "#2B6CB0"
     },
     "ECU": {
       "name": "Ecuador",
-      "color": "#7B341E"
+      "color": "#C53030"
     },
     "ENG": {
       "name": "England",
@@ -50,11 +50,11 @@
     },
     "GHA": {
       "name": "Ghana",
-      "color": "#2F855A"
+      "color": "#ED64A6"
     },
     "IRN": {
       "name": "Iran",
-      "color": "#805AD5"
+      "color": "#C05621"
     },
     "ITA": {
       "name": "Italy",
@@ -74,11 +74,11 @@
     },
     "PRY": {
       "name": "Paraguay",
-      "color": "#68D391"
+      "color": "#718096"
     },
     "POL": {
       "name": "Poland",
-      "color": "#22543D"
+      "color": "#CBD5E0"
     },
     "PRT": {
       "name": "Portugal",
@@ -86,11 +86,11 @@
     },
     "SAU": {
       "name": "Saudi Arabia",
-      "color": "#D69E2E"
+      "color": "#9B2C2C"
     },
     "SRB": {
       "name": "Serbia and Montenegro",
-      "color": "#9B2C2C"
+      "color": "#E2E8F0"
     },
     "KOR": {
       "name": "South Korea",
@@ -102,23 +102,23 @@
     },
     "SWE": {
       "name": "Sweden",
-      "color": "#2B6CB0"
+      "color": "#D69E2E"
     },
     "CHE": {
       "name": "Switzerland",
-      "color": "#ED8936"
+      "color": "#6B46C1"
     },
     "TGO": {
       "name": "Togo",
-      "color": "#9B2C2C"
+      "color": "#2F855A"
     },
     "TTO": {
       "name": "Trinidad and Tobago",
-      "color": "#718096"
+      "color": "#4299E1"
     },
     "TUN": {
       "name": "Tunisia",
-      "color": "#FC8181"
+      "color": "#DD6B20"
     },
     "USA": {
       "name": "USA",
@@ -126,7 +126,7 @@
     },
     "UKR": {
       "name": "Ukraine",
-      "color": "#4299E1"
+      "color": "#3182CE"
     }
   },
   "matches": [
@@ -166,7 +166,7 @@
       "date": "2006-06-20",
       "home": "ECU",
       "away": "DEU",
-      "winner": "DEU",
+      "winner": "",
       "score": "0-3",
       "stage": "Group Stage"
     },
@@ -174,7 +174,7 @@
       "date": "2006-06-20",
       "home": "CRI",
       "away": "POL",
-      "winner": "POL",
+      "winner": "",
       "score": "1-2",
       "stage": "Group Stage"
     },
@@ -222,7 +222,7 @@
       "date": "2006-06-20",
       "home": "PRY",
       "away": "TTO",
-      "winner": "PRY",
+      "winner": "",
       "score": "2-0",
       "stage": "Group Stage"
     },
@@ -270,7 +270,7 @@
       "date": "2006-06-21",
       "home": "CIV",
       "away": "SRB",
-      "winner": "CIV",
+      "winner": "",
       "score": "3-2",
       "stage": "Group Stage"
     },
@@ -310,7 +310,7 @@
       "date": "2006-06-21",
       "home": "PRT",
       "away": "MEX",
-      "winner": "PRT",
+      "winner": "",
       "score": "2-1",
       "stage": "Group Stage"
     },
@@ -326,7 +326,7 @@
       "date": "2006-06-12",
       "home": "ITA",
       "away": "GHA",
-      "winner": "ITA",
+      "winner": "",
       "score": "2-0",
       "stage": "Group Stage"
     },
@@ -334,7 +334,7 @@
       "date": "2006-06-12",
       "home": "USA",
       "away": "CZE",
-      "winner": "CZE",
+      "winner": "",
       "score": "0-3",
       "stage": "Group Stage"
     },
@@ -390,7 +390,7 @@
       "date": "2006-06-18",
       "home": "BRA",
       "away": "AUS",
-      "winner": "BRA",
+      "winner": "",
       "score": "2-0",
       "stage": "Group Stage"
     },
@@ -430,7 +430,7 @@
       "date": "2006-06-13",
       "home": "KOR",
       "away": "TGO",
-      "winner": "KOR",
+      "winner": "",
       "score": "2-1",
       "stage": "Group Stage"
     },
@@ -470,7 +470,7 @@
       "date": "2006-06-14",
       "home": "ESP",
       "away": "UKR",
-      "winner": "ESP",
+      "winner": "",
       "score": "4-0",
       "stage": "Group Stage"
     },

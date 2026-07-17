@@ -6,7 +6,7 @@
     },
     "AUS": {
       "name": "Australia",
-      "color": "#ED64A6"
+      "color": "#63B3ED"
     },
     "BEL": {
       "name": "Belgium",
@@ -18,7 +18,7 @@
     },
     "CMR": {
       "name": "Cameroon",
-      "color": "#E2E8F0"
+      "color": "#319795"
     },
     "CAN": {
       "name": "Canada",
@@ -26,7 +26,7 @@
     },
     "CRI": {
       "name": "Costa Rica",
-      "color": "#319795"
+      "color": "#2B6CB0"
     },
     "HRV": {
       "name": "Croatia",
@@ -34,11 +34,11 @@
     },
     "DNK": {
       "name": "Denmark",
-      "color": "#2C7A7B"
+      "color": "#805AD5"
     },
     "ECU": {
       "name": "Ecuador",
-      "color": "#276749"
+      "color": "#2F855A"
     },
     "ENG": {
       "name": "England",
@@ -54,11 +54,11 @@
     },
     "GHA": {
       "name": "Ghana",
-      "color": "#2B6CB0"
+      "color": "#68D391"
     },
     "IRN": {
       "name": "Iran",
-      "color": "#7B341E"
+      "color": "#ED64A6"
     },
     "JPN": {
       "name": "Japan",
@@ -70,7 +70,7 @@
     },
     "MAR": {
       "name": "Morocco",
-      "color": "#805AD5"
+      "color": "#7B341E"
     },
     "NLD": {
       "name": "Netherlands",
@@ -78,7 +78,7 @@
     },
     "POL": {
       "name": "Poland",
-      "color": "#A0AEC0"
+      "color": "#C05621"
     },
     "PRT": {
       "name": "Portugal",
@@ -90,15 +90,15 @@
     },
     "SAU": {
       "name": "Saudi Arabia",
-      "color": "#63B3ED"
+      "color": "#C53030"
     },
     "SEN": {
       "name": "Senegal",
-      "color": "#D69E2E"
+      "color": "#276749"
     },
     "SRB": {
       "name": "Serbia",
-      "color": "#2F855A"
+      "color": "#E53E3E"
     },
     "KOR": {
       "name": "South Korea",
@@ -110,11 +110,11 @@
     },
     "CHE": {
       "name": "Switzerland",
-      "color": "#2C5282"
+      "color": "#38A169"
     },
     "TUN": {
       "name": "Tunisia",
-      "color": "#ED8936"
+      "color": "#B7791F"
     },
     "USA": {
       "name": "USA",
@@ -126,7 +126,7 @@
     },
     "WAL": {
       "name": "Wales",
-      "color": "#2B6CB0"
+      "color": "#9B2C2C"
     }
   },
   "matches": [
@@ -134,7 +134,7 @@
       "date": "2022-11-20",
       "home": "QAT",
       "away": "ECU",
-      "winner": "ECU",
+      "winner": "",
       "score": "0-2",
       "stage": "Group Stage"
     },
@@ -142,7 +142,7 @@
       "date": "2022-11-21",
       "home": "SEN",
       "away": "NLD",
-      "winner": "NLD",
+      "winner": "",
       "score": "0-2",
       "stage": "Group Stage"
     },
@@ -198,7 +198,7 @@
       "date": "2022-11-25",
       "home": "WAL",
       "away": "IRN",
-      "winner": "IRN",
+      "winner": "",
       "score": "0-2",
       "stage": "Group Stage"
     },
@@ -230,7 +230,7 @@
       "date": "2022-11-22",
       "home": "ARG",
       "away": "SAU",
-      "winner": "SAU",
+      "winner": "",
       "score": "1-2",
       "stage": "Group Stage"
     },
@@ -262,7 +262,7 @@
       "date": "2022-11-30",
       "home": "POL",
       "away": "ARG",
-      "winner": "ARG",
+      "winner": "",
       "score": "0-2",
       "stage": "Group Stage"
     },
@@ -270,7 +270,7 @@
       "date": "2022-11-30",
       "home": "SAU",
       "away": "MEX",
-      "winner": "MEX",
+      "winner": "",
       "score": "1-2",
       "stage": "Group Stage"
     },
@@ -286,7 +286,7 @@
       "date": "2022-11-22",
       "home": "FRA",
       "away": "AUS",
-      "winner": "FRA",
+      "winner": "",
       "score": "4-1",
       "stage": "Group Stage"
     },
@@ -318,7 +318,7 @@
       "date": "2022-11-30",
       "home": "TUN",
       "away": "FRA",
-      "winner": "TUN",
+      "winner": "",
       "score": "1-0",
       "stage": "Group Stage"
     },
@@ -342,7 +342,7 @@
       "date": "2022-11-27",
       "home": "JPN",
       "away": "CRI",
-      "winner": "CRI",
+      "winner": "",
       "score": "0-1",
       "stage": "Group Stage"
     },
@@ -358,7 +358,7 @@
       "date": "2022-12-01",
       "home": "JPN",
       "away": "ESP",
-      "winner": "JPN",
+      "winner": "",
       "score": "2-1",
       "stage": "Group Stage"
     },
@@ -366,7 +366,7 @@
       "date": "2022-12-01",
       "home": "CRI",
       "away": "DEU",
-      "winner": "DEU",
+      "winner": "",
       "score": "2-4",
       "stage": "Group Stage"
     },
@@ -382,7 +382,7 @@
       "date": "2022-11-23",
       "home": "BEL",
       "away": "CAN",
-      "winner": "BEL",
+      "winner": "",
       "score": "1-0",
       "stage": "Group Stage"
     },
@@ -446,7 +446,7 @@
       "date": "2022-11-28",
       "home": "BRA",
       "away": "CHE",
-      "winner": "BRA",
+      "winner": "",
       "score": "1-0",
       "stage": "Group Stage"
     },
@@ -462,7 +462,7 @@
       "date": "2022-12-02",
       "home": "CMR",
       "away": "BRA",
-      "winner": "CMR",
+      "winner": "",
       "score": "1-0",
       "stage": "Group Stage"
     },
@@ -486,7 +486,7 @@
       "date": "2022-11-28",
       "home": "KOR",
       "away": "GHA",
-      "winner": "GHA",
+      "winner": "",
       "score": "2-3",
       "stage": "Group Stage"
     },
@@ -502,7 +502,7 @@
       "date": "2022-12-02",
       "home": "GHA",
       "away": "URY",
-      "winner": "URY",
+      "winner": "",
       "score": "0-2",
       "stage": "Group Stage"
     },
@@ -510,7 +510,7 @@
       "date": "2022-12-02",
       "home": "KOR",
       "away": "PRT",
-      "winner": "KOR",
+      "winner": "",
       "score": "2-1",
       "stage": "Group Stage"
     },

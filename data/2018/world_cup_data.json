@@ -18,11 +18,11 @@
     },
     "COL": {
       "name": "Colombia",
-      "color": "#C53030"
+      "color": "#ED64A6"
     },
     "CRI": {
       "name": "Costa Rica",
-      "color": "#319795"
+      "color": "#F6AD55"
     },
     "HRV": {
       "name": "Croatia",
@@ -30,11 +30,11 @@
     },
     "DNK": {
       "name": "Denmark",
-      "color": "#2B6CB0"
+      "color": "#CBD5E0"
     },
     "EGY": {
       "name": "Egypt",
-      "color": "#E53E3E"
+      "color": "#DD6B20"
     },
     "ENG": {
       "name": "England",
@@ -50,11 +50,11 @@
     },
     "ISL": {
       "name": "Iceland",
-      "color": "#276749"
+      "color": "#E2E8F0"
     },
     "IRN": {
       "name": "Iran",
-      "color": "#718096"
+      "color": "#68D391"
     },
     "JPN": {
       "name": "Japan",
@@ -66,23 +66,23 @@
     },
     "MAR": {
       "name": "Morocco",
-      "color": "#2C5282"
+      "color": "#7B341E"
     },
     "NGA": {
       "name": "Nigeria",
-      "color": "#2B6CB0"
+      "color": "#4A5568"
     },
     "PAN": {
       "name": "Panama",
-      "color": "#F6AD55"
+      "color": "#805AD5"
     },
     "PER": {
       "name": "Peru",
-      "color": "#4299E1"
+      "color": "#9B2C2C"
     },
     "POL": {
       "name": "Poland",
-      "color": "#9F7AEA"
+      "color": "#2B6CB0"
     },
     "PRT": {
       "name": "Portugal",
@@ -90,19 +90,19 @@
     },
     "RUS": {
       "name": "Russia",
-      "color": "#3182CE"
+      "color": "#276749"
     },
     "SAU": {
       "name": "Saudi Arabia",
-      "color": "#C05621"
+      "color": "#22543D"
     },
     "SEN": {
       "name": "Senegal",
-      "color": "#553C9A"
+      "color": "#63B3ED"
     },
     "SRB": {
       "name": "Serbia",
-      "color": "#ED64A6"
+      "color": "#2B6CB0"
     },
     "KOR": {
       "name": "South Korea",
@@ -114,15 +114,15 @@
     },
     "SWE": {
       "name": "Sweden",
-      "color": "#22543D"
+      "color": "#C53030"
     },
     "CHE": {
       "name": "Switzerland",
-      "color": "#9B2C2C"
+      "color": "#3182CE"
     },
     "TUN": {
       "name": "Tunisia",
-      "color": "#38A169"
+      "color": "#A0AEC0"
     },
     "URY": {
       "name": "Uruguay",
@@ -166,7 +166,7 @@
       "date": "2018-06-25",
       "home": "URY",
       "away": "RUS",
-      "winner": "URY",
+      "winner": "",
       "score": "3-0",
       "stage": "Group Stage"
     },
@@ -174,7 +174,7 @@
       "date": "2018-06-25",
       "home": "SAU",
       "away": "EGY",
-      "winner": "SAU",
+      "winner": "",
       "score": "2-1",
       "stage": "Group Stage"
     },
@@ -182,7 +182,7 @@
       "date": "2018-06-15",
       "home": "MAR",
       "away": "IRN",
-      "winner": "IRN",
+      "winner": "",
       "score": "0-1",
       "stage": "Group Stage"
     },
@@ -270,7 +270,7 @@
       "date": "2018-06-26",
       "home": "AUS",
       "away": "PER",
-      "winner": "PER",
+      "winner": "",
       "score": "0-2",
       "stage": "Group Stage"
     },
@@ -294,7 +294,7 @@
       "date": "2018-06-21",
       "home": "ARG",
       "away": "HRV",
-      "winner": "HRV",
+      "winner": "",
       "score": "0-3",
       "stage": "Group Stage"
     },
@@ -302,7 +302,7 @@
       "date": "2018-06-22",
       "home": "NGA",
       "away": "ISL",
-      "winner": "NGA",
+      "winner": "",
       "score": "2-0",
       "stage": "Group Stage"
     },
@@ -326,7 +326,7 @@
       "date": "2018-06-17",
       "home": "CRI",
       "away": "SRB",
-      "winner": "SRB",
+      "winner": "",
       "score": "0-1",
       "stage": "Group Stage"
     },
@@ -398,7 +398,7 @@
       "date": "2018-06-23",
       "home": "DEU",
       "away": "SWE",
-      "winner": "DEU",
+      "winner": "",
       "score": "2-1",
       "stage": "Group Stage"
     },
@@ -406,7 +406,7 @@
       "date": "2018-06-27",
       "home": "KOR",
       "away": "DEU",
-      "winner": "KOR",
+      "winner": "",
       "score": "2-0",
       "stage": "Group Stage"
     },
@@ -414,7 +414,7 @@
       "date": "2018-06-27",
       "home": "MEX",
       "away": "SWE",
-      "winner": "SWE",
+      "winner": "",
       "score": "0-3",
       "stage": "Group Stage"
     },
@@ -454,7 +454,7 @@
       "date": "2018-06-28",
       "home": "ENG",
       "away": "BEL",
-      "winner": "BEL",
+      "winner": "",
       "score": "0-1",
       "stage": "Group Stage"
     },
@@ -462,7 +462,7 @@
       "date": "2018-06-28",
       "home": "PAN",
       "away": "TUN",
-      "winner": "TUN",
+      "winner": "",
       "score": "1-2",
       "stage": "Group Stage"
     },
@@ -470,7 +470,7 @@
       "date": "2018-06-19",
       "home": "COL",
       "away": "JPN",
-      "winner": "JPN",
+      "winner": "",
       "score": "1-2",
       "stage": "Group Stage"
     },
@@ -478,7 +478,7 @@
       "date": "2018-06-19",
       "home": "POL",
       "away": "SEN",
-      "winner": "SEN",
+      "winner": "",
       "score": "1-2",
       "stage": "Group Stage"
     },
@@ -502,7 +502,7 @@
       "date": "2018-06-28",
       "home": "JPN",
       "away": "POL",
-      "winner": "POL",
+      "winner": "",
       "score": "0-1",
       "stage": "Group Stage"
     },

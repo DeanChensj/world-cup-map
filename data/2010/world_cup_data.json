@@ -2,7 +2,7 @@
   "teams": {
     "DZA": {
       "name": "Algeria",
-      "color": "#9B2C2C"
+      "color": "#68D391"
     },
     "ARG": {
       "name": "Argentina",
@@ -10,7 +10,7 @@
     },
     "AUS": {
       "name": "Australia",
-      "color": "#C05621"
+      "color": "#C53030"
     },
     "BRA": {
       "name": "Brazil",
@@ -18,19 +18,19 @@
     },
     "CMR": {
       "name": "Cameroon",
-      "color": "#ED8936"
+      "color": "#4A5568"
     },
     "CHL": {
       "name": "Chile",
-      "color": "#9F7AEA"
+      "color": "#ED8936"
     },
     "CIV": {
       "name": "Côte d'Ivoire",
-      "color": "#F6AD55"
+      "color": "#2C5282"
     },
     "DNK": {
       "name": "Denmark",
-      "color": "#68D391"
+      "color": "#3182CE"
     },
     "ENG": {
       "name": "England",
@@ -46,15 +46,15 @@
     },
     "GHA": {
       "name": "Ghana",
-      "color": "#2B6CB0"
+      "color": "#4299E1"
     },
     "GRC": {
       "name": "Greece",
-      "color": "#718096"
+      "color": "#2F855A"
     },
     "HND": {
       "name": "Honduras",
-      "color": "#C53030"
+      "color": "#718096"
     },
     "ITA": {
       "name": "Italy",
@@ -78,15 +78,15 @@
     },
     "NGA": {
       "name": "Nigeria",
-      "color": "#4299E1"
+      "color": "#DD6B20"
     },
     "PRK": {
       "name": "North Korea",
-      "color": "#2F855A"
+      "color": "#CBD5E0"
     },
     "PRY": {
       "name": "Paraguay",
-      "color": "#D69E2E"
+      "color": "#9B2C2C"
     },
     "PRT": {
       "name": "Portugal",
@@ -94,19 +94,19 @@
     },
     "SRB": {
       "name": "Serbia",
-      "color": "#E2E8F0"
+      "color": "#F6AD55"
     },
     "SVK": {
       "name": "Slovakia",
-      "color": "#DD6B20"
+      "color": "#9B2C2C"
     },
     "SVN": {
       "name": "Slovenia",
-      "color": "#319795"
+      "color": "#63B3ED"
     },
     "ZAF": {
       "name": "South Africa",
-      "color": "#276749"
+      "color": "#A0AEC0"
     },
     "KOR": {
       "name": "South Korea",
@@ -118,7 +118,7 @@
     },
     "CHE": {
       "name": "Switzerland",
-      "color": "#A0AEC0"
+      "color": "#ED64A6"
     },
     "USA": {
       "name": "USA",
@@ -166,7 +166,7 @@
       "date": "2010-06-22",
       "home": "MEX",
       "away": "URY",
-      "winner": "URY",
+      "winner": "",
       "score": "0-1",
       "stage": "Group Stage"
     },
@@ -174,7 +174,7 @@
       "date": "2010-06-22",
       "home": "FRA",
       "away": "ZAF",
-      "winner": "ZAF",
+      "winner": "",
       "score": "1-2",
       "stage": "Group Stage"
     },
@@ -198,7 +198,7 @@
       "date": "2010-06-17",
       "home": "ARG",
       "away": "KOR",
-      "winner": "ARG",
+      "winner": "",
       "score": "4-1",
       "stage": "Group Stage"
     },
@@ -206,7 +206,7 @@
       "date": "2010-06-17",
       "home": "GRC",
       "away": "NGA",
-      "winner": "GRC",
+      "winner": "",
       "score": "2-1",
       "stage": "Group Stage"
     },
@@ -238,7 +238,7 @@
       "date": "2010-06-13",
       "home": "DZA",
       "away": "SVN",
-      "winner": "SVN",
+      "winner": "",
       "score": "0-1",
       "stage": "Group Stage"
     },
@@ -294,7 +294,7 @@
       "date": "2010-06-18",
       "home": "DEU",
       "away": "SRB",
-      "winner": "SRB",
+      "winner": "",
       "score": "0-1",
       "stage": "Group Stage"
     },
@@ -310,7 +310,7 @@
       "date": "2010-06-23",
       "home": "AUS",
       "away": "SRB",
-      "winner": "AUS",
+      "winner": "",
       "score": "2-1",
       "stage": "Group Stage"
     },
@@ -318,7 +318,7 @@
       "date": "2010-06-23",
       "home": "GHA",
       "away": "DEU",
-      "winner": "DEU",
+      "winner": "",
       "score": "0-1",
       "stage": "Group Stage"
     },
@@ -342,7 +342,7 @@
       "date": "2010-06-19",
       "home": "NLD",
       "away": "JPN",
-      "winner": "NLD",
+      "winner": "",
       "score": "1-0",
       "stage": "Group Stage"
     },
@@ -350,7 +350,7 @@
       "date": "2010-06-19",
       "home": "CMR",
       "away": "DNK",
-      "winner": "DNK",
+      "winner": "",
       "score": "1-2",
       "stage": "Group Stage"
     },
@@ -390,7 +390,7 @@
       "date": "2010-06-20",
       "home": "SVK",
       "away": "PRY",
-      "winner": "PRY",
+      "winner": "",
       "score": "0-2",
       "stage": "Group Stage"
     },
@@ -462,7 +462,7 @@
       "date": "2010-06-25",
       "home": "PRK",
       "away": "CIV",
-      "winner": "CIV",
+      "winner": "",
       "score": "0-3",
       "stage": "Group Stage"
     },
@@ -478,7 +478,7 @@
       "date": "2010-06-16",
       "home": "ESP",
       "away": "CHE",
-      "winner": "CHE",
+      "winner": "",
       "score": "0-1",
       "stage": "Group Stage"
     },
@@ -502,7 +502,7 @@
       "date": "2010-06-25",
       "home": "CHL",
       "away": "ESP",
-      "winner": "ESP",
+      "winner": "",
       "score": "1-2",
       "stage": "Group Stage"
     },
@@ -641,6 +641,14 @@
       "winner": "ESP",
       "score": "0-1 (aet)",
       "stage": "Final"
+    },
+    {
+      "date": "2010-06-24",
+      "home": "PRY",
+      "away": "NZL",
+      "winner": "PRY",
+      "score": "Group Standings",
+      "stage": "Group Stage"
     }
   ]
 }

@@ -129,7 +129,20 @@ def convert_year(year):
             "color": color
         }
 
-    # Process all matches
+    # 1. Scan matches to identify teams that qualified for the knockout stage
+    qualified_teams = set()
+    for match in data.get("matches", []):
+        stage = get_clean_stage_name(match.get("round", "Group Stage"))
+        if stage != "Group Stage":
+            # Any team playing in a knockout match qualified!
+            t1 = resolved_teams.get(match.get("team1"))
+            t2 = resolved_teams.get(match.get("team2"))
+            if t1: qualified_teams.add(t1["code"])
+            if t2: qualified_teams.add(t2["code"])
+
+    print(f"Qualified teams: {sorted(list(qualified_teams))}")
+
+    # 2. Process all matches
     for idx, match in enumerate(data.get("matches", [])):
         t1_name = match.get("team1")
         t2_name = match.get("team2")
@@ -177,6 +190,13 @@ def convert_year(year):
         stage = get_clean_stage_name(match.get("round", "Group Stage"))
         date = match.get("date")
         
+        # Apply group stage filter: matches should only affect eliminated teams
+        if stage == "Group Stage" and winner:
+            loser = code2 if winner == code1 else code1
+            # If the loser qualified, or if the winner was eliminated: skip this annexation!
+            if loser in qualified_teams or winner not in qualified_teams:
+                winner = ""
+        
         matches_data.append({
             "date": date,
             "home": code1,
@@ -184,6 +204,26 @@ def convert_year(year):
             "winner": winner,
             "score": score_str,
             "stage": stage
+        })
+
+    # Add manual standings resolutions for undefeated-but-eliminated anomalies
+    if year == 1998:
+        matches_data.append({
+            "date": "1998-06-25",
+            "home": "NLD",
+            "away": "BEL",
+            "winner": "NLD",
+            "score": "Group Standings",
+            "stage": "Group Stage"
+        })
+    elif year == 2010:
+        matches_data.append({
+            "date": "2010-06-24",
+            "home": "PRY",
+            "away": "NZL",
+            "winner": "PRY",
+            "score": "Group Standings",
+            "stage": "Group Stage"
         })
 
     # Save to target folder structure

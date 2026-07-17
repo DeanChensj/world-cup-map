@@ -14,15 +14,15 @@
     },
     "CMR": {
       "name": "Cameroon",
-      "color": "#4299E1"
+      "color": "#553C9A"
     },
     "CHN": {
       "name": "China",
-      "color": "#9B2C2C"
+      "color": "#319795"
     },
     "CRI": {
       "name": "Costa Rica",
-      "color": "#D69E2E"
+      "color": "#DD6B20"
     },
     "HRV": {
       "name": "Croatia",
@@ -30,11 +30,11 @@
     },
     "DNK": {
       "name": "Denmark",
-      "color": "#DD6B20"
+      "color": "#276749"
     },
     "ECU": {
       "name": "Ecuador",
-      "color": "#276749"
+      "color": "#2F855A"
     },
     "ENG": {
       "name": "England",
@@ -50,7 +50,7 @@
     },
     "IRL": {
       "name": "Ireland",
-      "color": "#553C9A"
+      "color": "#ED8936"
     },
     "ITA": {
       "name": "Italy",
@@ -66,15 +66,15 @@
     },
     "NGA": {
       "name": "Nigeria",
-      "color": "#ED8936"
+      "color": "#6B46C1"
     },
     "PRY": {
       "name": "Paraguay",
-      "color": "#2B6CB0"
+      "color": "#38A169"
     },
     "POL": {
       "name": "Poland",
-      "color": "#4A5568"
+      "color": "#9B2C2C"
     },
     "PRT": {
       "name": "Portugal",
@@ -82,23 +82,23 @@
     },
     "RUS": {
       "name": "Russia",
-      "color": "#718096"
+      "color": "#805AD5"
     },
     "SAU": {
       "name": "Saudi Arabia",
-      "color": "#B7791F"
+      "color": "#22543D"
     },
     "SEN": {
       "name": "Senegal",
-      "color": "#2F855A"
+      "color": "#D69E2E"
     },
     "SVN": {
       "name": "Slovenia",
-      "color": "#7B341E"
+      "color": "#2C5282"
     },
     "ZAF": {
       "name": "South Africa",
-      "color": "#2B6CB0"
+      "color": "#4A5568"
     },
     "KOR": {
       "name": "South Korea",
@@ -110,15 +110,15 @@
     },
     "SWE": {
       "name": "Sweden",
-      "color": "#805AD5"
+      "color": "#2B6CB0"
     },
     "TUN": {
       "name": "Tunisia",
-      "color": "#E53E3E"
+      "color": "#68D391"
     },
     "TUR": {
       "name": "Turkey",
-      "color": "#63B3ED"
+      "color": "#4299E1"
     },
     "USA": {
       "name": "USA",
@@ -198,7 +198,7 @@
       "date": "2002-06-07",
       "home": "ESP",
       "away": "PRY",
-      "winner": "ESP",
+      "winner": "",
       "score": "3-1",
       "stage": "Group Stage"
     },
@@ -206,7 +206,7 @@
       "date": "2002-06-08",
       "home": "ZAF",
       "away": "SVN",
-      "winner": "ZAF",
+      "winner": "",
       "score": "1-0",
       "stage": "Group Stage"
     },
@@ -230,7 +230,7 @@
       "date": "2002-06-03",
       "home": "BRA",
       "away": "TUR",
-      "winner": "BRA",
+      "winner": "",
       "score": "2-1",
       "stage": "Group Stage"
     },
@@ -238,7 +238,7 @@
       "date": "2002-06-04",
       "home": "CHN",
       "away": "CRI",
-      "winner": "CRI",
+      "winner": "",
       "score": "0-2",
       "stage": "Group Stage"
     },
@@ -302,7 +302,7 @@
       "date": "2002-06-10",
       "home": "PRT",
       "away": "POL",
-      "winner": "PRT",
+      "winner": "",
       "score": "4-0",
       "stage": "Group Stage"
     },
@@ -318,7 +318,7 @@
       "date": "2002-06-14",
       "home": "POL",
       "away": "USA",
-      "winner": "POL",
+      "winner": "",
       "score": "3-1",
       "stage": "Group Stage"
     },
@@ -350,7 +350,7 @@
       "date": "2002-06-06",
       "home": "CMR",
       "away": "SAU",
-      "winner": "CMR",
+      "winner": "",
       "score": "1-0",
       "stage": "Group Stage"
     },
@@ -382,7 +382,7 @@
       "date": "2002-06-02",
       "home": "ARG",
       "away": "NGA",
-      "winner": "ARG",
+      "winner": "",
       "score": "1-0",
       "stage": "Group Stage"
     },
@@ -438,7 +438,7 @@
       "date": "2002-06-08",
       "home": "ITA",
       "away": "HRV",
-      "winner": "HRV",
+      "winner": "",
       "score": "1-2",
       "stage": "Group Stage"
     },
@@ -462,7 +462,7 @@
       "date": "2002-06-13",
       "home": "ECU",
       "away": "HRV",
-      "winner": "ECU",
+      "winner": "",
       "score": "1-0",
       "stage": "Group Stage"
     },
@@ -478,7 +478,7 @@
       "date": "2002-06-05",
       "home": "RUS",
       "away": "TUN",
-      "winner": "RUS",
+      "winner": "",
       "score": "2-0",
       "stage": "Group Stage"
     },
