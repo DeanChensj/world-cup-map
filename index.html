@@ -51,12 +51,20 @@
     .country {
       stroke: #1e2430;
       stroke-width: 0.4px;
-      transition: fill 0.4s cubic-bezier(0.16, 1, 0.3, 1), stroke-width 0.2s ease, opacity 0.3s ease;
+      transition: fill 0.4s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.2s ease, stroke-width 0.2s ease, opacity 0.3s ease;
       cursor: crosshair;
     }
     .country:hover {
-      stroke: #00ff66;
+      stroke: #00ff66 !important;
+      stroke-width: 1.2px !important;
+    }
+    .empire-capital {
+      stroke: #ffffff;
       stroke-width: 1.2px;
+    }
+    .suzerain-highlight {
+      stroke: #ffcc00 !important;
+      stroke-width: 1.8px !important;
     }
     .graticule {
       fill: none;
@@ -466,6 +474,10 @@
         .enter()
         .append("path")
           .attr("d", path)
+          .attr("id", d => {
+            const alpha3 = getWCCodeFromMap(d.properties.name, d.id);
+            return alpha3 ? `country-${alpha3}` : `country-numeric-${d.id}`;
+          })
           .attr("class", "country")
           .attr("fill", "#161a22") // Default unmapped background color
           .on("mouseover", showTooltip)
@@ -551,6 +563,13 @@
       }
 
       tooltip.style("display", "block").html(content);
+
+      if (alpha3) {
+        const owner = getCurrentOwner(alpha3);
+        if (owner && owner !== alpha3) {
+          d3.select(`#country-${owner}`).classed("suzerain-highlight", true);
+        }
+      }
     }
 
     function moveTooltip(event) {
@@ -559,8 +578,18 @@
              .style("top", (y + 15) + "px");
     }
 
-    function hideTooltip() {
+    function hideTooltip(event, d) {
       tooltip.style("display", "none");
+      
+      if (d) {
+        const alpha3 = getWCCodeFromMap(d.properties.name, d.id);
+        if (alpha3) {
+          const owner = getCurrentOwner(alpha3);
+          if (owner && owner !== alpha3) {
+            d3.select(`#country-${owner}`).classed("suzerain-highlight", false);
+          }
+        }
+      }
     }
 
     // --- Interactive Linkage Highlight / Fade ---
@@ -597,7 +626,21 @@
         .transition()
         .duration(400)
         .ease(d3.easeCubicOut)
-        .attr("fill", d => getCountryColor(d.properties.name, d.id));
+        .attr("fill", d => getCountryColor(d.properties.name, d.id))
+        .attr("class", d => {
+          const alpha3 = getWCCodeFromMap(d.properties.name, d.id);
+          let classes = "country";
+          if (alpha3) {
+            const owner = getCurrentOwner(alpha3);
+            if (alpha3 === owner) {
+              const isEmpire = originalTeams.filter(t => getCurrentOwner(t) === owner).length > 1;
+              if (isEmpire) {
+                classes += " empire-capital";
+              }
+            }
+          }
+          return classes;
+        });
 
       // Update Leaderboard
       const leaderboard = getLeaderboard();
