@@ -566,16 +566,16 @@
       "date": "2026-07-18",
       "home": "FRA",
       "away": "ENG",
-      "winner": "FRA",
-      "score": "2-1",
+      "winner": "",
+      "score": "vs",
       "stage": "Third-Place Match"
     },
     {
       "date": "2026-07-19",
       "home": "ESP",
       "away": "ARG",
-      "winner": "ARG",
-      "score": "3-1",
+      "winner": "",
+      "score": "vs",
       "stage": "Final"
     }
   ]
