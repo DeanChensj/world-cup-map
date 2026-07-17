@@ -128,12 +128,20 @@
         <i id="audio-icon" class="ph-bold ph-speaker-high text-[10px]"></i>
         <span id="audio-label">SFX: ON</span>
       </button>
-      <!-- Central Active Date -->
+      <!-- Central Active Date & Sandbox Controls -->
       <div class="flex items-center space-x-2">
-        <span class="text-[10px] uppercase font-mono text-console-dimText">Status: Simulating</span>
+        <span id="sim-status-label" class="text-[10px] uppercase font-mono text-console-dimText">Status: Simulating</span>
         <div id="current-date-badge" class="bg-console-bg border border-console-border px-3 py-1 font-mono text-xs font-bold text-console-accent tracking-widest rounded">
           2026-06-11
         </div>
+        <button id="btn-share-universe" onclick="shareUniverse()" title="Share Parallel Universe Link" class="bg-console-bg border border-console-border text-console-accent hover:border-console-accent px-2 py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer">
+          <i class="ph-bold ph-share-network text-[10px]"></i>
+          <span>SHARE</span>
+        </button>
+        <button id="btn-reset-overrides" onclick="resetOverrides()" title="Reset to Real History" class="hidden bg-console-bg border border-console-red text-console-red hover:bg-console-red/10 px-2 py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer">
+          <i class="ph-bold ph-arrow-counter-clockwise text-[10px]"></i>
+          <span>RESET</span>
+        </button>
       </div>
     </div>
   </header>
@@ -268,6 +276,7 @@
     let playbackInterval = null;
     let worldData = null;
     let centroids = {};
+    let userOverrides = {};
 
     // ISO A3 to ISO A2 Flag CDN mapping
     const alpha3To2 = {
@@ -372,8 +381,71 @@
         btn.classList.add("text-console-accent");
         icon.className = "ph-bold ph-speaker-high text-[10px]";
         label.innerText = "SFX: ON";
-        audio.playClick();
       }
+    }
+
+    function parseUrlOverrides() {
+      const params = new URLSearchParams(window.location.search);
+      const altParam = params.get("alt");
+      if (altParam) {
+        userOverrides = {};
+        altParam.split(",").forEach(item => {
+          const parts = item.split(":");
+          if (parts.length === 2) {
+            const idx = parseInt(parts[0]);
+            if (!isNaN(idx)) {
+              userOverrides[idx] = parts[1];
+            }
+          }
+        });
+      }
+    }
+
+    function toggleMatchWinner(matchIndex) {
+      audio.playClick();
+      const match = matches[matchIndex];
+      if (!match) return;
+
+      const currentWinner = (userOverrides[matchIndex] !== undefined) ? userOverrides[matchIndex] : match.winner;
+
+      if (currentWinner === match.home) {
+        userOverrides[matchIndex] = match.away;
+      } else if (currentWinner === match.away) {
+        userOverrides[matchIndex] = "";
+      } else {
+        userOverrides[matchIndex] = match.home;
+      }
+
+      updateUI();
+    }
+
+    function resetOverrides() {
+      audio.playClick();
+      userOverrides = {};
+      const url = new URL(window.location.href);
+      url.searchParams.delete("alt");
+      window.history.replaceState({}, document.title, url.toString());
+      updateUI();
+    }
+
+    function shareUniverse() {
+      audio.playClick();
+      const currentYear = document.getElementById("header-year").innerText;
+      const overridePairs = Object.entries(userOverrides)
+        .map(([idx, code]) => `${idx}:${code}`)
+        .join(",");
+
+      const url = new URL(window.location.href);
+      url.searchParams.set("edition", currentYear);
+      if (overridePairs) {
+        url.searchParams.set("alt", overridePairs);
+      } else {
+        url.searchParams.delete("alt");
+      }
+
+      navigator.clipboard.writeText(url.toString()).then(() => {
+        triggerAlert("PARALLEL UNIVERSE LINK COPIED TO CLIPBOARD!");
+      });
     }
 
     function getFlagImg(code) {
@@ -407,7 +479,8 @@
       const logs = [];
 
       activeMatches.forEach(match => {
-        const winnerCode = match.winner;
+        const matchIdx = match.originalIndex;
+        const winnerCode = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
         if (!winnerCode) return; // Skip draws
 
         const loserCode = (winnerCode === match.home) ? match.away : match.home;
@@ -536,8 +609,10 @@
       d3.json(`data/${edition}/world_cup_data.json`).then(wcData => {
         teamMetadata = wcData.teams;
         matches = wcData.matches;
+        matches.forEach((m, idx) => m.originalIndex = idx);
         dates = Array.from(new Set(matches.map(m => m.date))).sort();
         originalTeams = Object.keys(teamMetadata);
+        parseUrlOverrides();
         currentDateIndex = 0;
 
         document.getElementById("header-year").innerText = edition;
@@ -883,21 +958,70 @@
           </div>
         `).join("");
 
-      // Update Terminal Log
+      // Sandbox status indicator
+      const overrideCount = Object.keys(userOverrides).length;
+      const resetBtn = document.getElementById("btn-reset-overrides");
+      const statusLabel = document.getElementById("sim-status-label");
+      if (overrideCount > 0) {
+        resetBtn.classList.remove("hidden");
+        statusLabel.innerText = `Status: Parallel Universe (${overrideCount} Alt)`;
+        statusLabel.className = "text-[10px] uppercase font-mono text-console-accent font-bold animate-pulse";
+      } else {
+        resetBtn.classList.add("hidden");
+        statusLabel.innerText = "Status: Simulating";
+        statusLabel.className = "text-[10px] uppercase font-mono text-console-dimText";
+      }
+
+      // Update Terminal Log / Overrides list
       const logEl = document.getElementById("conquest-log");
-      if (logs.length === 0) {
+      const activeMatchesList = matches.filter(m => m.date <= currentDate);
+      
+      if (activeMatchesList.length === 0) {
         logEl.innerHTML = `<div class="text-console-dimText italic">// Console ready. Awaiting tournament kickoff...</div>`;
       } else {
-        logEl.innerHTML = logs.reverse().map(log => `
-          <div class="mb-2 leading-relaxed">
-            <span class="text-console-dimText">[${log.date}]</span>
-            <span class="text-console-text font-bold">${log.winner}</span> 
-            <span>annexed</span> 
-            <span class="text-console-red font-bold">${log.loser}</span> 
-            <span class="text-console-accent">[+${log.count} units]</span>
-            <div class="text-[9px] text-console-dimText font-mono uppercase tracking-wider">${log.stage}</div>
-          </div>
-        `).join("");
+        logEl.innerHTML = activeMatchesList.slice().reverse().map(match => {
+          const idx = match.originalIndex;
+          const currentWinner = (userOverrides[idx] !== undefined) ? userOverrides[idx] : match.winner;
+          const isOverridden = (userOverrides[idx] !== undefined);
+
+          const homeName = teamMetadata[match.home]?.name || match.home;
+          const awayName = teamMetadata[match.away]?.name || match.away;
+
+          let resultText = "";
+          if (currentWinner === match.home) {
+            resultText = `<span class="text-console-accent font-bold">${homeName} WIN</span>`;
+          } else if (currentWinner === match.away) {
+            resultText = `<span class="text-console-red font-bold">${awayName} WIN</span>`;
+          } else {
+            resultText = `<span class="text-console-dimText italic">DRAW / UNPLAYED</span>`;
+          }
+
+          return `
+            <div 
+              onclick="toggleMatchWinner(${idx})"
+              title="Click to cycle match result (Sandbox Mode)"
+              class="mb-1.5 p-1.5 bg-console-bg border ${isOverridden ? 'border-console-accent bg-console-accent/5' : 'border-console-border hover:border-console-accent/40'} rounded-sm cursor-pointer transition flex items-center justify-between group"
+            >
+              <div class="text-[10px] font-mono leading-tight">
+                <div class="text-[9px] text-console-dimText flex items-center space-x-1">
+                  <span>${match.date}</span>
+                  <span>•</span>
+                  <span>${match.stage}</span>
+                  ${isOverridden ? '<span class="text-console-accent font-bold ml-1">[ALT]</span>' : ''}
+                </div>
+                <div class="text-console-text font-semibold mt-0.5">
+                  ${getFlagImg(match.home)} ${homeName} <span class="text-console-dimText font-normal">vs</span> ${awayName} ${getFlagImg(match.away)}
+                </div>
+                <div class="text-[10px] mt-0.5">
+                  Result: ${resultText}
+                </div>
+              </div>
+              <div class="text-[10px] text-console-dimText group-hover:text-console-accent transition flex items-center space-x-1">
+                <i class="ph-bold ph-pencil-simple"></i>
+              </div>
+            </div>
+          `;
+        }).join("");
       }
     }
 
