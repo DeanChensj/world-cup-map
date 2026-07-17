@@ -366,7 +366,7 @@
       "BRA": "br", "COL": "co", "ECU": "ec", "PRY": "py", "URY": "uy",
       "NZL": "nz", "AUT": "at", "BEL": "be", "BIH": "ba", "HRV": "hr",
       "CZE": "cz", "ENG": "gb-eng", "FRA": "fr", "DEU": "de", "NLD": "nl",
-      "NOR": "no", "PRT": "pt", "SCO": "gb-sct", "ESP": "es", "SWE": "se",
+      "NOR": "no", "PRT": "pt", "SCO": "gb-sct", "WAL": "gb-wls", "NIR": "gb-nir", "ESP": "es", "SWE": "se",
       "CHE": "ch", "TUR": "tr", "CUW": "cw"
     };
 
@@ -811,7 +811,10 @@
       const microNations = [
         { code: "CUW", name: "Curaçao", coords: [-68.9900, 12.1696] },
         { code: "CPV", name: "Cabo Verde", coords: [-24.0132, 16.0022] },
-        { code: "TTO", name: "Trinidad & Tobago", coords: [-61.2225, 10.6918] }
+        { code: "TTO", name: "Trinidad & Tobago", coords: [-61.2225, 10.6918] },
+        { code: "SCO", name: "Scotland", coords: [-4.2026, 56.4907] },
+        { code: "WAL", name: "Wales", coords: [-3.7837, 52.1307] },
+        { code: "NIR", name: "Northern Ireland", coords: [-6.4923, 54.6538] }
       ];
 
       g.selectAll(".micro-nation")
@@ -848,11 +851,14 @@
       // Compute and cache centroids for features and micro-nations
       centroids = {};
       worldData.features.forEach(f => {
-        const code = getWCCodeFromMap(f.properties.name, f.id);
+        const code = getWCCodeFromMap(f.properties ? f.properties.name : "", f.id);
         if (code) {
           centroids[code] = path.centroid(f);
         }
       });
+      if (centroids["ENG"]) {
+        centroids["ENG"] = projection([-1.1743, 52.3555]);
+      }
       microNations.forEach(m => {
         centroids[m.code] = projection(m.coords);
       });
