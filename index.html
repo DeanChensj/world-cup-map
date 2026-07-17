@@ -306,10 +306,10 @@
         const ownerOfWinner = getCurrentOwner(winnerCode);
         
         if (ownerOfWinner !== ownerOfLoser) {
-          // Standard Annexation
+          // Lineage-based Annexation
           let count = 0;
           originalTeams.forEach(team => {
-            if (getCurrentOwner(team) === ownerOfLoser) {
+            if (getCurrentOwner(team) === ownerOfLoser && countryLineage[team].includes(loserCode)) {
               countryLineage[team].push(ownerOfWinner);
               count++;
             }
@@ -318,22 +318,22 @@
             date: match.date,
             winner: teamMetadata[ownerOfWinner].name,
             winnerCode: ownerOfWinner,
-            loser: teamMetadata[ownerOfLoser].name,
-            loserCode: ownerOfLoser,
+            loser: teamMetadata[loserCode].name,
+            loserCode: loserCode,
             count: count,
             stage: match.stage
           });
 
           // Trigger massive conquest visual alert banner on active play
           if (count >= 4 && match.date === targetDate) {
-            triggerAlert(`[EVENT]: ${teamMetadata[ownerOfWinner].name.toUpperCase()} annexed ${teamMetadata[ownerOfLoser].name.toUpperCase()} (+${count} sectors)`);
+            triggerAlert(`[EVENT]: ${teamMetadata[ownerOfWinner].name.toUpperCase()} annexed ${teamMetadata[loserCode].name.toUpperCase()}'s holdings (+${count} sectors)`);
           }
         } else {
           // Rebellion check: if the winner overthrows their supreme master
           if (ownerOfWinner === loserCode) {
             let count = 0;
             originalTeams.forEach(team => {
-              if (getCurrentOwner(team) === loserCode) {
+              if (getCurrentOwner(team) === loserCode && countryLineage[team].includes(loserCode)) {
                 countryLineage[team].push(winnerCode);
                 count++;
               }

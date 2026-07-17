@@ -1,75 +1,39 @@
 import json
-import glob
-import os
 
-def test_all_years():
-    data_dirs = sorted(glob.glob("data/[0-9][0-9][0-9][0-9]"))
-    print(f"Found {len(data_dirs)} years to verify: {[os.path.basename(d) for d in data_dirs]}")
+def run_test_old():
+    with open("data/1998/world_cup_data.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    teams = data["teams"]
+    matches = data["matches"]
+    matches = sorted(matches, key=lambda x: x["date"])
     
-    all_success = True
-    
-    for y_dir in data_dirs:
-        year = os.path.basename(y_dir)
-        filepath = os.path.join(y_dir, "world_cup_data.json")
+    original_teams = list(teams.keys())
+    country_lineage = {t: [t] for t in original_teams}
+
+    def get_current_owner(team):
+        return country_lineage[team][-1]
+
+    print("--- Tracing 1998 with OLD Buggy Annexation Logic ---")
+    for match in matches:
+        winner = match["winner"]
+        if not winner:
+            continue
         
-        with open(filepath, "r", encoding="utf-8") as f:
-            data = json.load(f)
-            
-        teams = data["teams"]
-        matches = data["matches"]
+        home = match["home"]
+        away = match["away"]
+        loser = away if winner == home else home
         
-        original_teams = list(teams.keys())
-        country_lineage = {t: [t] for t in original_teams}
-
-        def get_current_owner(t):
-            return country_lineage[t][-1]
-
-        for match in matches:
-            winner = match["winner"]
-            if not winner:
-                continue
-            
-            home = match["home"]
-            away = match["away"]
-            loser = away if winner == home else home
-            
-            owner_winner = get_current_owner(winner)
-            owner_loser = get_current_owner(loser)
-            
-            if owner_winner != owner_loser:
-                for t in original_teams:
-                    if get_current_owner(t) == owner_loser:
-                        country_lineage[t].append(owner_winner)
-            else:
-                # Rebellion check
-                if owner_winner == loser:
-                    for t in original_teams:
-                        if get_current_owner(t) == loser:
-                            country_lineage[t].append(winner)
-
-        # Count holdings
-        counts = {}
-        for t in original_teams:
-            owner = get_current_owner(t)
-            counts[owner] = counts.get(owner, 0) + 1
-            
-        leaderboard = sorted(counts.items(), key=lambda x: x[1], reverse=True)
-        top_team_code, top_count = leaderboard[0]
-        top_team_name = teams[top_team_code]["name"]
+        owner_winner = get_current_owner(winner)
+        owner_loser = get_current_owner(loser)
         
-        total_teams = len(original_teams)
-        if top_count == total_teams:
-            print(f"[{year}] SUCCESS: {top_team_name} ({top_team_code}) won the conquest with all {top_count}/{total_teams} holdings.")
-        else:
-            print(f"[{year}] FAILURE: Top team is {top_team_name} ({top_team_code}) with only {top_count}/{total_teams} holdings.")
-            all_success = False
-            # Print leaderboard for debugging
-            for rank, (code, count) in enumerate(leaderboard[:5]):
-                print(f"   {rank+1}. {teams[code]['name']} ({code}): {count} holdings")
-                
-    if all_success:
-        print("\n=== ALL YEARS ARE 100% CORRECT! ===")
-    else:
-        print("\n=== SOME YEARS FAILED CONQUEST VERIFICATION ===")
+        if owner_winner != owner_loser:
+            # Old logic: annex all holdings of owner_loser
+            count = 0
+            for team in original_teams:
+                if get_current_owner(team) == owner_loser:
+                    country_lineage[team].append(owner_winner)
+                    count += 1
+            print(f"{match['date']} ({match['stage']}): {teams[winner]['name']} ({winner}) beat {teams[loser]['name']} ({loser}). Owner {teams[owner_winner]['name']} ({owner_winner}) annexed Owner {teams[owner_loser]['name']} ({owner_loser}) (+{count} sectors)")
 
-test_all_years()
+run_test_old()
