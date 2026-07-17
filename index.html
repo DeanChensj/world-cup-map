@@ -81,7 +81,7 @@
     }
   </style>
 </head>
-<body class="text-console-text min-h-screen flex flex-col font-sans select-none antialiased">
+<body class="text-console-text h-screen overflow-hidden flex flex-col font-sans select-none antialiased">
 
   <!-- Header (Max Height Cap: 64px) -->
   <header class="h-16 bg-console-panel border-b border-console-border px-6 flex items-center justify-between shadow-sm z-10">
@@ -455,6 +455,15 @@
     const projection = d3.geoNaturalEarth1();
     const path = d3.geoPath().projection(projection);
     const graticule = d3.geoGraticule();
+
+    // Map Zooming capability (D3 Zoom)
+    const zoom = d3.zoom()
+      .scaleExtent([1, 8])
+      .on("zoom", (event) => {
+        svg.selectAll("g").attr("transform", event.transform);
+      });
+
+    svg.call(zoom);
 
     // Initialise and render Map elements
     d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(data => {
