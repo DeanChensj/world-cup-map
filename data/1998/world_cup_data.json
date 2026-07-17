@@ -1,0 +1,646 @@
+{
+  "teams": {
+    "ARG": {
+      "name": "Argentina",
+      "color": "#4FD1C5"
+    },
+    "AUT": {
+      "name": "Austria",
+      "color": "#B7791F"
+    },
+    "BEL": {
+      "name": "Belgium",
+      "color": "#9B2C2C"
+    },
+    "BRA": {
+      "name": "Brazil",
+      "color": "#ECC94B"
+    },
+    "BGR": {
+      "name": "Bulgaria",
+      "color": "#F6AD55"
+    },
+    "CMR": {
+      "name": "Cameroon",
+      "color": "#68D391"
+    },
+    "CHL": {
+      "name": "Chile",
+      "color": "#2C5282"
+    },
+    "COL": {
+      "name": "Colombia",
+      "color": "#276749"
+    },
+    "HRV": {
+      "name": "Croatia",
+      "color": "#E53E3E"
+    },
+    "DNK": {
+      "name": "Denmark",
+      "color": "#C05621"
+    },
+    "ENG": {
+      "name": "England",
+      "color": "#EDF2F7"
+    },
+    "FRA": {
+      "name": "France",
+      "color": "#2B6CB0"
+    },
+    "DEU": {
+      "name": "Germany",
+      "color": "#445063"
+    },
+    "IRN": {
+      "name": "Iran",
+      "color": "#2B6CB0"
+    },
+    "ITA": {
+      "name": "Italy",
+      "color": "#3182CE"
+    },
+    "JAM": {
+      "name": "Jamaica",
+      "color": "#9F7AEA"
+    },
+    "JPN": {
+      "name": "Japan",
+      "color": "#3b4a5e"
+    },
+    "MEX": {
+      "name": "Mexico",
+      "color": "#319795"
+    },
+    "MAR": {
+      "name": "Morocco",
+      "color": "#C53030"
+    },
+    "NLD": {
+      "name": "Netherlands",
+      "color": "#ED8936"
+    },
+    "NGA": {
+      "name": "Nigeria",
+      "color": "#ED8936"
+    },
+    "NOR": {
+      "name": "Norway",
+      "color": "#2F855A"
+    },
+    "PRY": {
+      "name": "Paraguay",
+      "color": "#319795"
+    },
+    "ROU": {
+      "name": "Romania",
+      "color": "#2B6CB0"
+    },
+    "SAU": {
+      "name": "Saudi Arabia",
+      "color": "#2C7A7B"
+    },
+    "SCO": {
+      "name": "Scotland",
+      "color": "#22543D"
+    },
+    "ZAF": {
+      "name": "South Africa",
+      "color": "#CBD5E0"
+    },
+    "KOR": {
+      "name": "South Korea",
+      "color": "#DD6B20"
+    },
+    "ESP": {
+      "name": "Spain",
+      "color": "#C53030"
+    },
+    "TUN": {
+      "name": "Tunisia",
+      "color": "#A0AEC0"
+    },
+    "USA": {
+      "name": "USA",
+      "color": "#3182CE"
+    },
+    "SRB": {
+      "name": "Yugoslavia",
+      "color": "#718096"
+    }
+  },
+  "matches": [
+    {
+      "date": "1998-06-10",
+      "home": "BRA",
+      "away": "SCO",
+      "winner": "BRA",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-10",
+      "home": "MAR",
+      "away": "NOR",
+      "winner": "",
+      "score": "2-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-16",
+      "home": "SCO",
+      "away": "NOR",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-16",
+      "home": "BRA",
+      "away": "MAR",
+      "winner": "BRA",
+      "score": "3-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-23",
+      "home": "SCO",
+      "away": "MAR",
+      "winner": "MAR",
+      "score": "0-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-23",
+      "home": "BRA",
+      "away": "NOR",
+      "winner": "NOR",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-11",
+      "home": "CMR",
+      "away": "AUT",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-11",
+      "home": "ITA",
+      "away": "CHL",
+      "winner": "",
+      "score": "2-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-17",
+      "home": "CHL",
+      "away": "AUT",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-17",
+      "home": "ITA",
+      "away": "CMR",
+      "winner": "ITA",
+      "score": "3-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-23",
+      "home": "ITA",
+      "away": "AUT",
+      "winner": "ITA",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-23",
+      "home": "CHL",
+      "away": "CMR",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-12",
+      "home": "SAU",
+      "away": "DNK",
+      "winner": "DNK",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-12",
+      "home": "FRA",
+      "away": "ZAF",
+      "winner": "FRA",
+      "score": "3-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-18",
+      "home": "FRA",
+      "away": "SAU",
+      "winner": "FRA",
+      "score": "4-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-18",
+      "home": "ZAF",
+      "away": "DNK",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-24",
+      "home": "FRA",
+      "away": "DNK",
+      "winner": "FRA",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-24",
+      "home": "ZAF",
+      "away": "SAU",
+      "winner": "",
+      "score": "2-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-12",
+      "home": "PRY",
+      "away": "BGR",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-13",
+      "home": "ESP",
+      "away": "NGA",
+      "winner": "NGA",
+      "score": "2-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-19",
+      "home": "NGA",
+      "away": "BGR",
+      "winner": "NGA",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-19",
+      "home": "ESP",
+      "away": "PRY",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-24",
+      "home": "ESP",
+      "away": "BGR",
+      "winner": "ESP",
+      "score": "6-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-24",
+      "home": "NGA",
+      "away": "PRY",
+      "winner": "PRY",
+      "score": "1-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-13",
+      "home": "NLD",
+      "away": "BEL",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-13",
+      "home": "KOR",
+      "away": "MEX",
+      "winner": "MEX",
+      "score": "1-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-20",
+      "home": "NLD",
+      "away": "KOR",
+      "winner": "NLD",
+      "score": "5-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-20",
+      "home": "BEL",
+      "away": "MEX",
+      "winner": "",
+      "score": "2-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-25",
+      "home": "BEL",
+      "away": "KOR",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-25",
+      "home": "NLD",
+      "away": "MEX",
+      "winner": "",
+      "score": "2-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-14",
+      "home": "SRB",
+      "away": "IRN",
+      "winner": "SRB",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-15",
+      "home": "DEU",
+      "away": "USA",
+      "winner": "DEU",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-21",
+      "home": "DEU",
+      "away": "SRB",
+      "winner": "",
+      "score": "2-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-21",
+      "home": "USA",
+      "away": "IRN",
+      "winner": "IRN",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-25",
+      "home": "DEU",
+      "away": "IRN",
+      "winner": "DEU",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-25",
+      "home": "USA",
+      "away": "SRB",
+      "winner": "SRB",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-15",
+      "home": "ROU",
+      "away": "COL",
+      "winner": "ROU",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-15",
+      "home": "ENG",
+      "away": "TUN",
+      "winner": "ENG",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-22",
+      "home": "COL",
+      "away": "TUN",
+      "winner": "COL",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-22",
+      "home": "ROU",
+      "away": "ENG",
+      "winner": "ROU",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-26",
+      "home": "ROU",
+      "away": "TUN",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-26",
+      "home": "COL",
+      "away": "ENG",
+      "winner": "ENG",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-14",
+      "home": "JAM",
+      "away": "HRV",
+      "winner": "HRV",
+      "score": "1-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-14",
+      "home": "ARG",
+      "away": "JPN",
+      "winner": "ARG",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-20",
+      "home": "JPN",
+      "away": "HRV",
+      "winner": "HRV",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-21",
+      "home": "ARG",
+      "away": "JAM",
+      "winner": "ARG",
+      "score": "5-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-26",
+      "home": "JPN",
+      "away": "JAM",
+      "winner": "JAM",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-26",
+      "home": "ARG",
+      "away": "HRV",
+      "winner": "ARG",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "1998-06-27",
+      "home": "BRA",
+      "away": "CHL",
+      "winner": "BRA",
+      "score": "4-1",
+      "stage": "Round of 16"
+    },
+    {
+      "date": "1998-06-27",
+      "home": "ITA",
+      "away": "NOR",
+      "winner": "ITA",
+      "score": "1-0",
+      "stage": "Round of 16"
+    },
+    {
+      "date": "1998-06-28",
+      "home": "NGA",
+      "away": "DNK",
+      "winner": "DNK",
+      "score": "1-4",
+      "stage": "Round of 16"
+    },
+    {
+      "date": "1998-06-28",
+      "home": "FRA",
+      "away": "PRY",
+      "winner": "FRA",
+      "score": "1-0 (aet)",
+      "stage": "Round of 16"
+    },
+    {
+      "date": "1998-06-29",
+      "home": "DEU",
+      "away": "MEX",
+      "winner": "DEU",
+      "score": "2-1",
+      "stage": "Round of 16"
+    },
+    {
+      "date": "1998-06-29",
+      "home": "NLD",
+      "away": "SRB",
+      "winner": "NLD",
+      "score": "2-1",
+      "stage": "Round of 16"
+    },
+    {
+      "date": "1998-06-30",
+      "home": "ARG",
+      "away": "ENG",
+      "winner": "ARG",
+      "score": "4-3 (p)",
+      "stage": "Round of 16"
+    },
+    {
+      "date": "1998-06-30",
+      "home": "ROU",
+      "away": "HRV",
+      "winner": "HRV",
+      "score": "0-1",
+      "stage": "Round of 16"
+    },
+    {
+      "date": "1998-07-03",
+      "home": "ITA",
+      "away": "FRA",
+      "winner": "FRA",
+      "score": "3-4 (p)",
+      "stage": "Quarterfinal"
+    },
+    {
+      "date": "1998-07-03",
+      "home": "BRA",
+      "away": "DNK",
+      "winner": "BRA",
+      "score": "3-2",
+      "stage": "Quarterfinal"
+    },
+    {
+      "date": "1998-07-04",
+      "home": "DEU",
+      "away": "HRV",
+      "winner": "HRV",
+      "score": "0-3",
+      "stage": "Quarterfinal"
+    },
+    {
+      "date": "1998-07-04",
+      "home": "NLD",
+      "away": "ARG",
+      "winner": "NLD",
+      "score": "2-1",
+      "stage": "Quarterfinal"
+    },
+    {
+      "date": "1998-07-07",
+      "home": "BRA",
+      "away": "NLD",
+      "winner": "BRA",
+      "score": "4-2 (p)",
+      "stage": "Semifinal"
+    },
+    {
+      "date": "1998-07-08",
+      "home": "FRA",
+      "away": "HRV",
+      "winner": "FRA",
+      "score": "2-1",
+      "stage": "Semifinal"
+    },
+    {
+      "date": "1998-07-11",
+      "home": "NLD",
+      "away": "HRV",
+      "winner": "HRV",
+      "score": "1-2",
+      "stage": "Third-Place Match"
+    },
+    {
+      "date": "1998-07-12",
+      "home": "BRA",
+      "away": "FRA",
+      "winner": "FRA",
+      "score": "0-3",
+      "stage": "Final"
+    }
+  ]
+}

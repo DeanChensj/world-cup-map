@@ -1,0 +1,646 @@
+{
+  "teams": {
+    "ARG": {
+      "name": "Argentina",
+      "color": "#4FD1C5"
+    },
+    "AUS": {
+      "name": "Australia",
+      "color": "#2F855A"
+    },
+    "BEL": {
+      "name": "Belgium",
+      "color": "#9B2C2C"
+    },
+    "BRA": {
+      "name": "Brazil",
+      "color": "#ECC94B"
+    },
+    "COL": {
+      "name": "Colombia",
+      "color": "#C53030"
+    },
+    "CRI": {
+      "name": "Costa Rica",
+      "color": "#319795"
+    },
+    "HRV": {
+      "name": "Croatia",
+      "color": "#E53E3E"
+    },
+    "DNK": {
+      "name": "Denmark",
+      "color": "#2B6CB0"
+    },
+    "EGY": {
+      "name": "Egypt",
+      "color": "#E53E3E"
+    },
+    "ENG": {
+      "name": "England",
+      "color": "#EDF2F7"
+    },
+    "FRA": {
+      "name": "France",
+      "color": "#2B6CB0"
+    },
+    "DEU": {
+      "name": "Germany",
+      "color": "#445063"
+    },
+    "ISL": {
+      "name": "Iceland",
+      "color": "#276749"
+    },
+    "IRN": {
+      "name": "Iran",
+      "color": "#718096"
+    },
+    "JPN": {
+      "name": "Japan",
+      "color": "#3b4a5e"
+    },
+    "MEX": {
+      "name": "Mexico",
+      "color": "#319795"
+    },
+    "MAR": {
+      "name": "Morocco",
+      "color": "#2C5282"
+    },
+    "NGA": {
+      "name": "Nigeria",
+      "color": "#2B6CB0"
+    },
+    "PAN": {
+      "name": "Panama",
+      "color": "#F6AD55"
+    },
+    "PER": {
+      "name": "Peru",
+      "color": "#4299E1"
+    },
+    "POL": {
+      "name": "Poland",
+      "color": "#9F7AEA"
+    },
+    "PRT": {
+      "name": "Portugal",
+      "color": "#276749"
+    },
+    "RUS": {
+      "name": "Russia",
+      "color": "#3182CE"
+    },
+    "SAU": {
+      "name": "Saudi Arabia",
+      "color": "#C05621"
+    },
+    "SEN": {
+      "name": "Senegal",
+      "color": "#553C9A"
+    },
+    "SRB": {
+      "name": "Serbia",
+      "color": "#ED64A6"
+    },
+    "KOR": {
+      "name": "South Korea",
+      "color": "#DD6B20"
+    },
+    "ESP": {
+      "name": "Spain",
+      "color": "#C53030"
+    },
+    "SWE": {
+      "name": "Sweden",
+      "color": "#22543D"
+    },
+    "CHE": {
+      "name": "Switzerland",
+      "color": "#9B2C2C"
+    },
+    "TUN": {
+      "name": "Tunisia",
+      "color": "#38A169"
+    },
+    "URY": {
+      "name": "Uruguay",
+      "color": "#4299E1"
+    }
+  },
+  "matches": [
+    {
+      "date": "2018-06-14",
+      "home": "RUS",
+      "away": "SAU",
+      "winner": "RUS",
+      "score": "5-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-15",
+      "home": "EGY",
+      "away": "URY",
+      "winner": "URY",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-19",
+      "home": "RUS",
+      "away": "EGY",
+      "winner": "RUS",
+      "score": "3-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-20",
+      "home": "URY",
+      "away": "SAU",
+      "winner": "URY",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-25",
+      "home": "URY",
+      "away": "RUS",
+      "winner": "URY",
+      "score": "3-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-25",
+      "home": "SAU",
+      "away": "EGY",
+      "winner": "SAU",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-15",
+      "home": "MAR",
+      "away": "IRN",
+      "winner": "IRN",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-15",
+      "home": "PRT",
+      "away": "ESP",
+      "winner": "",
+      "score": "3-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-20",
+      "home": "PRT",
+      "away": "MAR",
+      "winner": "PRT",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-20",
+      "home": "IRN",
+      "away": "ESP",
+      "winner": "ESP",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-25",
+      "home": "IRN",
+      "away": "PRT",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-25",
+      "home": "ESP",
+      "away": "MAR",
+      "winner": "",
+      "score": "2-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-16",
+      "home": "FRA",
+      "away": "AUS",
+      "winner": "FRA",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-16",
+      "home": "PER",
+      "away": "DNK",
+      "winner": "DNK",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-21",
+      "home": "DNK",
+      "away": "AUS",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-21",
+      "home": "FRA",
+      "away": "PER",
+      "winner": "FRA",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-26",
+      "home": "DNK",
+      "away": "FRA",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-26",
+      "home": "AUS",
+      "away": "PER",
+      "winner": "PER",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-16",
+      "home": "ARG",
+      "away": "ISL",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-16",
+      "home": "HRV",
+      "away": "NGA",
+      "winner": "HRV",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-21",
+      "home": "ARG",
+      "away": "HRV",
+      "winner": "HRV",
+      "score": "0-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-22",
+      "home": "NGA",
+      "away": "ISL",
+      "winner": "NGA",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-26",
+      "home": "NGA",
+      "away": "ARG",
+      "winner": "ARG",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-26",
+      "home": "ISL",
+      "away": "HRV",
+      "winner": "HRV",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-17",
+      "home": "CRI",
+      "away": "SRB",
+      "winner": "SRB",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-17",
+      "home": "BRA",
+      "away": "CHE",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-22",
+      "home": "BRA",
+      "away": "CRI",
+      "winner": "BRA",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-22",
+      "home": "SRB",
+      "away": "CHE",
+      "winner": "CHE",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-27",
+      "home": "SRB",
+      "away": "BRA",
+      "winner": "BRA",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-27",
+      "home": "CHE",
+      "away": "CRI",
+      "winner": "",
+      "score": "2-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-17",
+      "home": "DEU",
+      "away": "MEX",
+      "winner": "MEX",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-18",
+      "home": "SWE",
+      "away": "KOR",
+      "winner": "SWE",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-23",
+      "home": "KOR",
+      "away": "MEX",
+      "winner": "MEX",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-23",
+      "home": "DEU",
+      "away": "SWE",
+      "winner": "DEU",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-27",
+      "home": "KOR",
+      "away": "DEU",
+      "winner": "KOR",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-27",
+      "home": "MEX",
+      "away": "SWE",
+      "winner": "SWE",
+      "score": "0-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-18",
+      "home": "BEL",
+      "away": "PAN",
+      "winner": "BEL",
+      "score": "3-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-18",
+      "home": "TUN",
+      "away": "ENG",
+      "winner": "ENG",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-23",
+      "home": "BEL",
+      "away": "TUN",
+      "winner": "BEL",
+      "score": "5-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-24",
+      "home": "ENG",
+      "away": "PAN",
+      "winner": "ENG",
+      "score": "6-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-28",
+      "home": "ENG",
+      "away": "BEL",
+      "winner": "BEL",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-28",
+      "home": "PAN",
+      "away": "TUN",
+      "winner": "TUN",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-19",
+      "home": "COL",
+      "away": "JPN",
+      "winner": "JPN",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-19",
+      "home": "POL",
+      "away": "SEN",
+      "winner": "SEN",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-24",
+      "home": "JPN",
+      "away": "SEN",
+      "winner": "",
+      "score": "2-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-24",
+      "home": "POL",
+      "away": "COL",
+      "winner": "COL",
+      "score": "0-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-28",
+      "home": "JPN",
+      "away": "POL",
+      "winner": "POL",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-28",
+      "home": "SEN",
+      "away": "COL",
+      "winner": "COL",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2018-06-30",
+      "home": "FRA",
+      "away": "ARG",
+      "winner": "FRA",
+      "score": "4-3",
+      "stage": "Round of 16"
+    },
+    {
+      "date": "2018-06-30",
+      "home": "URY",
+      "away": "PRT",
+      "winner": "URY",
+      "score": "2-1",
+      "stage": "Round of 16"
+    },
+    {
+      "date": "2018-07-01",
+      "home": "ESP",
+      "away": "RUS",
+      "winner": "RUS",
+      "score": "3-4 (p)",
+      "stage": "Round of 16"
+    },
+    {
+      "date": "2018-07-01",
+      "home": "HRV",
+      "away": "DNK",
+      "winner": "HRV",
+      "score": "3-2 (p)",
+      "stage": "Round of 16"
+    },
+    {
+      "date": "2018-07-02",
+      "home": "BRA",
+      "away": "MEX",
+      "winner": "BRA",
+      "score": "2-0",
+      "stage": "Round of 16"
+    },
+    {
+      "date": "2018-07-02",
+      "home": "BEL",
+      "away": "JPN",
+      "winner": "BEL",
+      "score": "3-2",
+      "stage": "Round of 16"
+    },
+    {
+      "date": "2018-07-03",
+      "home": "SWE",
+      "away": "CHE",
+      "winner": "SWE",
+      "score": "1-0",
+      "stage": "Round of 16"
+    },
+    {
+      "date": "2018-07-03",
+      "home": "COL",
+      "away": "ENG",
+      "winner": "ENG",
+      "score": "3-4 (p)",
+      "stage": "Round of 16"
+    },
+    {
+      "date": "2018-07-06",
+      "home": "URY",
+      "away": "FRA",
+      "winner": "FRA",
+      "score": "0-2",
+      "stage": "Quarterfinal"
+    },
+    {
+      "date": "2018-07-06",
+      "home": "BRA",
+      "away": "BEL",
+      "winner": "BEL",
+      "score": "1-2",
+      "stage": "Quarterfinal"
+    },
+    {
+      "date": "2018-07-07",
+      "home": "SWE",
+      "away": "ENG",
+      "winner": "ENG",
+      "score": "0-2",
+      "stage": "Quarterfinal"
+    },
+    {
+      "date": "2018-07-07",
+      "home": "RUS",
+      "away": "HRV",
+      "winner": "HRV",
+      "score": "3-4 (p)",
+      "stage": "Quarterfinal"
+    },
+    {
+      "date": "2018-07-10",
+      "home": "FRA",
+      "away": "BEL",
+      "winner": "FRA",
+      "score": "1-0",
+      "stage": "Semifinal"
+    },
+    {
+      "date": "2018-07-11",
+      "home": "HRV",
+      "away": "ENG",
+      "winner": "HRV",
+      "score": "2-1 (aet)",
+      "stage": "Semifinal"
+    },
+    {
+      "date": "2018-07-14",
+      "home": "BEL",
+      "away": "ENG",
+      "winner": "BEL",
+      "score": "2-0",
+      "stage": "Third-Place Match"
+    },
+    {
+      "date": "2018-07-15",
+      "home": "FRA",
+      "away": "HRV",
+      "winner": "FRA",
+      "score": "4-2",
+      "stage": "Final"
+    }
+  ]
+}

@@ -87,14 +87,29 @@
   <header class="h-16 bg-console-panel border-b border-console-border px-6 flex items-center justify-between shadow-sm z-10">
     <div class="flex items-center space-x-3">
       <div class="w-3 h-3 bg-console-accent rounded-sm animate-pulse"></div>
-      <span class="font-mono text-sm tracking-wider font-bold uppercase text-console-accent">Conquest.io // World Cup 2026</span>
+      <span class="font-mono text-sm tracking-wider font-bold uppercase text-console-accent">Conquest.io // World Cup <span id="header-year">2026</span></span>
     </div>
     
-    <!-- Central Active Date -->
-    <div class="flex items-center space-x-2">
-      <span class="text-[10px] uppercase font-mono text-console-dimText">Status: Simulating</span>
-      <div id="current-date-badge" class="bg-console-bg border border-console-border px-3 py-1 font-mono text-xs font-bold text-console-accent tracking-widest rounded">
-        2026-06-11
+    <div class="flex items-center space-x-6">
+      <div class="flex items-center space-x-2">
+        <span class="text-[9px] uppercase font-mono text-console-dimText">Edition:</span>
+        <select id="edition-select" onchange="switchEdition(this.value)" class="bg-console-bg border border-console-border text-console-text font-mono text-[10px] font-bold rounded px-2 py-1 focus:outline-none focus:border-console-accent transition cursor-pointer">
+          <option value="2026" selected>2026 USA/MEX/CAN</option>
+          <option value="2022">2022 QATAR</option>
+          <option value="2018">2018 RUSSIA</option>
+          <option value="2014">2014 BRAZIL</option>
+          <option value="2010">2010 SOUTH AFRICA</option>
+          <option value="2006">2006 GERMANY</option>
+          <option value="2002">2002 KOREA/JAPAN</option>
+          <option value="1998">1998 FRANCE</option>
+        </select>
+      </div>
+      <!-- Central Active Date -->
+      <div class="flex items-center space-x-2">
+        <span class="text-[10px] uppercase font-mono text-console-dimText">Status: Simulating</span>
+        <div id="current-date-badge" class="bg-console-bg border border-console-border px-3 py-1 font-mono text-xs font-bold text-console-accent tracking-widest rounded">
+          2026-06-11
+        </div>
       </div>
     </div>
   </header>
@@ -356,16 +371,49 @@
 
     svg.call(zoom);
 
-    // Initialise and render Map elements
-    Promise.all([
-      d3.json("data/world_cup_data.json"),
-      d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json")
-    ]).then(([wcData, mapData]) => {
-      teamMetadata = wcData.teams;
-      matches = wcData.matches;
-      dates = Array.from(new Set(matches.map(m => m.date))).sort();
-      originalTeams = Object.keys(teamMetadata);
+    function switchEdition(edition) {
+      if (playbackInterval) {
+        clearInterval(playbackInterval);
+        playbackInterval = null;
+        document.getElementById("play-pause-btn").innerHTML = `<i class="ph-bold ph-play text-sm"></i>`;
+      }
+      loadEdition(edition);
+    }
 
+    function loadEdition(edition) {
+      d3.json(`data/${edition}/world_cup_data.json`).then(wcData => {
+        teamMetadata = wcData.teams;
+        matches = wcData.matches;
+        dates = Array.from(new Set(matches.map(m => m.date))).sort();
+        originalTeams = Object.keys(teamMetadata);
+        currentDateIndex = 0;
+
+        document.getElementById("header-year").innerText = edition;
+
+        // Reset the timeline slider UI
+        const slider = document.getElementById("timeline-slider");
+        slider.max = dates.length - 1;
+        slider.value = 0;
+        document.getElementById("timeline-end").innerText = formatDateString(dates[dates.length - 1]).toUpperCase();
+        document.getElementById("timeline-start").innerText = formatDateString(dates[0]).toUpperCase();
+
+        // Repopulate initial ownership state
+        initOwnership();
+
+        // Redraw/color countries to their day-0 initial state
+        svg.selectAll(".country")
+          .transition()
+          .duration(300)
+          .attr("fill", d => getCountryColor(d.properties.name, d.id))
+          .style("opacity", 1.0);
+
+        // Refresh dynamic UI elements (leaderboard, logs, badging)
+        updateUI();
+      });
+    }
+
+    // Initialise and render Map elements
+    d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(mapData => {
       worldData = topojson.feature(mapData, mapData.objects.countries);
       
       // Filter out Antarctica (id "010") to make the rest of the world render much larger
@@ -391,18 +439,13 @@
         .append("path")
           .attr("d", path)
           .attr("class", "country")
-          .attr("fill", d => getCountryColor(d.properties.name, d.id))
+          .attr("fill", "#161a22") // Default unmapped background color
           .on("mouseover", showTooltip)
           .on("mousemove", moveTooltip)
           .on("mouseout", hideTooltip);
 
-      // Slider UI setup
-      const slider = document.getElementById("timeline-slider");
-      slider.max = dates.length - 1;
-      document.getElementById("timeline-end").innerText = formatDateString(dates[dates.length - 1]).toUpperCase();
-      document.getElementById("timeline-start").innerText = formatDateString(dates[0]).toUpperCase();
-
-      updateUI();
+      // Load initial default edition (2026)
+      loadEdition("2026");
     });
 
     function formatDateString(dateStr) {
@@ -696,7 +739,7 @@
       "724": "ESP", "736": "SDN", "752": "SWE", "756": "CHE", "762": "TJK",
       "764": "THA", "788": "TUN", "792": "TUR", "800": "UGA", "804": "UKR",
       "807": "MKD", "818": "EGY", "826": "GBR", "840": "USA", "858": "URY",
-      "860": "UZB", "862": "VEN", "887": "YEM", "894": "ZMB", "716": "ZWE", "531": "CUW"
+      "860": "UZB", "862": "VEN", "887": "YEM", "894": "ZMB", "716": "ZWE", "531": "CUW", "688": "SRB"
     };
   </script>
 </body>
