@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World Cup Conquest Map 2026</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- D3.js and TopoJSON CDN -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://unpkg.com/topojson@3"></script>
+  <style>
+    /* Styling for the map projection container */
+    .country {
+      stroke: #ffffff;
+      stroke-width: 0.5px;
+      transition: fill 0.3s ease;
+      cursor: pointer;
+    }
+    .country:hover {
+      stroke: #000000;
+      stroke-width: 1px;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white font-sans min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-gray-800 p-4 border-b border-gray-700 flex justify-between items-center shadow-lg">
+    <div>
+      <h1 class="text-2xl font-bold tracking-wider text-yellow-400">🏆 2026 World Cup Conquest Map</h1>
+      <p class="text-xs text-gray-400">If A wins, A annexes B's current territory. Watch the map change over time!</p>
+    </div>
+    <div class="flex items-center space-x-4">
+      <div id="current-date-badge" class="bg-gray-700 px-4 py-2 rounded-lg font-mono font-bold text-yellow-300">
+        Date: 2026-06-11
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Layout -->
+  <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
+    
+    <!-- Sidebar: Stats and Logs -->
+    <aside class="w-full md:w-80 bg-gray-800 border-r border-gray-700 flex flex-col h-64 md:h-auto overflow-hidden">
+      <!-- Leaderboard Section -->
+      <div class="p-4 border-b border-gray-700 flex-1 flex flex-col overflow-hidden">
+        <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-3">Territory Leaderboard</h2>
+        <div id="leaderboard" class="space-y-2 overflow-y-auto flex-1 pr-1 text-xs">
+          <!-- Leaderboard items injected here -->
+        </div>
+      </div>
+
+      <!-- Recent Annexations -->
+      <div class="p-4 border-t border-gray-700 h-1/2 flex flex-col overflow-hidden">
+        <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-3">Conquest History</h2>
+        <div id="conquest-log" class="space-y-1 overflow-y-auto flex-1 text-xs font-mono text-gray-300">
+          <!-- Logs injected here -->
+        </div>
+      </div>
+    </aside>
+
+    <!-- Map Area -->
+    <main class="flex-1 bg-gray-950 relative flex items-center justify-center p-4">
+      <div id="map-container" class="w-full h-full min-h-[400px] flex items-center justify-center relative">
+        <svg id="world-map" class="w-full h-full max-h-[85vh]"></svg>
+        
+        <!-- Tooltip -->
+        <div id="tooltip" class="absolute hidden bg-gray-900 border border-gray-700 text-white text-xs rounded p-2 pointer-events-none shadow-xl z-50"></div>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Bottom Timeline Controller -->
+  <footer class="bg-gray-800 border-t border-gray-700 p-6 shadow-2xl">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+      
+      <!-- Playback Controls -->
+      <div class="flex items-center space-x-3">
+        <button id="btn-prev" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded-lg text-sm font-bold transition">◀ Prev Day</button>
+        <button id="btn-play" class="bg-yellow-500 hover:bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg text-sm font-extrabold shadow-md transition">▶ Play</button>
+        <button id="btn-next" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded-lg text-sm font-bold transition">Next Day ▶</button>
+        <button id="btn-reset" class="text-gray-400 hover:text-white px-2 py-1 text-xs underline">Reset</button>
+      </div>
+
+      <!-- Slider Timeline -->
+      <div class="flex-1 w-full md:mx-8 flex items-center space-x-4">
+        <span class="text-xs text-gray-400 font-mono" id="timeline-start">June 11</span>
+        <input type="range" id="timeline-slider" class="flex-1 accent-yellow-500 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer" min="0" max="0" value="0">
+        <span class="text-xs text-gray-400 font-mono" id="timeline-end">July 19</span>
+      </div>
+
+      <!-- Quick Legend Info -->
+      <div class="text-xs text-gray-400 flex items-center space-x-2">
+        <span class="inline-block w-3 h-3 bg-gray-700 border border-gray-600 rounded"></span>
+        <span>Non-participating / Eliminated</span>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Simulation JavaScript -->
+  <script>
+    // --- Data Definitions ---
+
+    // ISO A3 codes for 48 teams of 2026 World Cup
+    const teamMetadata = {
+      "CAN": { name: "Canada", color: "#FF0000", textColor: "#FFFFFF" },
+      "MEX": { name: "Mexico", color: "#006847", textColor: "#FFFFFF" },
+      "USA": { name: "United States", color: "#0A3161", textColor: "#FFFFFF" },
+      "AUS": { name: "Australia", color: "#FFCD00", textColor: "#00843D" },
+      "IRQ": { name: "Iraq", color: "#007A3D", textColor: "#FFFFFF" },
+      "IRN": { name: "Iran", color: "#239B56", textColor: "#FFFFFF" },
+      "JPN": { name: "Japan", color: "#000080", textColor: "#FFFFFF" },
+      "JOR": { name: "Jordan", color: "#C0392B", textColor: "#FFFFFF" },
+      "KOR": { name: "South Korea", color: "#D35400", textColor: "#FFFFFF" },
+      "QAT": { name: "Qatar", color: "#800020", textColor: "#FFFFFF" },
+      "SAU": { name: "Saudi Arabia", color: "#006C35", textColor: "#FFFFFF" },
+      "UZB": { name: "Uzbekistan", color: "#1F618D", textColor: "#FFFFFF" },
+      "DZA": { name: "Algeria", color: "#006633", textColor: "#FFFFFF" },
+      "CPV": { name: "Cabo Verde", color: "#002A7E", textColor: "#FFFFFF" },
+      "COD": { name: "Congo DR", color: "#007FFF", textColor: "#FFFFFF" },
+      "CIV": { name: "Côte d'Ivoire", color: "#F77F00", textColor: "#FFFFFF" },
+      "EGY": { name: "Egypt", color: "#C09300", textColor: "#000000" },
+      "GHA": { name: "Ghana", color: "#F4D03F", textColor: "#000000" },
+      "MAR": { name: "Morocco", color: "#C1272D", textColor: "#006233" },
+      "SEN": { name: "Senegal", color: "#00853F", textColor: "#FFFFFF" },
+      "ZAF": { name: "South Africa", color: "#007A4D", textColor: "#FFFFFF" },
+      "TUN": { name: "Tunisia", color: "#E74C3C", textColor: "#FFFFFF" },
+      "HTI": { name: "Haiti", color: "#00209F", textColor: "#FFFFFF" },
+      "PAN": { name: "Panama", color: "#DA291C", textColor: "#FFFFFF" },
+      "ARG": { name: "Argentina", color: "#74ACDF", textColor: "#FFFFFF" },
+      "BRA": { name: "Brazil", color: "#FFDF00", textColor: "#002776" },
+      "COL": { name: "Colombia", color: "#FCD116", textColor: "#003893" },
+      "ECU": { name: "Ecuador", color: "#FFDD00", textColor: "#0033A0" },
+      "PRY": { name: "Paraguay", color: "#D52B1E", textColor: "#FFFFFF" },
+      "URY": { name: "Uruguay", color: "#0081C6", textColor: "#FFFFFF" },
+      "NZL": { name: "New Zealand", color: "#000000", textColor: "#FFFFFF" },
+      "AUT": { name: "Austria", color: "#ED2939", textColor: "#FFFFFF" },
+      "BEL": { name: "Belgium", color: "#E30A17", textColor: "#FFFFFF" },
+      "BIH": { name: "Bosnia & Herz.", color: "#002F6C", textColor: "#FFFFFF" },
+      "HRV": { name: "Croatia", color: "#FF0000", textColor: "#FFFFFF" },
+      "CZE": { name: "Czechia", color: "#11457E", textColor: "#FFFFFF" },
+      "ENG": { name: "England", color: "#FFFFFF", textColor: "#E2001A" },
+      "FRA": { name: "France", color: "#002395", textColor: "#FFFFFF" },
+      "DEU": { name: "Germany", color: "#000000", textColor: "#DD0000" },
+      "NLD": { name: "Netherlands", color: "#214488", textColor: "#FFFFFF" }, // Usually orange, let's use orange
+      "NOR": { name: "Norway", color: "#EF2B2D", textColor: "#FFFFFF" },
+      "PRT": { name: "Portugal", color: "#006600", textColor: "#FF0000" },
+      "SCO": { name: "Scotland", color: "#005EB8", textColor: "#FFFFFF" },
+      "ESP": { name: "Spain", color: "#C60B1E", textColor: "#F1BF00" },
+      "SWE": { name: "Sweden", color: "#006AA7", textColor: "#FECC00" },
+      "CHE": { name: "Switzerland", color: "#D52B1E", textColor: "#FFFFFF" },
+      "TUR": { name: "Türkiye", color: "#E30A17", textColor: "#FFFFFF" }
+    };
+
+    // Override some team colors for better visuals
+    teamMetadata["NLD"].color = "#FF7F00"; // Orange
+    teamMetadata["ENG"].color = "#FFFFFF"; // Red/White (needs stroke)
+    teamMetadata["ENG"].stroke = "#E2001A";
+    
+    // ISO codes translation for maps (GBR contains ENG, SCO)
+    // We will dynamically map ENG and SCO to GBR in the map visualization based on who is dominant
+    // For general mapping, standard map GBR will represent either ENG or SCO
+    
+    // --- Mock Match Schedule & Results ---
+    // Let's create a realistic progression of the 2026 World Cup from June 11 to July 19.
+    // Group stage: June 11 - June 27 (Draws are possible but ignore draws. Wins cause annexation)
+    // Knockouts: June 28 - July 19 (Every match has a winner)
+    const matches = [
+      // Day 1: June 11
+      { date: "2026-06-11", home: "USA", away: "SEN", winner: "USA", score: "2-1", stage: "Group Stage" },
+      { date: "2026-06-11", home: "CAN", away: "CIV", winner: "CAN", score: "1-0", stage: "Group Stage" },
+      // Day 2: June 12
+      { date: "2026-06-12", home: "MEX", away: "SWE", winner: "SWE", score: "0-2", stage: "Group Stage" },
+      { date: "2026-06-12", home: "ARG", away: "AUS", winner: "ARG", score: "3-0", stage: "Group Stage" },
+      // Day 3: June 13
+      { date: "2026-06-13", home: "BRA", away: "JPN", winner: "BRA", score: "2-0", stage: "Group Stage" },
+      { date: "2026-06-13", home: "FRA", away: "MAR", winner: "FRA", score: "2-1", stage: "Group Stage" },
+      // Day 4: June 14
+      { date: "2026-06-14", home: "DEU", away: "EGY", winner: "DEU", score: "3-1", stage: "Group Stage" },
+      { date: "2026-06-14", home: "ESP", away: "SAU", winner: "ESP", score: "4-0", stage: "Group Stage" },
+      // Day 5: June 15
+      { date: "2026-06-15", home: "ENG", away: "TUN", winner: "ENG", score: "2-0", stage: "Group Stage" },
+      { date: "2026-06-15", home: "NLD", away: "ECU", winner: "NLD", score: "1-0", stage: "Group Stage" },
+      // Day 6: June 16
+      { date: "2026-06-16", home: "PRT", away: "KOR", winner: "PRT", score: "2-1", stage: "Group Stage" },
+      { date: "2026-06-16", home: "URY", away: "IRQ", winner: "URY", score: "3-0", stage: "Group Stage" },
+      // Day 7: June 17
+      { date: "2026-06-17", home: "COL", away: "UZB", winner: "COL", score: "2-0", stage: "Group Stage" },
+      { date: "2026-06-17", home: "NOR", away: "ZAF", winner: "NOR", score: "1-0", stage: "Group Stage" },
+      // Day 8: June 18
+      { date: "2026-06-18", home: "BEL", away: "HTI", winner: "BEL", score: "4-1", stage: "Group Stage" },
+      { date: "2026-06-18", home: "HRV", away: "PAN", winner: "HRV", score: "2-0", stage: "Group Stage" },
+      
+      // Day 9: June 19 (Second round of games or simulated group final clashes)
+      { date: "2026-06-19", home: "USA", away: "CAN", winner: "USA", score: "2-1", stage: "Group Stage" }, // USA annexes CAN (and whatever CAN owned)
+      { date: "2026-06-19", home: "ARG", away: "SWE", winner: "ARG", score: "1-0", stage: "Group Stage" }, // ARG annexes SWE (and MEX territory SWE took)
+      // Day 10: June 20
+      { date: "2026-06-20", home: "BRA", away: "FRA", winner: "BRA", score: "3-2", stage: "Group Stage" }, // BRA annexes FRA (and MAR)
+      { date: "2026-06-20", home: "ESP", away: "DEU", winner: "ESP", score: "2-1", stage: "Group Stage" }, // ESP annexes DEU (and EGY)
+      // Day 11: June 21
+      { date: "2026-06-21", home: "ENG", away: "NLD", winner: "ENG", score: "1-0", stage: "Group Stage" }, // ENG annexes NLD (and ECU)
+      { date: "2026-06-21", home: "PRT", away: "URY", winner: "PRT", score: "2-2", winner: "PRT", stage: "Group Stage" }, // PRT annexes URY (and IRQ)
+
+      // Day 12: June 22
+      { date: "2026-06-22", home: "COL", away: "NOR", winner: "COL", score: "3-1", stage: "Group Stage" }, // COL annexes NOR (and ZAF)
+      { date: "2026-06-22", home: "BEL", away: "HRV", winner: "BEL", score: "2-1", stage: "Group Stage" }, // BEL annexes HRV (and PAN)
+
+      // --- Knockouts: Round of 32 (Starts June 28) ---
+      { date: "2026-06-28", home: "USA", away: "COL", winner: "USA", score: "2-1", stage: "Round of 32" }, // USA annexes COL, NOR, ZAF
+      { date: "2026-06-29", home: "ARG", away: "BEL", winner: "ARG", score: "3-1", stage: "Round of 32" }, // ARG annexes BEL, HRV, PAN, HTI
+      { date: "2026-06-30", home: "BRA", away: "PRT", winner: "BRA", score: "1-0", stage: "Round of 32" }, // BRA annexes PRT, URY, IRQ, KOR
+      { date: "2026-07-01", home: "ESP", away: "ENG", winner: "ESP", score: "3-2", stage: "Round of 32" }, // ESP annexes ENG, NLD, ECU, TUN
+
+      // --- Round of 16 ---
+      { date: "2026-07-05", home: "USA", away: "BRA", winner: "BRA", score: "1-2", stage: "Round of 16" }, // BRA annexes USA and all its holdings
+      { date: "2026-07-06", home: "ARG", away: "ESP", winner: "ARG", score: "2-1", stage: "Round of 16" }, // ARG annexes ESP and all its holdings
+
+      // --- Quarterfinals ---
+      // At this stage, massive chunks of land are owned by just a few remaining giants
+      { date: "2026-07-10", home: "BRA", away: "ARG", winner: "ARG", score: "3-4", stage: "Quarterfinal" }, // ARG annexes BRA! (Argentina now owns almost the whole Americas and large parts of Europe/Africa)
+
+      // --- Semifinals ---
+      // Remaining underdog teams (e.g. simulated like Switzerland CHE or Japan JPN coming back, or other brackets)
+      // Let's create an opponent for Argentina for the Semi and Final
+      // Say Germany and Italy are not here, but Japan survived in another branch and owns Asia.
+      { date: "2026-07-11", home: "JPN", away: "AUS", winner: "JPN", score: "2-0", stage: "Group Stage (Mock)" }, // Retroactive check
+      { date: "2026-07-14", home: "ARG", away: "JPN", winner: "ARG", score: "2-0", stage: "Semifinal" }, // ARG annexes JPN (Argentina owns the World!)
+
+      // --- Final ---
+      { date: "2026-07-19", home: "ARG", away: "ESP", winner: "ARG", score: "3-1", stage: "Final" } 
+    ];
+
+    // Sorted distinct dates of the matches
+    const dates = Array.from(new Set(matches.map(m => m.date))).sort();
+    
+    // Timeline variables
+    let currentDateIndex = 0;
+    let playbackInterval = null;
+    let worldData = null; // Topojson data
+
+    // --- Country to Map ID Mapping ---
+    // Some World Cup teams share map country polygon (like England, Scotland -> United Kingdom).
+    // We map team code -> Map ISO Code (ISO_A3).
+    const teamToMapCode = (teamCode) => {
+      if (teamCode === "ENG" || teamCode === "SCO") return "GBR";
+      return teamCode;
+    };
+
+    // State of who owns what country
+    let originalTeams = Object.keys(teamMetadata);
+    let territoryOwner = {}; // originalTeamCode -> currentOwnerTeamCode
+
+    // Initialize/Reset state
+    function initOwnership() {
+      territoryOwner = {};
+      originalTeams.forEach(team => {
+        territoryOwner[team] = team;
+      });
+    }
+
+    // Run simulator up to index
+    function runSimulationToDateIndex(dateIndex) {
+      initOwnership();
+      
+      const targetDate = dates[dateIndex];
+      const activeMatches = matches.filter(m => m.date <= targetDate);
+      
+      const logs = [];
+
+      activeMatches.forEach(match => {
+        const homeCode = match.home;
+        const awayCode = match.away;
+        const winnerCode = match.winner;
+        const loserCode = (winnerCode === homeCode) ? awayCode : homeCode;
+        
+        // Find owner of the loser
+        const ownerOfLoser = territoryOwner[loserCode];
+        const ownerOfWinner = territoryOwner[winnerCode];
+        
+        // Transfer all territories owned by loser's owner to winner's owner
+        if (ownerOfLoser && ownerOfWinner && ownerOfLoser !== ownerOfWinner) {
+          let count = 0;
+          originalTeams.forEach(team => {
+            if (territoryOwner[team] === ownerOfLoser) {
+              territoryOwner[team] = ownerOfWinner;
+              count++;
+            }
+          });
+          logs.push({
+            date: match.date,
+            winner: teamMetadata[ownerOfWinner].name,
+            loser: teamMetadata[ownerOfLoser].name,
+            count: count,
+            stage: match.stage
+          });
+        }
+      });
+
+      return logs;
+    }
+
+    // --- Leaderboard Calculation ---
+    // Count how many starting territories each remaining owner controls.
+    function getLeaderboard() {
+      const counts = {};
+      originalTeams.forEach(team => {
+        const owner = territoryOwner[team];
+        counts[owner] = (counts[owner] || 0) + 1;
+      });
+
+      return Object.entries(counts)
+        .map(([teamCode, count]) => ({
+          code: teamCode,
+          name: teamMetadata[teamCode]?.name || teamCode,
+          count: count,
+          color: teamMetadata[teamCode]?.color || "#7f8c8d"
+        }))
+        .sort((a, b) => b.count - a.count);
+    }
+
+    // --- D3 Map Setup ---
+    const svg = d3.select("#world-map");
+    const container = d3.select("#map-container");
+    const tooltip = d3.select("#tooltip");
+
+    const projection = d3.geoNaturalEarth1()
+      .scale(150)
+      .translate([400, 250]);
+
+    const path = d3.geoPath().projection(projection);
+
+    // Zoom behavior
+    const zoom = d3.zoom()
+      .scaleExtent([1, 8])
+      .on("zoom", (event) => {
+        svg.selectAll("g").attr("transform", event.transform);
+      });
+
+    svg.call(zoom);
+
+    // Fetch and render Map
+    d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(data => {
+      worldData = topojson.feature(data, data.objects.countries);
+      
+      // Render base map
+      svg.append("g")
+        .selectAll("path")
+        .data(worldData.features)
+        .enter()
+        .append("path")
+          .attr("d", path)
+          .attr("class", "country")
+          .attr("fill", d => getCountryColor(d.properties.name, d.id))
+          .on("mouseover", showTooltip)
+          .on("mousemove", moveTooltip)
+          .on("mouseout", hideTooltip);
+
+      // Setup timeline Slider range now that dates are ready
+      const slider = document.getElementById("timeline-slider");
+      slider.max = dates.length - 1;
+      document.getElementById("timeline-end").innerText = formatDateString(dates[dates.length - 1]);
+      document.getElementById("timeline-start").innerText = formatDateString(dates[0]);
+
+      updateUI();
+    });
+
+    // Format human-friendly date string
+    function formatDateString(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    // Map geometric country code (like ISO numbers or names) to World Cup code
+    function getWCCodeFromMap(name, id) {
+      // world-atlas ids are numeric string codes (ISO 3166-1 numeric)
+      // For quick fallback, we can use a basic lookup map of numeric ID -> ISO Alpha 3
+      return numericToAlpha3[id] || null;
+    }
+
+    // Determine current color of a country based on ownership
+    function getCountryColor(name, id) {
+      const alpha3 = getWCCodeFromMap(name, id);
+      if (!alpha3) return "#2c3e50"; // Dark gray/blue for non-participating
+
+      // Is it a participating team?
+      if (originalTeams.includes(alpha3)) {
+        const owner = territoryOwner[alpha3];
+        return teamMetadata[owner]?.color || "#7f8c8d";
+      }
+
+      return "#2c3e50"; // Default
+    }
+
+    // Tooltip logic
+    function showTooltip(event, d) {
+      const alpha3 = getWCCodeFromMap(d.properties.name, d.id);
+      if (!alpha3 || !originalTeams.includes(alpha3)) {
+        tooltip.style("display", "block")
+          .html(`<strong>${d.properties.name}</strong><br>Did not qualify`);
+        return;
+      }
+
+      const originalTeam = teamMetadata[alpha3].name;
+      const currentOwnerCode = territoryOwner[alpha3];
+      const currentOwner = teamMetadata[currentOwnerCode].name;
+
+      let content = `<strong>${originalTeam}</strong>`;
+      if (alpha3 !== currentOwnerCode) {
+        content += `<br>Occupied by: <span class="font-bold text-yellow-400">${currentOwner}</span>`;
+      } else {
+        content += `<br>Independent`;
+      }
+
+      tooltip.style("display", "block").html(content);
+    }
+
+    // Double check zoom transformations and coordinates for tooltip positioning
+    function moveTooltip(event) {
+      const [x, y] = d3.pointer(event, container.node());
+      tooltip.style("left", (x + 15) + "px")
+             .style("top", (y + 15) + "px");
+    }
+
+    // Hide tooltip when pointer leaves
+    function hideTooltip() {
+      tooltip.style("display", "none");
+    }
+
+    // --- UI Update Loop ---
+    function updateUI() {
+      const currentDate = dates[currentDateIndex];
+      document.getElementById("current-date-badge").innerText = `Date: ${currentDate}`;
+      document.getElementById("timeline-slider").value = currentDateIndex;
+
+      // Run simulation to this day
+      const logs = runSimulationToDateIndex(currentDateIndex);
+
+      // Update map colors
+      svg.selectAll(".country")
+        .transition()
+        .duration(200)
+        .attr("fill", d => getCountryColor(d.properties.name, d.id));
+
+      // Update Leaderboard
+      const leaderboard = getLeaderboard();
+      const leaderboardEl = document.getElementById("leaderboard");
+      leaderboardEl.innerHTML = leaderboard
+        .map((entry, idx) => `
+          <div class="flex items-center justify-between p-2 bg-gray-700 rounded shadow">
+            <div class="flex items-center space-x-2">
+              <span class="w-4 text-center font-bold text-gray-400">${idx + 1}</span>
+              <span class="w-3 h-3 rounded-full" style="background-color: ${entry.color}"></span>
+              <span class="font-medium">${entry.name}</span>
+            </div>
+            <span class="bg-gray-800 px-2 py-0.5 rounded font-mono font-bold text-yellow-400">${entry.count}</span>
+          </div>
+        `).join("");
+
+      // Update Log
+      const logEl = document.getElementById("conquest-log");
+      if (logs.length === 0) {
+        logEl.innerHTML = `<p class="text-gray-500 italic">No territory changes yet.</p>`;
+      } else {
+        logEl.innerHTML = logs.reverse().map(log => `
+          <div class="mb-2 pb-1 border-b border-gray-750">
+            <span class="text-gray-500 font-mono text-[10px]">[${log.date}]</span>
+            <span class="font-bold text-yellow-400">${log.winner}</span> annexed 
+            <span class="font-bold text-red-400">${log.loser}</span> 
+            <span class="text-gray-400">(${log.count} land units)</span>
+            <div class="text-[10px] text-gray-500">${log.stage}</div>
+          </div>
+        `).join("");
+      }
+    }
+
+    // --- Interactive Handlers ---
+    const slider = document.getElementById("timeline-slider");
+    slider.addEventListener("input", (e) => {
+      currentDateIndex = parseInt(e.target.value);
+      updateUI();
+      if (playbackInterval) stopPlayback();
+    });
+
+    document.getElementById("btn-prev").addEventListener("click", () => {
+      if (currentDateIndex > 0) {
+        currentDateIndex--;
+        updateUI();
+        if (playbackInterval) stopPlayback();
+      }
+    });
+
+    document.getElementById("btn-next").addEventListener("click", () => {
+      if (currentDateIndex < dates.length - 1) {
+        currentDateIndex++;
+        updateUI();
+        if (playbackInterval) stopPlayback();
+      }
+    });
+
+    document.getElementById("btn-reset").addEventListener("click", () => {
+      currentDateIndex = 0;
+      updateUI();
+      if (playbackInterval) stopPlayback();
+    });
+
+    const playBtn = document.getElementById("btn-play");
+    playBtn.addEventListener("click", () => {
+      if (playbackInterval) {
+        stopPlayback();
+      } else {
+        startPlayback();
+      }
+    });
+
+    function startPlayback() {
+      playBtn.innerText = "⏸ Pause";
+      playBtn.classList.remove("bg-yellow-500", "hover:bg-yellow-400");
+      playBtn.classList.add("bg-red-600", "hover:bg-red-500");
+      
+      playbackInterval = setInterval(() => {
+        if (currentDateIndex < dates.length - 1) {
+          currentDateIndex++;
+          updateUI();
+        } else {
+          stopPlayback();
+        }
+      }, 1500); // 1.5 seconds per day simulation
+    }
+
+    function stopPlayback() {
+      clearInterval(playbackInterval);
+      playbackInterval = null;
+      playBtn.innerText = "▶ Play";
+      playBtn.classList.remove("bg-red-600", "hover:bg-red-500");
+      playBtn.classList.add("bg-yellow-500", "hover:bg-yellow-400");
+    }
+
+    // --- ISO 3166-1 Numeric to Alpha-3 Conversion Map ---
+    // Essential for matching D3 topojson numeric ids to ISO A3 codes
+    const numericToAlpha3 = {
+      "004": "AFG", "008": "ALB", "012": "DZA", "024": "AGO", "032": "ARG",
+      "036": "AUS", "040": "AUT", "050": "BGD", "056": "BEL", "076": "BRA",
+      "100": "BGR", "116": "KHM", "120": "CMR", "124": "CAN", "148": "TCD",
+      "152": "CHL", "156": "CHN", "170": "COL", "180": "COD", "191": "HRV",
+      "192": "CUB", "203": "CZE", "208": "DNK", "214": "DOM", "218": "ECU",
+      "222": "SLV", "231": "ETH", "246": "FIN", "250": "FRA", "276": "DEU",
+      "288": "GHA", "300": "GRC", "320": "GTM", "324": "GIN", "328": "GUY",
+      "332": "HTI", "340": "HND", "348": "HUN", "352": "ISL", "356": "IND",
+      "360": "IDN", "364": "IRN", "368": "IRQ", "372": "IRL", "376": "ISR",
+      "380": "ITA", "384": "CIV", "388": "JAM", "392": "JPN", "400": "JOR",
+      "404": "KEN", "410": "KOR", "414": "KWT", "417": "KGZ", "418": "LAO",
+      "422": "LBN", "426": "LSO", "428": "LVA", "430": "LBR", "434": "LBY",
+      "440": "LTU", "442": "LUX", "450": "MDG", "454": "MWI", "458": "MYS",
+      "484": "MEX", "496": "MNG", "498": "MDA", "504": "MAR", "508": "MOZ",
+      "524": "NPL", "528": "NLD", "554": "NZL", "558": "NIC", "562": "NER",
+      "566": "NGA", "578": "NOR", "586": "PAK", "591": "PAN", "600": "PRY",
+      "604": "PER", "608": "PHL", "616": "POL", "620": "PRT", "634": "QAT",
+      "642": "ROU", "643": "RUS", "646": "RWA", "682": "SAU", "686": "SEN",
+      "702": "SGP", "703": "SVK", "704": "VNM", "705": "SVN", "710": "ZAF",
+      "724": "ESP", "736": "SDN", "752": "SWE", "756": "CHE", "762": "TJK",
+      "764": "THA", "788": "TUN", "792": "TUR", "800": "UGA", "804": "UKR",
+      "807": "MKD", "818": "EGY", "826": "GBR", "840": "USA", "858": "URY",
+      "860": "UZB", "862": "VEN", "887": "YEM", "894": "ZMB", "716": "ZWE"
+    };
+  </script>
+</body>
+</html>
