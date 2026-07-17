@@ -28,13 +28,13 @@
           },
           colors: {
             console: {
-              bg: '#0a0b0d',
-              panel: '#111317',
-              border: '#1f242e',
-              text: '#e2e8f0',
-              accent: '#00ff66', // Tactical Green
-              accentHover: '#00d655',
-              dimText: '#6272a4',
+              bg: 'var(--bg)',
+              panel: 'var(--panel)',
+              border: 'var(--border)',
+              text: 'var(--text)',
+              accent: 'var(--accent)',
+              accentHover: '#00cc55',
+              dimText: 'var(--dim-text)',
               red: '#ff5555'
             }
           }
@@ -44,23 +44,52 @@
   </script>
 
   <style>
+    :root {
+      --bg: #0a0b0d;
+      --panel: #111317;
+      --border: #1f242e;
+      --text: #e2e8f0;
+      --dim-text: #6272a4;
+      --unmapped: #161a22;
+      --graticule: #1b202b;
+      --country-stroke: #1e2430;
+      --accent: #00ff66;
+    }
+
+    body.light-theme {
+      --bg: #f4f6f8;
+      --panel: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --dim-text: #64748b;
+      --unmapped: #cbd5e1;
+      --graticule: #cbd5e1;
+      --country-stroke: #94a3b8;
+      --accent: #059669;
+    }
+
     body {
-      background-color: #0a0b0d;
+      background-color: var(--bg);
+      color: var(--text);
       font-family: 'Geist', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     .country {
-      stroke: #1e2430;
+      stroke: var(--country-stroke);
       stroke-width: 0.4px;
       transition: fill 0.4s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.2s ease, stroke-width 0.2s ease, opacity 0.3s ease;
       cursor: crosshair;
     }
     .country:hover {
-      stroke: #00ff66 !important;
+      stroke: var(--accent) !important;
       stroke-width: 1.2px !important;
     }
     .empire-capital {
       stroke: #ffffff;
       stroke-width: 1.2px;
+    }
+    body.light-theme .empire-capital {
+      stroke: #0f172a;
     }
     .suzerain-highlight {
       stroke: #ffcc00 !important;
@@ -79,7 +108,7 @@
     }
     .graticule {
       fill: none;
-      stroke: #1b202b;
+      stroke: var(--graticule);
       stroke-width: 0.5px;
       pointer-events: none;
     }
@@ -123,6 +152,11 @@
           <option value="1998">1998 FRANCE</option>
         </select>
       </div>
+      <!-- Theme Toggle -->
+      <button id="btn-theme-toggle" onclick="toggleTheme()" title="Switch Light / Dark Theme" class="bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-2 py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1.5 transition cursor-pointer">
+        <i id="theme-icon" class="ph-bold ph-sun text-[10px]"></i>
+        <span id="theme-label">THEME: DARK</span>
+      </button>
       <!-- SFX Audio Toggle -->
       <button id="btn-audio-toggle" onclick="toggleAudio()" class="bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-2 py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1.5 transition cursor-pointer">
         <i id="audio-icon" class="ph-bold ph-speaker-high text-[10px]"></i>
@@ -386,8 +420,29 @@
         btn.classList.remove("text-console-dimText");
         btn.classList.add("text-console-accent");
         icon.className = "ph-bold ph-speaker-high text-[10px]";
-        label.innerText = "SFX: ON";
       }
+    }
+
+    let isLightTheme = false;
+
+    function toggleTheme() {
+      audio.playClick();
+      isLightTheme = !isLightTheme;
+      const body = document.body;
+      const icon = document.getElementById("theme-icon");
+      const label = document.getElementById("theme-label");
+
+      if (isLightTheme) {
+        body.classList.add("light-theme");
+        icon.className = "ph-bold ph-moon text-[10px]";
+        label.innerText = "THEME: LIGHT";
+      } else {
+        body.classList.remove("light-theme");
+        icon.className = "ph-bold ph-sun text-[10px]";
+        label.innerText = "THEME: DARK";
+      }
+
+      updateUI();
     }
 
     function parseUrlOverrides() {
@@ -755,14 +810,15 @@
 
     function getCountryColor(name, id, code) {
       const alpha3 = getWCCodeFromMap(name, id, code);
-      if (!alpha3) return "#161a22";
+      const unmappedColor = isLightTheme ? "#cbd5e1" : "#161a22";
+      if (!alpha3) return unmappedColor;
 
       if (originalTeams.includes(alpha3)) {
         const owner = getCurrentOwner(alpha3);
         return teamMetadata[owner]?.color || "#2c3e50";
       }
 
-      return "#161a22";
+      return unmappedColor;
     }
 
     // Tooltip logic with modern minimal cards + Lineage tracing
