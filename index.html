@@ -768,14 +768,65 @@
       });
     }
 
+    const ukHomeNationsFeatures = [
+      {
+        type: "Feature",
+        id: "826_ENG",
+        code: "ENG",
+        properties: { name: "England" },
+        geometry: {
+          type: "Polygon",
+          coordinates: [[
+            [-2.9466, 53.9847], [-3.6162, 54.6008], [-3.6306, 54.6144], [-4.8438, 54.7904],
+            [-1.1142, 54.6245], [-0.4302, 54.4637], [0.1854, 53.3246], [0.4698, 52.9303],
+            [1.683, 52.739], [1.5606, 52.0992], [1.0494, 51.8064], [1.449, 51.2902],
+            [0.549, 50.7655], [-0.7866, 50.7756], [-2.4894, 50.4998], [-2.9574, 50.6961],
+            [-3.6162, 50.2289], [-4.5414, 50.3423], [-5.2435, 49.9598], [-5.7763, 50.1596],
+            [-4.311, 51.2106], [-2.9466, 53.9847]
+          ]]
+        }
+      },
+      {
+        type: "Feature",
+        id: "826_SCO",
+        code: "SCO",
+        properties: { name: "Scotland" },
+        geometry: {
+          type: "Polygon",
+          coordinates: [[
+            [-5.0526, 55.087], [-5.5002, 55.4326], [-5.6604, 55.4293], [-4.9662, 55.8458],
+            [-5.5848, 55.9388], [-5.5866, 56.4001], [-6.1542, 56.7797], [-5.7834, 57.0094],
+            [-5.7366, 57.7288], [-4.7898, 58.5303], [-3.0582, 58.635], [-3.069, 57.652],
+            [-1.947, 57.4807], [-2.601, 56.337], [-3.2202, 55.9867], [-1.9746, 55.8087],
+            [-3.0114, 55.0022], [-5.0526, 55.087]
+          ]]
+        }
+      },
+      {
+        type: "Feature",
+        id: "826_WAL",
+        code: "WAL",
+        properties: { name: "Wales" },
+        geometry: {
+          type: "Polygon",
+          coordinates: [[
+            [-3.0546, 51.5835], [-3.5352, 51.4285], [-4.9968, 51.6833], [-5.319, 51.8906],
+            [-4.7646, 52.8126], [-4.7358, 53.4831], [-3.3948, 53.3323], [-3.033, 53.2285],
+            [-2.7306, 51.9897], [-2.6568, 51.5912], [-3.0546, 51.5835]
+          ]]
+        }
+      }
+    ];
+
     // Initialise and render Map elements
     d3.json("data/countries-110m.json")
       .catch(() => d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"))
       .then(mapData => {
         worldData = topojson.feature(mapData, mapData.objects.countries);
         
-        // Filter out Antarctica (id "010") to make the rest of the world render much larger
-        worldData.features = worldData.features.filter(d => d.id !== "010");
+        // Filter out Antarctica (010) and GBR (826), and replace GBR with independent Home Nations features
+        worldData.features = worldData.features.filter(d => String(d.id) !== "010" && String(d.id) !== "826");
+        worldData.features.push(...ukHomeNationsFeatures);
 
         // Dynamically fit map size to container viewport
         const width = container.node().clientWidth || 800;
@@ -812,8 +863,6 @@
         { code: "CUW", name: "Curaçao", coords: [-68.9900, 12.1696] },
         { code: "CPV", name: "Cabo Verde", coords: [-24.0132, 16.0022] },
         { code: "TTO", name: "Trinidad & Tobago", coords: [-61.2225, 10.6918] },
-        { code: "SCO", name: "Scotland", coords: [-4.2026, 56.4907] },
-        { code: "WAL", name: "Wales", coords: [-3.7837, 52.1307] },
         { code: "NIR", name: "Northern Ireland", coords: [-6.4923, 54.6538] }
       ];
 
