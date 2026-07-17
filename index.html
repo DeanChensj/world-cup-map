@@ -403,6 +403,9 @@
       .scaleExtent([1, 8])
       .on("zoom", (event) => {
         svg.selectAll("g").attr("transform", event.transform);
+        // Scale down micro-nation dots during zoom to keep them clean
+        svg.selectAll(".micro-nation")
+          .attr("r", 3.5 / event.transform.k);
       });
 
     svg.call(zoom);
@@ -440,7 +443,12 @@
         svg.selectAll(".country")
           .transition()
           .duration(300)
-          .attr("fill", d => getCountryColor(d.properties.name, d.id))
+          .attr("fill", d => {
+            if (d.code) {
+              return getCountryColor(d.name, null, d.code);
+            }
+            return getCountryColor(d.properties.name, d.id);
+          })
           .style("opacity", 1.0);
 
         // Refresh dynamic UI elements (leaderboard, logs, badging)
@@ -484,6 +492,40 @@
           .on("mousemove", moveTooltip)
           .on("mouseout", hideTooltip);
 
+      const microNations = [
+        { code: "CUW", name: "Curaçao", coords: [-68.9900, 12.1696] },
+        { code: "CPV", name: "Cabo Verde", coords: [-24.0132, 16.0022] },
+        { code: "TTO", name: "Trinidad & Tobago", coords: [-61.2225, 10.6918] }
+      ];
+
+      g.selectAll(".micro-nation")
+        .data(microNations)
+        .enter()
+        .append("circle")
+          .attr("class", "country micro-nation")
+          .attr("id", d => `country-${d.code}`)
+          .attr("cx", d => projection(d.coords)[0])
+          .attr("cy", d => projection(d.coords)[1])
+          .attr("r", 3.5)
+          .attr("fill", "#161a22")
+          .on("mouseover", (event, d) => {
+            const mockedD = {
+              id: null,
+              properties: { name: d.name },
+              code: d.code
+            };
+            showTooltip(event, mockedD);
+          })
+          .on("mousemove", moveTooltip)
+          .on("mouseout", (event, d) => {
+            const mockedD = {
+              id: null,
+              properties: { name: d.name },
+              code: d.code
+            };
+            hideTooltip(event, mockedD);
+          });
+
       // Load initial default edition (2026)
       loadEdition("2026");
     });
@@ -493,18 +535,17 @@
       return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
 
-    function getWCCodeFromMap(name, id) {
+    function getWCCodeFromMap(name, id, code) {
+      if (code) return code;
       const alpha3 = numericToAlpha3[id] || null;
       if (alpha3 === "GBR") {
-        // Map United Kingdom (GBR) to England (ENG) initially.
-        // Scotland (SCO) participates in logic and can take it by defeating ENG.
         return "ENG";
       }
       return alpha3;
     }
 
-    function getCountryColor(name, id) {
-      const alpha3 = getWCCodeFromMap(name, id);
+    function getCountryColor(name, id, code) {
+      const alpha3 = getWCCodeFromMap(name, id, code);
       if (!alpha3) return "#161a22";
 
       if (originalTeams.includes(alpha3)) {
@@ -598,7 +639,7 @@
         .transition()
         .duration(200)
         .style("opacity", d => {
-          const alpha3 = getWCCodeFromMap(d.properties.name, d.id);
+          const alpha3 = d.code || getWCCodeFromMap(d.properties.name, d.id);
           if (!alpha3) return 0.05;
           const currentOwner = getCurrentOwner(alpha3);
           return currentOwner === ownerCode ? 1.0 : 0.12;
@@ -626,10 +667,15 @@
         .transition()
         .duration(400)
         .ease(d3.easeCubicOut)
-        .attr("fill", d => getCountryColor(d.properties.name, d.id))
+        .attr("fill", d => {
+          if (d.code) {
+            return getCountryColor(d.name, null, d.code);
+          }
+          return getCountryColor(d.properties.name, d.id);
+        })
         .attr("class", d => {
-          const alpha3 = getWCCodeFromMap(d.properties.name, d.id);
-          let classes = "country";
+          const alpha3 = d.code || getWCCodeFromMap(d.properties.name, d.id);
+          let classes = d.code ? "country micro-nation" : "country";
           if (alpha3) {
             const owner = getCurrentOwner(alpha3);
             if (alpha3 === owner) {
@@ -810,7 +856,7 @@
       "724": "ESP", "736": "SDN", "752": "SWE", "756": "CHE", "762": "TJK",
       "764": "THA", "788": "TUN", "792": "TUR", "800": "UGA", "804": "UKR",
       "807": "MKD", "818": "EGY", "826": "GBR", "840": "USA", "858": "URY",
-      "860": "UZB", "862": "VEN", "887": "YEM", "894": "ZMB", "716": "ZWE", "531": "CUW", "688": "SRB"
+      "860": "UZB", "862": "VEN", "887": "YEM", "894": "ZMB", "716": "ZWE", "531": "CUW", "688": "SRB", "132": "CPV"
     };
   </script>
 </body>
