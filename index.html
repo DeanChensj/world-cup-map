@@ -66,6 +66,17 @@
       stroke: #ffcc00 !important;
       stroke-width: 1.8px !important;
     }
+    @keyframes flowDash {
+      to {
+        stroke-dashoffset: -20;
+      }
+    }
+    .flow-arc {
+      fill: none;
+      stroke-dasharray: 4, 4;
+      animation: flowDash 1s linear infinite;
+      pointer-events: none;
+    }
     .graticule {
       fill: none;
       stroke: #1b202b;
@@ -112,6 +123,11 @@
           <option value="1998">1998 FRANCE</option>
         </select>
       </div>
+      <!-- SFX Audio Toggle -->
+      <button id="btn-audio-toggle" onclick="toggleAudio()" class="bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-2 py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1.5 transition cursor-pointer">
+        <i id="audio-icon" class="ph-bold ph-speaker-high text-[10px]"></i>
+        <span id="audio-label">SFX: ON</span>
+      </button>
       <!-- Central Active Date -->
       <div class="flex items-center space-x-2">
         <span class="text-[10px] uppercase font-mono text-console-dimText">Status: Simulating</span>
@@ -251,6 +267,7 @@
     let currentDateIndex = 0;
     let playbackInterval = null;
     let worldData = null;
+    let centroids = {};
 
     // ISO A3 to ISO A2 Flag CDN mapping
     const alpha3To2 = {
@@ -265,6 +282,99 @@
       "NOR": "no", "PRT": "pt", "SCO": "gb-sct", "ESP": "es", "SWE": "se",
       "CHE": "ch", "TUR": "tr", "CUW": "cw"
     };
+
+    class TacticalAudio {
+      constructor() {
+        this.ctx = null;
+        this.muted = false;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      playClick() {
+        if (this.muted) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1000, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(400, this.ctx.currentTime + 0.03);
+        gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.03);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.03);
+      }
+
+      playAlert() {
+        if (this.muted) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        [110, 165, 220].forEach(freq => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(freq, now);
+          osc.frequency.exponentialRampToValueAtTime(freq * 0.95, now + 0.6);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.6);
+        });
+      }
+
+      playChime(isPlay) {
+        if (this.muted) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        const startFreq = isPlay ? 440 : 880;
+        const endFreq = isPlay ? 880 : 440;
+        osc.frequency.setValueAtTime(startFreq, now);
+        osc.frequency.exponentialRampToValueAtTime(endFreq, now + 0.08);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.08);
+      }
+    }
+
+    const audio = new TacticalAudio();
+
+    function toggleAudio() {
+      audio.muted = !audio.muted;
+      const btn = document.getElementById("btn-audio-toggle");
+      const icon = document.getElementById("audio-icon");
+      const label = document.getElementById("audio-label");
+      
+      if (audio.muted) {
+        btn.classList.add("text-console-dimText");
+        btn.classList.remove("text-console-accent");
+        icon.className = "ph-bold ph-speaker-slash text-[10px]";
+        label.innerText = "SFX: OFF";
+      } else {
+        btn.classList.remove("text-console-dimText");
+        btn.classList.add("text-console-accent");
+        icon.className = "ph-bold ph-speaker-high text-[10px]";
+        label.innerText = "SFX: ON";
+        audio.playClick();
+      }
+    }
 
     function getFlagImg(code) {
       const code2 = alpha3To2[code];
@@ -378,6 +488,7 @@
 
     // --- Conquest Event Warning Banner ---
     function triggerAlert(message) {
+      audio.playAlert();
       const banner = document.getElementById("alert-banner");
       document.getElementById("alert-message").innerText = message;
       banner.style.opacity = "1";
@@ -403,9 +514,11 @@
       .scaleExtent([1, 8])
       .on("zoom", (event) => {
         svg.selectAll("g").attr("transform", event.transform);
-        // Scale down micro-nation dots during zoom to keep them clean
+        // Scale down micro-nation dots and flow arcs during zoom to keep them clean
         svg.selectAll(".micro-nation")
           .attr("r", 3.5 / event.transform.k);
+        svg.selectAll(".flow-arc")
+          .style("stroke-width", (1.2 / event.transform.k) + "px");
       });
 
     svg.call(zoom);
@@ -525,6 +638,21 @@
             };
             hideTooltip(event, mockedD);
           });
+
+      // Vector layer for tactical flow arcs
+      g.append("g").attr("class", "vector-layer");
+
+      // Compute and cache centroids for features and micro-nations
+      centroids = {};
+      worldData.features.forEach(f => {
+        const code = getWCCodeFromMap(f.properties.name, f.id);
+        if (code) {
+          centroids[code] = path.centroid(f);
+        }
+      });
+      microNations.forEach(m => {
+        centroids[m.code] = projection(m.coords);
+      });
 
       // Load initial default edition (2026)
       loadEdition("2026");
@@ -688,6 +816,46 @@
           return classes;
         });
 
+      // Render Empire Flow Vector Arcs
+      const vectorGroup = svg.select(".vector-layer");
+      vectorGroup.selectAll("*").remove(); // Clear previous arcs
+
+      // Find all active empires (teams owning > 1 territory)
+      originalTeams.forEach(suzerainCode => {
+        const holdings = originalTeams.filter(t => getCurrentOwner(t) === suzerainCode);
+        if (holdings.length > 1 && centroids[suzerainCode]) {
+          const [cx0, cy0] = centroids[suzerainCode];
+          const color = teamMetadata[suzerainCode]?.color || "#00ff66";
+
+          holdings.forEach(vassalCode => {
+            if (vassalCode !== suzerainCode && centroids[vassalCode]) {
+              const [cx1, cy1] = centroids[vassalCode];
+              
+              // Calculate control point for curved quadratic arc Q
+              const midX = (cx0 + cx1) / 2;
+              const midY = (cy0 + cy1) / 2;
+              const dx = cx1 - cx0;
+              const dy = cy1 - cy0;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              
+              // Offset control point perpendicular to line
+              const offset = Math.min(dist * 0.25, 45);
+              const ctrlX = midX - (dy / (dist || 1)) * offset;
+              const ctrlY = midY + (dx / (dist || 1)) * offset;
+
+              const dStr = `M ${cx1} ${cy1} Q ${ctrlX} ${ctrlY} ${cx0} ${cy0}`;
+
+              vectorGroup.append("path")
+                .attr("d", dStr)
+                .attr("class", `flow-arc flow-arc-${suzerainCode}`)
+                .attr("stroke", color)
+                .attr("stroke-width", "1.2px")
+                .attr("opacity", 0.45);
+            }
+          });
+        }
+      });
+
       // Update Leaderboard
       const leaderboard = getLeaderboard();
       const activeFactionsCount = leaderboard.filter(e => e.count > 0).length;
@@ -771,6 +939,7 @@
     // --- Interactive Control Listeners ---
     const slider = document.getElementById("timeline-slider");
     slider.addEventListener("input", (e) => {
+      audio.playClick();
       currentDateIndex = parseInt(e.target.value);
       updateUI();
       if (playbackInterval) stopPlayback();
@@ -778,6 +947,7 @@
 
     document.getElementById("btn-prev").addEventListener("click", () => {
       if (currentDateIndex > 0) {
+        audio.playClick();
         currentDateIndex--;
         updateUI();
         if (playbackInterval) stopPlayback();
@@ -786,6 +956,7 @@
 
     document.getElementById("btn-next").addEventListener("click", () => {
       if (currentDateIndex < dates.length - 1) {
+        audio.playClick();
         currentDateIndex++;
         updateUI();
         if (playbackInterval) stopPlayback();
@@ -793,6 +964,7 @@
     });
 
     document.getElementById("btn-reset").addEventListener("click", () => {
+      audio.playClick();
       currentDateIndex = 0;
       updateUI();
       if (playbackInterval) stopPlayback();
@@ -808,6 +980,7 @@
     });
 
     function startPlayback() {
+      audio.playChime(true);
       playBtn.classList.remove("bg-console-accent", "text-console-bg");
       playBtn.classList.add("bg-console-red", "text-console-text");
       document.getElementById("play-icon").className = "ph-fill ph-pause text-xs";
@@ -824,6 +997,7 @@
     }
 
     function stopPlayback() {
+      audio.playChime(false);
       clearInterval(playbackInterval);
       playbackInterval = null;
       playBtn.classList.add("bg-console-accent", "text-console-bg");
