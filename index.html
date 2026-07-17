@@ -504,9 +504,34 @@
         url.searchParams.delete("alt");
       }
 
-      navigator.clipboard.writeText(url.toString()).then(() => {
+      const urlString = url.toString();
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(urlString).then(() => {
+          triggerAlert("PARALLEL UNIVERSE LINK COPIED TO CLIPBOARD!");
+        }).catch(() => {
+          fallbackCopyText(urlString);
+        });
+      } else {
+        fallbackCopyText(urlString);
+      }
+    }
+
+    function fallbackCopyText(text) {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
         triggerAlert("PARALLEL UNIVERSE LINK COPIED TO CLIPBOARD!");
-      });
+      } catch (err) {
+        prompt("Copy this Universe URL:", text);
+      }
+      document.body.removeChild(textArea);
     }
 
     function getFlagImg(code) {
@@ -823,12 +848,13 @@
 
     // Tooltip logic with modern minimal cards + Lineage tracing
     function showTooltip(event, d) {
-      const alpha3 = getWCCodeFromMap(d.properties.name, d.id);
+      const alpha3 = d.code || getWCCodeFromMap(d.properties ? d.properties.name : "", d.id);
       if (!alpha3 || !originalTeams.includes(alpha3)) {
+        const countryName = (d.properties && d.properties.name) ? d.properties.name : (d.name || "Unmapped Zone");
         tooltip.style("display", "block")
           .html(`
             <div class="text-[9px] text-console-dimText uppercase tracking-wider">Unmapped Zone</div>
-            <div class="font-bold font-sans mt-1 text-console-text">${d.properties.name}</div>
+            <div class="font-bold font-sans mt-1 text-console-text">${countryName}</div>
           `);
         return;
       }
