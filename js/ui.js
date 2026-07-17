@@ -352,6 +352,26 @@ function jumpToDateIndex(dateIdx) {
   updateUI();
 }
 
+function toggleTheme() {
+  audio.playClick();
+  isLightTheme = !isLightTheme;
+  const body = document.body;
+  const icon = document.getElementById("theme-icon");
+  const label = document.getElementById("theme-label");
+
+  if (isLightTheme) {
+    body.classList.add("light-theme");
+    icon.className = "ph-bold ph-moon text-[10px]";
+    label.innerText = "THEME: LIGHT";
+  } else {
+    body.classList.remove("light-theme");
+    icon.className = "ph-bold ph-sun text-[10px]";
+    label.innerText = "THEME: DARK";
+  }
+
+  updateUI();
+}
+
 // Global Keyboard Hotkeys Listener
 document.addEventListener("keydown", (e) => {
   if (["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName)) return;
@@ -463,7 +483,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .append("path")
         .attr("d", path)
         .attr("id", d => {
-          const alpha3 = getWCCodeFromMap(d.properties.name, d.id);
+          const alpha3 = getWCCodeFromMap(d.properties ? d.properties.name : "", d.id);
           return alpha3 ? `country-${alpha3}` : `country-numeric-${d.id}`;
         })
         .attr("class", "country")
@@ -510,7 +530,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     centroids = {};
     worldData.features.forEach(f => {
-      const code = getWCCodeFromMap(f.properties.name, f.id);
+      const code = getWCCodeFromMap(f.properties ? f.properties.name : "", f.id);
       if (code) {
         centroids[code] = path.centroid(f);
       }

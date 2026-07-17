@@ -9,6 +9,7 @@ let playbackInterval = null;
 let originalTeams = [];
 let countryLineage = {};
 let userOverrides = {};
+let isLightTheme = false;
 
 function initOwnership() {
   countryLineage = {};
