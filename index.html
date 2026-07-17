@@ -169,6 +169,7 @@
           <span id="active-factions" class="text-[10px] font-mono text-console-accent bg-console-accent/10 px-1.5 py-0.5 rounded">48 Factions</span>
         </div>
         
+        <div id="champion-container"></div>
         <div id="leaderboard" class="space-y-1.5 overflow-y-auto flex-1 pr-1 font-mono text-xs">
           <!-- Dynamically populated -->
         </div>
@@ -243,15 +244,20 @@
         </button>
       </div>
 
-      <!-- Linear Timeline Scrub Slider -->
-      <div class="flex-1 w-full flex items-center space-x-4">
-        <span class="text-[10px] text-console-dimText font-mono" id="timeline-start">JUN 11</span>
-        
-        <div class="flex-1 relative flex items-center">
-          <input type="range" id="timeline-slider" class="w-full accent-console-accent h-1 bg-console-border rounded-lg appearance-none cursor-pointer hover:bg-console-border/80 transition" min="0" max="0" value="0">
+      <!-- Linear Timeline Scrub Slider with Stage Jump Bar -->
+      <div class="flex-1 w-full flex flex-col space-y-1">
+        <div id="stage-jump-bar" class="flex items-center justify-between font-mono text-[9px] text-console-dimText px-1 overflow-x-auto">
+          <!-- Populated dynamically via JS -->
         </div>
-        
-        <span class="text-[10px] text-console-dimText font-mono" id="timeline-end">JUL 19</span>
+        <div class="flex items-center space-x-4">
+          <span class="text-[10px] text-console-dimText font-mono" id="timeline-start">JUN 11</span>
+          
+          <div class="flex-1 relative flex items-center">
+            <input type="range" id="timeline-slider" class="w-full accent-console-accent h-1 bg-console-border rounded-lg appearance-none cursor-pointer hover:bg-console-border/80 transition" min="0" max="0" value="0">
+          </div>
+          
+          <span class="text-[10px] text-console-dimText font-mono" id="timeline-end">JUL 19</span>
+        </div>
       </div>
 
       <!-- Simulation Rate Info -->
@@ -936,6 +942,32 @@
       const activeFactionsCount = leaderboard.filter(e => e.count > 0).length;
       document.getElementById("active-factions").innerText = `${activeFactionsCount} Factions Active`;
 
+      // Render Conquest Champion Banner at end of tournament
+      const championContainer = document.getElementById("champion-container");
+      if (championContainer) {
+        if (currentDateIndex === dates.length - 1 && leaderboard.length > 0) {
+          const champion = leaderboard[0];
+          const totalCount = originalTeams.length;
+          championContainer.innerHTML = `
+            <div class="mb-3 p-3 bg-gradient-to-r from-yellow-500/20 via-console-panel to-yellow-500/10 border border-yellow-400/80 rounded-sm font-mono shadow-xl relative overflow-hidden">
+              <div class="text-[9px] uppercase tracking-widest text-yellow-400 font-bold flex items-center space-x-1">
+                <i class="ph-fill ph-trophy text-xs animate-bounce"></i>
+                <span>Conquest Champion</span>
+              </div>
+              <div class="flex items-center space-x-3 mt-1.5">
+                ${getFlagImg(champion.code)}
+                <span class="font-sans font-bold text-sm text-white">${champion.name}</span>
+                <span class="ml-auto font-bold text-yellow-400 text-xs">${champion.count} / ${totalCount} SECTORS</span>
+              </div>
+            </div>
+          `;
+        } else {
+          championContainer.innerHTML = "";
+        }
+      }
+
+      renderStageJumpBar();
+
       const leaderboardEl = document.getElementById("leaderboard");
       leaderboardEl.innerHTML = leaderboard
         .filter(entry => entry.count > 0)
@@ -1012,8 +1044,9 @@
                 <div class="text-console-text font-semibold mt-0.5">
                   ${getFlagImg(match.home)} ${homeName} <span class="text-console-dimText font-normal">vs</span> ${awayName} ${getFlagImg(match.away)}
                 </div>
-                <div class="text-[10px] mt-0.5">
-                  Result: ${resultText}
+                <div class="text-[10px] mt-0.5 flex items-center space-x-2">
+                  <span>Result: ${resultText}</span>
+                  <span class="text-console-dimText/70 text-[9px]">• Real: ${match.score}</span>
                 </div>
               </div>
               <div class="text-[10px] text-console-dimText group-hover:text-console-accent transition flex items-center space-x-1">
@@ -1059,6 +1092,73 @@
     if (window.innerWidth < 1024) {
       switchMobileTab('map');
     }
+
+    function renderStageJumpBar() {
+      const bar = document.getElementById("stage-jump-bar");
+      if (!matches || matches.length === 0 || !bar) return;
+
+      const stageMap = {};
+      matches.forEach(m => {
+        let key = m.stage;
+        if (key.includes("Group")) key = "Group Stage";
+        if (stageMap[key] === undefined) {
+          stageMap[key] = dates.indexOf(m.date);
+        }
+      });
+
+      const stageLabels = {
+        "Group Stage": "GROUP",
+        "Round of 16": "R16",
+        "Quarterfinal": "QUARTER",
+        "Semifinal": "SEMI",
+        "Third-Place Match": "3RD PLACE",
+        "Final": "FINAL"
+      };
+
+      bar.innerHTML = Object.entries(stageMap).map(([stage, dateIdx]) => {
+        const label = stageLabels[stage] || stage.toUpperCase();
+        const isActive = (currentDateIndex >= dateIdx && dateIdx !== -1);
+        return `
+          <button 
+            onclick="jumpToDateIndex(${dateIdx})" 
+            title="Jump to ${stage}"
+            class="px-1.5 py-0.5 rounded transition cursor-pointer font-mono text-[9px] ${isActive ? 'text-console-accent font-bold bg-console-accent/10 border border-console-accent/30' : 'hover:text-console-text text-console-dimText'}"
+          >
+            • ${label}
+          </button>
+        `;
+      }).join("");
+    }
+
+    function jumpToDateIndex(dateIdx) {
+      if (dateIdx === -1) return;
+      audio.playClick();
+      if (playbackInterval) stopPlayback();
+      currentDateIndex = dateIdx;
+      updateUI();
+    }
+
+    // Global Keyboard Hotkeys Listener
+    document.addEventListener("keydown", (e) => {
+      if (["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName)) return;
+
+      if (e.code === "Space") {
+        e.preventDefault();
+        document.getElementById("btn-play").click();
+      } else if (e.code === "ArrowLeft") {
+        e.preventDefault();
+        document.getElementById("btn-prev").click();
+      } else if (e.code === "ArrowRight") {
+        e.preventDefault();
+        document.getElementById("btn-next").click();
+      } else if (e.code === "KeyR") {
+        e.preventDefault();
+        resetOverrides();
+      } else if (e.code === "KeyM") {
+        e.preventDefault();
+        toggleAudio();
+      }
+    });
 
     // --- Interactive Control Listeners ---
     const slider = document.getElementById("timeline-slider");
