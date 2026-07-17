@@ -462,13 +462,17 @@ document.addEventListener("DOMContentLoaded", () => {
     switchMobileTab('map');
   }
 
-  d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(mapData => {
-    worldData = topojson.feature(mapData, mapData.objects.countries);
-    worldData.features = worldData.features.filter(d => d.id !== "010");
+  d3.json("data/countries-110m.json")
+    .catch(() => d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"))
+    .then(mapData => {
+      worldData = topojson.feature(mapData, mapData.objects.countries);
+      worldData.features = worldData.features.filter(d => d.id !== "010");
 
-    const width = container.node().clientWidth || 800;
-    const height = container.node().clientHeight || 500;
-    projection.fitSize([width, height], worldData);
+      const width = container.node().clientWidth || 800;
+      const height = container.node().clientHeight || 500;
+      svg.attr("viewBox", `0 0 ${width} ${height}`)
+         .attr("preserveAspectRatio", "xMidYMid meet");
+      projection.fitSize([width, height], worldData);
 
     const g = svg.append("g");
 
