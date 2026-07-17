@@ -49,8 +49,8 @@
       font-family: 'Geist', sans-serif;
     }
     .country {
-      stroke: #161a22;
-      stroke-width: 0.5px;
+      stroke: #1e2430;
+      stroke-width: 0.4px;
       transition: fill 0.4s cubic-bezier(0.16, 1, 0.3, 1), stroke-width 0.2s ease, opacity 0.3s ease;
       cursor: crosshair;
     }
@@ -152,7 +152,7 @@
       </div>
 
       <div id="map-container" class="w-full h-full flex items-center justify-center relative">
-        <svg id="world-map" class="w-full h-full max-h-[80vh] drop-shadow-2xl"></svg>
+        <svg id="world-map" class="w-full h-full drop-shadow-2xl"></svg>
         
         <!-- Legend Overlay -->
         <div class="absolute bottom-4 left-4 bg-console-panel/90 border border-console-border p-3 rounded font-mono text-[10px] text-console-dimText space-y-1.5 backdrop-blur-md">
@@ -228,7 +228,7 @@
       "AUS": { name: "Australia", color: "#D69E2E" },
       "IRQ": { name: "Iraq", color: "#2B6CB0" },
       "IRN": { name: "Iran", color: "#38A169" },
-      "JPN": { name: "Japan", color: "#4A5568" },
+      "JPN": { name: "Japan", color: "#3b4a5e" },
       "JOR": { name: "Jordan", color: "#C53030" },
       "KOR": { name: "South Korea", color: "#DD6B20" },
       "QAT": { name: "Qatar", color: "#7B341E" },
@@ -252,7 +252,7 @@
       "ECU": { name: "Ecuador", color: "#D69E2E" },
       "PRY": { name: "Paraguay", color: "#C53030" },
       "URY": { name: "Uruguay", color: "#4299E1" },
-      "NZL": { name: "New Zealand", color: "#1A202C" },
+      "NZL": { name: "New Zealand", color: "#2d3748" },
       "AUT": { name: "Austria", color: "#C53030" },
       "BEL": { name: "Belgium", color: "#9B2C2C" },
       "BIH": { name: "Bosnia & Herz.", color: "#2B6CB0" },
@@ -260,7 +260,7 @@
       "CZE": { name: "Czechia", color: "#2B6CB0" },
       "ENG": { name: "England", color: "#EDF2F7" },
       "FRA": { name: "France", color: "#2B6CB0" },
-      "DEU": { name: "Germany", color: "#2D3748" },
+      "DEU": { name: "Germany", color: "#445063" },
       "NLD": { name: "Netherlands", color: "#ED8936" }, // Orange
       "NOR": { name: "Norway", color: "#C53030" },
       "PRT": { name: "Portugal", color: "#276749" },
@@ -337,6 +337,26 @@
     let currentDateIndex = 0;
     let playbackInterval = null;
     let worldData = null;
+
+    // ISO A3 to ISO A2 Flag CDN mapping
+    const alpha3To2 = {
+      "CAN": "ca", "MEX": "mx", "USA": "us", "AUS": "au", "IRQ": "iq",
+      "IRN": "ir", "JPN": "jp", "JOR": "jo", "KOR": "kr", "QAT": "qa",
+      "SAU": "sa", "UZB": "uz", "DZA": "dz", "CPV": "cv", "COD": "cd",
+      "CIV": "ci", "EGY": "eg", "GHA": "gh", "MAR": "ma", "SEN": "sn",
+      "ZAF": "za", "TUN": "tn", "HTI": "ht", "PAN": "pa", "ARG": "ar",
+      "BRA": "br", "COL": "co", "ECU": "ec", "PRY": "py", "URY": "uy",
+      "NZL": "nz", "AUT": "at", "BEL": "be", "BIH": "ba", "HRV": "hr",
+      "CZE": "cz", "ENG": "gb-eng", "FRA": "fr", "DEU": "de", "NLD": "nl",
+      "NOR": "no", "PRT": "pt", "SCO": "gb-sct", "ESP": "es", "SWE": "se",
+      "CHE": "ch", "TUR": "tr", "CUW": "cw"
+    };
+
+    function getFlagImg(code) {
+      const code2 = alpha3To2[code];
+      if (!code2) return `<span class="w-5 h-3.5 bg-console-border inline-block rounded-sm"></span>`;
+      return `<img src="https://flagcdn.com/20x15/${code2}.png" class="w-5 h-3.5 object-cover rounded-sm border border-console-border/40 shadow-sm" alt="${code}" />`;
+    }
 
     let originalTeams = Object.keys(teamMetadata);
     
@@ -432,10 +452,7 @@
     const container = d3.select("#map-container");
     const tooltip = d3.select("#tooltip");
 
-    const projection = d3.geoNaturalEarth1()
-      .scale(160)
-      .translate([window.innerWidth > 1024 ? 380 : 300, 260]);
-
+    const projection = d3.geoNaturalEarth1();
     const path = d3.geoPath().projection(projection);
     const graticule = d3.geoGraticule();
 
@@ -452,6 +469,14 @@
     d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(data => {
       worldData = topojson.feature(data, data.objects.countries);
       
+      // Filter out Antarctica (id "010") to make the rest of the world render much larger
+      worldData.features = worldData.features.filter(d => d.id !== "010");
+
+      // Dynamically fit map size to container viewport
+      const width = container.node().clientWidth || 800;
+      const height = container.node().clientHeight || 500;
+      projection.fitSize([width, height], worldData);
+
       const g = svg.append("g");
 
       // Draw map Grid
@@ -514,8 +539,8 @@
       if (!alpha3 || !originalTeams.includes(alpha3)) {
         tooltip.style("display", "block")
           .html(`
-            <div class="text-[10px] text-console-dimText uppercase tracking-wider">Unmapped Zone</div>
-            <div class="font-bold font-mono mt-0.5 text-console-text">${d.properties.name}</div>
+            <div class="text-[9px] text-console-dimText uppercase tracking-wider">Unmapped Zone</div>
+            <div class="font-bold font-sans mt-1 text-console-text">${d.properties.name}</div>
           `);
         return;
       }
@@ -526,20 +551,23 @@
       const currentOwner = teamMetadata[currentOwnerCode].name;
       const currentOwnerColor = teamMetadata[currentOwnerCode].color;
 
-      // Compose lineage trail (e.g. USA -> BRA -> ARG)
+      // Compose lineage trail with flags
       const lineageTrail = lineageCodes.map(code => teamMetadata[code]?.name || code).join(" ➔ ");
 
       let content = `
         <div class="text-[9px] text-console-dimText uppercase tracking-wider">Territory Details</div>
-        <div class="font-bold text-console-text font-mono text-sm mt-0.5">${originalTeam}</div>
+        <div class="flex items-center space-x-2 mt-1">
+          ${getFlagImg(alpha3)}
+          <span class="font-bold text-console-text font-sans text-sm">${originalTeam}</span>
+        </div>
       `;
       
       if (alpha3 !== currentOwnerCode) {
         content += `
-          <div class="flex items-center space-x-1.5 mt-2 pt-1.5 border-t border-console-border">
-            <span class="w-2 h-2 rounded-full" style="background-color: ${currentOwnerColor}"></span>
+          <div class="flex items-center space-x-2 mt-2 pt-1.5 border-t border-console-border">
+            ${getFlagImg(currentOwnerCode)}
             <span class="text-[11px] text-console-dimText">Occupied by:</span>
-            <span class="text-[11px] text-console-accent font-bold">${currentOwner}</span>
+            <span class="text-[11px] text-console-accent font-bold font-sans">${currentOwner}</span>
           </div>
           <div class="mt-2 text-[9px] leading-relaxed text-console-dimText font-mono border-t border-console-border/50 pt-1.5">
             <div class="uppercase tracking-wider text-[8px] mb-0.5">Lineage Trace:</div>
@@ -548,7 +576,7 @@
         `;
       } else {
         content += `
-          <div class="text-[10px] text-console-accent mt-2 pt-1 font-bold">// Independent Sovereign</div>
+          <div class="text-[10px] text-console-accent mt-2 pt-1 font-bold font-mono">// Independent Sovereign</div>
         `;
       }
 
@@ -616,13 +644,14 @@
             class="flex items-center justify-between p-2 bg-console-bg border border-console-border hover:border-console-accent/40 rounded-sm cursor-pointer transition"
           >
             <div class="flex items-center space-x-2.5">
-              <span class="w-3 text-center text-[10px] font-bold text-console-dimText">${idx + 1}</span>
-              <span class="w-2 h-2 rounded-full" style="background-color: ${entry.color}"></span>
-              <span class="font-medium text-console-text">${entry.name}</span>
+              <span class="w-3 text-center font-mono text-[9px] font-bold text-console-dimText">${idx + 1}</span>
+              ${getFlagImg(entry.code)}
+              <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${entry.color}"></span>
+              <span class="text-[11px] font-semibold text-console-text font-sans">${entry.name}</span>
             </div>
-            <div class="flex items-center space-x-2">
-              <span class="text-[10px] text-console-dimText">Holdings:</span>
-              <span class="font-bold text-console-accent font-mono">${entry.count}</span>
+            <div class="flex items-center space-x-2 font-mono">
+              <span class="text-[9px] text-console-dimText">HOLDINGS:</span>
+              <span class="font-bold text-console-accent text-[11px]">${entry.count}</span>
             </div>
           </div>
         `).join("");
