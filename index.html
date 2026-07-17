@@ -57,15 +57,15 @@
     }
 
     body.light-theme {
-      --bg: #f4f6f8;
-      --panel: #ffffff;
-      --border: #e2e8f0;
+      --bg: #e8f1f9;
+      --panel: #f8fafc;
+      --border: #cbd5e1;
       --text: #0f172a;
-      --dim-text: #64748b;
-      --unmapped: #cbd5e1;
-      --graticule: #cbd5e1;
+      --dim-text: #475569;
+      --unmapped: #d1d5db;
+      --graticule: #c0d6e8;
       --country-stroke: #94a3b8;
-      --accent: #059669;
+      --accent: #0284c7;
     }
 
     body {
@@ -810,7 +810,7 @@
 
     function getCountryColor(name, id, code) {
       const alpha3 = getWCCodeFromMap(name, id, code);
-      const unmappedColor = isLightTheme ? "#cbd5e1" : "#161a22";
+      const unmappedColor = isLightTheme ? "#d1d5db" : "#161a22";
       if (!alpha3) return unmappedColor;
 
       if (originalTeams.includes(alpha3)) {
