@@ -51,7 +51,7 @@
     .country {
       stroke: #161a22;
       stroke-width: 0.5px;
-      transition: fill 0.4s cubic-bezier(0.16, 1, 0.3, 1), stroke-width 0.2s ease;
+      transition: fill 0.4s cubic-bezier(0.16, 1, 0.3, 1), stroke-width 0.2s ease, opacity 0.3s ease;
       cursor: crosshair;
     }
     .country:hover {
@@ -99,14 +99,21 @@
     </div>
   </header>
 
+  <!-- Mobile Tabs (Visible only on mobile/tablet) -->
+  <div class="lg:hidden flex border-b border-console-border bg-console-panel font-mono text-[10px] text-console-dimText">
+    <button onclick="switchMobileTab('map')" id="tab-map" class="flex-1 py-3 text-center border-r border-console-border text-console-accent font-bold">MAP VIEW</button>
+    <button onclick="switchMobileTab('leaderboard')" id="tab-leaderboard" class="flex-1 py-3 text-center border-r border-console-border">HOLDINGS</button>
+    <button onclick="switchMobileTab('logs')" id="tab-logs" class="flex-1 py-3 text-center">FEED</button>
+  </div>
+
   <!-- Dashboard Workspace Grid -->
   <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
     
     <!-- Left Sidebar: Leaderboard & Logs (Console Panel layout) -->
-    <aside class="w-full lg:w-96 bg-console-panel border-b lg:border-b-0 lg:border-r border-console-border flex flex-col h-[450px] lg:h-auto overflow-hidden">
+    <aside id="sidebar-panel" class="w-full lg:w-96 bg-console-panel border-b lg:border-b-0 lg:border-r border-console-border flex flex-col h-[400px] lg:h-auto overflow-hidden">
       
       <!-- Section 1: Leaderboard -->
-      <div class="flex-1 p-5 flex flex-col overflow-hidden border-b border-console-border">
+      <div id="leaderboard-section" class="flex-1 p-5 flex flex-col overflow-hidden border-b border-console-border">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-[10px] font-mono uppercase tracking-widest text-console-dimText flex items-center space-x-1.5">
             <i class="ph-bold ph-globe"></i>
@@ -121,7 +128,7 @@
       </div>
 
       <!-- Section 2: Logs styled as Terminal Feed -->
-      <div class="h-48 p-5 flex flex-col overflow-hidden bg-console-bg/50">
+      <div id="logs-section" class="h-48 p-5 flex flex-col overflow-hidden bg-console-bg/50">
         <h2 class="text-[10px] font-mono uppercase tracking-widest text-console-dimText mb-3 flex items-center space-x-1.5">
           <i class="ph-bold ph-terminal"></i>
           <span>Live Feed [Conquest log]</span>
@@ -134,9 +141,15 @@
     </aside>
 
     <!-- Main Map Visualization Section -->
-    <main class="flex-1 bg-console-bg relative flex items-center justify-center p-6 overflow-hidden">
+    <main id="map-section" class="flex-1 bg-console-bg relative flex items-center justify-center p-6 overflow-hidden">
       <!-- Interactive Grid Background Overlay -->
       <div class="absolute inset-0 bg-[linear-gradient(to_right,#161a22_1px,transparent_1px),linear-gradient(to_bottom,#161a22_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30 pointer-events-none"></div>
+
+      <!-- Conquest Large Event Alert Banner -->
+      <div id="alert-banner" class="absolute top-6 left-1/2 transform -translate-x-1/2 -translate-y-4 bg-console-accent text-console-bg px-6 py-3 font-mono text-[11px] font-bold uppercase tracking-widest rounded-sm shadow-2xl flex items-center space-x-2 border border-console-accent pointer-events-none opacity-0 transition-all duration-300 z-50">
+        <i class="ph-bold ph-warning-circle text-sm animate-pulse"></i>
+        <span id="alert-message">Conquest System Alert</span>
+      </div>
 
       <div id="map-container" class="w-full h-full flex items-center justify-center relative">
         <svg id="world-map" class="w-full h-full max-h-[80vh] drop-shadow-2xl"></svg>
@@ -154,7 +167,7 @@
         </div>
 
         <!-- Custom Tooltip (Anti-slop style) -->
-        <div id="tooltip" class="absolute hidden bg-console-panel border border-console-border text-console-text text-xs rounded-sm p-3 pointer-events-none shadow-2xl z-50 font-mono space-y-1 backdrop-blur-md">
+        <div id="tooltip" class="absolute hidden bg-console-panel border border-console-border text-console-text text-xs rounded-sm p-3 pointer-events-none shadow-2xl z-50 font-mono space-y-1 backdrop-blur-md max-w-sm">
           <!-- Managed via JS -->
         </div>
       </div>
@@ -325,15 +338,23 @@
     let worldData = null;
 
     let originalTeams = Object.keys(teamMetadata);
-    let territoryOwner = {};
+    
+    // Lineage Tracking: originalCountry -> [owner1, owner2, ...]
+    let countryLineage = {};
 
     function initOwnership() {
-      territoryOwner = {};
+      countryLineage = {};
       originalTeams.forEach(team => {
-        territoryOwner[team] = team;
+        countryLineage[team] = [team];
       });
     }
 
+    function getCurrentOwner(team) {
+      const history = countryLineage[team];
+      return history ? history[history.length - 1] : team;
+    }
+
+    // Run simulation step
     function runSimulationToDateIndex(dateIndex) {
       initOwnership();
       const targetDate = dates[dateIndex];
@@ -344,14 +365,14 @@
         const winnerCode = match.winner;
         const loserCode = (winnerCode === match.home) ? match.away : match.home;
         
-        const ownerOfLoser = territoryOwner[loserCode];
-        const ownerOfWinner = territoryOwner[winnerCode];
+        const ownerOfLoser = getCurrentOwner(loserCode);
+        const ownerOfWinner = getCurrentOwner(winnerCode);
         
         if (ownerOfLoser && ownerOfWinner && ownerOfLoser !== ownerOfWinner) {
           let count = 0;
           originalTeams.forEach(team => {
-            if (territoryOwner[team] === ownerOfLoser) {
-              territoryOwner[team] = ownerOfWinner;
+            if (getCurrentOwner(team) === ownerOfLoser) {
+              countryLineage[team].push(ownerOfWinner);
               count++;
             }
           });
@@ -364,6 +385,11 @@
             count: count,
             stage: match.stage
           });
+
+          // Trigger massive conquest visual alert banner on active play
+          if (count >= 4 && match.date === targetDate) {
+            triggerAlert(`[EVENT]: ${teamMetadata[ownerOfWinner].name.toUpperCase()} annexed ${teamMetadata[ownerOfLoser].name.toUpperCase()} (+${count} sectors)`);
+          }
         }
       });
 
@@ -373,7 +399,7 @@
     function getLeaderboard() {
       const counts = {};
       originalTeams.forEach(team => {
-        const owner = territoryOwner[team];
+        const owner = getCurrentOwner(team);
         counts[owner] = (counts[owner] || 0) + 1;
       });
 
@@ -387,6 +413,19 @@
         .sort((a, b) => b.count - a.count);
     }
 
+    // --- Conquest Event Warning Banner ---
+    function triggerAlert(message) {
+      const banner = document.getElementById("alert-banner");
+      document.getElementById("alert-message").innerText = message;
+      banner.style.opacity = "1";
+      banner.style.transform = "translate(-50%, 0)";
+      
+      setTimeout(() => {
+        banner.style.opacity = "0";
+        banner.style.transform = "translate(-50%, -16px)";
+      }, 2500);
+    }
+
     // --- D3 Map rendering with Graticules ---
     const svg = d3.select("#world-map");
     const container = d3.select("#map-container");
@@ -397,8 +436,6 @@
       .translate([window.innerWidth > 1024 ? 380 : 300, 260]);
 
     const path = d3.geoPath().projection(projection);
-
-    // Dynamic grid lines (graticules) for the retro-tactical radar look
     const graticule = d3.geoGraticule();
 
     // Map Zooming capability
@@ -454,17 +491,17 @@
 
     function getCountryColor(name, id) {
       const alpha3 = getWCCodeFromMap(name, id);
-      if (!alpha3) return "#161a22"; // Off-black default for empty world space
+      if (!alpha3) return "#161a22";
 
       if (originalTeams.includes(alpha3)) {
-        const owner = territoryOwner[alpha3];
+        const owner = getCurrentOwner(alpha3);
         return teamMetadata[owner]?.color || "#2c3e50";
       }
 
       return "#161a22";
     }
 
-    // Tooltip logic with modern minimal cards
+    // Tooltip logic with modern minimal cards + Lineage tracing
     function showTooltip(event, d) {
       const alpha3 = getWCCodeFromMap(d.properties.name, d.id);
       if (!alpha3 || !originalTeams.includes(alpha3)) {
@@ -477,20 +514,29 @@
       }
 
       const originalTeam = teamMetadata[alpha3].name;
-      const currentOwnerCode = territoryOwner[alpha3];
+      const lineageCodes = countryLineage[alpha3] || [alpha3];
+      const currentOwnerCode = lineageCodes[lineageCodes.length - 1];
       const currentOwner = teamMetadata[currentOwnerCode].name;
       const currentOwnerColor = teamMetadata[currentOwnerCode].color;
+
+      // Compose lineage trail (e.g. USA -> BRA -> ARG)
+      const lineageTrail = lineageCodes.map(code => teamMetadata[code]?.name || code).join(" ➔ ");
 
       let content = `
         <div class="text-[9px] text-console-dimText uppercase tracking-wider">Territory Details</div>
         <div class="font-bold text-console-text font-mono text-sm mt-0.5">${originalTeam}</div>
       `;
+      
       if (alpha3 !== currentOwnerCode) {
         content += `
           <div class="flex items-center space-x-1.5 mt-2 pt-1.5 border-t border-console-border">
             <span class="w-2 h-2 rounded-full" style="background-color: ${currentOwnerColor}"></span>
             <span class="text-[11px] text-console-dimText">Occupied by:</span>
             <span class="text-[11px] text-console-accent font-bold">${currentOwner}</span>
+          </div>
+          <div class="mt-2 text-[9px] leading-relaxed text-console-dimText font-mono border-t border-console-border/50 pt-1.5">
+            <div class="uppercase tracking-wider text-[8px] mb-0.5">Lineage Trace:</div>
+            <span class="text-console-text">${lineageTrail}</span>
           </div>
         `;
       } else {
@@ -510,6 +556,26 @@
 
     function hideTooltip() {
       tooltip.style("display", "none");
+    }
+
+    // --- Interactive Linkage Highlight / Fade ---
+    function highlightOwner(ownerCode) {
+      d3.selectAll(".country")
+        .transition()
+        .duration(200)
+        .style("opacity", d => {
+          const alpha3 = getWCCodeFromMap(d.properties.name, d.id);
+          if (!alpha3) return 0.05;
+          const currentOwner = getCurrentOwner(alpha3);
+          return currentOwner === ownerCode ? 1.0 : 0.12;
+        });
+    }
+
+    function resetHighlight() {
+      d3.selectAll(".country")
+        .transition()
+        .duration(200)
+        .style("opacity", 1.0);
     }
 
     // --- UI Update Loop ---
@@ -537,7 +603,11 @@
       leaderboardEl.innerHTML = leaderboard
         .filter(entry => entry.count > 0)
         .map((entry, idx) => `
-          <div class="flex items-center justify-between p-2 bg-console-bg border border-console-border hover:border-console-accent/40 rounded-sm transition">
+          <div 
+            onmouseenter="highlightOwner('${entry.code}')" 
+            onmouseleave="resetHighlight()"
+            class="flex items-center justify-between p-2 bg-console-bg border border-console-border hover:border-console-accent/40 rounded-sm cursor-pointer transition"
+          >
             <div class="flex items-center space-x-2.5">
               <span class="w-3 text-center text-[10px] font-bold text-console-dimText">${idx + 1}</span>
               <span class="w-2 h-2 rounded-full" style="background-color: ${entry.color}"></span>
@@ -566,6 +636,41 @@
           </div>
         `).join("");
       }
+    }
+
+    // --- Mobile Responsive Tabs Logic ---
+    function switchMobileTab(tab) {
+      const mapSec = document.getElementById("map-section");
+      const sidePanel = document.getElementById("sidebar-panel");
+      const lbSec = document.getElementById("leaderboard-section");
+      const logsSec = document.getElementById("logs-section");
+
+      // Tabs active styling
+      document.getElementById("tab-map").className = "flex-1 py-3 text-center border-r border-console-border " + (tab === 'map' ? "text-console-accent font-bold" : "");
+      document.getElementById("tab-leaderboard").className = "flex-1 py-3 text-center border-r border-console-border " + (tab === 'leaderboard' ? "text-console-accent font-bold" : "");
+      document.getElementById("tab-logs").className = "flex-1 py-3 text-center " + (tab === 'logs' ? "text-console-accent font-bold" : "");
+
+      if (tab === 'map') {
+        mapSec.classList.remove("hidden");
+        sidePanel.classList.add("hidden");
+      } else if (tab === 'leaderboard') {
+        mapSec.classList.add("hidden");
+        sidePanel.classList.remove("hidden");
+        lbSec.classList.remove("hidden");
+        logsSec.classList.add("hidden");
+        sidePanel.className = "w-full bg-console-panel border-b border-console-border flex flex-col h-auto overflow-hidden";
+      } else if (tab === 'logs') {
+        mapSec.classList.add("hidden");
+        sidePanel.classList.remove("hidden");
+        lbSec.classList.add("hidden");
+        logsSec.classList.remove("hidden");
+        sidePanel.className = "w-full bg-console-panel border-b border-console-border flex flex-col h-auto overflow-hidden";
+      }
+    }
+
+    // Initialize layout for viewport sizes on load
+    if (window.innerWidth < 1024) {
+      switchMobileTab('map');
     }
 
     // --- Interactive Control Listeners ---
@@ -608,7 +713,6 @@
     });
 
     function startPlayback() {
-      // Toggle play style to active/pause state
       playBtn.classList.remove("bg-console-accent", "text-console-bg");
       playBtn.classList.add("bg-console-red", "text-console-text");
       document.getElementById("play-icon").className = "ph-fill ph-pause text-xs";
