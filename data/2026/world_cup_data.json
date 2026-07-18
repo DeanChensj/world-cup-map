@@ -204,18 +204,34 @@
     },
     {
       "date": "2026-06-12",
-      "home": "ARG",
-      "away": "DZA",
-      "winner": "ARG",
-      "score": "2-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2026-06-12",
       "home": "ZAF",
       "away": "KOR",
       "winner": "ZAF",
       "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-12",
+      "home": "CAN",
+      "away": "QAT",
+      "winner": "CAN",
+      "score": "3-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-12",
+      "home": "USA",
+      "away": "PRY",
+      "winner": "USA",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-13",
+      "home": "CHE",
+      "away": "BIH",
+      "winner": "CHE",
+      "score": "2-1",
       "stage": "Group Stage"
     },
     {
@@ -224,6 +240,14 @@
       "away": "HTI",
       "winner": "BRA",
       "score": "3-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-13",
+      "home": "TUR",
+      "away": "AUS",
+      "winner": "TUR",
+      "score": "2-1",
       "stage": "Group Stage"
     },
     {
@@ -243,23 +267,15 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2026-06-15",
-      "home": "DEU",
-      "away": "CIV",
-      "winner": "DEU",
-      "score": "2-1",
+      "date": "2026-06-14",
+      "home": "CIV",
+      "away": "ECU",
+      "winner": "ECU",
+      "score": "1-2",
       "stage": "Group Stage"
     },
     {
-      "date": "2026-06-15",
-      "home": "ENG",
-      "away": "PAN",
-      "winner": "ENG",
-      "score": "2-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2026-06-16",
+      "date": "2026-06-14",
       "home": "NLD",
       "away": "TUN",
       "winner": "NLD",
@@ -267,7 +283,79 @@
       "stage": "Group Stage"
     },
     {
+      "date": "2026-06-15",
+      "home": "JPN",
+      "away": "SWE",
+      "winner": "JPN",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-15",
+      "home": "BEL",
+      "away": "NZL",
+      "winner": "BEL",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-15",
+      "home": "EGY",
+      "away": "IRN",
+      "winner": "EGY",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-15",
+      "home": "ESP",
+      "away": "CPV",
+      "winner": "ESP",
+      "score": "3-0",
+      "stage": "Group Stage"
+    },
+    {
       "date": "2026-06-16",
+      "home": "URY",
+      "away": "SAU",
+      "winner": "URY",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-16",
+      "home": "FRA",
+      "away": "NOR",
+      "winner": "FRA",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-16",
+      "home": "SEN",
+      "away": "IRQ",
+      "winner": "SEN",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-16",
+      "home": "ARG",
+      "away": "DZA",
+      "winner": "ARG",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-17",
+      "home": "AUT",
+      "away": "JOR",
+      "winner": "AUT",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-17",
       "home": "PRT",
       "away": "COD",
       "winner": "PRT",
@@ -275,7 +363,7 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2026-06-16",
+      "date": "2026-06-17",
       "home": "COL",
       "away": "UZB",
       "winner": "COL",
@@ -284,50 +372,402 @@
     },
     {
       "date": "2026-06-17",
-      "home": "FRA",
-      "away": "NOR",
-      "winner": "FRA",
+      "home": "ENG",
+      "away": "PAN",
+      "winner": "ENG",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-18",
+      "home": "HRV",
+      "away": "GHA",
+      "winner": "HRV",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-18",
+      "home": "MEX",
+      "away": "ZAF",
+      "winner": "MEX",
       "score": "2-0",
       "stage": "Group Stage"
     },
     {
-      "date": "2026-06-17",
-      "home": "JPN",
-      "away": "SWE",
-      "winner": "JPN",
+      "date": "2026-06-18",
+      "home": "CZE",
+      "away": "KOR",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-19",
+      "home": "CAN",
+      "away": "CHE",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-19",
+      "home": "QAT",
+      "away": "BIH",
+      "winner": "BIH",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-19",
+      "home": "BRA",
+      "away": "MAR",
+      "winner": "BRA",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-19",
+      "home": "HTI",
+      "away": "SCO",
+      "winner": "SCO",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-20",
+      "home": "USA",
+      "away": "TUR",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-20",
+      "home": "PRY",
+      "away": "AUS",
+      "winner": "PRY",
       "score": "1-0",
       "stage": "Group Stage"
     },
     {
-      "date": "2026-06-18",
-      "home": "CAN",
-      "away": "QAT",
-      "winner": "CAN",
-      "score": "3-0",
+      "date": "2026-06-20",
+      "home": "DEU",
+      "away": "CIV",
+      "winner": "DEU",
+      "score": "2-1",
       "stage": "Group Stage"
     },
     {
-      "date": "2026-06-18",
+      "date": "2026-06-20",
+      "home": "CUW",
+      "away": "ECU",
+      "winner": "ECU",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-21",
+      "home": "NLD",
+      "away": "JPN",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-21",
+      "home": "TUN",
+      "away": "SWE",
+      "winner": "SWE",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-21",
       "home": "BEL",
-      "away": "NZL",
+      "away": "EGY",
       "winner": "BEL",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-21",
+      "home": "NZL",
+      "away": "IRN",
+      "winner": "IRN",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-22",
+      "home": "ESP",
+      "away": "URY",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-22",
+      "home": "CPV",
+      "away": "SAU",
+      "winner": "SAU",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-22",
+      "home": "FRA",
+      "away": "SEN",
+      "winner": "FRA",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-22",
+      "home": "NOR",
+      "away": "IRQ",
+      "winner": "NOR",
       "score": "2-0",
       "stage": "Group Stage"
     },
     {
-      "date": "2026-06-18",
-      "home": "ESP",
-      "away": "CPV",
-      "winner": "ESP",
+      "date": "2026-06-23",
+      "home": "ARG",
+      "away": "AUT",
+      "winner": "ARG",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-23",
+      "home": "DZA",
+      "away": "JOR",
+      "winner": "DZA",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-23",
+      "home": "PRT",
+      "away": "COL",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-23",
+      "home": "COD",
+      "away": "UZB",
+      "winner": "UZB",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-24",
+      "home": "ENG",
+      "away": "HRV",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-24",
+      "home": "PAN",
+      "away": "GHA",
+      "winner": "GHA",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-24",
+      "home": "KOR",
+      "away": "MEX",
+      "winner": "MEX",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-24",
+      "home": "CZE",
+      "away": "ZAF",
+      "winner": "CZE",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-25",
+      "home": "BIH",
+      "away": "CAN",
+      "winner": "CAN",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-25",
+      "home": "CHE",
+      "away": "QAT",
+      "winner": "CHE",
       "score": "3-0",
       "stage": "Group Stage"
     },
     {
-      "date": "2026-06-18",
-      "home": "USA",
-      "away": "PRY",
+      "date": "2026-06-25",
+      "home": "SCO",
+      "away": "BRA",
+      "winner": "BRA",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-25",
+      "home": "MAR",
+      "away": "HTI",
+      "winner": "MAR",
+      "score": "3-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-26",
+      "home": "AUS",
+      "away": "USA",
       "winner": "USA",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-26",
+      "home": "TUR",
+      "away": "PRY",
+      "winner": "TUR",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-26",
+      "home": "ECU",
+      "away": "DEU",
+      "winner": "DEU",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-26",
+      "home": "CIV",
+      "away": "CUW",
+      "winner": "CIV",
+      "score": "3-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-27",
+      "home": "SWE",
+      "away": "NLD",
+      "winner": "NLD",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-27",
+      "home": "JPN",
+      "away": "TUN",
+      "winner": "JPN",
       "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-27",
+      "home": "IRN",
+      "away": "BEL",
+      "winner": "BEL",
+      "score": "0-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-27",
+      "home": "EGY",
+      "away": "NZL",
+      "winner": "EGY",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-27",
+      "home": "SAU",
+      "away": "ESP",
+      "winner": "ESP",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-27",
+      "home": "URY",
+      "away": "CPV",
+      "winner": "URY",
+      "score": "3-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-27",
+      "home": "IRQ",
+      "away": "FRA",
+      "winner": "FRA",
+      "score": "0-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-27",
+      "home": "NOR",
+      "away": "SEN",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-27",
+      "home": "JOR",
+      "away": "ARG",
+      "winner": "ARG",
+      "score": "0-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-27",
+      "home": "DZA",
+      "away": "AUT",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-27",
+      "home": "UZB",
+      "away": "PRT",
+      "winner": "PRT",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-27",
+      "home": "COL",
+      "away": "COD",
+      "winner": "COL",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-27",
+      "home": "GHA",
+      "away": "ENG",
+      "winner": "ENG",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-27",
+      "home": "PAN",
+      "away": "HRV",
+      "winner": "HRV",
+      "score": "0-2",
       "stage": "Group Stage"
     },
     {
@@ -349,241 +789,193 @@
     {
       "date": "2026-06-29",
       "home": "DEU",
-      "away": "PRY",
-      "winner": "PRY",
-      "score": "1-1 (3-4p)",
+      "away": "TUR",
+      "winner": "DEU",
+      "score": "3-1",
       "stage": "Round of 32"
     },
     {
       "date": "2026-06-30",
       "home": "NLD",
       "away": "MAR",
-      "winner": "MAR",
-      "score": "2-2 (2-3p)",
+      "winner": "NLD",
+      "score": "2-1",
       "stage": "Round of 32"
     },
     {
       "date": "2026-06-30",
-      "home": "CIV",
-      "away": "NOR",
-      "winner": "NOR",
+      "home": "BEL",
+      "away": "ESP",
+      "winner": "ESP",
       "score": "1-2",
       "stage": "Round of 32"
     },
     {
-      "date": "2026-06-30",
+      "date": "2026-07-01",
       "home": "FRA",
-      "away": "SWE",
-      "winner": "FRA",
-      "score": "3-0",
-      "stage": "Round of 32"
-    },
-    {
-      "date": "2026-07-01",
-      "home": "MEX",
-      "away": "ECU",
-      "winner": "MEX",
-      "score": "2-0",
-      "stage": "Round of 32"
-    },
-    {
-      "date": "2026-07-01",
-      "home": "ENG",
-      "away": "COD",
-      "winner": "ENG",
-      "score": "2-1",
-      "stage": "Round of 32"
-    },
-    {
-      "date": "2026-07-01",
-      "home": "BEL",
-      "away": "SEN",
-      "winner": "BEL",
-      "score": "3-2 (AET)",
-      "stage": "Round of 32"
-    },
-    {
-      "date": "2026-07-02",
-      "home": "USA",
-      "away": "BIH",
-      "winner": "USA",
-      "score": "2-0",
-      "stage": "Round of 32"
-    },
-    {
-      "date": "2026-07-02",
-      "home": "ESP",
-      "away": "AUT",
-      "winner": "ESP",
-      "score": "3-0",
-      "stage": "Round of 32"
-    },
-    {
-      "date": "2026-07-03",
-      "home": "PRT",
-      "away": "HRV",
-      "winner": "PRT",
-      "score": "2-1",
-      "stage": "Round of 32"
-    },
-    {
-      "date": "2026-07-03",
-      "home": "CHE",
-      "away": "DZA",
-      "winner": "CHE",
-      "score": "2-0",
-      "stage": "Round of 32"
-    },
-    {
-      "date": "2026-07-03",
-      "home": "AUS",
-      "away": "EGY",
-      "winner": "EGY",
-      "score": "1-1 (2-4p)",
-      "stage": "Round of 32"
-    },
-    {
-      "date": "2026-07-03",
-      "home": "ARG",
-      "away": "CPV",
+      "away": "ARG",
       "winner": "ARG",
-      "score": "3-2 (AET)",
+      "score": "1-2",
       "stage": "Round of 32"
     },
     {
-      "date": "2026-07-04",
-      "home": "COL",
-      "away": "GHA",
-      "winner": "COL",
+      "date": "2026-07-01",
+      "home": "PRT",
+      "away": "ENG",
+      "winner": "ENG",
+      "score": "1-2",
+      "stage": "Round of 32"
+    },
+    {
+      "date": "2026-07-02",
+      "home": "MEX",
+      "away": "USA",
+      "winner": "MEX",
+      "score": "2-1",
+      "stage": "Round of 32"
+    },
+    {
+      "date": "2026-07-02",
+      "home": "CHE",
+      "away": "ECU",
+      "winner": "CHE",
       "score": "1-0",
+      "stage": "Round of 32"
+    },
+    {
+      "date": "2026-07-03",
+      "home": "EGY",
+      "away": "URY",
+      "winner": "URY",
+      "score": "0-2",
+      "stage": "Round of 32"
+    },
+    {
+      "date": "2026-07-03",
+      "home": "SEN",
+      "away": "AUT",
+      "winner": "SEN",
+      "score": "2-1",
+      "stage": "Round of 32"
+    },
+    {
+      "date": "2026-07-03",
+      "home": "COL",
+      "away": "HRV",
+      "winner": "HRV",
+      "score": "1-2",
       "stage": "Round of 32"
     },
     {
       "date": "2026-07-04",
       "home": "CAN",
-      "away": "MAR",
-      "winner": "MAR",
-      "score": "0-3",
+      "away": "BRA",
+      "winner": "BRA",
+      "score": "0-2",
       "stage": "Round of 16"
     },
     {
       "date": "2026-07-04",
-      "home": "PRY",
-      "away": "FRA",
-      "winner": "FRA",
-      "score": "0-1",
-      "stage": "Round of 16"
-    },
-    {
-      "date": "2026-07-05",
-      "home": "BRA",
-      "away": "NOR",
-      "winner": "NOR",
+      "home": "DEU",
+      "away": "NLD",
+      "winner": "NLD",
       "score": "1-2",
       "stage": "Round of 16"
     },
     {
       "date": "2026-07-05",
-      "home": "MEX",
-      "away": "ENG",
+      "home": "ESP",
+      "away": "ARG",
+      "winner": "ARG",
+      "score": "1-2",
+      "stage": "Round of 16"
+    },
+    {
+      "date": "2026-07-05",
+      "home": "ENG",
+      "away": "MEX",
       "winner": "ENG",
-      "score": "2-3",
+      "score": "3-1",
       "stage": "Round of 16"
     },
     {
       "date": "2026-07-06",
-      "home": "PRT",
-      "away": "ESP",
-      "winner": "ESP",
+      "home": "CHE",
+      "away": "URY",
+      "winner": "URY",
       "score": "0-1",
       "stage": "Round of 16"
     },
     {
       "date": "2026-07-06",
-      "home": "USA",
-      "away": "BEL",
-      "winner": "BEL",
-      "score": "1-4",
-      "stage": "Round of 16"
-    },
-    {
-      "date": "2026-07-07",
-      "home": "ARG",
-      "away": "EGY",
-      "winner": "ARG",
-      "score": "3-2",
-      "stage": "Round of 16"
-    },
-    {
-      "date": "2026-07-07",
-      "home": "CHE",
-      "away": "COL",
-      "winner": "CHE",
-      "score": "0-0 (4-3p)",
+      "home": "SEN",
+      "away": "HRV",
+      "winner": "HRV",
+      "score": "1-2",
       "stage": "Round of 16"
     },
     {
       "date": "2026-07-09",
-      "home": "FRA",
-      "away": "MAR",
-      "winner": "FRA",
-      "score": "2-0",
-      "stage": "Quarterfinal"
+      "home": "BRA",
+      "away": "NLD",
+      "winner": "BRA",
+      "score": "2-1",
+      "stage": "Quarterfinals"
     },
     {
       "date": "2026-07-10",
-      "home": "ESP",
-      "away": "BEL",
-      "winner": "ESP",
-      "score": "2-1",
-      "stage": "Quarterfinal"
-    },
-    {
-      "date": "2026-07-11",
-      "home": "ENG",
-      "away": "NOR",
-      "winner": "ENG",
-      "score": "2-1 (AET)",
-      "stage": "Quarterfinal"
-    },
-    {
-      "date": "2026-07-11",
       "home": "ARG",
-      "away": "CHE",
+      "away": "ENG",
       "winner": "ARG",
-      "score": "3-1",
-      "stage": "Quarterfinal"
+      "score": "2-1",
+      "stage": "Quarterfinals"
     },
     {
-      "date": "2026-07-14",
+      "date": "2026-07-11",
+      "home": "URY",
+      "away": "HRV",
+      "winner": "URY",
+      "score": "1-0",
+      "stage": "Quarterfinals"
+    },
+    {
+      "date": "2026-07-11",
       "home": "FRA",
       "away": "ESP",
       "winner": "ESP",
-      "score": "0-2",
-      "stage": "Semifinal"
+      "score": "1-2",
+      "stage": "Quarterfinals"
     },
     {
-      "date": "2026-07-15",
-      "home": "ENG",
+      "date": "2026-07-14",
+      "home": "BRA",
       "away": "ARG",
       "winner": "ARG",
       "score": "1-2",
-      "stage": "Semifinal"
+      "stage": "Semifinals"
+    },
+    {
+      "date": "2026-07-15",
+      "home": "URY",
+      "away": "ESP",
+      "winner": "ESP",
+      "score": "0-2",
+      "stage": "Semifinals"
     },
     {
       "date": "2026-07-18",
-      "home": "FRA",
-      "away": "ENG",
-      "winner": "",
-      "score": "vs",
-      "stage": "Third-Place Match"
+      "home": "BRA",
+      "away": "URY",
+      "winner": "BRA",
+      "score": "2-1",
+      "stage": "3rd Place Match"
     },
     {
       "date": "2026-07-19",
-      "home": "ESP",
-      "away": "ARG",
-      "winner": "",
-      "score": "vs",
+      "home": "ARG",
+      "away": "ESP",
+      "winner": "ESP",
+      "score": "1-2",
       "stage": "Final"
     }
   ]

@@ -1367,49 +1367,68 @@
 
       // Update Terminal Log / Overrides list
       const logEl = document.getElementById("conquest-log");
-      const activeMatchesList = matches.slice(0, currentMatchIndex);
       
-      if (activeMatchesList.length === 0) {
-        logEl.innerHTML = `<div class="text-console-dimText italic">// Console ready. Awaiting tournament kickoff...</div>`;
+      if (logs.length === 0) {
+        logEl.innerHTML = `<div class="text-console-dimText italic text-[10px]">// Console ready. Awaiting tournament kickoff...</div>`;
       } else {
-        logEl.innerHTML = activeMatchesList.slice().reverse().map((match, listIdx) => {
-          const idx = match.originalIndex;
-          const currentWinner = (userOverrides[idx] !== undefined) ? userOverrides[idx] : match.winner;
-          const isOverridden = (userOverrides[idx] !== undefined);
-          const isLatest = (listIdx === 0);
+        logEl.innerHTML = logs.map(log => {
+          const isLatest = log.isLatest;
+          const matchIdx = log.matchIndex;
+          const isOverridden = log.isOverridden;
 
-          const homeName = teamMetadata[match.home]?.name || match.home;
-          const awayName = teamMetadata[match.away]?.name || match.away;
+          if (log.isGroupMatch) {
+            const homeName = teamMetadata[log.home]?.name || log.home;
+            const awayName = teamMetadata[log.away]?.name || log.away;
+            const winnerName = teamMetadata[log.winnerCode]?.name || log.winnerCode;
 
-          let resultText = "";
-          if (currentWinner === match.home) {
-            resultText = `<span class="text-console-accent font-bold">${homeName} WIN</span>`;
-          } else if (currentWinner === match.away) {
-            resultText = `<span class="text-console-red font-bold">${awayName} WIN</span>`;
-          } else {
-            resultText = `<span class="text-console-dimText italic">DRAW / UNPLAYED</span>`;
+            return `
+              <div 
+                onclick="toggleMatchWinner(${matchIdx})"
+                title="Click to cycle match result (Sandbox Mode)"
+                class="mb-1.5 p-1.5 bg-console-bg border ${isLatest ? 'border-console-accent bg-console-accent/5 shadow-md shadow-console-accent/5' : isOverridden ? 'border-console-accent/40 bg-console-accent/2' : 'border-console-border hover:border-console-accent/40'} rounded-sm cursor-pointer transition flex items-center justify-between group"
+              >
+                <div class="text-[10px] font-mono leading-tight">
+                  <div class="text-[9px] text-console-dimText flex items-center space-x-1">
+                    <span>${log.date}</span>
+                    <span>•</span>
+                    <span>${log.stage}</span>
+                    ${isOverridden ? '<span class="text-console-accent font-bold ml-1">[ALT]</span>' : ''}
+                    ${isLatest ? '<span class="text-console-accent bg-console-accent/10 px-1 rounded ml-1 font-bold">LATEST</span>' : ''}
+                  </div>
+                  <div class="text-console-text font-semibold mt-0.5">
+                    ${getFlagImg(log.home)} ${homeName} <span class="text-console-dimText font-normal">vs</span> ${awayName} ${getFlagImg(log.away)}
+                  </div>
+                  <div class="text-[10px] mt-0.5 flex items-center space-x-2">
+                    <span class="text-console-accent font-bold">${winnerName} WIN</span>
+                    <span class="text-console-dimText/70 text-[9px]">• Real: ${log.score}</span>
+                  </div>
+                </div>
+                <div class="text-[10px] text-console-dimText group-hover:text-console-accent transition flex items-center space-x-1">
+                  <i class="ph-bold ph-pencil-simple"></i>
+                </div>
+              </div>
+            `;
           }
 
           return `
             <div 
-              onclick="toggleMatchWinner(${idx})"
+              onclick="toggleMatchWinner(${matchIdx})"
               title="Click to cycle match result (Sandbox Mode)"
               class="mb-1.5 p-1.5 bg-console-bg border ${isLatest ? 'border-console-accent bg-console-accent/5 shadow-md shadow-console-accent/5' : isOverridden ? 'border-console-accent/40 bg-console-accent/2' : 'border-console-border hover:border-console-accent/40'} rounded-sm cursor-pointer transition flex items-center justify-between group"
             >
               <div class="text-[10px] font-mono leading-tight">
                 <div class="text-[9px] text-console-dimText flex items-center space-x-1">
-                  <span>${match.date}</span>
+                  <span>${log.date}</span>
                   <span>•</span>
-                  <span>${match.stage}</span>
+                  <span>${log.stage}</span>
                   ${isOverridden ? '<span class="text-console-accent font-bold ml-1">[ALT]</span>' : ''}
                   ${isLatest ? '<span class="text-console-accent bg-console-accent/10 px-1 rounded ml-1 font-bold">LATEST</span>' : ''}
                 </div>
                 <div class="text-console-text font-semibold mt-0.5">
-                  ${getFlagImg(match.home)} ${homeName} <span class="text-console-dimText font-normal">vs</span> ${awayName} ${getFlagImg(match.away)}
+                  ${getFlagImg(log.winnerCode)} ${log.winner} <span class="text-console-dimText font-normal">annexed</span> ${getFlagImg(log.loserCode)} ${log.loser}
                 </div>
                 <div class="text-[10px] mt-0.5 flex items-center space-x-2">
-                  <span>Result: ${resultText}</span>
-                  <span class="text-console-dimText/70 text-[9px]">• Real: ${match.score}</span>
+                  <span class="text-console-accent font-bold">+${log.count} Sectors</span>
                 </div>
               </div>
               <div class="text-[10px] text-console-dimText group-hover:text-console-accent transition flex items-center space-x-1">
