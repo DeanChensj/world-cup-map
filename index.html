@@ -742,6 +742,14 @@
         matches = wcData.matches;
         matches.forEach((m, idx) => m.originalIndex = idx);
         dates = Array.from(new Set(matches.map(m => m.date))).sort();
+        
+        // Insert a Pre-Tournament Day 0 date entry so that simulation starts at a clean kickoff state
+        if (dates.length > 0) {
+          const firstDate = new Date(dates[0]);
+          firstDate.setDate(firstDate.getDate() - 1);
+          const preTournamentDate = firstDate.toISOString().split("T")[0];
+          dates.unshift(preTournamentDate);
+        }
         originalTeams = Object.keys(teamMetadata);
 
         // Calculate advancing teams dynamically
