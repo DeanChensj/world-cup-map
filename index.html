@@ -203,11 +203,6 @@
       <!-- Interactive Grid Background Overlay -->
       <div class="absolute inset-0 bg-[linear-gradient(to_right,#161a22_1px,transparent_1px),linear-gradient(to_bottom,#161a22_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30 pointer-events-none"></div>
 
-      <!-- Conquest Large Event Alert Banner -->
-      <div id="alert-banner" class="absolute top-2 sm:top-6 left-1/2 transform -translate-x-1/2 -translate-y-4 bg-console-accent text-console-bg px-4 py-2 sm:px-6 sm:py-3 font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-widest rounded-sm shadow-2xl flex items-center space-x-2 border border-console-accent pointer-events-none opacity-0 transition-all duration-300 z-50">
-        <i class="ph-bold ph-warning-circle text-sm animate-pulse"></i>
-        <span id="alert-message">Conquest System Alert</span>
-      </div>
 
       <!-- Cyberpunk Black Gold Clash Card Overlay -->
       <div id="clash-card-overlay" class="absolute top-2 sm:top-6 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-[#0d0f12]/95 via-[#161a22]/95 to-[#0d0f12]/95 border border-amber-500/60 shadow-[0_0_25px_rgba(245,158,11,0.25)] rounded-lg p-2 sm:p-3.5 z-40 hidden transition-all duration-300 w-[94%] sm:w-auto max-w-[340px] sm:max-w-sm backdrop-blur-md">
@@ -721,15 +716,6 @@
     // --- Conquest Event Warning Banner ---
     function triggerAlert(message) {
       audio.playAlert();
-      const banner = document.getElementById("alert-banner");
-      document.getElementById("alert-message").innerText = message;
-      banner.style.opacity = "1";
-      banner.style.transform = "translate(-50%, 0)";
-      
-      setTimeout(() => {
-        banner.style.opacity = "0";
-        banner.style.transform = "translate(-50%, -16px)";
-      }, 2500);
     }
 
     // --- D3 Map rendering with Graticules ---
