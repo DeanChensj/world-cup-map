@@ -253,6 +253,9 @@
         <div id="leaderboard" class="space-y-1.5 overflow-y-auto flex-1 pr-1 font-mono text-xs">
           <!-- Dynamically populated -->
         </div>
+      <!-- Vertical Resizer Handle for Desktop View -->
+      <div id="resizer-handle" title="Drag up/down to adjust Live Feed height" class="hidden lg:flex h-2 bg-console-border hover:bg-console-accent/60 cursor-ns-resize items-center justify-center transition group shrink-0">
+        <div class="w-8 h-0.5 bg-console-dimText/40 group-hover:bg-console-accent rounded-full transition"></div>
       </div>
 
       <!-- Section 2: Logs styled as Terminal Feed -->
@@ -1682,6 +1685,34 @@
       playBtn.classList.remove("bg-console-red", "text-console-text");
       document.getElementById("play-icon").className = "ph-fill ph-play text-xs";
       document.getElementById("play-text").innerText = "Play";
+    }
+
+    // --- Vertical Resizer for Live Feed [Desktop] ---
+    const resizer = document.getElementById("resizer-handle");
+    const logsSection = document.getElementById("logs-section");
+    let isResizing = false;
+
+    if (resizer && logsSection) {
+      resizer.addEventListener("mousedown", (e) => {
+        isResizing = true;
+        document.body.classList.add("cursor-ns-resize");
+      });
+
+      document.addEventListener("mousemove", (e) => {
+        if (!isResizing) return;
+        const sidebarRect = document.getElementById("sidebar-panel").getBoundingClientRect();
+        const newHeight = sidebarRect.bottom - e.clientY;
+        if (newHeight >= 100 && newHeight <= sidebarRect.height - 150) {
+          logsSection.style.height = `${newHeight}px`;
+        }
+      });
+
+      document.addEventListener("mouseup", () => {
+        if (isResizing) {
+          isResizing = false;
+          document.body.classList.remove("cursor-ns-resize");
+        }
+      });
     }
 
     // --- ISO 3166-1 Numeric to Alpha-3 Conversion Map ---
