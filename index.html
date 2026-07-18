@@ -988,7 +988,8 @@
 
     function getWCCodeFromMap(name, id, code) {
       if (code) return code;
-      const alpha3 = numericToAlpha3[id] || null;
+      const key = String(id || '').padStart(3, '0');
+      const alpha3 = numericToAlpha3[id] || numericToAlpha3[key] || null;
       if (alpha3 === "GBR") {
         return "ENG";
       }
