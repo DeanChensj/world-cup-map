@@ -771,6 +771,11 @@
           .attr("r", 3.5 / event.transform.k);
         svg.selectAll(".flow-arc")
           .style("stroke-width", (1.2 / event.transform.k) + "px");
+
+        // Toggle capital labels visibility on zoom threshold >= 2.2
+        const isZoomedIn = event.transform.k >= 2.2;
+        svg.selectAll(".capital-label:not(.active-clash-label)")
+          .style("display", isZoomedIn ? "block" : "none");
       });
 
     svg.call(zoom);
@@ -1380,6 +1385,27 @@
               .attr("stroke", "#0a0b0d")
               .attr("stroke-width", "0.6px")
               .attr("opacity", 0.95);
+          }
+
+          // Render Capital City Labels
+          const capCity = teamCapitals[code]?.city || teamMetadata[code]?.name || code;
+          const isPlaying = playingTeams.includes(code);
+          const currentZoom = d3.zoomTransform(svg.node()).k || 1.0;
+          const isZoomedIn = currentZoom >= 2.2;
+          
+          if (isPlaying || isZoomedIn) {
+            vectorGroup.append("text")
+              .attr("x", cx + 4)
+              .attr("y", cy + 2.5)
+              .attr("class", `capital-label ${isPlaying ? 'active-clash-label' : ''}`)
+              .attr("font-family", "monospace")
+              .attr("font-size", isPlaying ? "9px" : "8px")
+              .attr("font-weight", isPlaying ? "bold" : "600")
+              .attr("letter-spacing", "0.05em")
+              .attr("fill", isPlaying ? "#00ffcc" : "#f59e0b")
+              .attr("opacity", isPlaying ? 1.0 : 0.85)
+              .style("display", (isPlaying || isZoomedIn) ? "block" : "none")
+              .text(capCity.toUpperCase());
           }
         }
       });
