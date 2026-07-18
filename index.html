@@ -145,14 +145,6 @@
       stroke: #0f766e !important;
       stroke-width: 2.2px !important;
     }
-    @keyframes pulseRing {
-      0% { r: 3px; opacity: 0.9; stroke-width: 2px; }
-      100% { r: 14px; opacity: 0; stroke-width: 0.5px; }
-    }
-    .capital-pulse-ring {
-      animation: pulseRing 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-      pointer-events: none;
-    }
     .flow-arc {
       fill: none;
       stroke-dasharray: 4, 4;
@@ -1004,15 +996,6 @@
           centroids[code] = path.centroid(f);
         }
       });
-      // Override with exact capital city coordinates for all 48 teams
-      if (typeof teamCapitals !== 'undefined') {
-        Object.keys(teamCapitals).forEach(code => {
-          const item = teamCapitals[code];
-          if (item && item.coords) {
-            centroids[code] = projection(item.coords);
-          }
-        });
-      }
       microNations.forEach(m => {
         centroids[m.code] = projection(m.coords);
       });
@@ -1181,11 +1164,11 @@
           return classes;
         });
 
-      // Render Empire Flow Vector Arcs & Capital Pulse Rings
+      // Render Empire Flow Vector Arcs & Tactical Centroids
       const vectorGroup = svg.select(".vector-layer");
       vectorGroup.selectAll("*").remove(); // Clear previous arcs
 
-      // Render Capital City Micro-Beacons for all 48 teams
+      // Render subtle 1.2px micro-dots for active nations
       originalTeams.forEach(code => {
         if (centroids[code]) {
           const [cx, cy] = centroids[code];
@@ -1193,14 +1176,23 @@
           const color = teamMetadata[owner]?.color || "#00ff66";
           const isEmpire = originalTeams.filter(t => getCurrentOwner(t) === owner).length > 1;
 
-          vectorGroup.append("circle")
-            .attr("cx", cx)
-            .attr("cy", cy)
-            .attr("r", isEmpire && code === owner ? 3.5 : 1.8)
-            .attr("fill", color)
-            .attr("stroke", "#0a0b0d")
-            .attr("stroke-width", "0.8px")
-            .attr("opacity", 0.85);
+          if (isEmpire && code === owner) {
+            vectorGroup.append("circle")
+              .attr("cx", cx)
+              .attr("cy", cy)
+              .attr("r", 2.2)
+              .attr("fill", "none")
+              .attr("stroke", color)
+              .attr("stroke-width", "1.2px")
+              .attr("opacity", 0.9);
+          } else {
+            vectorGroup.append("circle")
+              .attr("cx", cx)
+              .attr("cy", cy)
+              .attr("r", 1.0)
+              .attr("fill", color)
+              .attr("opacity", 0.6);
+          }
         }
       });
 
@@ -1209,16 +1201,6 @@
         if (holdings.length > 1 && centroids[suzerainCode]) {
           const [cx0, cy0] = centroids[suzerainCode];
           const color = teamMetadata[suzerainCode]?.color || "#00ff66";
-
-          // Add pulsing capital ring for empires
-          vectorGroup.append("circle")
-            .attr("cx", cx0)
-            .attr("cy", cy0)
-            .attr("r", 5)
-            .attr("fill", "none")
-            .attr("stroke", color)
-            .attr("stroke-width", "1.5px")
-            .attr("class", "capital-pulse-ring");
 
           holdings.forEach(vassalCode => {
             if (vassalCode !== suzerainCode && centroids[vassalCode]) {
