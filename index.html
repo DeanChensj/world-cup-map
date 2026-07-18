@@ -274,8 +274,8 @@
       <div id="map-container" class="w-full h-full flex items-center justify-center relative">
         <svg id="world-map" class="w-full h-full drop-shadow-2xl"></svg>
         
-        <!-- Legend Overlay -->
-        <div class="absolute bottom-4 left-4 bg-console-panel/90 border border-console-border p-3 rounded font-mono text-[10px] text-console-dimText space-y-1.5 backdrop-blur-md">
+        <!-- Collapsible Legend Overlay -->
+        <div id="legend-overlay" class="absolute bottom-4 left-4 bg-console-panel/95 border border-console-border p-3 rounded font-mono text-[10px] text-console-dimText space-y-1.5 backdrop-blur-md shadow-2xl z-30 hidden sm:block">
           <div class="flex items-center space-x-2">
             <span class="w-2.5 h-2.5 bg-console-accent/25 border border-console-accent rounded-sm"></span>
             <span class="text-console-text">Active Factions</span>
@@ -296,6 +296,16 @@
               <span>SFX</span>
             </button>
           </div>
+        </div>
+
+        <!-- Floating "?" icon button to toggle Legend on mobile -->
+        <button id="btn-legend-toggle" onclick="toggleMobileLegend()" class="sm:hidden absolute bottom-4 left-4 w-8 h-8 bg-console-panel border border-console-border hover:border-console-accent text-console-accent flex items-center justify-center rounded-full shadow-2xl z-30 cursor-pointer">
+          <i class="ph-bold ph-question text-sm"></i>
+        </button>
+
+        <!-- Floating Mobile Match Carousel Overlay -->
+        <div id="mobile-match-carousel" class="sm:hidden absolute bottom-4 right-4 left-16 flex items-center space-x-2 overflow-x-auto py-1 pr-2 pointer-events-auto z-20">
+          <!-- Populated dynamically via JS -->
         </div>
 
         <!-- Custom Tooltip (Anti-slop style) -->
@@ -1345,6 +1355,144 @@
           `;
         }).join("");
       }
+
+      // Collect all playing teams for camera tracking
+      const activeDayMatches = matches.filter(m => m.date === currentDate);
+      const playingTeams = [];
+      activeDayMatches.forEach(m => {
+        playingTeams.push(m.home);
+        playingTeams.push(m.away);
+      });
+      focusMapOnTeams(playingTeams);
+
+      // Render Floating Mobile Match Carousel Overlay
+      const carouselEl = document.getElementById("mobile-match-carousel");
+      if (carouselEl) {
+        if (activeDayMatches.length === 0) {
+          carouselEl.classList.add("hidden");
+          carouselEl.innerHTML = "";
+        } else {
+          carouselEl.classList.remove("hidden");
+          carouselEl.innerHTML = activeDayMatches.map(match => {
+            const idx = match.originalIndex;
+            const currentWinner = (userOverrides[idx] !== undefined) ? userOverrides[idx] : match.winner;
+            const isOverridden = (userOverrides[idx] !== undefined);
+            
+            let simmedScoreText = "";
+            if (currentWinner === match.home) {
+              simmedScoreText = "H-WIN";
+            } else if (currentWinner === match.away) {
+              simmedScoreText = "A-WIN";
+            } else {
+              simmedScoreText = "DRAW";
+            }
+            
+            return `
+              <div 
+                onclick="toggleMobileSandbox(${idx})"
+                class="flex items-center justify-between bg-console-panel border ${isOverridden ? 'border-console-accent bg-console-accent/5' : 'border-console-border'} p-2 rounded-sm font-mono text-[9px] space-x-2.5 shadow-lg min-w-[170px] shrink-0 active:scale-95 transition cursor-pointer"
+              >
+                <div class="flex items-center space-x-1">
+                  ${getFlagImg(match.home)}
+                  <span class="font-bold ${currentWinner === match.home ? 'text-console-accent' : 'text-console-text'}">${match.home}</span>
+                </div>
+                <div class="flex flex-col items-center leading-tight">
+                  <span class="text-console-dimText text-[8px]">Real: ${match.score}</span>
+                  <span class="text-console-accent font-bold text-[8px]">${simmedScoreText}</span>
+                </div>
+                <div class="flex items-center space-x-1">
+                  <span class="font-bold ${currentWinner === match.away ? 'text-console-accent' : 'text-console-text'}">${match.away}</span>
+                  ${getFlagImg(match.away)}
+                </div>
+              </div>
+            `;
+          }).join("");
+        }
+      }
+    }
+
+    function toggleMobileSandbox(matchIdx) {
+      const match = matches[matchIdx];
+      const currentWinner = userOverrides[matchIdx];
+      if (currentWinner === match.home) {
+        userOverrides[matchIdx] = match.away;
+      } else if (currentWinner === match.away) {
+        userOverrides[matchIdx] = "";
+      } else {
+        userOverrides[matchIdx] = match.home;
+      }
+      updateUI();
+      // Sync overrides to URL
+      const overridesStr = Object.entries(userOverrides)
+        .map(([idx, winner]) => `${idx}:${winner}`)
+        .join(",");
+      const url = new URL(window.location.href);
+      if (overridesStr) {
+        url.searchParams.set("alt", overridesStr);
+      } else {
+        url.searchParams.delete("alt");
+      }
+      window.history.replaceState({}, "", url.toString());
+    }
+
+    let isMobileLegendExpanded = false;
+    function toggleMobileLegend() {
+      isMobileLegendExpanded = !isMobileLegendExpanded;
+      const overlay = document.getElementById("legend-overlay");
+      const btn = document.getElementById("btn-legend-toggle");
+      if (isMobileLegendExpanded) {
+        overlay.classList.remove("hidden");
+        overlay.classList.add("block");
+        btn.innerHTML = `<i class="ph-bold ph-x text-sm"></i>`;
+      } else {
+        overlay.classList.add("hidden");
+        overlay.classList.remove("block");
+        btn.innerHTML = `<i class="ph-bold ph-question text-sm"></i>`;
+      }
+    }
+
+    function focusMapOnTeams(teams) {
+      if (!teams || teams.length === 0) {
+        const width = container.node().clientWidth || 800;
+        const height = container.node().clientHeight || 500;
+        svg.transition().duration(750).call(
+          zoom.transform,
+          d3.zoomIdentity
+        );
+        return;
+      }
+
+      const coords = [];
+      teams.forEach(code => {
+        const c = centroids[code];
+        if (c) coords.push(c);
+      });
+
+      if (coords.length === 0) return;
+
+      let minX = d3.min(coords, d => d[0]);
+      let maxX = d3.max(coords, d => d[0]);
+      let minY = d3.min(coords, d => d[1]);
+      let maxY = d3.max(coords, d => d[1]);
+
+      const width = container.node().clientWidth || 800;
+      const height = container.node().clientHeight || 500;
+
+      const dx = maxX - minX || 40;
+      const dy = maxY - minY || 40;
+      const x = (minX + maxX) / 2;
+      const y = (minY + maxY) / 2;
+
+      let scale = Math.min(4.5, 0.55 / Math.max(dx / width, dy / height));
+      if (scale < 1.0) scale = 1.0;
+
+      svg.transition().duration(750).call(
+        zoom.transform,
+        d3.zoomIdentity
+          .translate(width / 2, height / 2)
+          .scale(scale)
+          .translate(-x, -y)
+      );
     }
 
     // --- Mobile Responsive Tabs Logic ---
