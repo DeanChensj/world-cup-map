@@ -760,10 +760,14 @@
 
     function switchEdition(edition) {
       if (playbackInterval) {
-        clearInterval(playbackInterval);
-        playbackInterval = null;
-        document.getElementById("play-pause-btn").innerHTML = `<i class="ph-bold ph-play text-sm"></i>`;
+        stopPlayback();
       }
+      
+      // Clear URL overrides when switching editions to prevent cross-pollution and crash bugs
+      const url = new URL(window.location.href);
+      url.searchParams.delete("alt");
+      window.history.replaceState({}, "", url.toString());
+      
       loadEdition(edition);
     }
 
