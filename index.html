@@ -257,7 +257,10 @@
             <i class="ph-bold ph-crown text-amber-400"></i>
             <span id="campaign-select-text">FACTION HUD</span>
           </span>
-          <button onclick="openFactionModal()" class="text-[8px] text-console-dimText hover:text-amber-400 underline cursor-pointer">CHANGE</button>
+          <div class="flex items-center space-x-1.5">
+            <button onclick="openFactionModal()" class="text-[8px] text-console-dimText hover:text-amber-400 underline cursor-pointer">CHANGE</button>
+            <button onclick="clearCampaignTeam()" class="text-[8px] text-console-dimText hover:text-console-red underline cursor-pointer">CLEAR</button>
+          </div>
         </div>
         <div class="flex items-center space-x-2">
           <div id="hud-flag" class="shrink-0"></div>

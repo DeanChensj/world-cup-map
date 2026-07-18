@@ -5,7 +5,23 @@ function openFactionModal() {
   const grid = document.getElementById("faction-teams-grid");
   if (!modal || !grid) return;
 
-  grid.innerHTML = originalTeams.map(code => {
+  const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+
+  const clearCardHTML = `
+    <div 
+      onclick="clearCampaignTeam()"
+      class="p-2 bg-console-panel border ${!activeCampaignTeam ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'border-console-border hover:border-console-red'} rounded-lg cursor-pointer transition flex items-center space-x-2 group col-span-2 sm:col-span-3 md:col-span-4 mb-1"
+    >
+      <i class="ph-bold ph-globe text-amber-400 text-base"></i>
+      <div class="flex flex-col min-w-0 flex-1">
+        <span class="font-bold font-sans text-xs text-white truncate">${isZh ? '🌐 全局观战模式 (取消主队选择)' : '🌐 SPECTATOR MODE (NO FACTION SELECTED)'}</span>
+        <span class="text-[8px] text-console-dimText uppercase font-mono">${isZh ? '点击退出战役主队模式，切换为自由观战' : 'CLICK TO CLEAR COMMANDER FACTION & SWITCH TO SPECTATOR'}</span>
+      </div>
+      ${!activeCampaignTeam ? '<i class="ph-bold ph-check-circle text-amber-400 text-sm"></i>' : `<span class="text-[9px] text-console-dimText group-hover:text-console-red font-mono">[✕ ${isZh ? '取消' : 'Clear'}]</span>`}
+    </div>
+  `;
+
+  const teamsHTML = originalTeams.map(code => {
     const team = teamMetadata[code];
     const name = (typeof getTeamName === "function") ? getTeamName(code, team?.name) : (team?.name || code);
     const isSelected = activeCampaignTeam === code;
@@ -25,6 +41,8 @@ function openFactionModal() {
     `;
   }).join("");
 
+  grid.innerHTML = clearCardHTML + teamsHTML;
+
   modal.classList.remove("hidden");
 }
 
@@ -33,10 +51,23 @@ function closeFactionModal() {
   if (modal) modal.classList.add("hidden");
 }
 
+function clearCampaignTeam() {
+  if (typeof audio !== "undefined") audio.playClick();
+  activeCampaignTeam = null;
+  localStorage.removeItem("activeCampaignTeam");
+  closeFactionModal();
+  updateCampaignHUD();
+  updateUI();
+  const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+  if (typeof triggerAlert === "function") {
+    triggerAlert(isZh ? "已退出战役模式 (切换为全局观战)" : "FACTION CLEARED (SPECTATOR MODE ACTIVE)");
+  }
+}
+
 function selectCampaignTeam(code) {
   activeCampaignTeam = code;
   localStorage.setItem("activeCampaignTeam", code);
-  audio.playClick();
+  if (typeof audio !== "undefined") audio.playClick();
   closeFactionModal();
   updateCampaignHUD();
   updateUI();
