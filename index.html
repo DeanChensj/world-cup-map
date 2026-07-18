@@ -1450,26 +1450,35 @@
 
 
 
-      // Render active clash ray for current playing teams in knockout matches
-      if (playingTeams.length === 2 && centroids[playingTeams[0]] && centroids[playingTeams[1]]) {
-        const c0 = centroids[playingTeams[0]];
-        const c1 = centroids[playingTeams[1]];
-        const midX = (c0[0] + c1[0]) / 2;
-        const midY = (c0[1] + c1[1]) / 2;
-        const dx = c1[0] - c0[0];
-        const dy = c1[1] - c0[1];
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const offset = Math.min(dist * 0.15, 25);
-        const ctrlX = midX - (dy / (dist || 1)) * offset;
-        const ctrlY = midY + (dx / (dist || 1)) * offset;
-        const rayStr = `M ${c0[0]} ${c0[1]} Q ${ctrlX} ${ctrlY} ${c1[0]} ${c1[1]}`;
+      // Render active clash rays connecting capital cities for all current matches (Group Stage & Knockout)
+      if (activeDayMatches && activeDayMatches.length > 0) {
+        activeDayMatches.forEach(m => {
+          const isGroup = (!m.stage || m.stage === "Group Stage" || m.stage.includes("Group"));
+          const homeCode = isGroup ? m.home : getCurrentOwner(m.home);
+          const awayCode = isGroup ? m.away : getCurrentOwner(m.away);
 
-        vectorGroup.append("path")
-          .attr("d", rayStr)
-          .attr("class", "active-clash-ray")
-          .attr("fill", "none")
-          .attr("stroke", "#ffcc00")
-          .attr("stroke-width", "1.0px");
+          if (homeCode && awayCode && homeCode !== awayCode && centroids[homeCode] && centroids[awayCode]) {
+            const c0 = centroids[homeCode];
+            const c1 = centroids[awayCode];
+            const midX = (c0[0] + c1[0]) / 2;
+            const midY = (c0[1] + c1[1]) / 2;
+            const dx = c1[0] - c0[0];
+            const dy = c1[1] - c0[1];
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist > 3) {
+              const offset = Math.min(dist * 0.18, 30);
+              const ctrlX = midX - (dy / dist) * offset;
+              const ctrlY = midY + (dx / dist) * offset;
+              const rayStr = `M ${c0[0]} ${c0[1]} Q ${ctrlX} ${ctrlY} ${c1[0]} ${c1[1]}`;
+
+              vectorGroup.append("path")
+                .attr("d", rayStr)
+                .attr("class", "active-clash-ray")
+                .attr("fill", "none")
+                .attr("stroke-width", isGroup ? "1.2px" : "1.6px");
+            }
+          }
+        });
       }
 
       // Update Leaderboard
