@@ -1258,28 +1258,30 @@
         
         const gPin = vectorGroup.append("g").attr("class", "hover-capital-pin");
 
-        // Solid crisp capital dot
+        const isMobile = window.innerWidth < 640;
+        
+        // Solid crisp capital dot (Scaled down for mobile screens)
         gPin.append("circle")
           .attr("cx", cx)
           .attr("cy", cy)
-          .attr("r", 3.5)
+          .attr("r", isMobile ? 2.2 : 3.5)
           .attr("fill", "#00ffcc")
           .attr("stroke", "#0d0f12")
-          .attr("stroke-width", "1.2px");
+          .attr("stroke-width", isMobile ? "0.8px" : "1.2px");
 
         // Capital name label on the map
         const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
         const labelText = isZh ? capCity : capCity.toUpperCase();
 
         gPin.append("text")
-          .attr("x", cx + 7)
-          .attr("y", cy + 3)
+          .attr("x", cx + (isMobile ? 4.5 : 7))
+          .attr("y", cy + (isMobile ? 2 : 3))
           .attr("font-family", "monospace")
-          .attr("font-size", "11px")
+          .attr("font-size", isMobile ? "8.5px" : "11px")
           .attr("font-weight", "bold")
           .attr("fill", "#00ffcc")
           .attr("stroke", "#0d0f12")
-          .attr("stroke-width", "2.5px")
+          .attr("stroke-width", isMobile ? "1.6px" : "2.5px")
           .attr("paint-order", "stroke fill")
           .text(labelText);
       }
@@ -1551,12 +1553,14 @@
           const owner = getCurrentOwner(code);
           const isEmpire = originalTeams.filter(t => getCurrentOwner(t) === owner).length > 1;
 
+          const isMobile = window.innerWidth < 640;
+
           if (code === activeCampaignTeam) {
-            // Main Campaign Team Capital: Refined Hairline Dual-Ring Micro Pin (r = 2.4px + 3.6px ring)
+            // Main Campaign Team Capital: Refined Hairline Dual-Ring Micro Pin (r = 1.8px + 2.8px ring on mobile)
             vectorGroup.append("circle")
               .attr("cx", cx)
               .attr("cy", cy)
-              .attr("r", 3.6)
+              .attr("r", isMobile ? 2.8 : 3.6)
               .attr("fill", "none")
               .attr("stroke", "#f59e0b")
               .attr("stroke-width", "0.6px")
@@ -1566,25 +1570,25 @@
             vectorGroup.append("circle")
               .attr("cx", cx)
               .attr("cy", cy)
-              .attr("r", 2.4)
+              .attr("r", isMobile ? 1.8 : 2.4)
               .attr("fill", "#f59e0b")
               .attr("stroke", "#0a0b0d")
               .attr("stroke-width", "0.8px");
           } else if (code === owner && isEmpire) {
-            // Empire Capital: Micro Gold Pin (r = 2.2px)
+            // Empire Capital: Micro Gold Pin (r = 1.5px on mobile)
             vectorGroup.append("circle")
               .attr("cx", cx)
               .attr("cy", cy)
-              .attr("r", 2.2)
+              .attr("r", isMobile ? 1.5 : 2.2)
               .attr("fill", "#ffd700")
               .attr("stroke", "#0a0b0d")
               .attr("stroke-width", "0.8px");
           } else {
-            // Regular Capital Pin: Micro White Core Pin (r = 1.6px)
+            // Regular Capital Pin: Micro White Core Pin (r = 1.1px on mobile)
             vectorGroup.append("circle")
               .attr("cx", cx)
               .attr("cy", cy)
-              .attr("r", 1.6)
+              .attr("r", isMobile ? 1.1 : 1.6)
               .attr("fill", "#ffffff")
               .attr("stroke", "#0a0b0d")
               .attr("stroke-width", "0.6px")
@@ -1596,7 +1600,6 @@
           const isPlaying = playingTeams.includes(code);
           const isCampaignHQ = (activeCampaignTeam && code === activeCampaignTeam);
           const currentZoom = d3.zoomTransform(svg.node()).k || 1.0;
-          const isMobile = window.innerWidth < 640;
 
           // On mobile screens, strictly show labels ONLY for active playing teams or campaign HQ (never show non-competing capitals even when zooming)
           const shouldShowLabel = isMobile 
@@ -1604,15 +1607,15 @@
             : (isPlaying || currentZoom >= 2.0);
           
           if (shouldShowLabel) {
-            const fontSz = isMobile ? (isPlaying ? "8px" : "7px") : (isPlaying ? "9px" : "8px");
+            const fontSz = isMobile ? (isPlaying ? "7.5px" : "6.5px") : (isPlaying ? "9px" : "8px");
             vectorGroup.append("text")
-              .attr("x", cx + 3.5)
-              .attr("y", cy + 2.5)
+              .attr("x", cx + (isMobile ? 2.5 : 3.5))
+              .attr("y", cy + (isMobile ? 1.8 : 2.5))
               .attr("class", `capital-label ${isPlaying ? 'active-clash-label' : ''}`)
               .attr("font-family", "monospace")
               .attr("font-size", fontSz)
               .attr("font-weight", isPlaying ? "bold" : "600")
-              .attr("letter-spacing", "0.04em")
+              .attr("letter-spacing", "0.03em")
               .attr("fill", isPlaying ? "#00ffcc" : "#f59e0b")
               .attr("opacity", isPlaying ? 1.0 : 0.85)
               .text(capCity.toUpperCase());
