@@ -996,6 +996,15 @@
           centroids[code] = path.centroid(f);
         }
       });
+      // Override with exact real capital city coordinates for all 48 teams
+      if (typeof teamCapitals !== 'undefined') {
+        Object.keys(teamCapitals).forEach(code => {
+          const item = teamCapitals[code];
+          if (item && item.coords) {
+            centroids[code] = projection(item.coords);
+          }
+        });
+      }
       microNations.forEach(m => {
         centroids[m.code] = projection(m.coords);
       });
