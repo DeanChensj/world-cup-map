@@ -2,195 +2,195 @@
   "teams": {
     "CAN": {
       "name": "Canada",
-      "color": "#E53E3E"
+      "color": "#9f1239"
     },
     "MEX": {
       "name": "Mexico",
-      "color": "#319795"
+      "color": "#15803d"
     },
     "USA": {
       "name": "United States",
-      "color": "#3182CE"
+      "color": "#1e40af"
     },
     "AUS": {
       "name": "Australia",
-      "color": "#D69E2E"
+      "color": "#ca8a04"
     },
     "IRQ": {
       "name": "Iraq",
-      "color": "#2B6CB0"
+      "color": "#047857"
     },
     "IRN": {
       "name": "Iran",
-      "color": "#38A169"
+      "color": "#065f46"
     },
     "JPN": {
       "name": "Japan",
-      "color": "#3b4a5e"
+      "color": "#1e3a8a"
     },
     "JOR": {
       "name": "Jordan",
-      "color": "#C53030"
+      "color": "#be123c"
     },
     "KOR": {
       "name": "South Korea",
-      "color": "#DD6B20"
+      "color": "#b91c1c"
     },
     "QAT": {
       "name": "Qatar",
-      "color": "#7B341E"
+      "color": "#701a75"
     },
     "SAU": {
       "name": "Saudi Arabia",
-      "color": "#22543D"
+      "color": "#14532d"
     },
     "UZB": {
       "name": "Uzbekistan",
-      "color": "#2B6CB0"
+      "color": "#0369a1"
     },
     "DZA": {
       "name": "Algeria",
-      "color": "#276749"
+      "color": "#166534"
     },
     "CPV": {
       "name": "Cabo Verde",
-      "color": "#2C5282"
+      "color": "#1d4ed8"
     },
     "COD": {
       "name": "Congo DR",
-      "color": "#2B6CB0"
+      "color": "#0891b2"
     },
     "CIV": {
-      "name": "C\u00f4te d'Ivoire",
-      "color": "#DD6B20"
+      "name": "Côte d'Ivoire",
+      "color": "#c2410c"
     },
     "EGY": {
       "name": "Egypt",
-      "color": "#9B2C2C"
+      "color": "#991b1b"
     },
     "GHA": {
       "name": "Ghana",
-      "color": "#D69E2E"
+      "color": "#b45309"
     },
     "MAR": {
       "name": "Morocco",
-      "color": "#9B2C2C"
+      "color": "#9a3412"
     },
     "SEN": {
       "name": "Senegal",
-      "color": "#22543D"
+      "color": "#15803d"
     },
     "ZAF": {
       "name": "South Africa",
-      "color": "#276749"
+      "color": "#a16207"
     },
     "TUN": {
       "name": "Tunisia",
-      "color": "#C53030"
+      "color": "#991b1b"
     },
     "HTI": {
       "name": "Haiti",
-      "color": "#2C5282"
+      "color": "#881337"
     },
     "PAN": {
       "name": "Panama",
-      "color": "#C53030"
+      "color": "#1d4ed8"
     },
     "ARG": {
       "name": "Argentina",
-      "color": "#63B3ED"
+      "color": "#0284c7"
     },
     "BRA": {
       "name": "Brazil",
-      "color": "#D69E2E"
+      "color": "#d97706"
     },
     "COL": {
       "name": "Colombia",
-      "color": "#D69E2E"
+      "color": "#b45309"
     },
     "ECU": {
       "name": "Ecuador",
-      "color": "#D69E2E"
+      "color": "#ca8a04"
     },
     "PRY": {
       "name": "Paraguay",
-      "color": "#C53030"
+      "color": "#991b1b"
     },
     "URY": {
       "name": "Uruguay",
-      "color": "#3182CE"
+      "color": "#0369a1"
     },
     "NZL": {
       "name": "New Zealand",
-      "color": "#2D3748"
+      "color": "#64748b"
     },
     "AUT": {
       "name": "Austria",
-      "color": "#C53030"
+      "color": "#b91c1c"
     },
     "BEL": {
       "name": "Belgium",
-      "color": "#E53E3E"
+      "color": "#991b1b"
     },
     "BIH": {
       "name": "Bosnia and Herzegovina",
-      "color": "#2B6CB0"
+      "color": "#1e40af"
     },
     "HRV": {
       "name": "Croatia",
-      "color": "#E53E3E"
+      "color": "#c2410c"
     },
     "CZE": {
       "name": "Czech Republic",
-      "color": "#C53030"
+      "color": "#9a3412"
     },
     "ENG": {
       "name": "England",
-      "color": "#3182CE"
+      "color": "#94a3b8"
     },
     "FRA": {
       "name": "France",
-      "color": "#2B6CB0"
+      "color": "#1d4ed8"
     },
     "DEU": {
       "name": "Germany",
-      "color": "#1A202C"
+      "color": "#475569"
     },
     "NLD": {
       "name": "Netherlands",
-      "color": "#DD6B20"
+      "color": "#c2410c"
     },
     "NOR": {
       "name": "Norway",
-      "color": "#C53030"
+      "color": "#991b1b"
     },
     "PRT": {
       "name": "Portugal",
-      "color": "#C53030"
+      "color": "#881337"
     },
     "SCO": {
       "name": "Scotland",
-      "color": "#2B6CB0"
+      "color": "#1e3a8a"
     },
     "ESP": {
       "name": "Spain",
-      "color": "#E53E3E"
+      "color": "#9a3412"
     },
     "SWE": {
       "name": "Sweden",
-      "color": "#D69E2E"
+      "color": "#ca8a04"
     },
     "CHE": {
       "name": "Switzerland",
-      "color": "#E53E3E"
+      "color": "#991b1b"
     },
     "TUR": {
       "name": "Turkey",
-      "color": "#C53030"
+      "color": "#881337"
     },
     "CUW": {
-      "name": "Cura\u00e7ao",
-      "color": "#2B6CB0"
+      "name": "Curaçao",
+      "color": "#0284c7"
     }
   },
   "matches": [
