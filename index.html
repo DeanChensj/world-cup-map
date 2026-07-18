@@ -777,9 +777,10 @@
         stopPlayback();
       }
       
-      // Clear URL overrides when switching editions to prevent cross-pollution and crash bugs
+      // Update URL parameters to match selected edition
       const url = new URL(window.location.href);
-      url.searchParams.delete("alt");
+      url.searchParams.set("edition", edition);
+      url.searchParams.delete("alt"); // Clear overrides to prevent cross-pollution and crash bugs
       window.history.replaceState({}, "", url.toString());
       
       loadEdition(edition);
@@ -1003,8 +1004,12 @@
         centroids[m.code] = projection(m.coords);
       });
 
-      // Load initial default edition (2026)
-      loadEdition("2026");
+      // Load initial default edition or URL-specified edition
+      const params = new URLSearchParams(window.location.search);
+      const urlEdition = params.get("edition");
+      const defaultEdition = ["2026", "2022", "2018", "2014", "2010", "2006", "2002", "1998"].includes(urlEdition) ? urlEdition : "2026";
+      document.getElementById("edition-select").value = defaultEdition;
+      loadEdition(defaultEdition);
 
       // Resize listener for D3 projection
       window.addEventListener("resize", () => {
