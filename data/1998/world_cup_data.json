@@ -2,131 +2,131 @@
   "teams": {
     "ARG": {
       "name": "Argentina",
-      "color": "#4FD1C5"
+      "color": "#0284c7"
     },
     "AUT": {
       "name": "Austria",
-      "color": "#7B341E"
+      "color": "#b91c1c"
     },
     "BEL": {
       "name": "Belgium",
-      "color": "#9B2C2C"
+      "color": "#991b1b"
     },
     "BRA": {
       "name": "Brazil",
-      "color": "#ECC94B"
+      "color": "#d97706"
     },
     "BGR": {
       "name": "Bulgaria",
-      "color": "#276749"
+      "color": "#15803d"
     },
     "CMR": {
       "name": "Cameroon",
-      "color": "#4A5568"
+      "color": "#14532d"
     },
     "CHL": {
       "name": "Chile",
-      "color": "#553C9A"
+      "color": "#b91c1c"
     },
     "COL": {
       "name": "Colombia",
-      "color": "#DD6B20"
+      "color": "#b45309"
     },
     "HRV": {
       "name": "Croatia",
-      "color": "#E53E3E"
+      "color": "#c2410c"
     },
     "DNK": {
       "name": "Denmark",
-      "color": "#319795"
+      "color": "#991b1b"
     },
     "ENG": {
       "name": "England",
-      "color": "#EDF2F7"
+      "color": "#94a3b8"
     },
     "FRA": {
       "name": "France",
-      "color": "#2B6CB0"
+      "color": "#1d4ed8"
     },
     "DEU": {
       "name": "Germany",
-      "color": "#445063"
+      "color": "#475569"
     },
     "IRN": {
       "name": "Iran",
-      "color": "#A0AEC0"
+      "color": "#065f46"
     },
     "ITA": {
       "name": "Italy",
-      "color": "#3182CE"
+      "color": "#0369a1"
     },
     "JAM": {
       "name": "Jamaica",
-      "color": "#E2E8F0"
+      "color": "#ca8a04"
     },
     "JPN": {
       "name": "Japan",
-      "color": "#3b4a5e"
+      "color": "#1e3a8a"
     },
     "MEX": {
       "name": "Mexico",
-      "color": "#319795"
+      "color": "#15803d"
     },
     "MAR": {
       "name": "Morocco",
-      "color": "#9F7AEA"
+      "color": "#9a3412"
     },
     "NLD": {
       "name": "Netherlands",
-      "color": "#ED8936"
+      "color": "#c2410c"
     },
     "NGA": {
       "name": "Nigeria",
-      "color": "#718096"
+      "color": "#15803d"
     },
     "NOR": {
       "name": "Norway",
-      "color": "#FC8181"
+      "color": "#991b1b"
     },
     "PRY": {
       "name": "Paraguay",
-      "color": "#3182CE"
+      "color": "#991b1b"
     },
     "ROU": {
       "name": "Romania",
-      "color": "#4299E1"
+      "color": "#b45309"
     },
     "SAU": {
       "name": "Saudi Arabia",
-      "color": "#C53030"
+      "color": "#14532d"
     },
     "SCO": {
       "name": "Scotland",
-      "color": "#E53E3E"
+      "color": "#1e3a8a"
     },
     "ZAF": {
       "name": "South Africa",
-      "color": "#22543D"
+      "color": "#a16207"
     },
     "KOR": {
       "name": "South Korea",
-      "color": "#DD6B20"
+      "color": "#b91c1c"
     },
     "ESP": {
       "name": "Spain",
-      "color": "#C53030"
+      "color": "#9a3412"
     },
     "TUN": {
       "name": "Tunisia",
-      "color": "#B7791F"
+      "color": "#991b1b"
     },
     "USA": {
       "name": "USA",
-      "color": "#3182CE"
+      "color": "#1e40af"
     },
     "SRB": {
       "name": "Yugoslavia",
-      "color": "#CBD5E0"
+      "color": "#881337"
     }
   },
   "matches": [
