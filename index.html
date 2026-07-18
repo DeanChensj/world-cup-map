@@ -282,6 +282,43 @@
         <span id="alert-message">Conquest System Alert</span>
       </div>
 
+      <!-- Cyberpunk Black Gold Clash Card Overlay -->
+      <div id="clash-card-overlay" class="absolute top-6 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-[#0d0f12] via-[#161a22] to-[#0d0f12] border border-amber-500/60 shadow-[0_0_30px_rgba(245,158,11,0.25)] rounded-lg p-3.5 z-40 hidden transition-all duration-300 w-[92%] max-w-sm backdrop-blur-md">
+        <!-- Card Top Bar -->
+        <div class="flex items-center justify-between border-b border-amber-500/20 pb-2 mb-2.5">
+          <div class="flex items-center space-x-2">
+            <span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+            <span id="clash-card-stage" class="text-[10px] font-mono uppercase tracking-widest text-amber-400 font-bold">TACTICAL CONFLICT // MATCH</span>
+          </div>
+          <button onclick="closeClashCard()" class="text-console-dimText hover:text-amber-400 transition font-mono text-xs p-1">✕</button>
+        </div>
+
+        <!-- Card Main Face (Black Gold Grid) -->
+        <div class="flex items-center justify-between px-3 py-1">
+          <!-- Team A -->
+          <div class="flex-1 flex flex-col items-center text-center space-y-1">
+            <div id="clash-teamA-flag" class="transform hover:scale-105 transition duration-200"></div>
+            <div id="clash-teamA-name" class="font-bold text-white font-sans text-sm tracking-wide">ARGENTINA</div>
+          </div>
+
+          <!-- VS Badge -->
+          <div class="px-5 flex flex-col items-center justify-center">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-b from-amber-400 to-amber-600 flex items-center justify-center font-extrabold text-black font-mono text-xs shadow-[0_0_15px_rgba(245,158,11,0.5)] border border-amber-200">
+              VS
+            </div>
+            <div id="clash-match-score" class="text-[11px] font-mono text-console-accent font-bold mt-1.5">
+              3 - 2
+            </div>
+          </div>
+
+          <!-- Team B -->
+          <div class="flex-1 flex flex-col items-center text-center space-y-1">
+            <div id="clash-teamB-flag" class="transform hover:scale-105 transition duration-200"></div>
+            <div id="clash-teamB-name" class="font-bold text-white font-sans text-sm tracking-wide">FRANCE</div>
+          </div>
+        </div>
+      </div>
+
       <div id="map-container" class="w-full h-full flex items-center justify-center relative">
         <svg id="world-map" class="w-full h-full drop-shadow-2xl"></svg>
         
@@ -1119,6 +1156,43 @@
         .style("opacity", 1.0);
     }
 
+    function showClashCard(match) {
+      if (!match || !match.home || !match.away) {
+        closeClashCard();
+        return;
+      }
+      const overlay = document.getElementById("clash-card-overlay");
+      if (!overlay) return;
+
+      const code1 = match.home;
+      const code2 = match.away;
+      const owner1 = getCurrentOwner(code1);
+      const owner2 = getCurrentOwner(code2);
+
+      const name1 = teamMetadata[owner1]?.name || owner1;
+      const name2 = teamMetadata[owner2]?.name || owner2;
+
+      document.getElementById("clash-card-stage").innerText = `TACTICAL CONFLICT // ${(match.stage || 'MATCH').toUpperCase()}`;
+
+      document.getElementById("clash-teamA-flag").innerHTML = getFlagImg(owner1).replace('w-5 h-3.5', 'w-12 h-8 shadow-md border border-amber-500/40');
+      document.getElementById("clash-teamA-name").innerText = name1;
+
+      document.getElementById("clash-teamB-flag").innerHTML = getFlagImg(owner2).replace('w-5 h-3.5', 'w-12 h-8 shadow-md border border-amber-500/40');
+      document.getElementById("clash-teamB-name").innerText = name2;
+
+      const scoreStr = (match.score1 !== undefined && match.score2 !== undefined)
+        ? `${match.score1} - ${match.score2}`
+        : `SCHEDULED`;
+      document.getElementById("clash-match-score").innerText = scoreStr;
+
+      overlay.classList.remove("hidden");
+    }
+
+    function closeClashCard() {
+      const overlay = document.getElementById("clash-card-overlay");
+      if (overlay) overlay.classList.add("hidden");
+    }
+
     // --- UI Update Loop ---
     function updateUI() {
       const step = timelineSteps[currentStepIndex] || timelineSteps[0];
@@ -1135,8 +1209,10 @@
         currentDate = step.match.date;
         activeDayMatches = [step.match];
         playingTeams = [step.match.home, step.match.away];
+        showClashCard(step.match);
         document.getElementById("current-date-badge").innerText = `${formatDateString(currentDate)} • ${step.match.stage}`;
       } else {
+        closeClashCard();
         document.getElementById("current-date-badge").innerText = `${currentDate || 'KICKOFF'} • Kickoff`;
       }
 
@@ -1455,6 +1531,7 @@
         userOverrides[matchIdx] = match.home;
       }
       updateUI();
+      if (match) showClashCard(match);
       // Sync overrides to URL
       const overridesStr = Object.entries(userOverrides)
         .map(([idx, winner]) => `${idx}:${winner}`)
