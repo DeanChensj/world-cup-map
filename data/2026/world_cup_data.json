@@ -253,23 +253,23 @@
     {
       "date": "2026-06-15",
       "home": "ENG",
-      "away": "TUN",
+      "away": "PAN",
       "winner": "ENG",
-      "score": "2-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2026-06-16",
-      "home": "NLD",
-      "away": "ECU",
-      "winner": "NLD",
       "score": "2-1",
       "stage": "Group Stage"
     },
     {
       "date": "2026-06-16",
+      "home": "NLD",
+      "away": "TUN",
+      "winner": "NLD",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-16",
       "home": "PRT",
-      "away": "SAU",
+      "away": "COD",
       "winner": "PRT",
       "score": "2-0",
       "stage": "Group Stage"
@@ -277,7 +277,7 @@
     {
       "date": "2026-06-16",
       "home": "COL",
-      "away": "IRQ",
+      "away": "UZB",
       "winner": "COL",
       "score": "2-0",
       "stage": "Group Stage"
@@ -285,16 +285,16 @@
     {
       "date": "2026-06-17",
       "home": "FRA",
-      "away": "NZL",
+      "away": "NOR",
       "winner": "FRA",
       "score": "2-0",
       "stage": "Group Stage"
     },
     {
       "date": "2026-06-17",
-      "home": "SWE",
-      "away": "IRN",
-      "winner": "SWE",
+      "home": "JPN",
+      "away": "SWE",
+      "winner": "JPN",
       "score": "1-0",
       "stage": "Group Stage"
     },
@@ -309,25 +309,25 @@
     {
       "date": "2026-06-18",
       "home": "BEL",
-      "away": "JOR",
+      "away": "NZL",
       "winner": "BEL",
-      "score": "3-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2026-06-18",
-      "home": "HRV",
-      "away": "UZB",
-      "winner": "HRV",
       "score": "2-0",
       "stage": "Group Stage"
     },
     {
       "date": "2026-06-18",
-      "home": "NOR",
-      "away": "PAN",
-      "winner": "NOR",
-      "score": "2-1",
+      "home": "ESP",
+      "away": "CPV",
+      "winner": "ESP",
+      "score": "3-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2026-06-18",
+      "home": "USA",
+      "away": "PRY",
+      "winner": "USA",
+      "score": "2-0",
       "stage": "Group Stage"
     },
     {
