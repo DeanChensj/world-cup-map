@@ -1326,7 +1326,7 @@
       svg.select(".vector-layer").selectAll(".hover-capital-pin").remove();
     }
 
-    function showClashCard(match) {
+    function showClashCard(match, latestLog) {
       if (!match || !match.home || !match.away) {
         closeClashCard();
         return;
@@ -1337,20 +1337,25 @@
       const matchIdx = match.originalIndex;
       const isGroupStage = (match.stage === "Group Stage" || match.stage.includes("Group"));
 
-      let code1 = isGroupStage ? match.home : getCurrentOwner(match.home);
-      let code2 = isGroupStage ? match.away : getCurrentOwner(match.away);
+      let code1, code2, activeWinner;
 
-      if (!isGroupStage && code1 === code2) {
-        const lineage2 = countryLineage[match.away];
-        if (lineage2 && lineage2.length > 1) {
-          code2 = lineage2[lineage2.length - 2];
-        } else {
-          code2 = match.away;
-        }
-        if (code1 === code2) {
+      if (latestLog && latestLog.matchIndex === matchIdx) {
+        code1 = latestLog.home;
+        code2 = latestLog.away;
+        activeWinner = latestLog.winnerCode;
+      } else {
+        code1 = isGroupStage ? match.home : getCurrentOwner(match.home);
+        code2 = isGroupStage ? match.away : getCurrentOwner(match.away);
+
+        if (!isGroupStage && code1 === code2) {
           code1 = match.home;
           code2 = match.away;
         }
+
+        let rawWinner = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
+        if (rawWinner === match.home) rawWinner = code1;
+        else if (rawWinner === match.away) rawWinner = code2;
+        activeWinner = rawWinner;
       }
 
       const name1 = getTeamName(code1, teamMetadata[code1]?.name);
@@ -1358,11 +1363,6 @@
       const stageTranslated = getStageName(match.stage || 'MATCH');
       const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
       const winnerTag = isZh ? '[胜者]' : '[WINNER]';
-
-      let rawWinner = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
-      if (rawWinner === match.home) rawWinner = code1;
-      else if (rawWinner === match.away) rawWinner = code2;
-      const activeWinner = rawWinner;
 
       document.getElementById("clash-card-stage").innerText = isZh ? `焦点对决战报 // ${stageTranslated}` : `TACTICAL CONFLICT // ${(match.stage || 'MATCH').toUpperCase()}`;
 
@@ -1415,10 +1415,20 @@
       } else if (step && step.type === "knockout_match") {
         currentDate = step.match.date;
         activeDayMatches = [step.match];
-        const ownerHome = getCurrentOwner(step.match.home);
-        const ownerAway = getCurrentOwner(step.match.away);
+        const latestLog = (logs.length > 0 && logs[0].matchIndex === step.match.originalIndex) ? logs[0] : null;
+
+        let ownerHome = step.match.home;
+        let ownerAway = step.match.away;
+        if (latestLog) {
+          ownerHome = latestLog.home;
+          ownerAway = latestLog.away;
+        } else {
+          ownerHome = getCurrentOwner(step.match.home);
+          ownerAway = getCurrentOwner(step.match.away);
+        }
+
         playingTeams = Array.from(new Set([step.match.home, step.match.away, ownerHome, ownerAway].filter(Boolean)));
-        showClashCard(step.match);
+        showClashCard(step.match, latestLog);
         document.getElementById("current-date-badge").innerText = `${formatDateString(currentDate)} • ${step.match.stage}`;
       } else {
         closeClashCard();
