@@ -115,17 +115,17 @@
         </select>
       </div>
       <!-- Language Toggle -->
-      <button id="btn-lang-toggle" onclick="toggleLanguage()" title="Switch Language (中文 / English)" class="flex bg-console-bg border border-console-border text-amber-400 hover:border-amber-400/60 px-2 py-1.5 rounded font-mono text-[9px] font-bold items-center space-x-1.5 transition cursor-pointer">
+      <button id="btn-lang-toggle" onclick="toggleLanguage()" title="Switch Language (中文 / English)" class="flex bg-console-bg border border-console-border text-amber-400 hover:border-amber-400/60 px-1.5 py-1 sm:px-2 sm:py-1.5 rounded font-mono text-[9px] font-bold items-center space-x-1 transition cursor-pointer shrink-0">
         <i class="ph-bold ph-translate text-[10px]"></i>
-        <span id="lang-label">LANG: EN</span>
+        <span id="lang-label" class="hidden min-[420px]:inline">LANG: EN</span>
       </button>
       <!-- Theme Toggle -->
-      <button id="btn-theme-toggle" onclick="toggleTheme()" title="Switch Light / Dark Theme" class="hidden sm:flex bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-2 py-1.5 rounded font-mono text-[9px] font-bold items-center space-x-1.5 transition cursor-pointer">
+      <button id="btn-theme-toggle" onclick="toggleTheme()" title="Switch Light / Dark Theme" class="flex bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-1.5 py-1 sm:px-2 sm:py-1.5 rounded font-mono text-[9px] font-bold items-center space-x-1 transition cursor-pointer shrink-0">
         <i id="theme-icon" class="ph-bold ph-sun text-[10px]"></i>
         <span id="theme-label" class="hidden md:inline">THEME: DARK</span>
       </button>
       <!-- SFX Audio Toggle -->
-      <button id="btn-audio-toggle" onclick="toggleAudio()" class="hidden sm:flex bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-2 py-1.5 rounded font-mono text-[9px] font-bold items-center space-x-1.5 transition cursor-pointer">
+      <button id="btn-audio-toggle" onclick="toggleAudio()" class="flex bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-1.5 py-1 sm:px-2 sm:py-1.5 rounded font-mono text-[9px] font-bold items-center space-x-1 transition cursor-pointer shrink-0">
         <i id="audio-icon" class="ph-bold ph-speaker-high text-[10px]"></i>
         <span id="audio-label" class="hidden md:inline">SFX: ON</span>
       </button>
@@ -135,11 +135,11 @@
         <div id="current-date-badge" class="bg-console-bg border border-console-border px-2 py-0.5 md:px-3 md:py-1 font-mono text-[10px] md:text-xs font-bold text-console-accent tracking-wider md:tracking-widest rounded">
           2026-06-11
         </div>
-        <button id="btn-share-universe" onclick="shareUniverse()" title="Share Parallel Universe Link" class="bg-console-bg border border-console-border text-console-accent hover:border-console-accent px-2 py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer">
+        <button id="btn-share-universe" onclick="shareUniverse()" title="Share Parallel Universe Link" class="bg-console-bg border border-console-border text-console-accent hover:border-console-accent px-1.5 py-1 sm:px-2 sm:py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer shrink-0">
           <i class="ph-bold ph-share-network text-[10px]"></i>
           <span id="share-btn-text" class="hidden sm:inline">SHARE</span>
         </button>
-        <button id="btn-reset-overrides" onclick="resetOverrides()" title="Reset to Real History" class="hidden bg-console-bg border border-console-red text-console-red hover:bg-console-red/10 px-2 py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer">
+        <button id="btn-reset-overrides" onclick="resetOverrides()" title="Reset to Real History" class="hidden bg-console-bg border border-console-red text-console-red hover:bg-console-red/10 px-1.5 py-1 sm:px-2 sm:py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer shrink-0">
           <i class="ph-bold ph-arrow-counter-clockwise text-[10px]"></i>
           <span class="hidden sm:inline">RESET</span>
         </button>
@@ -213,38 +213,39 @@
 
 
       <!-- Cyberpunk Black Gold Clash Card Overlay -->
-      <div id="clash-card-overlay" class="absolute top-2 sm:top-6 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-[#0d0f12]/95 via-[#161a22]/95 to-[#0d0f12]/95 border border-amber-500/60 shadow-[0_0_25px_rgba(245,158,11,0.25)] rounded-lg p-2 sm:p-3.5 z-40 hidden transition-all duration-300 w-[94%] sm:w-auto max-w-[340px] sm:max-w-sm backdrop-blur-md">
+      <!-- Cyberpunk Black Gold Clash Card Overlay -->
+      <div id="clash-card-overlay" class="absolute top-1 sm:top-6 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-[#0d0f12]/95 via-[#161a22]/95 to-[#0d0f12]/95 border border-amber-500/60 shadow-[0_0_20px_rgba(245,158,11,0.2)] rounded-lg p-1.5 sm:p-3.5 z-40 hidden transition-all duration-300 w-[90%] sm:w-auto max-w-[275px] sm:max-w-sm backdrop-blur-md">
         <!-- Card Top Bar -->
-        <div class="flex items-center justify-between border-b border-amber-500/20 pb-1 mb-1.5 sm:pb-2 sm:mb-2.5">
-          <div class="flex items-center space-x-1.5">
-            <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-500 animate-ping"></span>
-            <span id="clash-card-stage" class="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-amber-400 font-bold">TACTICAL CONFLICT // MATCH</span>
+        <div class="flex items-center justify-between border-b border-amber-500/20 pb-0.5 mb-1 sm:pb-2 sm:mb-2.5">
+          <div class="flex items-center space-x-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
+            <span id="clash-card-stage" class="text-[8px] sm:text-[10px] font-mono uppercase tracking-widest text-amber-400 font-bold truncate max-w-[200px] sm:max-w-none">TACTICAL CONFLICT // MATCH</span>
           </div>
-          <button onclick="closeClashCard()" class="text-console-dimText hover:text-amber-400 transition font-mono text-xs px-1">✕</button>
+          <button onclick="closeClashCard()" class="text-console-dimText hover:text-amber-400 transition font-mono text-[10px] sm:text-xs px-1">✕</button>
         </div>
 
         <!-- Card Main Face (Black Gold Grid) -->
-        <div class="flex items-center justify-between px-1 py-0.5 sm:px-3 sm:py-1 space-x-1 sm:space-x-2">
+        <div class="flex items-center justify-between px-0.5 py-0.5 sm:px-3 sm:py-1 space-x-1 sm:space-x-2">
           <!-- Team A Card -->
-          <div id="clash-card-teamA" class="flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1.5 rounded-lg cursor-pointer transition border border-transparent hover:border-amber-500/50 hover:bg-amber-500/5 group">
+          <div id="clash-card-teamA" class="flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1 sm:p-1.5 rounded-lg cursor-pointer transition border border-transparent hover:border-amber-500/50 hover:bg-amber-500/5 group">
             <div id="clash-teamA-flag" class="transform group-hover:scale-105 transition duration-200"></div>
-            <div id="clash-teamA-name" class="font-bold text-white font-sans text-xs sm:text-sm tracking-wide">ARGENTINA</div>
+            <div id="clash-teamA-name" class="font-bold text-white font-sans text-[10px] sm:text-sm tracking-wide">ARGENTINA</div>
           </div>
 
           <!-- VS Badge -->
-          <div class="px-1 sm:px-3 flex flex-col items-center justify-center shrink-0">
-            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-b from-amber-400 to-amber-600 flex items-center justify-center font-extrabold text-black font-mono text-[10px] sm:text-xs shadow-[0_0_15px_rgba(245,158,11,0.5)] border border-amber-200">
+          <div class="px-0.5 sm:px-3 flex flex-col items-center justify-center shrink-0">
+            <div class="w-5 h-5 sm:w-8 sm:h-8 rounded-full bg-gradient-to-b from-amber-400 to-amber-600 flex items-center justify-center font-extrabold text-black font-mono text-[8px] sm:text-xs shadow-[0_0_10px_rgba(245,158,11,0.5)] border border-amber-200">
               VS
             </div>
-            <div id="clash-match-score" class="text-[9px] sm:text-[10px] font-mono text-console-accent font-bold mt-0.5 sm:mt-1">
+            <div id="clash-match-score" class="text-[8px] sm:text-[10px] font-mono text-console-accent font-bold mt-0.5 sm:mt-1">
               3 - 2
             </div>
           </div>
 
           <!-- Team B Card -->
-          <div id="clash-card-teamB" class="flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1.5 rounded-lg cursor-pointer transition border border-transparent hover:border-amber-500/50 hover:bg-amber-500/5 group">
+          <div id="clash-card-teamB" class="flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1 sm:p-1.5 rounded-lg cursor-pointer transition border border-transparent hover:border-amber-500/50 hover:bg-amber-500/5 group">
             <div id="clash-teamB-flag" class="transform group-hover:scale-105 transition duration-200"></div>
-            <div id="clash-teamB-name" class="font-bold text-white font-sans text-xs sm:text-sm tracking-wide">FRANCE</div>
+            <div id="clash-teamB-name" class="font-bold text-white font-sans text-[10px] sm:text-sm tracking-wide">FRANCE</div>
           </div>
         </div>
       </div>
@@ -1337,22 +1338,22 @@
       // Team A element
       const cardA = document.getElementById("clash-card-teamA");
       cardA.onclick = () => setMatchWinner(matchIdx, code1);
-      document.getElementById("clash-teamA-flag").innerHTML = getFlagImg(code1).replace('w-5 h-3.5', 'w-10 h-7 sm:w-12 sm:h-8 shadow-md border border-amber-500/40');
+      document.getElementById("clash-teamA-flag").innerHTML = getFlagImg(code1).replace('w-5 h-3.5', 'w-6 h-4 sm:w-10 sm:h-7 shadow-md border border-amber-500/40');
       document.getElementById("clash-teamA-name").innerHTML = `
-        <span>${name1}</span>
-        ${activeWinner === code1 ? `<span class="block text-[8px] text-amber-400 font-mono uppercase font-bold">${winnerTag}</span>` : ''}
+        <span class="truncate max-w-[70px] sm:max-w-[110px] block text-[10px] sm:text-xs">${name1}</span>
+        ${activeWinner === code1 ? `<span class="block text-[7px] sm:text-[8px] text-amber-400 font-mono uppercase font-bold">${winnerTag}</span>` : ''}
       `;
-      cardA.className = `flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1.5 rounded-lg cursor-pointer transition border ${activeWinner === code1 ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'border-transparent hover:border-amber-500/50 hover:bg-amber-500/5'} group`;
+      cardA.className = `flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1 sm:p-1.5 rounded-lg cursor-pointer transition border ${activeWinner === code1 ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'border-transparent hover:border-amber-500/50 hover:bg-amber-500/5'} group`;
 
       // Team B element
       const cardB = document.getElementById("clash-card-teamB");
       cardB.onclick = () => setMatchWinner(matchIdx, code2);
-      document.getElementById("clash-teamB-flag").innerHTML = getFlagImg(code2).replace('w-5 h-3.5', 'w-10 h-7 sm:w-12 sm:h-8 shadow-md border border-amber-500/40');
+      document.getElementById("clash-teamB-flag").innerHTML = getFlagImg(code2).replace('w-5 h-3.5', 'w-6 h-4 sm:w-10 sm:h-7 shadow-md border border-amber-500/40');
       document.getElementById("clash-teamB-name").innerHTML = `
-        <span>${name2}</span>
-        ${activeWinner === code2 ? `<span class="block text-[8px] text-amber-400 font-mono uppercase font-bold">${winnerTag}</span>` : ''}
+        <span class="truncate max-w-[70px] sm:max-w-[110px] block text-[10px] sm:text-xs">${name2}</span>
+        ${activeWinner === code2 ? `<span class="block text-[7px] sm:text-[8px] text-amber-400 font-mono uppercase font-bold">${winnerTag}</span>` : ''}
       `;
-      cardB.className = `flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1.5 rounded-lg cursor-pointer transition border ${activeWinner === code2 ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'border-transparent hover:border-amber-500/50 hover:bg-amber-500/5'} group`;
+      cardB.className = `flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1 sm:p-1.5 rounded-lg cursor-pointer transition border ${activeWinner === code2 ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'border-transparent hover:border-amber-500/50 hover:bg-amber-500/5'} group`;
 
       const effectiveScore = getEffectiveMatchScore(match, activeWinner);
       document.getElementById("clash-match-score").innerHTML = formatScoreDisplay(effectiveScore);
@@ -1593,21 +1594,27 @@
           // Render Capital City Labels
           const capCity = teamCapitals[code]?.city || teamMetadata[code]?.name || code;
           const isPlaying = playingTeams.includes(code);
+          const isCampaignHQ = (activeCampaignTeam && code === activeCampaignTeam);
           const currentZoom = d3.zoomTransform(svg.node()).k || 1.0;
-          const isZoomedIn = currentZoom >= 2.2;
+          const isMobile = window.innerWidth < 640;
+
+          // On mobile screens, strictly show labels ONLY for active playing teams or campaign HQ (never show non-competing capitals even when zooming)
+          const shouldShowLabel = isMobile 
+            ? (isPlaying || isCampaignHQ)
+            : (isPlaying || currentZoom >= 2.0);
           
-          if (isPlaying || isZoomedIn) {
+          if (shouldShowLabel) {
+            const fontSz = isMobile ? (isPlaying ? "8px" : "7px") : (isPlaying ? "9px" : "8px");
             vectorGroup.append("text")
-              .attr("x", cx + 4)
+              .attr("x", cx + 3.5)
               .attr("y", cy + 2.5)
               .attr("class", `capital-label ${isPlaying ? 'active-clash-label' : ''}`)
               .attr("font-family", "monospace")
-              .attr("font-size", isPlaying ? "9px" : "8px")
+              .attr("font-size", fontSz)
               .attr("font-weight", isPlaying ? "bold" : "600")
-              .attr("letter-spacing", "0.05em")
+              .attr("letter-spacing", "0.04em")
               .attr("fill", isPlaying ? "#00ffcc" : "#f59e0b")
               .attr("opacity", isPlaying ? 1.0 : 0.85)
-              .style("display", (isPlaying || isZoomedIn) ? "block" : "none")
               .text(capCity.toUpperCase());
           }
         }
@@ -1745,11 +1752,11 @@
       if (overrideCount > 0) {
         resetBtn.classList.remove("hidden");
         statusLabel.innerText = t ? t.statusParallel(overrideCount) : `Status: Parallel Universe (${overrideCount} Alt)`;
-        statusLabel.className = "text-[10px] uppercase font-mono text-console-accent font-bold animate-pulse";
+        statusLabel.className = "hidden lg:inline text-[10px] uppercase font-mono text-console-accent font-bold animate-pulse";
       } else {
         resetBtn.classList.add("hidden");
         statusLabel.innerText = t ? t.statusSimulating : "Status: Simulating";
-        statusLabel.className = "text-[10px] uppercase font-mono text-console-dimText";
+        statusLabel.className = "hidden lg:inline text-[10px] uppercase font-mono text-console-dimText";
       }
 
     function renderLogCard(log) {
