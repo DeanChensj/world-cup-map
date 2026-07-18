@@ -433,6 +433,9 @@
       }
     }
 
+    let isSandboxAction = false;
+    let lastRenderedStepIndex = 0;
+
     function setMatchWinner(matchIndex, winnerCode) {
       audio.playClick();
       const match = matches[matchIndex];
@@ -443,6 +446,7 @@
       } else {
         userOverrides[matchIndex] = winnerCode;
       }
+      isSandboxAction = true;
       updateUI();
     }
 
@@ -476,6 +480,7 @@
         }
       }
 
+      isSandboxAction = true;
       updateUI();
     }
 
@@ -1390,37 +1395,90 @@
 
       document.getElementById("timeline-slider").value = currentStepIndex;
 
-      // Update map colors smoothly
-      svg.selectAll(".country")
-        .transition()
-        .duration(400)
-        .ease(d3.easeCubicOut)
-        .attr("fill", d => {
-          if (d.code) {
-            return getCountryColor(d.properties ? d.properties.name : (d.name || ""), null, d.code);
-          }
-          return getCountryColor(d.properties ? d.properties.name : "", d.id);
-        })
-        .attr("class", d => {
+      // Check direction of movement & Sandbox overrides for animation trigger
+      const isForward = (currentStepIndex > lastRenderedStepIndex) || isSandboxAction;
+      const latestAnnexation = (isForward && logs.length > 0 && logs[0].isAnnexation && logs[0].isLatest) ? logs[0] : null;
+
+      lastRenderedStepIndex = currentStepIndex;
+      isSandboxAction = false; // Reset sandbox action flag
+
+      // Stop any ongoing D3 transitions immediately if scrubbing or stepping backward
+      if (!isForward) {
+        svg.selectAll(".country").interrupt();
+      }
+
+      if (latestAnnexation) {
+        // --- 2-STAGE CONQUEST RIPPLE ANIMATION ---
+        const loserCode = latestAnnexation.loserCode;
+        const winnerCode = latestAnnexation.winnerCode;
+        const loserCenter = centroids[loserCode] || centroids[latestAnnexation.away] || [0, 0];
+
+        // Trigger Shockwave Pulse at Loser Capital at Stage 1 impact (~350ms)
+        setTimeout(() => {
+          if (typeof triggerShockwave === "function") triggerShockwave(loserCode);
+        }, 350);
+
+        svg.selectAll(".country").each(function(d) {
           const alpha3 = d.code || getWCCodeFromMap(d.properties ? d.properties.name : "", d.id);
-          let classes = d.code ? "country micro-nation" : "country";
-          if (alpha3) {
-            if (playingTeams.includes(alpha3)) {
-              classes += " playing-highlight";
+          if (!alpha3) return;
+
+          const owner = getCurrentOwner(alpha3);
+          const targetColor = getCountryColor(d.properties ? d.properties.name : (d.name || ""), null, alpha3);
+          const isNewlyConquered = (owner === winnerCode && countryLineage[alpha3] && countryLineage[alpha3].includes(loserCode));
+
+          const sel = d3.select(this);
+
+          if (isNewlyConquered && centroids[alpha3]) {
+            const [cx, cy] = centroids[alpha3];
+            const dist = Math.hypot(cx - loserCenter[0], cy - loserCenter[1]);
+            const delayMs = 380 + Math.min(dist * 2.2, 450); // Staggered ripple outward from loser capital
+
+            sel.transition()
+               .delay(delayMs)
+               .duration(400)
+               .ease(d3.easeCubicOut)
+               .attr("fill", targetColor);
+          } else {
+            sel.transition()
+               .duration(200)
+               .ease(d3.easeCubicOut)
+               .attr("fill", targetColor);
+          }
+        });
+      } else {
+        // Instant / Standard Transition for Group Stage or Backwards Step
+        svg.selectAll(".country")
+          .transition()
+          .duration(isForward ? 350 : 0)
+          .ease(d3.easeCubicOut)
+          .attr("fill", d => {
+            if (d.code) {
+              return getCountryColor(d.properties ? d.properties.name : (d.name || ""), null, d.code);
             }
-            const owner = getCurrentOwner(alpha3);
-            if (activeCampaignTeam && owner === activeCampaignTeam) {
-              classes += " campaign-faction-territory";
-            }
-            if (alpha3 === owner) {
-              const isEmpire = originalTeams.filter(t => getCurrentOwner(t) === owner).length > 1;
-              if (isEmpire) {
-                classes += " empire-capital";
-              }
+            return getCountryColor(d.properties ? d.properties.name : "", d.id);
+          });
+      }
+
+      svg.selectAll(".country").attr("class", d => {
+        const alpha3 = d.code || getWCCodeFromMap(d.properties ? d.properties.name : "", d.id);
+        let classes = d.code ? "country micro-nation" : "country";
+        if (alpha3) {
+          if (playingTeams.includes(alpha3)) {
+            classes += " playing-highlight";
+          }
+          const owner = getCurrentOwner(alpha3);
+          if (activeCampaignTeam && owner === activeCampaignTeam) {
+            classes += " campaign-faction-territory";
+          }
+          if (alpha3 === owner) {
+            const isEmpire = originalTeams.filter(t => getCurrentOwner(t) === owner).length > 1;
+            if (isEmpire) {
+              classes += " empire-capital";
             }
           }
-          return classes;
-        });
+        }
+        return classes;
+      });
 
       // Render Empire Flow Vector Arcs & Tactical Centroids
       const vectorGroup = svg.select(".vector-layer");
@@ -1496,8 +1554,6 @@
         }
       });
 
-
-
       // Render active clash rays connecting capital cities for all current matches (Group Stage & Knockout)
       if (activeDayMatches && activeDayMatches.length > 0) {
         activeDayMatches.forEach(m => {
@@ -1527,11 +1583,26 @@
               const ctrlY = midY + (dx / dist) * offset;
               const rayStr = `M ${c0[0]} ${c0[1]} Q ${ctrlX} ${ctrlY} ${c1[0]} ${c1[1]}`;
 
-              vectorGroup.append("path")
+              const rayPath = vectorGroup.append("path")
                 .attr("d", rayStr)
                 .attr("class", "active-clash-ray")
                 .attr("fill", "none")
                 .attr("stroke-width", isGroup ? "1.2px" : "1.8px");
+
+              // Stage 1 Laser Beam Shot Animation for Forward Knockout Matches
+              if (isForward && !isGroup) {
+                const node = rayPath.node();
+                if (node && node.getTotalLength) {
+                  const len = node.getTotalLength();
+                  rayPath
+                    .attr("stroke-dasharray", len + " " + len)
+                    .attr("stroke-dashoffset", len)
+                    .transition()
+                    .duration(400)
+                    .ease(d3.easeCubicOut)
+                    .attr("stroke-dashoffset", 0);
+                }
+              }
             }
           }
         });
