@@ -1372,13 +1372,7 @@
         }).join("");
       }
 
-      // Collect all playing teams for camera tracking
-      const activeDayMatches = matches.filter(m => m.date === currentDate);
-      const playingTeams = [];
-      activeDayMatches.forEach(m => {
-        playingTeams.push(m.home);
-        playingTeams.push(m.away);
-      });
+      // Focus map camera on playing teams
       focusMapOnTeams(playingTeams);
 
       // Render Floating Mobile Match Carousel Overlay
