@@ -597,8 +597,8 @@
         logs[0].count = count;
         logs[0].isAnnexation = true;
 
-        if (count >= 4 && isLatestStep) {
-          triggerAlert(`[CAPTURE]: ${(teamMetadata[ownerOfWinner]?.name || ownerOfWinner).toUpperCase()} captured ${(teamMetadata[loserCode]?.name || loserCode).toUpperCase()}'s sectors (+${count} sectors)`);
+        if (isLatestStep) {
+          triggerShockwave(ownerOfWinner);
         }
       } else {
         if (ownerOfWinner === loserCode) {
@@ -707,6 +707,30 @@
       });
 
     svg.call(zoom);
+
+    function triggerShockwave(teamCode) {
+      audio.playAlert();
+      if (!centroids[teamCode]) return;
+      const [cx, cy] = centroids[teamCode];
+      const vectorGroup = svg.select(".vector-layer");
+
+      const wave = vectorGroup.append("circle")
+        .attr("cx", cx)
+        .attr("cy", cy)
+        .attr("r", 3)
+        .attr("fill", "none")
+        .attr("stroke", "#ffcc00")
+        .attr("stroke-width", "2.0px")
+        .attr("opacity", 0.95);
+
+      wave.transition()
+        .duration(650)
+        .ease(d3.easeQuadOut)
+        .attr("r", 50)
+        .attr("stroke-width", "0.3px")
+        .attr("opacity", 0)
+        .remove();
+    }
 
     function switchEdition(edition) {
       if (playbackInterval) {
@@ -1281,40 +1305,7 @@
         }
       });
 
-      originalTeams.forEach(suzerainCode => {
-        const holdings = originalTeams.filter(t => getCurrentOwner(t) === suzerainCode);
-        if (holdings.length > 1 && centroids[suzerainCode]) {
-          const [cx0, cy0] = centroids[suzerainCode];
-          const color = teamMetadata[suzerainCode]?.color || "#00ff66";
 
-          holdings.forEach(vassalCode => {
-            if (vassalCode !== suzerainCode && centroids[vassalCode]) {
-              const [cx1, cy1] = centroids[vassalCode];
-              
-              // Calculate control point for curved quadratic arc Q
-              const midX = (cx0 + cx1) / 2;
-              const midY = (cy0 + cy1) / 2;
-              const dx = cx1 - cx0;
-              const dy = cy1 - cy0;
-              const dist = Math.sqrt(dx * dx + dy * dy);
-              
-              // Offset control point perpendicular to line
-              const offset = Math.min(dist * 0.25, 45);
-              const ctrlX = midX - (dy / (dist || 1)) * offset;
-              const ctrlY = midY + (dx / (dist || 1)) * offset;
-
-              const dStr = `M ${cx1} ${cy1} Q ${ctrlX} ${ctrlY} ${cx0} ${cy0}`;
-
-              vectorGroup.append("path")
-                .attr("d", dStr)
-                .attr("class", `flow-arc flow-arc-${suzerainCode}`)
-                .attr("stroke", color)
-                .attr("stroke-width", "1.4px")
-                .attr("opacity", 0.65);
-            }
-          });
-        }
-      });
 
       // Render active clash ray for current playing teams in knockout matches
       if (playingTeams.length === 2 && centroids[playingTeams[0]] && centroids[playingTeams[1]]) {

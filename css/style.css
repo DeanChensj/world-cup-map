@@ -81,11 +81,11 @@ body.light-theme .playing-highlight {
 
 .active-clash-ray {
   fill: none !important;
-  stroke: #ffcc00 !important;
-  stroke-dasharray: 3, 3;
-  animation: flowDash 0.8s linear infinite;
+  stroke: #00ffcc !important;
+  stroke-dasharray: 4, 4;
+  animation: flowDash 0.5s linear infinite;
   pointer-events: none;
-  filter: drop-shadow(0 0 3px rgba(255, 204, 0, 0.5));
+  filter: drop-shadow(0 0 6px rgba(0, 255, 204, 0.8));
 }
 
 @keyframes flowDash {
