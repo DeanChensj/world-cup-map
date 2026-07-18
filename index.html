@@ -449,7 +449,6 @@
     }
 
     function resetOverrides() {
-      audio.playClick();
       userOverrides = {};
       const url = new URL(window.location.href);
       url.searchParams.delete("alt");
@@ -1825,6 +1824,7 @@
     // Global Keyboard Hotkeys Listener
     document.addEventListener("keydown", (e) => {
       if (["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName)) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return; // Allow browser native shortcuts (Cmd+R, Ctrl+R, etc.)
 
       if (e.code === "Space") {
         e.preventDefault();
