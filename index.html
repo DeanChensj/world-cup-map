@@ -658,7 +658,7 @@
       const loserCode = (winnerCode === match.home) ? match.away : match.home;
       const isGroupStage = (match.stage === "Group Stage" || match.stage.includes("Group"));
 
-      // Always log match result for Live Feed
+      // Always log match for Live Feed
       logs.unshift({
         matchIndex: matchIdx,
         date: match.date,
@@ -724,6 +724,8 @@
       initOwnership();
       const logs = [];
 
+      let hasPassedGroupStage = false;
+
       for (let s = 1; s <= targetStepIndex; s++) {
         const step = timelineSteps[s];
         if (!step) continue;
@@ -735,6 +737,19 @@
             processSingleMatch(m, isLatestStep, logs);
           });
         } else if (step.type === "knockout_match") {
+          if (!hasPassedGroupStage) {
+            hasPassedGroupStage = true;
+            // Group Stage Elimination Annexation:
+            originalTeams.forEach(team => {
+              if (!advancingTeams.has(team)) {
+                const suzerain = Array.from(advancingTeams)[0];
+                if (suzerain && countryLineage[team]) {
+                  countryLineage[team].push(suzerain);
+                }
+              }
+            });
+          }
+
           processSingleMatch(step.match, isLatestStep, logs);
         }
       }
@@ -876,6 +891,20 @@
         slider.value = 0;
         document.getElementById("timeline-start").innerText = "KICKOFF";
         document.getElementById("timeline-end").innerText = "FINAL";
+
+        // Populate Stage Jump Bar Pills
+        const stageJumpBar = document.getElementById("stage-jump-bar");
+        if (stageJumpBar) {
+          stageJumpBar.innerHTML = `
+            <div class="flex items-center space-x-1.5 py-0.5">
+              <button onclick="jumpToStage('kickoff')" class="px-2 py-0.5 bg-console-bg border border-console-border hover:border-console-accent text-console-accent rounded-sm transition cursor-pointer">⚽ 开幕 KICKOFF</button>
+              <button onclick="jumpToStage('group')" class="px-2 py-0.5 bg-console-bg border border-console-border hover:border-console-accent text-console-text rounded-sm transition cursor-pointer">📅 小组赛 (17天)</button>
+              <button onclick="jumpToStage('r32')" class="px-2 py-0.5 bg-console-bg border border-console-border hover:border-console-red text-console-red rounded-sm transition cursor-pointer">⚔️ 淘汰赛 (32强)</button>
+              <button onclick="jumpToStage('final')" class="px-2 py-0.5 bg-console-bg border border-console-border hover:border-console-yellow text-console-yellow rounded-sm transition cursor-pointer">👑 决胜夜 FINAL</button>
+            </div>
+            <span class="text-console-dimText text-[9px] hidden md:inline">小组赛0领土吞并 • 淘汰赛实时领土割据</span>
+          `;
+        }
 
         // Repopulate initial ownership state
         initOwnership();
@@ -1644,11 +1673,36 @@
       }).join("");
     }
 
+    function jumpToStage(stage) {
+      audio.playClick();
+      if (playbackInterval) stopPlayback();
+      if (stage === 'kickoff') {
+        currentStepIndex = 0;
+      } else if (stage === 'group') {
+        const idx = timelineSteps.findIndex(s => s.type === 'group_day');
+        currentStepIndex = idx !== -1 ? idx : 0;
+      } else if (stage === 'r32') {
+        const idx = timelineSteps.findIndex(s => s.type === 'knockout_match');
+        currentStepIndex = idx !== -1 ? idx : 0;
+      } else if (stage === 'final') {
+        currentStepIndex = timelineSteps.length - 1;
+      }
+      updateUI();
+    }
+
     function jumpToMatchIndex(matchIdx) {
       audio.playClick();
       if (playbackInterval) stopPlayback();
-      currentMatchIndex = matchIdx;
-      updateUI();
+      // Find step that contains this matchIdx
+      const stepIdx = timelineSteps.findIndex(s => {
+        if (s.type === 'knockout_match') return s.match.originalIndex === matchIdx;
+        if (s.type === 'group_day') return s.matches.some(m => m.originalIndex === matchIdx);
+        return false;
+      });
+      if (stepIdx !== -1) {
+        currentStepIndex = stepIdx;
+        updateUI();
+      }
     }
 
     // Global Keyboard Hotkeys Listener
