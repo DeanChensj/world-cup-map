@@ -1272,6 +1272,10 @@
         } else {
           code2 = match.away;
         }
+        if (code1 === code2) {
+          code1 = match.home;
+          code2 = match.away;
+        }
       }
 
       const name1 = getTeamName(code1, teamMetadata[code1]?.name);
@@ -1320,6 +1324,9 @@
 
     // --- UI Update Loop ---
     function updateUI() {
+      // Run simulation step FIRST to ensure ownership state is 100% synchronized for currentStepIndex (forwards & backwards)
+      const logs = runSimulationToStep(currentStepIndex);
+
       const step = timelineSteps[currentStepIndex] || timelineSteps[0];
       let currentDate = dates[0];
       let playingTeams = [];
@@ -1344,9 +1351,6 @@
       }
 
       document.getElementById("timeline-slider").value = currentStepIndex;
-
-      // Run simulation step
-      const logs = runSimulationToStep(currentStepIndex);
 
       // Update map colors smoothly
       svg.selectAll(".country")
