@@ -1731,13 +1731,17 @@
 
       if (e.code === "Space") {
         e.preventDefault();
-        document.getElementById("btn-play").click();
+        document.getElementById("btn-play")?.click();
       } else if (e.code === "ArrowLeft") {
         e.preventDefault();
-        document.getElementById("btn-prev").click();
+        document.getElementById("btn-prev")?.click();
       } else if (e.code === "ArrowRight") {
         e.preventDefault();
-        document.getElementById("btn-next").click();
+        document.getElementById("btn-next")?.click();
+      } else if (e.code === "Escape") {
+        e.preventDefault();
+        closeFactionModal();
+        closeClashCard();
       } else if (e.code === "KeyR") {
         e.preventDefault();
         resetOverrides();
