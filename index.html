@@ -550,6 +550,59 @@
       return scoreStr;
     }
 
+    function getEffectiveMatchScore(match, effectiveWinnerCode) {
+      if (!match || !match.score) return "SCHEDULED";
+      const rawScore = match.score;
+      const isGroupStage = (!match.stage || match.stage === "Group Stage" || match.stage.includes("Group"));
+      
+      if (isGroupStage || !effectiveWinnerCode || effectiveWinnerCode === match.winner) {
+        return rawScore;
+      }
+
+      if (rawScore.includes("(p)")) {
+        const parts = rawScore.split("(");
+        const mainScore = parts[0].trim();
+        const pPart = parts[1].replace("p)", "").replace("p", "").trim();
+        const pScores = pPart.split("-").map(s => parseInt(s.trim()));
+        if (pScores.length === 2 && !isNaN(pScores[0]) && !isNaN(pScores[1])) {
+          const pMax = Math.max(pScores[0], pScores[1]);
+          const pMin = Math.min(pScores[0], pScores[1]);
+          if (effectiveWinnerCode === match.home) {
+            return `${mainScore} (${pMax}-${pMin} p)`;
+          } else {
+            return `${mainScore} (${pMin}-${pMax} p)`;
+          }
+        }
+      }
+
+      if (rawScore.includes("(aet)")) {
+        const mainScore = rawScore.replace("(aet)", "").trim();
+        const scores = mainScore.split("-").map(s => parseInt(s.trim()));
+        if (scores.length === 2 && !isNaN(scores[0]) && !isNaN(scores[1])) {
+          const sMax = Math.max(scores[0], scores[1]);
+          const sMin = Math.min(scores[0], scores[1]);
+          if (effectiveWinnerCode === match.home) {
+            return `${sMax}-${sMin} (aet)`;
+          } else {
+            return `${sMin}-${sMax} (aet)`;
+          }
+        }
+      }
+
+      const mainScores = rawScore.split("-").map(s => parseInt(s.trim()));
+      if (mainScores.length === 2 && !isNaN(mainScores[0]) && !isNaN(mainScores[1])) {
+        const sMax = Math.max(mainScores[0], mainScores[1]);
+        const sMin = Math.min(mainScores[0], mainScores[1]);
+        if (effectiveWinnerCode === match.home) {
+          return `${sMax}-${sMin}`;
+        } else if (effectiveWinnerCode === match.away) {
+          return `${sMin}-${sMax}`;
+        }
+      }
+
+      return rawScore;
+    }
+
     function processSingleMatch(match, isLatestStep, logs) {
       const matchIdx = match.originalIndex;
       const isGroupStage = (match.stage === "Group Stage" || match.stage.includes("Group"));
@@ -573,6 +626,8 @@
 
       const loserCode = (winnerCode === homeCode) ? awayCode : homeCode;
 
+      const dynamicScore = getEffectiveMatchScore(match, (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner);
+
       // Always log match for Live Feed using dynamic effective teams!
       logs.unshift({
         matchIndex: matchIdx,
@@ -580,7 +635,7 @@
         stage: match.stage,
         home: homeCode,
         away: awayCode,
-        score: match.score,
+        score: dynamicScore,
         winner: teamMetadata[winnerCode]?.name || winnerCode,
         winnerCode: winnerCode,
         loser: teamMetadata[loserCode]?.name || loserCode,
@@ -1195,10 +1250,8 @@
       `;
       cardB.className = `flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1.5 rounded-lg cursor-pointer transition border ${activeWinner === code2 ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'border-transparent hover:border-amber-500/50 hover:bg-amber-500/5'} group`;
 
-      const scoreStr = (match.score1 !== undefined && match.score2 !== undefined)
-        ? `${match.score1} - ${match.score2}`
-        : (match.score || `SCHEDULED`);
-      document.getElementById("clash-match-score").innerHTML = formatScoreDisplay(scoreStr);
+      const effectiveScore = getEffectiveMatchScore(match, activeWinner);
+      document.getElementById("clash-match-score").innerHTML = formatScoreDisplay(effectiveScore);
 
       overlay.classList.remove("hidden");
     }
