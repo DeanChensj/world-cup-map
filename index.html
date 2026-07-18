@@ -900,18 +900,7 @@
         document.getElementById("timeline-end").innerText = "FINAL";
 
         // Populate Stage Jump Bar Pills
-        const stageJumpBar = document.getElementById("stage-jump-bar");
-        if (stageJumpBar) {
-          stageJumpBar.innerHTML = `
-            <div class="flex items-center space-x-1.5 py-0.5">
-              <button onclick="jumpToStage('kickoff')" class="px-2 py-0.5 bg-console-bg border border-console-border hover:border-console-accent text-console-accent rounded-sm transition cursor-pointer">⚽ 开幕 KICKOFF</button>
-              <button onclick="jumpToStage('group')" class="px-2 py-0.5 bg-console-bg border border-console-border hover:border-console-accent text-console-text rounded-sm transition cursor-pointer">📅 小组赛 (17天)</button>
-              <button onclick="jumpToStage('r32')" class="px-2 py-0.5 bg-console-bg border border-console-border hover:border-console-red text-console-red rounded-sm transition cursor-pointer">⚔️ 淘汰赛 (32强)</button>
-              <button onclick="jumpToStage('final')" class="px-2 py-0.5 bg-console-bg border border-console-border hover:border-console-yellow text-console-yellow rounded-sm transition cursor-pointer">👑 决胜夜 FINAL</button>
-            </div>
-            <span class="text-console-dimText text-[9px] hidden md:inline">小组赛0领土吞并 • 淘汰赛实时领土割据</span>
-          `;
-        }
+        renderStageJumpBar();
 
         // Repopulate initial ownership state
         initOwnership();
@@ -1653,14 +1642,23 @@
       const isKnockout = step && step.type === "knockout_match";
       const isFinal = currentStepIndex === timelineSteps.length - 1;
 
+      const stageName = (isKnockout && step.match) ? step.match.stage : "";
+      const isR32 = isKnockout && stageName === "Round of 32";
+      const isR16 = isKnockout && stageName === "Round of 16";
+      const isQF = isKnockout && stageName === "Quarterfinals";
+      const isSF = isKnockout && (stageName === "Semifinals" || stageName === "3rd Place Match") && !isFinal;
+
       bar.innerHTML = `
-        <div class="flex items-center space-x-1.5 py-0.5">
-          <button onclick="jumpToStage('kickoff')" class="px-2 py-0.5 ${isKickoff ? 'bg-console-accent text-console-bg font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-accent text-console-accent'} rounded-sm transition cursor-pointer">⚽ 开幕 KICKOFF</button>
-          <button onclick="jumpToStage('group')" class="px-2 py-0.5 ${isGroup && !isKickoff ? 'bg-console-accent text-console-bg font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-accent text-console-text'} rounded-sm transition cursor-pointer">📅 小组赛 (17天)</button>
-          <button onclick="jumpToStage('r32')" class="px-2 py-0.5 ${isKnockout && !isFinal ? 'bg-console-red text-console-text font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-red text-console-red'} rounded-sm transition cursor-pointer">⚔️ 淘汰赛 (32强)</button>
-          <button onclick="jumpToStage('final')" class="px-2 py-0.5 ${isFinal ? 'bg-console-yellow text-console-bg font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-yellow text-console-yellow'} rounded-sm transition cursor-pointer">👑 决胜夜 FINAL</button>
+        <div class="flex items-center space-x-1 flex-wrap gap-y-1 py-0.5">
+          <button onclick="jumpToStage('kickoff')" class="px-2 py-0.5 text-xs ${isKickoff ? 'bg-console-accent text-console-bg font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-accent text-console-accent'} rounded-sm transition cursor-pointer">Kickoff</button>
+          <button onclick="jumpToStage('group')" class="px-2 py-0.5 text-xs ${isGroup && !isKickoff ? 'bg-console-accent text-console-bg font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-accent text-console-text'} rounded-sm transition cursor-pointer">Group Stage</button>
+          <button onclick="jumpToStage('r32')" class="px-2 py-0.5 text-xs ${isR32 ? 'bg-console-red text-console-text font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-red text-console-red'} rounded-sm transition cursor-pointer">Round of 32</button>
+          <button onclick="jumpToStage('r16')" class="px-2 py-0.5 text-xs ${isR16 ? 'bg-console-red text-console-text font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-red text-console-red'} rounded-sm transition cursor-pointer">Round of 16</button>
+          <button onclick="jumpToStage('qf')" class="px-2 py-0.5 text-xs ${isQF ? 'bg-console-red text-console-text font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-red text-console-red'} rounded-sm transition cursor-pointer">Quarterfinals</button>
+          <button onclick="jumpToStage('sf')" class="px-2 py-0.5 text-xs ${isSF ? 'bg-console-red text-console-text font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-red text-console-red'} rounded-sm transition cursor-pointer">Semifinals</button>
+          <button onclick="jumpToStage('final')" class="px-2 py-0.5 text-xs ${isFinal ? 'bg-console-yellow text-console-bg font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-yellow text-console-yellow'} rounded-sm transition cursor-pointer">Final</button>
         </div>
-        <span class="text-console-dimText text-[9px] hidden md:inline">${isGroup ? '小组赛 0 领土吞并 (48 国初始版图)' : '淘汰赛单败领土实时割据'}</span>
+        <span class="text-console-dimText text-[9px] hidden md:inline ml-auto">${isGroup ? 'Group Stage: 0 Annexation' : 'Knockout Stage: Single Elimination Annexation'}</span>
       `;
     }
 
@@ -1673,7 +1671,16 @@
         const idx = timelineSteps.findIndex(s => s.type === 'group_day');
         currentStepIndex = idx !== -1 ? idx : 0;
       } else if (stage === 'r32') {
-        const idx = timelineSteps.findIndex(s => s.type === 'knockout_match');
+        const idx = timelineSteps.findIndex(s => s.type === 'knockout_match' && s.match.stage === 'Round of 32');
+        currentStepIndex = idx !== -1 ? idx : 0;
+      } else if (stage === 'r16') {
+        const idx = timelineSteps.findIndex(s => s.type === 'knockout_match' && s.match.stage === 'Round of 16');
+        currentStepIndex = idx !== -1 ? idx : 0;
+      } else if (stage === 'qf') {
+        const idx = timelineSteps.findIndex(s => s.type === 'knockout_match' && s.match.stage === 'Quarterfinals');
+        currentStepIndex = idx !== -1 ? idx : 0;
+      } else if (stage === 'sf') {
+        const idx = timelineSteps.findIndex(s => s.type === 'knockout_match' && s.match.stage === 'Semifinals');
         currentStepIndex = idx !== -1 ? idx : 0;
       } else if (stage === 'final') {
         currentStepIndex = timelineSteps.length - 1;
