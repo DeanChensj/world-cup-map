@@ -596,10 +596,6 @@
         
         logs[0].count = count;
         logs[0].isAnnexation = true;
-
-        if (isLatestStep) {
-          triggerShockwave(ownerOfWinner);
-        }
       } else {
         if (ownerOfWinner === loserCode) {
           let count = 0;
@@ -717,17 +713,17 @@
       const wave = vectorGroup.append("circle")
         .attr("cx", cx)
         .attr("cy", cy)
-        .attr("r", 3)
+        .attr("r", 4)
         .attr("fill", "none")
         .attr("stroke", "#ffcc00")
-        .attr("stroke-width", "2.0px")
+        .attr("stroke-width", "3.0px")
         .attr("opacity", 0.95);
 
       wave.transition()
-        .duration(650)
+        .duration(750)
         .ease(d3.easeQuadOut)
-        .attr("r", 50)
-        .attr("stroke-width", "0.3px")
+        .attr("r", 65)
+        .attr("stroke-width", "0.2px")
         .attr("opacity", 0)
         .remove();
     }
@@ -1483,6 +1479,11 @@
 
       // Update Campaign Mode HUD
       updateCampaignHUD();
+
+      // Trigger Conquest Shockwave on latest annexation step
+      if (logs.length > 0 && logs[0].isAnnexation && logs[0].isLatest) {
+        triggerShockwave(logs[0].winnerCode);
+      }
 
       // Focus map camera on Campaign Team if playing, otherwise playing teams
       if (activeCampaignTeam && playingTeams.includes(activeCampaignTeam)) {
