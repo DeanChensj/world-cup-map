@@ -1217,8 +1217,17 @@
       const matchIdx = match.originalIndex;
       const isGroupStage = (match.stage === "Group Stage" || match.stage.includes("Group"));
 
-      const code1 = isGroupStage ? match.home : getCurrentOwner(match.home);
-      const code2 = isGroupStage ? match.away : getCurrentOwner(match.away);
+      let code1 = isGroupStage ? match.home : getCurrentOwner(match.home);
+      let code2 = isGroupStage ? match.away : getCurrentOwner(match.away);
+
+      if (!isGroupStage && code1 === code2) {
+        const lineage2 = countryLineage[match.away];
+        if (lineage2 && lineage2.length > 1) {
+          code2 = lineage2[lineage2.length - 2];
+        } else {
+          code2 = match.away;
+        }
+      }
 
       const name1 = teamMetadata[code1]?.name || code1;
       const name2 = teamMetadata[code2]?.name || code2;
