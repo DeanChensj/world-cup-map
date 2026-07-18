@@ -1972,6 +1972,13 @@
           logsSection.style.height = `${newHeight}px`;
         }
       });
+
+      document.addEventListener("mouseup", () => {
+        if (isResizing) {
+          isResizing = false;
+          document.body.classList.remove("cursor-ns-resize");
+        }
+      });
     }
   </script>
 
