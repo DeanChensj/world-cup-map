@@ -214,6 +214,10 @@
         <div id="current-date-badge" class="bg-console-bg border border-console-border px-2 py-0.5 md:px-3 md:py-1 font-mono text-[10px] md:text-xs font-bold text-console-accent tracking-wider md:tracking-widest rounded">
           2026-06-11
         </div>
+        <button id="btn-campaign-select" onclick="openFactionModal()" title="Select Campaign Main Faction" class="bg-amber-500/10 border border-amber-500/60 text-amber-400 hover:bg-amber-500/20 px-2 py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer shadow-[0_0_10px_rgba(245,158,11,0.2)]">
+          <i class="ph-bold ph-flag-banner text-[10px]"></i>
+          <span id="campaign-select-text">FACTION</span>
+        </button>
         <button id="btn-share-universe" onclick="shareUniverse()" title="Share Parallel Universe Link" class="bg-console-bg border border-console-border text-console-accent hover:border-console-accent px-2 py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer">
           <i class="ph-bold ph-share-network text-[10px]"></i>
           <span class="hidden sm:inline">SHARE</span>
@@ -249,6 +253,20 @@
           <span id="active-factions" class="text-[10px] font-mono text-console-accent bg-console-accent/10 px-1.5 py-0.5 rounded">48 Factions</span>
         </div>
         
+        <!-- Hero Campaign Faction Banner -->
+        <div id="hero-faction-banner" onclick="openFactionModal()" class="mb-3 p-3 bg-gradient-to-r from-amber-500/20 via-console-panel to-amber-500/10 border border-amber-400/80 hover:border-amber-300 rounded-sm font-mono shadow-xl cursor-pointer transition group relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+              <span id="hero-banner-title" class="text-[10px] uppercase tracking-widest text-amber-400 font-bold">SELECT CAMPAIGN FACTION</span>
+            </div>
+            <i class="ph-bold ph-caret-right text-amber-400 group-hover:translate-x-0.5 transition"></i>
+          </div>
+          <div id="hero-banner-content" class="text-[11px] text-console-dimText mt-1 flex items-center space-x-2">
+            <span>Choose your nation to lead global conquest</span>
+          </div>
+        </div>
+
         <div id="champion-container"></div>
         <div id="leaderboard" class="space-y-1.5 overflow-y-auto flex-1 pr-1 font-mono text-xs">
           <!-- Dynamically populated -->
@@ -316,6 +334,28 @@
             <div id="clash-teamB-flag" class="transform hover:scale-105 transition duration-200"></div>
             <div id="clash-teamB-name" class="font-bold text-white font-sans text-sm tracking-wide">FRANCE</div>
           </div>
+        </div>
+      </div>
+
+      <!-- Campaign HUD Panel (Main Faction Status) -->
+      <div id="campaign-hud" class="absolute top-6 right-6 bg-gradient-to-br from-[#0d0f12]/95 to-[#161a22]/95 border border-amber-500/50 p-3 rounded-lg font-mono shadow-[0_0_20px_rgba(245,158,11,0.2)] backdrop-blur-md z-30 hidden min-w-[170px]">
+        <div class="text-[9px] uppercase tracking-widest text-amber-400 font-bold flex items-center justify-between border-b border-amber-500/20 pb-1.5 mb-2">
+          <span class="flex items-center space-x-1">
+            <i class="ph-bold ph-crown text-amber-400"></i>
+            <span>FACTION HUD</span>
+          </span>
+          <button onclick="openFactionModal()" class="text-[8px] text-console-dimText hover:text-amber-400 underline cursor-pointer">CHANGE</button>
+        </div>
+        <div class="flex items-center space-x-2">
+          <div id="hud-flag" class="shrink-0"></div>
+          <div class="flex flex-col">
+            <span id="hud-name" class="font-bold text-white font-sans text-xs">JAPAN</span>
+            <span id="hud-title" class="text-[8px] text-amber-300 font-mono">INDEPENDENT STATE</span>
+          </div>
+        </div>
+        <div class="mt-2 text-[9px] text-console-dimText flex items-center justify-between border-t border-console-border/40 pt-1.5">
+          <span>SECTORS HELD:</span>
+          <span id="hud-sectors" class="font-bold text-console-accent text-xs">1</span>
         </div>
       </div>
 
@@ -424,6 +464,7 @@
     let worldData = null;
     let centroids = {};
     let userOverrides = {};
+    let activeCampaignTeam = localStorage.getItem("activeCampaignTeam") || "";
 
     const microNations = [
       { code: "CUW", name: "Curaçao", coords: [-68.9900, 12.1696] },
@@ -1156,6 +1197,95 @@
         .style("opacity", 1.0);
     }
 
+    // --- Campaign Faction System ---
+    function openFactionModal() {
+      const modal = document.getElementById("faction-modal");
+      const grid = document.getElementById("faction-teams-grid");
+      if (!modal || !grid) return;
+
+      grid.innerHTML = originalTeams.map(code => {
+        const team = teamMetadata[code];
+        const name = team?.name || code;
+        const isSelected = activeCampaignTeam === code;
+
+        return `
+          <div 
+            onclick="selectCampaignTeam('${code}')"
+            class="p-2.5 bg-console-panel border ${isSelected ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'border-console-border hover:border-amber-500/50'} rounded-lg cursor-pointer transition flex items-center space-x-2 group"
+          >
+            ${getFlagImg(code).replace('w-5 h-3.5', 'w-7 h-5 rounded')}
+            <div class="flex flex-col min-w-0 flex-1">
+              <span class="font-bold font-sans text-xs text-white truncate">${name}</span>
+              <span class="text-[8px] text-console-dimText uppercase font-mono">${code}</span>
+            </div>
+            ${isSelected ? '<i class="ph-bold ph-check-circle text-amber-400 text-sm"></i>' : ''}
+          </div>
+        `;
+      }).join("");
+
+      modal.classList.remove("hidden");
+    }
+
+    function closeFactionModal() {
+      const modal = document.getElementById("faction-modal");
+      if (modal) modal.classList.add("hidden");
+    }
+
+    function selectCampaignTeam(code) {
+      activeCampaignTeam = code;
+      localStorage.setItem("activeCampaignTeam", code);
+      audio.playClick();
+      closeFactionModal();
+      updateCampaignHUD();
+      updateUI();
+      if (centroids[code]) {
+        focusMapOnTeams([code]);
+      }
+      triggerAlert(`COMMANDER ASSIGNED TO ${teamMetadata[code]?.name || code}!`);
+    }
+
+    function updateCampaignHUD() {
+      const hud = document.getElementById("campaign-hud");
+      const selectBtnText = document.getElementById("campaign-select-text");
+      const bannerTitle = document.getElementById("hero-banner-title");
+      const bannerContent = document.getElementById("hero-banner-content");
+
+      if (!activeCampaignTeam || !originalTeams.includes(activeCampaignTeam)) {
+        if (hud) hud.classList.add("hidden");
+        if (selectBtnText) selectBtnText.innerText = "FACTION";
+        if (bannerTitle) bannerTitle.innerText = "SELECT CAMPAIGN FACTION";
+        if (bannerContent) bannerContent.innerHTML = `<span>Choose your nation to lead global conquest</span>`;
+        return;
+      }
+
+      if (hud) hud.classList.remove("hidden");
+      if (selectBtnText) selectBtnText.innerText = activeCampaignTeam;
+
+      const teamName = teamMetadata[activeCampaignTeam]?.name || activeCampaignTeam;
+      document.getElementById("hud-flag").innerHTML = getFlagImg(activeCampaignTeam).replace('w-5 h-3.5', 'w-8 h-5 rounded shadow');
+      document.getElementById("hud-name").innerText = teamName;
+
+      const sectors = originalTeams.filter(t => getCurrentOwner(t) === activeCampaignTeam).length;
+      document.getElementById("hud-sectors").innerText = sectors;
+
+      let title = "INDEPENDENT STATE";
+      if (sectors >= 24) title = "GLOBAL HEGEMON";
+      else if (sectors >= 8) title = "CONTINENTAL EMPIRE";
+      else if (sectors >= 3) title = "REGIONAL POWER";
+      else if (sectors > 1) title = "EXPANDING KINGDOM";
+
+      document.getElementById("hud-title").innerText = title;
+
+      if (bannerTitle) bannerTitle.innerText = `FACTION COMMANDER: ${activeCampaignTeam}`;
+      if (bannerContent) {
+        bannerContent.innerHTML = `
+          ${getFlagImg(activeCampaignTeam)}
+          <span class="font-bold text-white font-sans text-xs">${teamName}</span>
+          <span class="text-amber-400 font-mono text-[10px] ml-auto font-bold">${title} (${sectors})</span>
+        `;
+      }
+    }
+
     function showClashCard(match) {
       if (!match || !match.home || !match.away) {
         closeClashCard();
@@ -1469,8 +1599,15 @@
         }).join("");
       }
 
-      // Focus map camera on playing teams
-      focusMapOnTeams(playingTeams);
+      // Update Campaign Mode HUD
+      updateCampaignHUD();
+
+      // Focus map camera on Campaign Team if playing, otherwise playing teams
+      if (activeCampaignTeam && playingTeams.includes(activeCampaignTeam)) {
+        focusMapOnTeams([activeCampaignTeam]);
+      } else {
+        focusMapOnTeams(playingTeams);
+      }
 
       // Render Floating Mobile Match Carousel Overlay
       const carouselEl = document.getElementById("mobile-match-carousel");
@@ -1837,5 +1974,26 @@
       });
     }
   </script>
+
+  <!-- Faction Selection Modal -->
+  <div id="faction-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-gradient-to-b from-[#161a22] to-[#0d0f12] border border-amber-500/60 rounded-xl p-5 w-full max-w-xl shadow-[0_0_50px_rgba(245,158,11,0.25)] flex flex-col max-h-[85vh]">
+      <div class="flex items-center justify-between border-b border-amber-500/20 pb-3 mb-3">
+        <div>
+          <h2 class="text-sm font-bold font-sans text-white tracking-wide flex items-center space-x-2">
+            <i class="ph-bold ph-flag-banner text-amber-400"></i>
+            <span>CAMPAIGN MODE: SELECT YOUR FACTION</span>
+          </h2>
+          <p class="text-[9px] font-mono text-console-dimText mt-0.5">Choose your nation to lead global conquest across the 2026 World Cup map.</p>
+        </div>
+        <button onclick="closeFactionModal()" class="text-console-dimText hover:text-white transition font-mono text-base p-1 cursor-pointer">✕</button>
+      </div>
+
+      <!-- Teams Grid -->
+      <div id="faction-teams-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 overflow-y-auto flex-1 pr-1 font-mono text-xs my-2">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+  </div>
 </body>
 </html>
