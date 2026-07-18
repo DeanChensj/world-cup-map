@@ -57,6 +57,10 @@ function updateCampaignHUD() {
     if (selectBtnText) selectBtnText.innerText = "FACTION";
     if (bannerTitle) bannerTitle.innerText = "SELECT CAMPAIGN FACTION";
     if (bannerContent) bannerContent.innerHTML = `<span>Choose your nation to lead global conquest</span>`;
+    if (activeCampaignTeam && !originalTeams.includes(activeCampaignTeam) && typeof triggerAlert === "function") {
+      const year = document.getElementById("header-year")?.innerText || "";
+      triggerAlert(`${activeCampaignTeam} DID NOT QUALIFY FOR THE ${year} WORLD CUP`);
+    }
     return;
   }
 

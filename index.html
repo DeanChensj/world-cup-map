@@ -313,6 +313,9 @@
         <button id="btn-next" title="Next Day" class="w-9 h-9 bg-console-bg border border-console-border hover:border-console-accent text-console-text hover:text-console-accent flex items-center justify-center rounded-sm transition active:scale-95">
           <i class="ph-bold ph-caret-right text-sm"></i>
         </button>
+        <button id="btn-speed" onclick="togglePlaybackSpeed()" title="Playback Speed (1x / 2x / 4x)" class="w-9 h-9 bg-console-bg border border-console-border hover:border-console-accent text-console-accent font-mono font-bold text-[10px] flex items-center justify-center rounded-sm transition active:scale-95">
+          <span id="speed-label">1X</span>
+        </button>
         <button id="btn-reset" title="Reset Timeline" class="w-9 h-9 bg-console-bg border border-console-border hover:border-console-red text-console-dimText hover:text-console-red flex items-center justify-center rounded-sm transition active:scale-95">
           <i class="ph-bold ph-arrow-counter-clockwise text-sm"></i>
         </button>
@@ -407,10 +410,10 @@
     }
 
     function parseUrlOverrides() {
+      userOverrides = {};
       const params = new URLSearchParams(window.location.search);
       const altParam = params.get("alt");
       if (altParam) {
-        userOverrides = {};
         altParam.split(",").forEach(item => {
           const parts = item.split(":");
           if (parts.length === 2) {
@@ -1946,8 +1949,29 @@
       }
     });
 
+    let playbackSpeedMs = 1500;
+    const speedOptions = [1500, 750, 350];
+    const speedLabels = ["1X", "2X", "4X"];
+    let speedIdx = 0;
+
+    function togglePlaybackSpeed() {
+      audio.playClick();
+      speedIdx = (speedIdx + 1) % speedOptions.length;
+      playbackSpeedMs = speedOptions[speedIdx];
+      const labelEl = document.getElementById("speed-label");
+      if (labelEl) labelEl.innerText = speedLabels[speedIdx];
+      if (playbackInterval) {
+        stopPlayback();
+        startPlayback();
+      }
+    }
+
     function startPlayback() {
       audio.playChime(true);
+      if (currentStepIndex >= timelineSteps.length - 1) {
+        currentStepIndex = 0;
+        updateUI();
+      }
       playBtn.classList.remove("bg-console-accent", "text-console-bg");
       playBtn.classList.add("bg-console-red", "text-console-text");
       document.getElementById("play-icon").className = "ph-fill ph-pause text-xs";
@@ -1960,7 +1984,7 @@
         } else {
           stopPlayback();
         }
-      }, 1500);
+      }, playbackSpeedMs);
     }
 
     function stopPlayback() {
