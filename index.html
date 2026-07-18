@@ -650,91 +650,105 @@
       return history ? history[history.length - 1] : team;
     }
 
-    function processMatchResult(match, isLatestStep, logs) {
-      const matchIdx = match.originalIndex;
-      const winnerCode = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
-      if (!winnerCode) return; // Skip draws
+    // Run simulation step match-by-match
+    function runSimulationToMatchIndex(matchIndex) {
+      initOwnership();
+      const activeMatches = matches.slice(0, matchIndex);
+      const logs = [];
 
-      const loserCode = (winnerCode === match.home) ? match.away : match.home;
+      activeMatches.forEach((match, idx) => {
+        const matchIdx = match.originalIndex;
+        const winnerCode = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
+        if (!winnerCode) return; // Skip draws
 
-      const isGroupStage = (match.stage === "Group Stage" || match.stage.includes("Group"));
-      if (isGroupStage) {
-        if (advancingTeams.has(loserCode)) {
-          return;
-        }
-      }
+        const loserCode = (winnerCode === match.home) ? match.away : match.home;
+        const isLatestMatch = (idx === matchIndex - 1);
+        const isGroupStage = (match.stage === "Group Stage" || match.stage.includes("Group"));
 
-      const ownerOfLoser = getCurrentOwner(loserCode);
-      const ownerOfWinner = getCurrentOwner(winnerCode);
-      
-      if (ownerOfWinner !== ownerOfLoser) {
-        let count = 0;
-        originalTeams.forEach(team => {
-          if (getCurrentOwner(team) === ownerOfLoser && countryLineage[team].includes(loserCode)) {
-            countryLineage[team].push(ownerOfWinner);
-            count++;
-          }
-        });
-        
-        logs.unshift({
-          date: match.date,
-          winner: teamMetadata[ownerOfWinner]?.name || ownerOfWinner,
-          winnerCode: ownerOfWinner,
-          loser: teamMetadata[loserCode]?.name || loserCode,
-          loserCode: loserCode,
-          count: count,
-          stage: match.stage,
-          isLatest: isLatestStep
-        });
-
-        if (count >= 4 && isLatestStep) {
-          triggerAlert(`[CAPTURE]: ${(teamMetadata[ownerOfWinner]?.name || ownerOfWinner).toUpperCase()} captured ${(teamMetadata[loserCode]?.name || loserCode).toUpperCase()}'s sectors (+${count} sectors)`);
-        }
-      } else {
-        if (ownerOfWinner === loserCode) {
-          let count = 0;
-          originalTeams.forEach(team => {
-            if (getCurrentOwner(team) === loserCode && countryLineage[team].includes(loserCode)) {
-              countryLineage[team].push(winnerCode);
-              count++;
-            }
-          });
+        if (isGroupStage) {
           logs.unshift({
+            matchIndex: matchIdx,
             date: match.date,
+            stage: match.stage,
+            home: match.home,
+            away: match.away,
+            score: match.score,
             winner: teamMetadata[winnerCode]?.name || winnerCode,
             winnerCode: winnerCode,
             loser: teamMetadata[loserCode]?.name || loserCode,
             loserCode: loserCode,
-            count: count,
-            stage: `${match.stage} (Reclaim)`,
-            isLatest: isLatestStep
+            isOverridden: (userOverrides[matchIdx] !== undefined),
+            isLatest: isLatestMatch,
+            isGroupMatch: true
           });
 
-          if (isLatestStep) {
-            triggerAlert(`[UPSET]: ${(teamMetadata[winnerCode]?.name || winnerCode).toUpperCase()} reclaimed their sectors from ${(teamMetadata[loserCode]?.name || loserCode).toUpperCase()}!`);
+          if (advancingTeams.has(loserCode)) {
+            return;
           }
         }
-      }
-    }
 
-    function runSimulationToStep(targetStepIndex) {
-      initOwnership();
-      const logs = [];
-
-      for (let s = 1; s <= targetStepIndex; s++) {
-        const step = timelineSteps[s];
-        if (!step) continue;
-
-        const isLatestStep = (s === targetStepIndex);
-
-        if (step.type === "group_day") {
-          step.matches.forEach(m => {
-            processMatchResult(m, isLatestStep, logs);
+        const ownerOfLoser = getCurrentOwner(loserCode);
+        const ownerOfWinner = getCurrentOwner(winnerCode);
+        
+        if (ownerOfWinner !== ownerOfLoser) {
+          let count = 0;
+          originalTeams.forEach(team => {
+            if (getCurrentOwner(team) === ownerOfLoser && countryLineage[team].includes(loserCode)) {
+              countryLineage[team].push(ownerOfWinner);
+              count++;
+            }
           });
-        } else if (step.type === "knockout_match") {
-          processMatchResult(step.match, isLatestStep, logs);
+          
+          if (!isGroupStage) {
+            logs.unshift({
+              matchIndex: matchIdx,
+              date: match.date,
+              winner: teamMetadata[ownerOfWinner]?.name || ownerOfWinner,
+              winnerCode: ownerOfWinner,
+              loser: teamMetadata[loserCode]?.name || loserCode,
+              loserCode: loserCode,
+              count: count,
+              stage: match.stage,
+              isOverridden: (userOverrides[matchIdx] !== undefined),
+              isLatest: isLatestMatch,
+              isGroupMatch: false
+            });
+
+            if (count >= 4 && isLatestMatch) {
+              triggerAlert(`[CAPTURE]: ${(teamMetadata[ownerOfWinner]?.name || ownerOfWinner).toUpperCase()} captured ${(teamMetadata[loserCode]?.name || loserCode).toUpperCase()}'s sectors (+${count} sectors)`);
+            }
+          }
+        } else {
+          if (ownerOfWinner === loserCode) {
+            let count = 0;
+            originalTeams.forEach(team => {
+              if (getCurrentOwner(team) === loserCode && countryLineage[team].includes(loserCode)) {
+                countryLineage[team].push(winnerCode);
+                count++;
+              }
+            });
+            if (!isGroupStage) {
+              logs.unshift({
+                matchIndex: matchIdx,
+                date: match.date,
+                winner: teamMetadata[winnerCode]?.name || winnerCode,
+                winnerCode: winnerCode,
+                loser: teamMetadata[loserCode]?.name || loserCode,
+                loserCode: loserCode,
+                count: count,
+                stage: `${match.stage} (Reclaim)`,
+                isOverridden: (userOverrides[matchIdx] !== undefined),
+                isLatest: isLatestMatch,
+                isGroupMatch: false
+              });
+
+              if (isLatestMatch) {
+                triggerAlert(`[UPSET]: ${(teamMetadata[winnerCode]?.name || winnerCode).toUpperCase()} reclaimed their sectors from ${(teamMetadata[loserCode]?.name || loserCode).toUpperCase()}!`);
+              }
+            }
+          }
         }
-      }
+      });
 
       return logs;
     }
@@ -835,39 +849,15 @@
           }
         });
 
-        // Build Hybrid Timeline Steps: Group Stage (Day-by-Day) + Knockout Stage (Match-by-Match)
-        timelineSteps = [{ type: "kickoff", date: dates[0], label: "KICKOFF" }];
-
-        const groupDates = Array.from(new Set(matches.filter(m => m.stage === "Group Stage" || m.stage.includes("Group")).map(m => m.date))).sort();
-        groupDates.forEach(d => {
-          const dayMatches = matches.filter(m => m.date === d && (m.stage === "Group Stage" || m.stage.includes("Group")));
-          timelineSteps.push({
-            type: "group_day",
-            date: d,
-            matches: dayMatches,
-            label: `GROUP (${d.slice(5)})`
-          });
-        });
-
-        const knockoutMatches = matches.filter(m => m.stage !== "Group Stage" && !m.stage.includes("Group"));
-        knockoutMatches.forEach(m => {
-          timelineSteps.push({
-            type: "knockout_match",
-            date: m.date,
-            match: m,
-            label: m.stage.toUpperCase()
-          });
-        });
-
         parseUrlOverrides();
-        currentStepIndex = 0;
+        currentMatchIndex = 0;
 
         document.getElementById("header-year").innerText = edition;
 
-        // Reset the timeline slider UI to hybrid steps count
+        // Reset the timeline slider UI to match count
         const slider = document.getElementById("timeline-slider");
         slider.min = 0;
-        slider.max = timelineSteps.length - 1;
+        slider.max = matches.length;
         slider.value = 0;
         document.getElementById("timeline-start").innerText = "KICKOFF";
         document.getElementById("timeline-end").innerText = "FINAL";
@@ -1200,29 +1190,24 @@
 
     // --- UI Update Loop ---
     function updateUI() {
-      const step = timelineSteps[currentStepIndex] || timelineSteps[0];
       let currentDate = dates[0];
       let playingTeams = [];
       let activeDayMatches = [];
 
-      if (step && step.type === "group_day") {
-        currentDate = step.date;
-        activeDayMatches = step.matches;
-        playingTeams = Array.from(new Set(step.matches.flatMap(m => [m.home, m.away])));
-        document.getElementById("current-date-badge").innerText = `${formatDateString(currentDate)} • Group Stage`;
-      } else if (step && step.type === "knockout_match") {
-        currentDate = step.match.date;
-        activeDayMatches = [step.match];
-        playingTeams = [step.match.home, step.match.away];
-        document.getElementById("current-date-badge").innerText = `${formatDateString(currentDate)} • ${step.match.stage}`;
+      if (currentMatchIndex > 0) {
+        const activeMatch = matches[currentMatchIndex - 1];
+        currentDate = activeMatch.date;
+        playingTeams = [activeMatch.home, activeMatch.away];
+        activeDayMatches = [activeMatch];
+        document.getElementById("current-date-badge").innerText = `${formatDateString(currentDate)} • ${activeMatch.stage}`;
       } else {
         document.getElementById("current-date-badge").innerText = `${currentDate || 'KICKOFF'} • Kickoff`;
       }
 
-      document.getElementById("timeline-slider").value = currentStepIndex;
+      document.getElementById("timeline-slider").value = currentMatchIndex;
 
       // Run simulation step
-      const logs = runSimulationToStep(currentStepIndex);
+      const logs = runSimulationToMatchIndex(currentMatchIndex);
 
       // Update map colors smoothly
       svg.selectAll(".country")
@@ -1653,24 +1638,24 @@
     const slider = document.getElementById("timeline-slider");
     slider.addEventListener("input", (e) => {
       audio.playClick();
-      currentStepIndex = parseInt(e.target.value);
+      currentMatchIndex = parseInt(e.target.value);
       updateUI();
       if (playbackInterval) stopPlayback();
     });
 
     document.getElementById("btn-prev").addEventListener("click", () => {
-      if (currentStepIndex > 0) {
+      if (currentMatchIndex > 0) {
         audio.playClick();
-        currentStepIndex--;
+        currentMatchIndex--;
         updateUI();
         if (playbackInterval) stopPlayback();
       }
     });
 
     document.getElementById("btn-next").addEventListener("click", () => {
-      if (currentStepIndex < timelineSteps.length - 1) {
+      if (currentMatchIndex < matches.length) {
         audio.playClick();
-        currentStepIndex++;
+        currentMatchIndex++;
         updateUI();
         if (playbackInterval) stopPlayback();
       }
@@ -1678,7 +1663,7 @@
 
     document.getElementById("btn-reset").addEventListener("click", () => {
       audio.playClick();
-      currentStepIndex = 0;
+      currentMatchIndex = 0;
       updateUI();
       if (playbackInterval) stopPlayback();
     });
@@ -1700,8 +1685,8 @@
       document.getElementById("play-text").innerText = "Pause";
       
       playbackInterval = setInterval(() => {
-        if (currentStepIndex < timelineSteps.length - 1) {
-          currentStepIndex++;
+        if (currentMatchIndex < matches.length) {
+          currentMatchIndex++;
           updateUI();
         } else {
           stopPlayback();
