@@ -1004,8 +1004,14 @@
           centroids[code] = path.centroid(f);
         }
       });
-      if (centroids["ENG"]) {
-        centroids["ENG"] = projection([-1.1743, 52.3555]);
+      // Override with exact capital city coordinates for all 48 teams
+      if (typeof teamCapitals !== 'undefined') {
+        Object.keys(teamCapitals).forEach(code => {
+          const item = teamCapitals[code];
+          if (item && item.coords) {
+            centroids[code] = projection(item.coords);
+          }
+        });
       }
       microNations.forEach(m => {
         centroids[m.code] = projection(m.coords);
@@ -1043,10 +1049,7 @@
       const currentOwnerCode = lineageCodes[lineageCodes.length - 1];
       const currentOwner = teamMetadata[currentOwnerCode].name;
       const currentOwnerColor = teamMetadata[currentOwnerCode].color;
-
-      // Compose lineage trail with flags
       const lineageTrail = lineageCodes.map(code => teamMetadata[code]?.name || code).join(" ➔ ");
-
       let content = `
         <div class="text-[9px] text-console-dimText uppercase tracking-wider">Territory Details</div>
         <div class="flex items-center space-x-2 mt-1">
@@ -1181,6 +1184,25 @@
       // Render Empire Flow Vector Arcs & Capital Pulse Rings
       const vectorGroup = svg.select(".vector-layer");
       vectorGroup.selectAll("*").remove(); // Clear previous arcs
+
+      // Render Capital City Micro-Beacons for all 48 teams
+      originalTeams.forEach(code => {
+        if (centroids[code]) {
+          const [cx, cy] = centroids[code];
+          const owner = getCurrentOwner(code);
+          const color = teamMetadata[owner]?.color || "#00ff66";
+          const isEmpire = originalTeams.filter(t => getCurrentOwner(t) === owner).length > 1;
+
+          vectorGroup.append("circle")
+            .attr("cx", cx)
+            .attr("cy", cy)
+            .attr("r", isEmpire && code === owner ? 3.5 : 1.8)
+            .attr("fill", color)
+            .attr("stroke", "#0a0b0d")
+            .attr("stroke-width", "0.8px")
+            .attr("opacity", 0.85);
+        }
+      });
 
       originalTeams.forEach(suzerainCode => {
         const holdings = originalTeams.filter(t => getCurrentOwner(t) === suzerainCode);
