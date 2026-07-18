@@ -1241,6 +1241,53 @@
           const currentOwner = getCurrentOwner(alpha3);
           return currentOwner === ownerCode ? 1.0 : 0.12;
         });
+
+      // Render prominent glowing capital city label directly on the MAP for the hovered country
+      const vectorGroup = svg.select(".vector-layer");
+      vectorGroup.selectAll(".hover-capital-pin").remove();
+
+      if (ownerCode && centroids[ownerCode]) {
+        const [cx, cy] = centroids[ownerCode];
+        const capCity = (typeof getCapitalName === "function") ? getCapitalName(ownerCode) : (teamCapitals[ownerCode]?.city || ownerCode);
+        
+        const gPin = vectorGroup.append("g").attr("class", "hover-capital-pin");
+
+        // Glowing outer pulse ring around capital
+        gPin.append("circle")
+          .attr("cx", cx)
+          .attr("cy", cy)
+          .attr("r", 6)
+          .attr("fill", "none")
+          .attr("stroke", "#00ffcc")
+          .attr("stroke-width", "1.5px")
+          .attr("class", "animate-ping")
+          .attr("opacity", 0.9);
+
+        // Core capital dot
+        gPin.append("circle")
+          .attr("cx", cx)
+          .attr("cy", cy)
+          .attr("r", 3.5)
+          .attr("fill", "#00ffcc")
+          .attr("stroke", "#000000")
+          .attr("stroke-width", "1px");
+
+        // Capital name label on the map
+        const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+        const labelText = isZh ? `★ 首都: ${capCity}` : `★ CAPITAL: ${capCity.toUpperCase()}`;
+
+        gPin.append("text")
+          .attr("x", cx + 7)
+          .attr("y", cy + 3)
+          .attr("font-family", "monospace")
+          .attr("font-size", "11px")
+          .attr("font-weight", "bold")
+          .attr("fill", "#00ffcc")
+          .attr("stroke", "#0d0f12")
+          .attr("stroke-width", "2.5px")
+          .attr("paint-order", "stroke fill")
+          .text(labelText);
+      }
     }
 
     function resetHighlight() {
@@ -1249,6 +1296,8 @@
         .transition()
         .duration(200)
         .style("opacity", 1.0);
+
+      svg.select(".vector-layer").selectAll(".hover-capital-pin").remove();
     }
 
     function showClashCard(match) {
@@ -1550,22 +1599,12 @@
               class="p-2 bg-console-bg border ${entry.count > 1 ? 'border-console-accent/40 bg-console-accent/5' : 'border-console-border'} hover:border-console-accent rounded-sm cursor-pointer transition flex flex-col space-y-1.5 group"
             >
               <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2 min-w-0">
+                <div class="flex items-center space-x-2">
                   <span class="w-4 text-center font-mono text-[10px] ${badgeClass}">#${idx + 1}</span>
                   ${getFlagImg(entry.code)}
                   <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${entry.color}"></span>
-                  <div class="flex flex-col min-w-0">
-                    <div class="flex items-center space-x-1">
-                      <span class="text-xs font-semibold text-console-text font-sans truncate max-w-[110px]">${entry.name}</span>
-                      ${isCommander ? '<span class="text-[8px] text-amber-400 bg-amber-500/20 px-1 rounded font-bold font-mono">★</span>' : ''}
-                    </div>
-                    ${capitalCity ? `
-                      <span class="hidden group-hover:flex text-[9px] text-amber-400 font-mono items-center space-x-0.5 truncate transition-all duration-200">
-                        <i class="ph-bold ph-map-pin text-[8px]"></i>
-                        <span>${capitalCity}</span>
-                      </span>
-                    ` : ''}
-                  </div>
+                  <span class="text-xs font-semibold text-console-text font-sans truncate max-w-[120px]">${entry.name}</span>
+                  ${isCommander ? '<span class="text-[8px] text-amber-400 bg-amber-500/20 px-1 rounded font-bold font-mono">★</span>' : ''}
                 </div>
                 <div class="flex items-center space-x-1 font-mono shrink-0 ml-2">
                   <span class="font-bold text-console-accent text-xs">${entry.count}</span>
