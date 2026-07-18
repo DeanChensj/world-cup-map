@@ -1274,7 +1274,7 @@
 
         // Capital name label on the map
         const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
-        const labelText = isZh ? `★ 首都: ${capCity}` : `★ CAPITAL: ${capCity.toUpperCase()}`;
+        const labelText = isZh ? capCity : capCity.toUpperCase();
 
         gPin.append("text")
           .attr("x", cx + 7)
