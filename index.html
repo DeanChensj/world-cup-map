@@ -583,6 +583,7 @@
     // Lineage Tracking: originalCountry -> [owner1, owner2, ...]
     let countryLineage = {};
     let advancingTeams = new Set();
+    let lastGroupStageDate = "";
 
     function initOwnership() {
       countryLineage = {};
@@ -610,10 +611,16 @@
 
         const loserCode = (winnerCode === match.home) ? match.away : match.home;
         
-        // Group Stage Rule: Group matches only annex teams that are ultimately eliminated in the group stage
+        // Group Stage Rule: Group stage matches only cause annexation ON or AFTER the very last day of the Group Stage,
+        // and only for teams that are ultimately eliminated.
         const isGroupStage = (match.stage === "Group Stage" || match.stage.includes("Group"));
-        if (isGroupStage && advancingTeams.has(loserCode)) {
-          return;
+        if (isGroupStage) {
+          if (targetDate < lastGroupStageDate) {
+            return;
+          }
+          if (advancingTeams.has(loserCode)) {
+            return;
+          }
         }
 
         const ownerOfLoser = getCurrentOwner(loserCode);
@@ -752,13 +759,18 @@
         }
         originalTeams = Object.keys(teamMetadata);
 
-        // Calculate advancing teams dynamically
+        // Calculate advancing teams and last date of group stage dynamically
         advancingTeams = new Set();
+        lastGroupStageDate = "";
         matches.forEach(m => {
           const isGroup = m.stage === "Group Stage" || m.stage.includes("Group");
           if (!isGroup) {
             advancingTeams.add(m.home);
             advancingTeams.add(m.away);
+          } else {
+            if (!lastGroupStageDate || m.date > lastGroupStageDate) {
+              lastGroupStageDate = m.date;
+            }
           }
         });
 
