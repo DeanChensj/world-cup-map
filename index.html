@@ -1325,7 +1325,7 @@
         const dx = c1[0] - c0[0];
         const dy = c1[1] - c0[1];
         const dist = Math.sqrt(dx * dx + dy * dy);
-        const offset = Math.min(dist * 0.3, 50);
+        const offset = Math.min(dist * 0.15, 25);
         const ctrlX = midX - (dy / (dist || 1)) * offset;
         const ctrlY = midY + (dx / (dist || 1)) * offset;
         const rayStr = `M ${c0[0]} ${c0[1]} Q ${ctrlX} ${ctrlY} ${c1[0]} ${c1[1]}`;
@@ -1333,7 +1333,9 @@
         vectorGroup.append("path")
           .attr("d", rayStr)
           .attr("class", "active-clash-ray")
-          .attr("stroke-width", "2.2px");
+          .attr("fill", "none")
+          .attr("stroke", "#ffcc00")
+          .attr("stroke-width", "1.0px");
       }
 
       // Update Leaderboard
