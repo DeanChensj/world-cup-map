@@ -531,8 +531,11 @@
       document.body.removeChild(textArea);
     }
 
-    function getTeamName(code) {
-      return teamMetadata[code]?.name || code;
+    function getTeamName(code, defaultName) {
+      if (typeof currentLang !== "undefined" && currentLang === "zh" && typeof TEAM_NAMES_ZH !== "undefined" && TEAM_NAMES_ZH[code]) {
+        return TEAM_NAMES_ZH[code];
+      }
+      return defaultName || teamMetadata[code]?.name || code;
     }
 
     function isGroupStage(stage) {
@@ -670,9 +673,9 @@
         home: homeCode,
         away: awayCode,
         score: dynamicScore,
-        winner: teamMetadata[winnerCode]?.name || winnerCode,
+        winner: getTeamName(winnerCode),
         winnerCode: winnerCode,
-        loser: teamMetadata[loserCode]?.name || loserCode,
+        loser: getTeamName(loserCode),
         loserCode: loserCode,
         isOverridden: (userOverrides[matchIdx] !== undefined),
         isLatest: isLatestStep,
@@ -774,7 +777,7 @@
       return Object.entries(counts)
         .map(([teamCode, count]) => ({
           code: teamCode,
-          name: teamMetadata[teamCode]?.name || teamCode,
+          name: getTeamName(teamCode),
           count: count,
           color: teamMetadata[teamCode]?.color || "#7f8c8d"
         }))
