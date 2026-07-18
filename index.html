@@ -54,10 +54,10 @@
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
   <!-- Modular Application Scripts -->
-  <script src="js/i18n.js?v=2.0"></script>
-  <script src="js/audio.js?v=2.0"></script>
-  <script src="js/iso-data.js?v=2.0"></script>
-  <script src="js/campaign.js?v=2.0"></script>
+  <script src="js/i18n.js?v=2.1"></script>
+  <script src="js/audio.js?v=2.1"></script>
+  <script src="js/iso-data.js?v=2.1"></script>
+  <script src="js/campaign.js?v=2.1"></script>
   
   <!-- Font and Custom Styling -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2951,13 +2951,15 @@
       const currentEff = getEffectiveTeamCode(origCode);
       const currentEffName = getTeamName(currentEff, currentEff);
 
+      const t = I18N[currentLang] || I18N.en;
+
       targetInfo.innerHTML = `
         <div class="flex items-center space-x-2">
-          <span class="text-console-dimText">${isZh ? '目标对局席位' : 'SLOT'}:</span>
+          <span class="text-console-dimText">${t.swapSlot}:</span>
           <span class="font-bold text-white font-mono">${origCode} (${origName})</span>
         </div>
         <div class="flex items-center space-x-1.5 ml-auto">
-          <span class="text-console-dimText">${isZh ? '当前参战国' : 'CURRENT'}:</span>
+          <span class="text-console-dimText">${t.swapCurrent}:</span>
           ${getFlagImg(currentEff)}
           <span class="font-bold text-console-accent font-mono">${currentEffName}</span>
         </div>
@@ -3119,7 +3121,7 @@
         <div class="flex items-center space-x-2">
           <i class="ph-bold ph-arrows-left-right text-console-accent text-lg"></i>
           <div>
-            <h3 id="swap-modal-title" class="font-mono text-xs sm:text-sm font-bold text-console-accent tracking-wider uppercase">SWAP QUALIFIED NATION // 开局替换参赛国</h3>
+            <h3 id="swap-modal-title" class="font-mono text-xs sm:text-sm font-bold text-console-accent tracking-wider uppercase">SWAP QUALIFIED NATION</h3>
             <p id="swap-modal-sub" class="text-[9px] text-console-dimText font-mono">Replace tournament slot with any non-qualified country</p>
           </div>
         </div>
@@ -3141,7 +3143,7 @@
 
       <!-- Country Candidates Grid -->
       <div class="p-3 overflow-y-auto flex-1 font-mono text-xs">
-        <div class="text-[9px] uppercase tracking-wider text-console-dimText font-bold mb-2">Featured Preset Candidates / 热门替换国</div>
+        <div id="swap-candidates-title" class="text-[9px] uppercase tracking-wider text-console-dimText font-bold mb-2">Featured Preset Candidates</div>
         <div id="swap-candidates-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
           <!-- Injected via JS -->
         </div>
@@ -3151,10 +3153,10 @@
       <div class="p-3 border-t border-console-border bg-console-bg flex items-center justify-between font-mono text-xs">
         <button id="btn-reset-single-swap" onclick="resetSingleSwap()" class="px-2.5 py-1.5 bg-console-bg border border-console-red text-console-red hover:bg-console-red/10 rounded font-bold text-[10px] flex items-center space-x-1 transition cursor-pointer">
           <i class="ph-bold ph-arrow-counter-clockwise text-xs"></i>
-          <span>RESET / 恢复原参赛国</span>
+          <span id="btn-reset-single-swap-text">RESET SLOT</span>
         </button>
         <button onclick="closeSwapModal()" class="px-3 py-1.5 bg-console-border hover:bg-console-border/80 text-white rounded font-bold text-[10px] transition cursor-pointer">
-          CLOSE / 关闭
+          <span id="swap-close-btn">CLOSE</span>
         </button>
       </div>
     </div>

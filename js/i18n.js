@@ -105,7 +105,15 @@ const I18N = {
     latest: "LATEST",
     noSectorsYet: "NO SECTORS CONQUERED YET",
     groupStageDesc: "Group Stage: 0 Annexation",
-    knockoutStageDesc: "Knockout Stage: Single Elimination Annexation"
+    knockoutStageDesc: "Knockout Stage: Single Elimination Annexation",
+    swapModalTitle: "SWAP QUALIFIED NATION",
+    swapModalSub: "Replace tournament slot with any non-qualified country",
+    swapSearchPlaceholder: "Search country (e.g., China, Italy, CHN, ITA)...",
+    resetSingleSwapBtn: "RESET THIS SLOT",
+    swapCandidatesTitle: "Featured Preset Candidates",
+    swapCloseBtn: "CLOSE",
+    swapSlot: "SLOT",
+    swapCurrent: "CURRENT"
   },
   zh: {
     siteTitle: "世界杯地图 //",
@@ -155,7 +163,15 @@ const I18N = {
     latest: "最新",
     noSectorsYet: "暂无领土斩获",
     groupStageDesc: "小组赛阶段：积分为主",
-    knockoutStageDesc: "淘汰赛阶段：单败淘汰领土吞并"
+    knockoutStageDesc: "淘汰赛阶段：单败淘汰领土吞并",
+    swapModalTitle: "开局替换参赛国",
+    swapModalSub: "将参赛席位替换为任意未晋级国家",
+    swapSearchPlaceholder: "搜索国家 (如: 中国, Italy, CHN)...",
+    resetSingleSwapBtn: "恢复真实历史",
+    swapCandidatesTitle: "热门替换国",
+    swapCloseBtn: "关闭",
+    swapSlot: "目标席位",
+    swapCurrent: "当前阵营"
   }
 };
 
@@ -242,4 +258,12 @@ function updateLanguageUI() {
 
   updateEl("modal-faction-title", t.chooseFactionModalTitle);
   updateEl("modal-faction-sub", t.chooseFactionModalSub);
+
+  updateEl("swap-modal-title", t.swapModalTitle);
+  updateEl("swap-modal-sub", t.swapModalSub);
+  updateEl("btn-reset-single-swap-text", t.resetSingleSwapBtn);
+  updateEl("swap-candidates-title", t.swapCandidatesTitle);
+  updateEl("swap-close-btn", t.swapCloseBtn);
+  const searchInput = document.getElementById("swap-search-input");
+  if (searchInput) searchInput.placeholder = t.swapSearchPlaceholder;
 }
