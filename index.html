@@ -366,16 +366,16 @@
     // --- Data Definitions ---
 
     // ISO A3 codes for 48 teams of 2026 World Cup with high contrast neon color options
-    let teamMetadata = {};
-    let matches = [];
+    var teamMetadata = {};
+    var matches = [];
 
-    let dates = [];
-    let currentMatchIndex = 0;
-    let playbackInterval = null;
-    let worldData = null;
-    let centroids = {};
-    let userOverrides = {};
-    let activeCampaignTeam = localStorage.getItem("activeCampaignTeam") || "";
+    var dates = [];
+    var currentMatchIndex = 0;
+    var playbackInterval = null;
+    var worldData = null;
+    var centroids = {};
+    var userOverrides = {};
+    var activeCampaignTeam = localStorage.getItem("activeCampaignTeam") || "";
 
     const microNations = [
       { code: "CUW", name: "Curaçao", coords: [-68.9900, 12.1696] },
@@ -395,8 +395,55 @@
       "NZL": "nz", "AUT": "at", "BEL": "be", "BIH": "ba", "HRV": "hr",
       "CZE": "cz", "ENG": "gb-eng", "FRA": "fr", "DEU": "de", "NLD": "nl",
       "NOR": "no", "PRT": "pt", "SCO": "gb-sct", "WAL": "gb-wls", "NIR": "gb-nir", "ESP": "es", "SWE": "se",
-      "CHE": "ch", "TUR": "tr", "CUW": "cw"
+      "CHE": "ch", "TUR": "tr", "CUW": "cw", "CHN": "cn", "ITA": "it", "RUS": "ru",
+      "CHL": "cl", "PER": "pe", "IRL": "ie", "FIN": "fi", "GRC": "gr", "POL": "pl",
+      "SVK": "sk", "SVN": "si", "SRB": "rs", "UKR": "ua", "NGA": "ng", "CMR": "cm"
     };
+
+    let teamSwaps = {};
+
+    function getEffectiveTeamCode(code) {
+      if (!code) return code;
+      return teamSwaps[code] || code;
+    }
+
+    const SWAP_METADATA_PRESETS = {
+      "CHN": { name: "China", color: "#ff3333", capital: "Beijing" },
+      "ITA": { name: "Italy", color: "#0066ff", capital: "Rome" },
+      "NOR": { name: "Norway", color: "#e60033", capital: "Oslo" },
+      "SWE": { name: "Sweden", color: "#ffcc00", capital: "Stockholm" },
+      "CHL": { name: "Chile", color: "#d62828", capital: "Santiago" },
+      "COL": { name: "Colombia", color: "#f7b801", capital: "Bogotá" },
+      "PER": { name: "Peru", color: "#dc2f02", capital: "Lima" },
+      "NGA": { name: "Nigeria", color: "#00b4d8", capital: "Abuja" },
+      "DZA": { name: "Algeria", color: "#2a9d8f", capital: "Algiers" },
+      "EGY": { name: "Egypt", color: "#e76f51", capital: "Cairo" },
+      "RUS": { name: "Russia", color: "#b7094c", capital: "Moscow" },
+      "IRL": { name: "Ireland", color: "#38b000", capital: "Dublin" },
+      "FIN": { name: "Finland", color: "#48cae4", capital: "Helsinki" },
+      "GRC": { name: "Greece", color: "#0077b6", capital: "Athens" },
+      "POL": { name: "Poland", color: "#e63946", capital: "Warsaw" },
+      "TUR": { name: "Turkey", color: "#d90429", capital: "Ankara" },
+      "UKR": { name: "Ukraine", color: "#ffd166", capital: "Kyiv" }
+    };
+
+    function getEffectiveTeamMetadata(code) {
+      const eff = getEffectiveTeamCode(code);
+      if (teamMetadata[eff]) return teamMetadata[eff];
+      if (SWAP_METADATA_PRESETS[eff]) return { code: eff, ...SWAP_METADATA_PRESETS[eff] };
+      
+      const name = getTeamName(eff, eff);
+      const capitalName = (typeof CAPITAL_NAMES_ZH !== "undefined" && CAPITAL_NAMES_ZH[eff]) ? CAPITAL_NAMES_ZH[eff] : name;
+      const hash = eff.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const hue = (hash * 137) % 360;
+
+      return {
+        code: eff,
+        name: name,
+        color: `hsl(${hue}, 85%, 60%)`,
+        capital: capitalName
+      };
+    }
 
     let isLightTheme = false;
 
@@ -427,6 +474,7 @@
 
     function parseUrlOverrides() {
       userOverrides = {};
+      teamSwaps = {};
       const params = new URLSearchParams(window.location.search);
       const altParam = params.get("alt");
       if (altParam) {
@@ -437,6 +485,15 @@
             if (!isNaN(idx)) {
               userOverrides[idx] = parts[1];
             }
+          }
+        });
+      }
+      const swapParam = params.get("swap");
+      if (swapParam) {
+        swapParam.split(",").forEach(item => {
+          const parts = item.split(":");
+          if (parts.length === 2) {
+            teamSwaps[parts[0]] = parts[1];
           }
         });
       }
@@ -496,10 +553,20 @@
 
     function resetOverrides() {
       userOverrides = {};
+      Object.keys(teamSwaps).forEach(k => delete teamSwaps[k]);
       const url = new URL(window.location.href);
       url.searchParams.delete("alt");
+      url.searchParams.delete("swap");
       window.history.replaceState({}, document.title, url.toString());
+
+      if (activeCampaignTeam && !originalTeams.includes(activeCampaignTeam)) {
+        activeCampaignTeam = null;
+        localStorage.removeItem("activeCampaignTeam");
+        if (typeof updateCampaignHUD === "function") updateCampaignHUD();
+      }
+
       updateUI();
+      if (typeof audio !== "undefined" && audio.playClick) audio.playClick();
     }
 
     function openShareModal() {
@@ -512,6 +579,9 @@
       const overridePairs = Object.entries(userOverrides)
         .map(([idx, code]) => `${idx}:${code}`)
         .join(",");
+      const swapPairs = Object.entries(teamSwaps)
+        .map(([orig, swap]) => `${orig}:${swap}`)
+        .join(",");
 
       const url = new URL(window.location.href);
       url.searchParams.set("edition", currentYear);
@@ -519,6 +589,11 @@
         url.searchParams.set("alt", overridePairs);
       } else {
         url.searchParams.delete("alt");
+      }
+      if (swapPairs) {
+        url.searchParams.set("swap", swapPairs);
+      } else {
+        url.searchParams.delete("swap");
       }
 
       const urlString = url.toString();
@@ -554,15 +629,15 @@
         if (!parentStep || !prevList || prevList.length === 0) return [];
         const m = parentStep.match;
         const matchLog = finalLogs.find(l => l.matchIndex === m.originalIndex);
-        const hCode = matchLog ? matchLog.home : getCurrentOwner(m.home);
-        const aCode = matchLog ? matchLog.away : getCurrentOwner(m.away);
+        const hCode = matchLog ? matchLog.home : getCurrentOwner(getEffectiveTeamCode(m.home));
+        const aCode = matchLog ? matchLog.away : getCurrentOwner(getEffectiveTeamCode(m.away));
 
         return prevList.filter(ps => {
           const pm = ps.match;
           const pLog = finalLogs.find(l => l.matchIndex === pm.originalIndex);
-          const ph = pLog ? pLog.home : getCurrentOwner(pm.home);
-          const pa = pLog ? pLog.away : getCurrentOwner(pm.away);
-          const pw = pLog ? pLog.winnerCode : pm.winner;
+          const ph = pLog ? pLog.home : getCurrentOwner(getEffectiveTeamCode(pm.home));
+          const pa = pLog ? pLog.away : getCurrentOwner(getEffectiveTeamCode(pm.away));
+          const pw = pLog ? pLog.winnerCode : getEffectiveTeamCode(pm.winner);
           return [ph, pa, pw].includes(hCode) || [ph, pa, pw].includes(aCode);
         });
       }
@@ -594,11 +669,17 @@
         const m = s.match;
         const mIdx = m.originalIndex;
 
-        let hCode = m.home;
-        let aCode = m.away;
+        const matchLog = finalLogs.find(l => l.matchIndex === mIdx);
 
-        if (typeof groupSlotReplacements !== "undefined" && groupSlotReplacements[hCode]) hCode = groupSlotReplacements[hCode];
-        if (typeof groupSlotReplacements !== "undefined" && groupSlotReplacements[aCode]) aCode = groupSlotReplacements[aCode];
+        let hCode = matchLog ? matchLog.home : getEffectiveTeamCode(m.home);
+        let aCode = matchLog ? matchLog.away : getEffectiveTeamCode(m.away);
+
+        if (typeof groupSlotReplacements !== "undefined") {
+          const rawH = getEffectiveTeamCode(m.home);
+          const rawA = getEffectiveTeamCode(m.away);
+          if (groupSlotReplacements[rawH]) hCode = groupSlotReplacements[rawH];
+          if (groupSlotReplacements[rawA]) aCode = groupSlotReplacements[rawA];
+        }
 
         if (s === grandFinal && leftSF && rightSF) {
           hCode = getMatchCardTeams(leftSF).wCode;
@@ -620,11 +701,13 @@
           }
         }
 
-        let rawWinner = (userOverrides[mIdx] !== undefined) ? userOverrides[mIdx] : m.winner;
-        let wCode = rawWinner;
-        if (rawWinner === hCode || rawWinner === m.home) {
+        let rawWinner = (userOverrides[mIdx] !== undefined) ? userOverrides[mIdx] : (matchLog ? matchLog.winnerCode : m.winner);
+        let wCode = getEffectiveTeamCode(rawWinner);
+        const homeEff = getEffectiveTeamCode(m.home);
+        const awayEff = getEffectiveTeamCode(m.away);
+        if (wCode === homeEff || rawWinner === m.home) {
           wCode = hCode;
-        } else if (rawWinner === aCode || rawWinner === m.away) {
+        } else if (wCode === awayEff || rawWinner === m.away) {
           wCode = aCode;
         }
 
@@ -854,14 +937,18 @@
 
     function initOwnership() {
       countryLineage = {};
-      originalTeams.forEach(team => {
-        countryLineage[team] = [team];
+      originalTeams.forEach(origTeam => {
+        const initialOwner = getEffectiveTeamCode(origTeam);
+        countryLineage[origTeam] = [initialOwner];
       });
     }
 
     function getCurrentOwner(team) {
       const history = countryLineage[team];
-      return history ? history[history.length - 1] : team;
+      if (history && history.length > 0) {
+        return history[history.length - 1];
+      }
+      return getEffectiveTeamCode(team);
     }
 
     function formatScoreDisplay(scoreStr) {
@@ -946,10 +1033,12 @@
 
       const adj = {};
       groupMatches.forEach(m => {
-        if (!adj[m.home]) adj[m.home] = new Set();
-        if (!adj[m.away]) adj[m.away] = new Set();
-        adj[m.home].add(m.away);
-        adj[m.away].add(m.home);
+        const homeEff = getEffectiveTeamCode(m.home);
+        const awayEff = getEffectiveTeamCode(m.away);
+        if (!adj[homeEff]) adj[homeEff] = new Set();
+        if (!adj[awayEff]) adj[awayEff] = new Set();
+        adj[homeEff].add(awayEff);
+        adj[awayEff].add(homeEff);
       });
 
       tournamentGroups = [];
@@ -977,38 +1066,41 @@
 
       function rankGroupTeams(overrideMap) {
         const rankings = {};
+        const groupStatsMap = {};
         tournamentGroups.forEach((group, gIdx) => {
           const stats = {};
           group.forEach(t => { stats[t] = { pts: 0, gd: 0, gf: 0, code: t }; });
 
-          const gMatches = groupMatches.filter(m => group.includes(m.home));
+          const gMatches = groupMatches.filter(m => group.includes(getEffectiveTeamCode(m.home)));
           gMatches.forEach(m => {
             const idx = m.originalIndex;
-            let winner = (overrideMap[idx] !== undefined) ? overrideMap[idx] : m.winner;
+            const homeEff = getEffectiveTeamCode(m.home);
+            const awayEff = getEffectiveTeamCode(m.away);
+            let winnerEff = (overrideMap[idx] !== undefined) ? getEffectiveTeamCode(overrideMap[idx]) : getEffectiveTeamCode(m.winner);
             const scoreStr = m.score || "0-0";
             const parts = scoreStr.split("-");
             const sh = (parts.length === 2 && !isNaN(parts[0])) ? parseInt(parts[0], 10) : 0;
             const sa = (parts.length === 2 && !isNaN(parts[1])) ? parseInt(parts[1], 10) : 0;
 
-            if (!winner && sh !== sa) {
-              winner = (sh > sa) ? m.home : m.away;
+            if (!winnerEff && sh !== sa) {
+              winnerEff = (sh > sa) ? homeEff : awayEff;
             }
 
-            if (winner === m.home) {
-              stats[m.home].pts += 3;
-              stats[m.home].gd += (sh - sa);
-              stats[m.home].gf += sh;
-              stats[m.away].gd += (sa - sh);
-              stats[m.away].gf += sa;
-            } else if (winner === m.away) {
-              stats[m.away].pts += 3;
-              stats[m.away].gd += (sa - sh);
-              stats[m.away].gf += sa;
-              stats[m.home].gd += (sh - sa);
-              stats[m.home].gf += sh;
+            if (winnerEff === homeEff) {
+              stats[homeEff].pts += 3;
+              stats[homeEff].gd += (sh - sa);
+              stats[homeEff].gf += sh;
+              stats[awayEff].gd += (sa - sh);
+              stats[awayEff].gf += sa;
+            } else if (winnerEff === awayEff) {
+              stats[awayEff].pts += 3;
+              stats[awayEff].gd += (sa - sh);
+              stats[awayEff].gf += sa;
+              stats[homeEff].gd += (sh - sa);
+              stats[homeEff].gf += sh;
             } else {
-              stats[m.home].pts += 1;
-              stats[m.away].pts += 1;
+              stats[homeEff].pts += 1;
+              stats[awayEff].pts += 1;
             }
           });
 
@@ -1019,17 +1111,19 @@
             return a.code.localeCompare(b.code);
           });
           rankings[gIdx] = sorted.map(x => x.code);
+          groupStatsMap[gIdx] = stats;
         });
-        return rankings;
+        return { rankings, groupStatsMap };
       }
 
-      const origRankings = rankGroupTeams({});
-      const newRankings = rankGroupTeams(userOverrides);
+      const origRes = rankGroupTeams({});
+      const newRes = rankGroupTeams(userOverrides);
+      const origRankings = origRes.rankings;
+      const newRankings = newRes.rankings;
 
       groupSlotReplacements = {};
       advancingTeams = new Set();
-
-      const maxAdvancersPerGroup = (matches.length > 80) ? 3 : 2;
+      const thirdPlaceTeams = [];
 
       tournamentGroups.forEach((group, gIdx) => {
         const origList = origRankings[gIdx] || group;
@@ -1038,34 +1132,62 @@
         origList.forEach((origTeam, i) => {
           const newTeam = newList[i] || origTeam;
           groupSlotReplacements[origTeam] = newTeam;
-          if (i < maxAdvancersPerGroup) {
-            advancingTeams.add(newTeam);
-          }
         });
+
+        if (newList[0]) advancingTeams.add(newList[0]);
+        if (newList[1]) advancingTeams.add(newList[1]);
+
+        if (newList[2]) {
+          const stats = newRes.groupStatsMap[gIdx] ? newRes.groupStatsMap[gIdx][newList[2]] : null;
+          thirdPlaceTeams.push({
+            code: newList[2],
+            pts: stats ? stats.pts : 0,
+            gd: stats ? stats.gd : 0,
+            gf: stats ? stats.gf : 0
+          });
+        }
       });
+
+      // 2026 World Cup format: 12 Groups -> Top 8 best 3rd place teams advance
+      if (matches.length > 80 && thirdPlaceTeams.length > 0) {
+        thirdPlaceTeams.sort((a, b) => {
+          if (b.pts !== a.pts) return b.pts - a.pts;
+          if (b.gd !== a.gd) return b.gd - a.gd;
+          if (b.gf !== a.gf) return b.gf - a.gf;
+          return a.code.localeCompare(b.code);
+        });
+
+        thirdPlaceTeams.slice(0, 8).forEach(t => {
+          advancingTeams.add(t.code);
+        });
+      }
     }
 
     function processSingleMatch(match, isLatestStep, logs) {
       const matchIdx = match.originalIndex;
       const isGroupStage = (match.stage === "Group Stage" || match.stage.includes("Group"));
 
-      const slotHome = isGroupStage ? match.home : (groupSlotReplacements[match.home] || match.home);
-      const slotAway = isGroupStage ? match.away : (groupSlotReplacements[match.away] || match.away);
+      const homeEffRaw = getEffectiveTeamCode(match.home);
+      const awayEffRaw = getEffectiveTeamCode(match.away);
+
+      const slotHome = isGroupStage ? homeEffRaw : (groupSlotReplacements[homeEffRaw] || homeEffRaw);
+      const slotAway = isGroupStage ? awayEffRaw : (groupSlotReplacements[awayEffRaw] || awayEffRaw);
 
       // Dynamic Effective Teams (Sovereign Empire Slot Succession for Knockouts)
-      const homeCode = isGroupStage ? match.home : getCurrentOwner(slotHome);
-      const awayCode = isGroupStage ? match.away : getCurrentOwner(slotAway);
+      const homeCode = isGroupStage ? homeEffRaw : getCurrentOwner(slotHome);
+      const awayCode = isGroupStage ? awayEffRaw : getCurrentOwner(slotAway);
 
       // If both slots belong to the exact same owner empire in knockout, skip duplicate match
       if (!isGroupStage && homeCode === awayCode) {
         return;
       }
 
-      let winnerCode = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
+      let rawWinner = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
+      let winnerCode = getEffectiveTeamCode(rawWinner);
       
       // Resolve static winner code (e.g. "ARG") to effective sovereign empire
-      if (winnerCode === match.home) winnerCode = homeCode;
-      else if (winnerCode === match.away) winnerCode = awayCode;
+      if (winnerCode === homeEffRaw) winnerCode = homeCode;
+      else if (winnerCode === awayEffRaw) winnerCode = awayCode;
 
       if (!winnerCode) return; // Skip draws in group stage
 
@@ -1097,37 +1219,20 @@
       }
 
       // Knockout Stage Annexation & Reclaim
-      const ownerOfLoser = getCurrentOwner(loserCode);
-      const ownerOfWinner = getCurrentOwner(winnerCode);
+      const ownerOfLoser = loserCode;
+      const ownerOfWinner = winnerCode;
       
       if (ownerOfWinner !== ownerOfLoser) {
         let count = 0;
-        originalTeams.forEach(team => {
-          if (getCurrentOwner(team) === ownerOfLoser && countryLineage[team].includes(loserCode)) {
-            countryLineage[team].push(ownerOfWinner);
+        originalTeams.forEach(origTeam => {
+          if (getCurrentOwner(origTeam) === ownerOfLoser) {
+            countryLineage[origTeam].push(ownerOfWinner);
             count++;
           }
         });
         
         logs[0].count = count;
         logs[0].isAnnexation = true;
-      } else {
-        if (ownerOfWinner === loserCode) {
-          let count = 0;
-          originalTeams.forEach(team => {
-            if (getCurrentOwner(team) === loserCode && countryLineage[team].includes(loserCode)) {
-              countryLineage[team].push(winnerCode);
-              count++;
-            }
-          });
-          logs[0].count = count;
-          logs[0].isAnnexation = true;
-          logs[0].stage = `${match.stage} (Reclaim)`;
-
-          if (isLatestStep) {
-            triggerAlert(`[UPSET]: ${(teamMetadata[winnerCode]?.name || winnerCode).toUpperCase()} reclaimed their sectors from ${(teamMetadata[loserCode]?.name || loserCode).toUpperCase()}!`);
-          }
-        }
       }
     }
 
@@ -1152,18 +1257,21 @@
           if (!hasPassedGroupStage) {
             hasPassedGroupStage = true;
             // Group Stage Elimination Annexation:
-            // Annex each eliminated team to the top advancing team from its own group
-            originalTeams.forEach(team => {
-              if (!advancingTeams.has(team)) {
-                const groupMatches = matches.filter(m => 
-                  (m.stage === "Group Stage" || m.stage.includes("Group")) && 
-                  (m.home === team || m.away === team)
-                );
-                const groupOpponents = Array.from(new Set(groupMatches.flatMap(m => [m.home, m.away]))).filter(t => t !== team);
+            // Annex each eliminated team's territory to the top advancing team from its own group
+            originalTeams.forEach(origTeam => {
+              const effTeam = getCurrentOwner(origTeam);
+              if (!advancingTeams.has(effTeam)) {
+                const groupMatches = matches.filter(m => {
+                  const h = getEffectiveTeamCode(m.home);
+                  const a = getEffectiveTeamCode(m.away);
+                  return (m.stage === "Group Stage" || m.stage.includes("Group")) && (h === effTeam || a === effTeam);
+                });
+                const groupOpponents = Array.from(new Set(groupMatches.flatMap(m => [getEffectiveTeamCode(m.home), getEffectiveTeamCode(m.away)]))).filter(t => t !== effTeam);
                 const groupAdvancer = groupOpponents.find(t => advancingTeams.has(t)) || Array.from(advancingTeams)[0];
                 
-                if (groupAdvancer && countryLineage[team]) {
-                  countryLineage[team].push(groupAdvancer);
+                if (groupAdvancer && countryLineage[origTeam]) {
+                  const ownerOfAdvancer = getCurrentOwner(groupAdvancer);
+                  countryLineage[origTeam].push(ownerOfAdvancer);
                 }
               }
             });
@@ -1178,18 +1286,21 @@
 
     function getLeaderboard() {
       const counts = {};
-      originalTeams.forEach(team => {
-        const owner = getCurrentOwner(team);
+      originalTeams.forEach(origTeam => {
+        const owner = getCurrentOwner(origTeam);
         counts[owner] = (counts[owner] || 0) + 1;
       });
 
       return Object.entries(counts)
-        .map(([teamCode, count]) => ({
-          code: teamCode,
-          name: getTeamName(teamCode),
-          count: count,
-          color: teamMetadata[teamCode]?.color || "#7f8c8d"
-        }))
+        .map(([teamCode, count]) => {
+          const meta = getEffectiveTeamMetadata(teamCode);
+          return {
+            code: teamCode,
+            name: getTeamName(teamCode, meta?.name),
+            count: count,
+            color: meta?.color || "#7f8c8d"
+          };
+        })
         .sort((a, b) => b.count - a.count);
     }
 
@@ -1575,9 +1686,11 @@
       const unmappedColor = isLightTheme ? "#d1d5db" : "#161a22";
       if (!alpha3) return unmappedColor;
 
-      if (originalTeams.includes(alpha3)) {
+      const effectiveOriginalTeams = originalTeams.map(t => getEffectiveTeamCode(t));
+      if (effectiveOriginalTeams.includes(alpha3)) {
         const owner = getCurrentOwner(alpha3);
-        return teamMetadata[owner]?.color || "#2c3e50";
+        const meta = getEffectiveTeamMetadata(owner);
+        return meta ? meta.color : "#2c3e50";
       }
 
       return unmappedColor;
@@ -1596,18 +1709,24 @@
         return;
       }
 
-      const originalTeam = getTeamName(alpha3, teamMetadata[alpha3]?.name);
-      const lineageCodes = countryLineage[alpha3] || [alpha3];
+      const initialOwnerCode = getEffectiveTeamCode(alpha3);
+      const initialMeta = getEffectiveTeamMetadata(initialOwnerCode);
+      const initialTeamName = getTeamName(initialOwnerCode, initialMeta?.name);
+
+      const lineageCodes = countryLineage[alpha3] || [initialOwnerCode];
       const currentOwnerCode = lineageCodes[lineageCodes.length - 1];
-      const currentOwner = getTeamName(currentOwnerCode, teamMetadata[currentOwnerCode]?.name);
-      const currentOwnerColor = teamMetadata[currentOwnerCode]?.color || "#00ff66";
+      const currentOwnerMeta = getEffectiveTeamMetadata(currentOwnerCode);
+      const currentOwner = getTeamName(currentOwnerCode, currentOwnerMeta?.name);
+      const currentOwnerColor = currentOwnerMeta?.color || "#00ff66";
       const lineageTrail = lineageCodes.map(code => getTeamName(code, teamMetadata[code]?.name)).join(" ➔ ");
       const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
       let content = `
         <div class="text-[9px] text-console-dimText uppercase tracking-wider">${isZh ? '领土详情' : 'Territory Details'}</div>
         <div class="flex items-center space-x-2 mt-1">
-          ${getFlagImg(alpha3)}
-          <span class="font-bold text-console-text font-sans text-sm">${originalTeam}</span>
+          ${getFlagImg(initialOwnerCode)}
+          <span class="font-bold text-console-text font-sans text-sm">${initialTeamName}</span>
+          <span class="text-[10px] text-console-accent font-mono font-bold">(${initialOwnerCode})</span>
+          ${teamSwaps[alpha3] ? `<span class="text-[8px] text-amber-400 bg-amber-500/20 px-1 py-0.5 rounded font-mono font-bold uppercase">${isZh ? '沙盒替换' : 'SWAPPED'}</span>` : ''}
         </div>
       `;
       
@@ -1774,7 +1893,10 @@
       cardA.onclick = () => setMatchWinner(matchIdx, code1);
       document.getElementById("clash-teamA-flag").innerHTML = getFlagImg(code1).replace('w-5 h-3.5', 'w-6 h-4 sm:w-10 sm:h-7 shadow-md border border-amber-500/40');
       document.getElementById("clash-teamA-name").innerHTML = `
-        <span class="truncate max-w-[70px] sm:max-w-[110px] block text-[10px] sm:text-xs">${name1}</span>
+        <div class="flex items-center space-x-1 justify-center">
+          <span class="truncate max-w-[70px] sm:max-w-[110px] block text-[10px] sm:text-xs font-bold">${name1}</span>
+          <button onclick="event.stopPropagation(); openSwapModal('${match.home}')" title="Swap Nation Slot" class="text-[8px] px-1 py-0.2 bg-console-bg border border-console-border hover:border-amber-400 text-console-dimText hover:text-amber-400 rounded transition cursor-pointer shrink-0">↻</button>
+        </div>
         ${activeWinner === code1 ? `<span class="block text-[7px] sm:text-[8px] text-amber-400 font-mono uppercase font-bold">${winnerTag}</span>` : ''}
       `;
       cardA.className = `flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1 sm:p-1.5 rounded-lg cursor-pointer transition border ${activeWinner === code1 ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'border-transparent hover:border-amber-500/50 hover:bg-amber-500/5'} group`;
@@ -1784,7 +1906,10 @@
       cardB.onclick = () => setMatchWinner(matchIdx, code2);
       document.getElementById("clash-teamB-flag").innerHTML = getFlagImg(code2).replace('w-5 h-3.5', 'w-6 h-4 sm:w-10 sm:h-7 shadow-md border border-amber-500/40');
       document.getElementById("clash-teamB-name").innerHTML = `
-        <span class="truncate max-w-[70px] sm:max-w-[110px] block text-[10px] sm:text-xs">${name2}</span>
+        <div class="flex items-center space-x-1 justify-center">
+          <span class="truncate max-w-[70px] sm:max-w-[110px] block text-[10px] sm:text-xs font-bold">${name2}</span>
+          <button onclick="event.stopPropagation(); openSwapModal('${match.away}')" title="Swap Nation Slot" class="text-[8px] px-1 py-0.2 bg-console-bg border border-console-border hover:border-amber-400 text-console-dimText hover:text-amber-400 rounded transition cursor-pointer shrink-0">↻</button>
+        </div>
         ${activeWinner === code2 ? `<span class="block text-[7px] sm:text-[8px] text-amber-400 font-mono uppercase font-bold">${winnerTag}</span>` : ''}
       `;
       cardB.className = `flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1 sm:p-1.5 rounded-lg cursor-pointer transition border ${activeWinner === code2 ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'border-transparent hover:border-amber-500/50 hover:bg-amber-500/5'} group`;
@@ -1820,17 +1945,22 @@
         activeDayMatches = [step.match];
         const latestLog = (logs.length > 0 && logs[0].matchIndex === step.match.originalIndex) ? logs[0] : null;
 
-        let ownerHome = step.match.home;
-        let ownerAway = step.match.away;
+        const homeEff = getEffectiveTeamCode(step.match.home);
+        const awayEff = getEffectiveTeamCode(step.match.away);
+        let ownerHome = homeEff;
+        let ownerAway = awayEff;
         if (latestLog) {
           ownerHome = latestLog.home;
           ownerAway = latestLog.away;
         } else {
-          ownerHome = getCurrentOwner(step.match.home);
-          ownerAway = getCurrentOwner(step.match.away);
+          const isGrp = (!step.match.stage || step.match.stage === "Group Stage" || step.match.stage.includes("Group"));
+          const slotHome = isGrp ? homeEff : (groupSlotReplacements[homeEff] || homeEff);
+          const slotAway = isGrp ? awayEff : (groupSlotReplacements[awayEff] || awayEff);
+          ownerHome = isGrp ? homeEff : getCurrentOwner(slotHome);
+          ownerAway = isGrp ? awayEff : getCurrentOwner(slotAway);
         }
 
-        playingTeams = Array.from(new Set([step.match.home, step.match.away, ownerHome, ownerAway].filter(Boolean)));
+        playingTeams = Array.from(new Set([homeEff, awayEff, ownerHome, ownerAway].filter(Boolean)));
         showClashCard(step.match, latestLog);
         document.getElementById("current-date-badge").innerText = `${formatDateString(currentDate)} • ${step.match.stage}`;
       } else {
@@ -1988,11 +2118,12 @@
       const vectorGroup = svg.select(".vector-layer");
       vectorGroup.selectAll("*").remove(); // Clear previous arcs
 
-      // Render High-Contrast Micro Capital City Pins for all 48 teams
-      originalTeams.forEach(code => {
+      // Render High-Contrast Micro Capital City Pins for effective active teams
+      originalTeams.forEach(origTeam => {
+        const code = getEffectiveTeamCode(origTeam);
         if (centroids[code]) {
           const [cx, cy] = centroids[code];
-          const owner = getCurrentOwner(code);
+          const owner = getCurrentOwner(origTeam);
           const isEmpire = originalTeams.filter(t => getCurrentOwner(t) === owner).length > 1;
 
           const isMobile = window.innerWidth < 640;
@@ -2078,16 +2209,22 @@
       if (activeDayMatches && activeDayMatches.length > 0) {
         activeDayMatches.forEach(m => {
           const isGroup = (!m.stage || m.stage === "Group Stage" || m.stage.includes("Group"));
-          let homeCode = isGroup ? m.home : getCurrentOwner(m.home);
-          let awayCode = isGroup ? m.away : getCurrentOwner(m.away);
+          const homeEffRaw = getEffectiveTeamCode(m.home);
+          const awayEffRaw = getEffectiveTeamCode(m.away);
+
+          const slotHome = isGroup ? homeEffRaw : (groupSlotReplacements[homeEffRaw] || homeEffRaw);
+          const slotAway = isGroup ? awayEffRaw : (groupSlotReplacements[awayEffRaw] || awayEffRaw);
+
+          let homeCode = isGroup ? homeEffRaw : getCurrentOwner(slotHome);
+          let awayCode = isGroup ? awayEffRaw : getCurrentOwner(slotAway);
 
           if (!isGroup && homeCode === awayCode) {
-            homeCode = m.home;
-            awayCode = m.away;
+            homeCode = homeEffRaw;
+            awayCode = awayEffRaw;
           }
 
-          if (!centroids[homeCode] && centroids[m.home]) homeCode = m.home;
-          if (!centroids[awayCode] && centroids[m.away]) awayCode = m.away;
+          if (!centroids[homeCode] && centroids[m.home]) homeCode = getEffectiveTeamCode(m.home);
+          if (!centroids[awayCode] && centroids[m.away]) awayCode = getEffectiveTeamCode(m.away);
 
           if (homeCode && awayCode && homeCode !== awayCode && centroids[homeCode] && centroids[awayCode]) {
             const c0 = centroids[homeCode];
@@ -2204,12 +2341,18 @@
 
       // Sandbox status indicator
       const overrideCount = Object.keys(userOverrides).length;
+      const swapCount = Object.keys(teamSwaps).length;
       const resetBtn = document.getElementById("btn-reset-overrides");
       const statusLabel = document.getElementById("sim-status-label");
       const t = (typeof I18N !== "undefined" && typeof currentLang !== "undefined") ? (I18N[currentLang] || I18N.en) : null;
-      if (overrideCount > 0) {
+      const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+
+      if (overrideCount > 0 || swapCount > 0) {
         resetBtn.classList.remove("hidden");
-        statusLabel.innerText = t ? t.statusParallel(overrideCount) : `Status: Parallel Universe (${overrideCount} Alt)`;
+        const parts = [];
+        if (swapCount > 0) parts.push(isZh ? `${swapCount}换国` : `${swapCount} Swaps`);
+        if (overrideCount > 0) parts.push(isZh ? `${overrideCount}篡改` : `${overrideCount} Alt`);
+        statusLabel.innerText = isZh ? `状态: 平行宇宙 (${parts.join(", ")})` : `Status: Parallel Universe (${parts.join(", ")})`;
         statusLabel.className = "hidden lg:inline text-[10px] uppercase font-mono text-console-accent font-bold animate-pulse";
       } else {
         resetBtn.classList.add("hidden");
@@ -2706,6 +2849,167 @@
         }
       });
     }
+    // --- Team Swap Sandbox Modal Functions ---
+    let currentSwapTarget = null;
+
+    const FEATURED_SWAP_CANDIDATES = [
+      { code: "CHN", nameEn: "China", nameZh: "中国" },
+      { code: "ITA", nameEn: "Italy", nameZh: "意大利" },
+      { code: "NOR", nameEn: "Norway", nameZh: "挪威" },
+      { code: "SWE", nameEn: "Sweden", nameZh: "瑞典" },
+      { code: "CHL", nameEn: "Chile", nameZh: "智利" },
+      { code: "COL", nameEn: "Colombia", nameZh: "哥伦比亚" },
+      { code: "PER", nameEn: "Peru", nameZh: "秘鲁" },
+      { code: "NGA", nameEn: "Nigeria", nameZh: "尼日利亚" },
+      { code: "DZA", nameEn: "Algeria", nameZh: "阿尔及利亚" },
+      { code: "EGY", nameEn: "Egypt", nameZh: "埃及" },
+      { code: "RUS", nameEn: "Russia", nameZh: "俄罗斯" },
+      { code: "IRL", nameEn: "Ireland", nameZh: "爱尔兰" },
+      { code: "FIN", nameEn: "Finland", nameZh: "芬兰" },
+      { code: "GRC", nameEn: "Greece", nameZh: "希腊" },
+      { code: "POL", nameEn: "Poland", nameZh: "波兰" },
+      { code: "TUR", nameEn: "Turkey", nameZh: "土耳其" },
+      { code: "UKR", nameEn: "Ukraine", nameZh: "乌克兰" },
+      { code: "SVK", nameEn: "Slovakia", nameZh: "斯洛伐克" }
+    ];
+
+    function openSwapModal(origCode) {
+      currentSwapTarget = origCode;
+      const modal = document.getElementById("swap-modal");
+      const targetInfo = document.getElementById("swap-modal-target-info");
+      const searchInput = document.getElementById("swap-search-input");
+      if (!modal || !targetInfo) return;
+
+      const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+      const origName = getTeamName(origCode, origCode);
+      const currentEff = getEffectiveTeamCode(origCode);
+      const currentEffName = getTeamName(currentEff, currentEff);
+
+      targetInfo.innerHTML = `
+        <div class="flex items-center space-x-2">
+          <span class="text-console-dimText">${isZh ? '目标对局席位' : 'SLOT'}:</span>
+          <span class="font-bold text-white font-mono">${origCode} (${origName})</span>
+        </div>
+        <div class="flex items-center space-x-1.5 ml-auto">
+          <span class="text-console-dimText">${isZh ? '当前参战国' : 'CURRENT'}:</span>
+          ${getFlagImg(currentEff)}
+          <span class="font-bold text-console-accent font-mono">${currentEffName}</span>
+        </div>
+      `;
+
+      if (searchInput) searchInput.value = "";
+      renderSwapCandidates("");
+      modal.classList.remove("hidden");
+      if (typeof audio !== "undefined" && audio.playClick) audio.playClick();
+    }
+
+    function closeSwapModal() {
+      const modal = document.getElementById("swap-modal");
+      if (modal) modal.classList.add("hidden");
+      currentSwapTarget = null;
+    }
+
+    function renderSwapCandidates(query = "") {
+      const grid = document.getElementById("swap-candidates-grid");
+      if (!grid) return;
+
+      const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+      const q = query.toLowerCase().trim();
+
+      let items = FEATURED_SWAP_CANDIDATES;
+      if (q) {
+        items = FEATURED_SWAP_CANDIDATES.filter(c => 
+          c.code.toLowerCase().includes(q) || 
+          c.nameEn.toLowerCase().includes(q) || 
+          c.nameZh.includes(q)
+        );
+      }
+
+      const currentEff = currentSwapTarget ? getEffectiveTeamCode(currentSwapTarget) : "";
+
+      grid.innerHTML = items.map(c => {
+        const isSelected = currentEff === c.code;
+        const name = isZh ? c.nameZh : c.nameEn;
+        return `
+          <div 
+            onclick="swapTeam('${currentSwapTarget}', '${c.code}')"
+            class="p-2 bg-console-bg border ${isSelected ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_10px_rgba(245,158,11,0.3)]' : 'border-console-border hover:border-console-accent'} rounded cursor-pointer transition flex items-center space-x-2 group shrink-0"
+          >
+            ${getFlagImg(c.code)}
+            <div class="flex flex-col min-w-0 flex-1">
+              <span class="font-bold text-xs text-white truncate group-hover:text-console-accent">${name}</span>
+              <span class="text-[8px] text-console-dimText font-mono">${c.code}</span>
+            </div>
+            ${isSelected ? '<i class="ph-bold ph-check-circle text-amber-400 text-xs"></i>' : ''}
+          </div>
+        `;
+      }).join("");
+    }
+
+    function filterSwapCandidates(query) {
+      renderSwapCandidates(query);
+    }
+
+    function swapTeam(origCode, newCode) {
+      if (!origCode) return;
+      const oldEff = getEffectiveTeamCode(origCode);
+
+      // Prevent duplicate team slot assignments across multiple slots
+      if (newCode && origCode !== newCode) {
+        Object.keys(teamSwaps).forEach(slot => {
+          if (teamSwaps[slot] === newCode) {
+            delete teamSwaps[slot];
+          }
+        });
+      }
+
+      if (origCode === newCode || !newCode) {
+        delete teamSwaps[origCode];
+      } else {
+        teamSwaps[origCode] = newCode;
+      }
+
+      const newEff = getEffectiveTeamCode(origCode);
+      if (activeCampaignTeam === oldEff) {
+        activeCampaignTeam = newEff;
+        localStorage.setItem("activeCampaignTeam", activeCampaignTeam);
+        if (typeof updateCampaignHUD === "function") updateCampaignHUD();
+      } else if (activeCampaignTeam && !originalTeams.map(t => getEffectiveTeamCode(t)).includes(activeCampaignTeam)) {
+        activeCampaignTeam = null;
+        localStorage.removeItem("activeCampaignTeam");
+        if (typeof updateCampaignHUD === "function") updateCampaignHUD();
+      }
+
+      // Clean up invalid match overrides
+      const effectiveTeams = originalTeams.map(t => getEffectiveTeamCode(t));
+      Object.keys(userOverrides).forEach(idx => {
+        const val = userOverrides[idx];
+        if (val && !effectiveTeams.includes(val)) {
+          delete userOverrides[idx];
+        }
+      });
+
+      if (typeof audio !== "undefined" && audio.playMatchWin) {
+        audio.playMatchWin();
+      } else if (typeof audio !== "undefined" && audio.playClick) {
+        audio.playClick();
+      }
+
+      closeSwapModal();
+      isSandboxAction = true;
+      updateUI();
+
+      const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+      const origName = getTeamName(origCode, origCode);
+      const newName = getTeamName(newCode || origCode);
+      triggerAlert(isZh ? `已将席位 [${origName}] 替换为 [${newName}] 参战！` : `SWAPPED [${origName}] WITH [${newName}]!`);
+    }
+
+    function resetSingleSwap() {
+      if (currentSwapTarget) {
+        swapTeam(currentSwapTarget, currentSwapTarget);
+      }
+    }
   </script>
 
   <!-- Faction Selection Modal -->
@@ -2738,6 +3042,54 @@
       <!-- Share Content Body (Pristine Panoramic View) -->
       <div id="share-modal-body" class="overflow-y-auto flex-1 font-mono text-xs space-y-2.5 my-0.5">
         <!-- Dynamically populated by buildShareContent() -->
+      </div>
+    </div>
+  </div>
+  <!-- Team Swap Sandbox Modal -->
+  <div id="swap-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-5 hidden">
+    <div class="bg-console-panel border border-console-accent/40 rounded-xl w-full max-w-lg shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
+      <!-- Header -->
+      <div class="p-3.5 border-b border-console-border flex items-center justify-between bg-console-bg">
+        <div class="flex items-center space-x-2">
+          <i class="ph-bold ph-arrows-left-right text-console-accent text-lg"></i>
+          <div>
+            <h3 id="swap-modal-title" class="font-mono text-xs sm:text-sm font-bold text-console-accent tracking-wider uppercase">SWAP QUALIFIED NATION // 开局替换参赛国</h3>
+            <p id="swap-modal-sub" class="text-[9px] text-console-dimText font-mono">Replace tournament slot with any non-qualified country</p>
+          </div>
+        </div>
+        <button onclick="closeSwapModal()" class="text-console-dimText hover:text-white text-lg px-2 py-1 rounded transition cursor-pointer">✕</button>
+      </div>
+
+      <!-- Current Slot Info -->
+      <div id="swap-modal-target-info" class="p-3 bg-console-bg/60 border-b border-console-border flex items-center justify-between font-mono text-xs">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Search Box -->
+      <div class="p-3 border-b border-console-border bg-console-bg">
+        <div class="relative flex items-center">
+          <i class="ph-bold ph-magnifying-glass text-console-dimText absolute left-2.5 text-xs"></i>
+          <input type="text" id="swap-search-input" oninput="filterSwapCandidates(this.value)" placeholder="Search country (e.g., China, Italy, CHN, ITA)..." class="w-full bg-console-bg border border-console-border text-console-text font-mono text-xs pl-8 pr-3 py-1.5 rounded focus:outline-none focus:border-console-accent">
+        </div>
+      </div>
+
+      <!-- Country Candidates Grid -->
+      <div class="p-3 overflow-y-auto flex-1 font-mono text-xs">
+        <div class="text-[9px] uppercase tracking-wider text-console-dimText font-bold mb-2">Featured Preset Candidates / 热门替换国</div>
+        <div id="swap-candidates-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- Footer Actions -->
+      <div class="p-3 border-t border-console-border bg-console-bg flex items-center justify-between font-mono text-xs">
+        <button id="btn-reset-single-swap" onclick="resetSingleSwap()" class="px-2.5 py-1.5 bg-console-bg border border-console-red text-console-red hover:bg-console-red/10 rounded font-bold text-[10px] flex items-center space-x-1 transition cursor-pointer">
+          <i class="ph-bold ph-arrow-counter-clockwise text-xs"></i>
+          <span>RESET / 恢复原参赛国</span>
+        </button>
+        <button onclick="closeSwapModal()" class="px-3 py-1.5 bg-console-border hover:bg-console-border/80 text-white rounded font-bold text-[10px] transition cursor-pointer">
+          CLOSE / 关闭
+        </button>
       </div>
     </div>
   </div>

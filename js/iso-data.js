@@ -127,5 +127,20 @@ const teamCapitals = {
   "SWE": { "city": "Stockholm", "coords": [18.0686, 59.3293] },
   "CHE": { "city": "Bern", "coords": [7.4474, 46.9480] },
   "TUR": { "city": "Ankara", "coords": [32.8597, 39.9334] },
-  "CUW": { "city": "Willemstad", "coords": [-68.9335, 12.1084] }
+  "CUW": { "city": "Willemstad", "coords": [-68.9335, 12.1084] },
+  "CHN": { "city": "Beijing", "coords": [116.4074, 39.9042] },
+  "ITA": { "city": "Rome", "coords": [12.4964, 41.9028] },
+  "RUS": { "city": "Moscow", "coords": [37.6173, 55.7558] },
+  "CHL": { "city": "Santiago", "coords": [-70.6693, -33.4489] },
+  "PER": { "city": "Lima", "coords": [-77.0428, -12.0464] },
+  "IRL": { "city": "Dublin", "coords": [-6.2603, 53.3498] },
+  "FIN": { "city": "Helsinki", "coords": [24.9384, 60.1699] },
+  "GRC": { "city": "Athens", "coords": [23.7275, 37.9838] },
+  "POL": { "city": "Warsaw", "coords": [21.0122, 52.2297] },
+  "SVK": { "city": "Bratislava", "coords": [17.1077, 48.1486] },
+  "SVN": { "city": "Ljubljana", "coords": [14.5058, 46.0569] },
+  "SRB": { "city": "Belgrade", "coords": [20.4489, 44.7866] },
+  "UKR": { "city": "Kyiv", "coords": [30.5234, 50.4501] },
+  "NGA": { "city": "Abuja", "coords": [7.4951, 9.0579] },
+  "CMR": { "city": "Yaoundé", "coords": [11.5021, 3.8480] }
 };

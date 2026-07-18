@@ -45,6 +45,9 @@ symbols = [
   ('playVictory', audio_content),
   ('playScan', audio_content),
   ('sfx-volume-slider', html_content),
+  ('openSwapModal', html_content),
+  ('swapTeam', html_content),
+  ('getEffectiveTeamCode', html_content),
   ('setMatchWinner', html_content),
   ('toggleMatchWinner', html_content)
 ]

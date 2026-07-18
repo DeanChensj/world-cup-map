@@ -413,7 +413,10 @@ class TacticalAudio {
   }
 }
 
-const audio = new TacticalAudio();
+var audio = (typeof window !== "undefined" && window.audio) ? window.audio : new TacticalAudio();
+if (typeof window !== "undefined") {
+  window.audio = audio;
+}
 
 // Backward compatible global toggle & UI update helpers
 function toggleAudio() {
