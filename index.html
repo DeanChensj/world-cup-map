@@ -977,6 +977,44 @@
       .catch(() => d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"))
       .then(mapData => {
         worldData = topojson.feature(mapData, mapData.objects.countries);
+
+        // Separate French Guiana (GUF) from France (250)
+        const franceFeatureIdx = worldData.features.findIndex(d => String(d.id) === "250");
+        if (franceFeatureIdx !== -1) {
+          const franceFeature = worldData.features[franceFeatureIdx];
+          if (franceFeature.geometry && franceFeature.geometry.type === "MultiPolygon") {
+            const metroPolygons = [];
+            const guianaPolygons = [];
+
+            franceFeature.geometry.coordinates.forEach(poly => {
+              // Calculate average longitude of this polygon
+              let sumLon = 0, count = 0;
+              const ring = poly[0] || [];
+              ring.forEach(pt => { sumLon += pt[0]; count++; });
+              const avgLon = sumLon / (count || 1);
+
+              if (avgLon < -30) {
+                guianaPolygons.push(poly);
+              } else {
+                metroPolygons.push(poly);
+              }
+            });
+
+            if (guianaPolygons.length > 0) {
+              franceFeature.geometry.coordinates = metroPolygons;
+              worldData.features.push({
+                type: "Feature",
+                id: "254",
+                code: "GUF",
+                properties: { name: "French Guiana" },
+                geometry: {
+                  type: guianaPolygons.length === 1 ? "Polygon" : "MultiPolygon",
+                  coordinates: guianaPolygons.length === 1 ? guianaPolygons[0] : guianaPolygons
+                }
+              });
+            }
+          }
+        }
         
         // Filter out Antarctica (010) and GBR (826), and replace GBR with independent Home Nations features
         worldData.features = worldData.features.filter(d => String(d.id) !== "010" && String(d.id) !== "826");
@@ -1847,7 +1885,7 @@
       "724": "ESP", "736": "SDN", "752": "SWE", "756": "CHE", "762": "TJK",
       "764": "THA", "788": "TUN", "792": "TUR", "800": "UGA", "804": "UKR",
       "807": "MKD", "818": "EGY", "826": "GBR", "840": "USA", "858": "URY",
-      "860": "UZB", "862": "VEN", "887": "YEM", "894": "ZMB", "716": "ZWE", "531": "CUW", "688": "SRB", "132": "CPV"
+      "860": "UZB", "862": "VEN", "887": "YEM", "894": "ZMB", "716": "ZWE", "531": "CUW", "688": "SRB", "132": "CPV", "254": "GUF"
     };
   </script>
 </body>
