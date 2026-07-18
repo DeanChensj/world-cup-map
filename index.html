@@ -54,6 +54,7 @@
   <!-- Modular Application Scripts -->
   <script src="js/audio.js"></script>
   <script src="js/iso-data.js"></script>
+  <script src="js/campaign.js"></script>
   
   <!-- Font and Custom Styling -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -85,100 +86,7 @@
     }
   </script>
 
-  <style>
-    :root {
-      --bg: #0a0b0d;
-      --panel: #111317;
-      --border: #1f242e;
-      --text: #e2e8f0;
-      --dim-text: #6272a4;
-      --unmapped: #161a22;
-      --graticule: #1b202b;
-      --country-stroke: #1e2430;
-      --accent: #00ff66;
-    }
-
-    body.light-theme {
-      --bg: #e8f1f9;
-      --panel: #f8fafc;
-      --border: #cbd5e1;
-      --text: #0f172a;
-      --dim-text: #475569;
-      --unmapped: #d1d5db;
-      --graticule: #c0d6e8;
-      --country-stroke: #94a3b8;
-      --accent: #0284c7;
-    }
-
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: 'Geist', sans-serif;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    .country {
-      stroke: var(--country-stroke);
-      stroke-width: 0.4px;
-      transition: fill 0.4s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.2s ease, stroke-width 0.2s ease, opacity 0.3s ease;
-      cursor: crosshair;
-    }
-    .country:hover {
-      stroke: var(--accent) !important;
-      stroke-width: 1.2px !important;
-    }
-    .empire-capital {
-      stroke: rgba(255, 255, 255, 0.85);
-      stroke-width: 0.7px;
-    }
-    body.light-theme .empire-capital {
-      stroke: #0f172a;
-      stroke-width: 0.7px;
-    }
-    .suzerain-highlight {
-      stroke: #ffcc00 !important;
-      stroke-width: 1.2px !important;
-    }
-    .playing-highlight {
-      stroke: #00ffcc !important;
-      stroke-width: 1.0px !important;
-    }
-    body.light-theme .playing-highlight {
-      stroke: #0f766e !important;
-      stroke-width: 1.0px !important;
-    }
-    .campaign-faction-territory {
-      stroke: #f59e0b !important;
-      stroke-width: 0.8px !important;
-      stroke-opacity: 0.85 !important;
-    }
-    .flow-arc {
-      fill: none;
-      stroke-dasharray: 4, 4;
-      animation: flowDash 1s linear infinite;
-      pointer-events: none;
-    }
-    .graticule {
-      fill: none;
-      stroke: var(--graticule);
-      stroke-width: 0.5px;
-      pointer-events: none;
-    }
-    /* Scrollbar style */
-    ::-webkit-scrollbar {
-      width: 4px;
-      height: 4px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0a0b0d;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #1f242e;
-      border-radius: 2px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #00ff66;
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="text-console-text h-dvh overflow-hidden flex flex-col font-sans select-none antialiased">
 
@@ -1196,95 +1104,6 @@
         .transition()
         .duration(200)
         .style("opacity", 1.0);
-    }
-
-    // --- Campaign Faction System ---
-    function openFactionModal() {
-      const modal = document.getElementById("faction-modal");
-      const grid = document.getElementById("faction-teams-grid");
-      if (!modal || !grid) return;
-
-      grid.innerHTML = originalTeams.map(code => {
-        const team = teamMetadata[code];
-        const name = team?.name || code;
-        const isSelected = activeCampaignTeam === code;
-
-        return `
-          <div 
-            onclick="selectCampaignTeam('${code}')"
-            class="p-2.5 bg-console-panel border ${isSelected ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'border-console-border hover:border-amber-500/50'} rounded-lg cursor-pointer transition flex items-center space-x-2 group"
-          >
-            ${getFlagImg(code).replace('w-5 h-3.5', 'w-7 h-5 rounded')}
-            <div class="flex flex-col min-w-0 flex-1">
-              <span class="font-bold font-sans text-xs text-white truncate">${name}</span>
-              <span class="text-[8px] text-console-dimText uppercase font-mono">${code}</span>
-            </div>
-            ${isSelected ? '<i class="ph-bold ph-check-circle text-amber-400 text-sm"></i>' : ''}
-          </div>
-        `;
-      }).join("");
-
-      modal.classList.remove("hidden");
-    }
-
-    function closeFactionModal() {
-      const modal = document.getElementById("faction-modal");
-      if (modal) modal.classList.add("hidden");
-    }
-
-    function selectCampaignTeam(code) {
-      activeCampaignTeam = code;
-      localStorage.setItem("activeCampaignTeam", code);
-      audio.playClick();
-      closeFactionModal();
-      updateCampaignHUD();
-      updateUI();
-      if (centroids[code]) {
-        focusMapOnTeams([code]);
-      }
-      triggerAlert(`COMMANDER ASSIGNED TO ${teamMetadata[code]?.name || code}!`);
-    }
-
-    function updateCampaignHUD() {
-      const hud = document.getElementById("campaign-hud");
-      const selectBtnText = document.getElementById("campaign-select-text");
-      const bannerTitle = document.getElementById("hero-banner-title");
-      const bannerContent = document.getElementById("hero-banner-content");
-
-      if (!activeCampaignTeam || !originalTeams.includes(activeCampaignTeam)) {
-        if (hud) hud.classList.add("hidden");
-        if (selectBtnText) selectBtnText.innerText = "FACTION";
-        if (bannerTitle) bannerTitle.innerText = "SELECT CAMPAIGN FACTION";
-        if (bannerContent) bannerContent.innerHTML = `<span>Choose your nation to lead global conquest</span>`;
-        return;
-      }
-
-      if (hud) hud.classList.remove("hidden");
-      if (selectBtnText) selectBtnText.innerText = activeCampaignTeam;
-
-      const teamName = teamMetadata[activeCampaignTeam]?.name || activeCampaignTeam;
-      document.getElementById("hud-flag").innerHTML = getFlagImg(activeCampaignTeam).replace('w-5 h-3.5', 'w-8 h-5 rounded shadow');
-      document.getElementById("hud-name").innerText = teamName;
-
-      const sectors = originalTeams.filter(t => getCurrentOwner(t) === activeCampaignTeam).length;
-      document.getElementById("hud-sectors").innerText = sectors;
-
-      let title = "INDEPENDENT STATE";
-      if (sectors >= 24) title = "GLOBAL HEGEMON";
-      else if (sectors >= 8) title = "CONTINENTAL EMPIRE";
-      else if (sectors >= 3) title = "REGIONAL POWER";
-      else if (sectors > 1) title = "EXPANDING KINGDOM";
-
-      document.getElementById("hud-title").innerText = title;
-
-      if (bannerTitle) bannerTitle.innerText = `FACTION COMMANDER: ${activeCampaignTeam}`;
-      if (bannerContent) {
-        bannerContent.innerHTML = `
-          ${getFlagImg(activeCampaignTeam)}
-          <span class="font-bold text-white font-sans text-xs">${teamName}</span>
-          <span class="text-amber-400 font-mono text-[10px] ml-auto font-bold">${title} (${sectors})</span>
-        `;
-      }
     }
 
     function showClashCard(match) {
