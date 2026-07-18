@@ -581,26 +581,66 @@
 
       const leftPrev = [qfs, r16s, r32s].filter(arr => arr.length > 0);
       const rightPrev = [qfs, r16s, r32s].filter(arr => arr.length > 0);
+      const hasR32 = (r32s.length > 0);
+
+      function getMatchCardTeams(s) {
+        if (!s || !s.match) return { hCode: '', aCode: '', wCode: '' };
+        const m = s.match;
+        const mIdx = m.originalIndex;
+
+        let hCode = m.home;
+        let aCode = m.away;
+
+        if (typeof groupSlotReplacements !== "undefined" && groupSlotReplacements[hCode]) hCode = groupSlotReplacements[hCode];
+        if (typeof groupSlotReplacements !== "undefined" && groupSlotReplacements[aCode]) aCode = groupSlotReplacements[aCode];
+
+        if (s === grandFinal && leftSF && rightSF) {
+          hCode = getMatchCardTeams(leftSF).wCode;
+          aCode = getMatchCardTeams(rightSF).wCode;
+        } else {
+          const prevStages = [qfs, r16s, r32s];
+          for (let i = 0; i < prevStages.length; i++) {
+            const arr = prevStages[i];
+            if (arr.includes(s)) {
+              if (i + 1 < prevStages.length && prevStages[i+1].length > 0) {
+                const feeders = resolveFeeders(s, prevStages[i+1]);
+                if (feeders.length === 2) {
+                  hCode = getMatchCardTeams(feeders[0]).wCode;
+                  aCode = getMatchCardTeams(feeders[1]).wCode;
+                }
+              }
+              break;
+            }
+          }
+        }
+
+        let wCode = (userOverrides[mIdx] !== undefined) ? userOverrides[mIdx] : m.winner;
+        if (wCode === m.home) wCode = hCode;
+        else if (wCode === m.away) wCode = aCode;
+
+        return { hCode, aCode, wCode };
+      }
 
       function renderMatchCard(s) {
         if (!s) return '';
         const m = s.match;
         const mIdx = m.originalIndex;
         const isOverridden = (userOverrides[mIdx] !== undefined);
-        const matchLog = finalLogs.find(l => l.matchIndex === mIdx);
 
-        const hCode = matchLog ? matchLog.home : getCurrentOwner(m.home);
-        const aCode = matchLog ? matchLog.away : getCurrentOwner(m.away);
-        const wCode = matchLog ? matchLog.winnerCode : (isOverridden ? userOverrides[mIdx] : m.winner);
+        const { hCode, aCode, wCode } = getMatchCardTeams(s);
         const isChampMatch = champ && (wCode === champ.code);
 
+        const cardWidth = hasR32 ? 'w-[54px] sm:w-[60px]' : 'w-[72px] sm:w-[84px]';
+        const flagSize = hasR32 ? 'w-3.5 h-2.5' : 'w-4 h-3';
+        const textSize = hasR32 ? 'text-[8.5px] sm:text-[9px]' : 'text-[10px] sm:text-[10.5px]';
+
         return `
-          <div class="bg-[#10141d] border ${isChampMatch ? 'border-amber-400/90 shadow-[0_0_12px_rgba(245,158,11,0.4)] bg-amber-500/15' : isOverridden ? 'border-amber-400/70 bg-amber-500/10' : 'border-console-border/70'} rounded px-1 py-0.5 flex flex-col relative shrink-0 w-[54px] sm:w-[60px] font-mono select-none transition-all">
+          <div class="bg-[#10141d] border ${isChampMatch ? 'border-amber-400/90 shadow-[0_0_12px_rgba(245,158,11,0.4)] bg-amber-500/15' : isOverridden ? 'border-amber-400/70 bg-amber-500/10' : 'border-console-border/70'} rounded px-1 sm:px-1.5 py-0.5 sm:py-1 flex flex-col relative shrink-0 ${cardWidth} font-mono select-none transition-all">
             <!-- Team Home -->
             <div class="flex items-center justify-between py-[1px] ${wCode === hCode ? (isChampMatch ? 'text-amber-300 font-bold' : 'text-amber-300/90 font-bold') : 'text-console-dimText/60'}">
               <div class="flex items-center space-x-1 min-w-0">
-                ${getFlagImg(hCode).replace('w-5 h-3.5', 'w-3.5 h-2.5 rounded-xs shrink-0')}
-                <span class="text-[8.5px] sm:text-[9px] tracking-wider leading-none font-bold">${hCode}</span>
+                ${getFlagImg(hCode).replace('w-5 h-3.5', flagSize + ' rounded-xs shrink-0')}
+                <span class="${textSize} tracking-wider leading-none font-bold">${hCode}</span>
               </div>
             </div>
 
@@ -610,12 +650,12 @@
             <!-- Team Away -->
             <div class="flex items-center justify-between py-[1px] ${wCode === aCode ? (isChampMatch ? 'text-amber-300 font-bold' : 'text-amber-300/90 font-bold') : 'text-console-dimText/60'}">
               <div class="flex items-center space-x-1 min-w-0">
-                ${getFlagImg(aCode).replace('w-5 h-3.5', 'w-3.5 h-2.5 rounded-xs shrink-0')}
-                <span class="text-[8.5px] sm:text-[9px] tracking-wider leading-none font-bold">${aCode}</span>
+                ${getFlagImg(aCode).replace('w-5 h-3.5', flagSize + ' rounded-xs shrink-0')}
+                <span class="${textSize} tracking-wider leading-none font-bold">${aCode}</span>
               </div>
             </div>
 
-            ${isChampMatch ? `<div class="absolute -top-1 -right-1 text-[5px] bg-amber-400 text-black px-0.5 rounded font-bold shadow"><i class="ph-bold ph-trophy text-[5.5px]"></i></div>` : isOverridden ? `<div class="absolute -top-1 -right-1 text-[5px] bg-amber-500 text-black px-0.5 rounded font-bold shadow">⚡</div>` : ''}
+            ${isChampMatch ? `<div class="absolute -top-1 -right-1 text-[5px] sm:text-[6px] bg-amber-400 text-black px-0.5 rounded font-bold shadow"><i class="ph-bold ph-trophy text-[6px]"></i></div>` : isOverridden ? `<div class="absolute -top-1 -right-1 text-[5px] sm:text-[6px] bg-amber-500 text-black px-0.5 rounded font-bold shadow">⚡</div>` : ''}
           </div>
         `;
       }
@@ -630,20 +670,23 @@
         const nextPrev = prevStages.slice(1);
 
         if (feeders.length === 2) {
-          const pm = parentStep.match;
-          const matchLog = finalLogs.find(l => l.matchIndex === pm.originalIndex);
-          const wCode = matchLog ? matchLog.winnerCode : pm.winner;
+          const { wCode } = getMatchCardTeams(parentStep);
           const isChampBranch = champ && (wCode === champ.code);
 
+          const connClass = hasR32 ? 'w-3 min-h-[40px]' : 'w-4 min-h-[48px]';
+          const viewBox = hasR32 ? '0 0 12 50' : '0 0 16 60';
+          const pathD = hasR32 ? 'M 0,12 L 6,12 L 6,38 L 0,38 M 6,25 L 12,25' : 'M 0,15 L 8,15 L 8,45 L 0,45 M 8,30 L 16,30';
+          const spaceY = hasR32 ? 'space-y-1.5' : 'space-y-2.5';
+
           return `
-            <div class="flex items-center space-x-1.5 my-auto">
-              <div class="flex flex-col justify-around h-full space-y-1.5">
+            <div class="flex items-center space-x-1.5 sm:space-x-2 my-auto">
+              <div class="flex flex-col justify-around h-full ${spaceY}">
                 ${renderLeftNode(feeders[0], nextPrev)}
                 ${renderLeftNode(feeders[1], nextPrev)}
               </div>
               <div class="flex items-center justify-center shrink-0 h-full py-0.5">
-                <svg class="w-3 h-full min-h-[40px] ${isChampBranch ? 'text-amber-400' : 'text-amber-500/40'} stroke-current shrink-0" fill="none" viewBox="0 0 12 50" preserveAspectRatio="none">
-                  <path d="M 0,12 L 6,12 L 6,38 L 0,38 M 6,25 L 12,25" stroke-width="${isChampBranch ? '1.8' : '1.4'}" />
+                <svg class="${connClass} h-full ${isChampBranch ? 'text-amber-400' : 'text-amber-500/40'} stroke-current shrink-0" fill="none" viewBox="${viewBox}" preserveAspectRatio="none">
+                  <path d="${pathD}" stroke-width="${isChampBranch ? '1.8' : '1.4'}" />
                 </svg>
               </div>
               <div class="my-auto shrink-0">
@@ -666,22 +709,25 @@
         const nextPrev = prevStages.slice(1);
 
         if (feeders.length === 2) {
-          const pm = parentStep.match;
-          const matchLog = finalLogs.find(l => l.matchIndex === pm.originalIndex);
-          const wCode = matchLog ? matchLog.winnerCode : pm.winner;
+          const { wCode } = getMatchCardTeams(parentStep);
           const isChampBranch = champ && (wCode === champ.code);
 
+          const connClass = hasR32 ? 'w-3 min-h-[40px]' : 'w-4 min-h-[48px]';
+          const viewBox = hasR32 ? '0 0 12 50' : '0 0 16 60';
+          const pathD = hasR32 ? 'M 12,12 L 6,12 L 6,38 L 12,38 M 6,25 L 0,25' : 'M 16,15 L 8,15 L 8,45 L 16,45 M 8,30 L 0,30';
+          const spaceY = hasR32 ? 'space-y-1.5' : 'space-y-2.5';
+
           return `
-            <div class="flex items-center space-x-1.5 my-auto">
+            <div class="flex items-center space-x-1.5 sm:space-x-2 my-auto">
               <div class="my-auto shrink-0">
                 ${renderMatchCard(parentStep)}
               </div>
               <div class="flex items-center justify-center shrink-0 h-full py-0.5">
-                <svg class="w-3 h-full min-h-[40px] ${isChampBranch ? 'text-amber-400' : 'text-amber-500/40'} stroke-current shrink-0" fill="none" viewBox="0 0 12 50" preserveAspectRatio="none">
-                  <path d="M 12,12 L 6,12 L 6,38 L 12,38 M 6,25 L 0,25" stroke-width="${isChampBranch ? '1.8' : '1.4'}" />
+                <svg class="${connClass} h-full ${isChampBranch ? 'text-amber-400' : 'text-amber-500/40'} stroke-current shrink-0" fill="none" viewBox="${viewBox}" preserveAspectRatio="none">
+                  <path d="${pathD}" stroke-width="${isChampBranch ? '1.8' : '1.4'}" />
                 </svg>
               </div>
-              <div class="flex flex-col justify-around h-full space-y-1.5">
+              <div class="flex flex-col justify-around h-full ${spaceY}">
                 ${renderRightNode(feeders[0], nextPrev)}
                 ${renderRightNode(feeders[1], nextPrev)}
               </div>
