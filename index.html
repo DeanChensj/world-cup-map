@@ -133,6 +133,14 @@
       stroke: #ffcc00 !important;
       stroke-width: 1.8px !important;
     }
+    .playing-highlight {
+      stroke: #00ffcc !important;
+      stroke-width: 2.2px !important;
+    }
+    body.light-theme .playing-highlight {
+      stroke: #0f766e !important;
+      stroke-width: 2.2px !important;
+    }
     @keyframes flowDash {
       to {
         stroke-dashoffset: -20;
@@ -1196,6 +1204,9 @@
           const alpha3 = d.code || getWCCodeFromMap(d.properties ? d.properties.name : "", d.id);
           let classes = d.code ? "country micro-nation" : "country";
           if (alpha3) {
+            if (playingTeams.includes(alpha3)) {
+              classes += " playing-highlight";
+            }
             const owner = getCurrentOwner(alpha3);
             if (alpha3 === owner) {
               const isEmpire = originalTeams.filter(t => getCurrentOwner(t) === owner).length > 1;
