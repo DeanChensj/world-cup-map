@@ -212,10 +212,8 @@ function updateLanguageUI() {
     themeLabel.innerText = isLight ? t.themeLight : t.themeDark;
   }
 
-  const sfxLabel = document.getElementById("audio-label");
-  if (sfxLabel) {
-    const isMuted = (typeof audio !== "undefined" && audio.isMuted);
-    sfxLabel.innerText = isMuted ? t.sfxOff : t.sfxOn;
+  if (typeof updateAudioUI === "function") {
+    updateAudioUI();
   }
 
   const shareText = document.getElementById("share-btn-text");

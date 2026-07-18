@@ -1,16 +1,16 @@
 import os
 import re
 
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 files = [
   'index.html',
-  'css/styles.css',
+  'css/style.css',
   'js/audio.js',
-  'js/simulation.js',
-  'js/map.js',
-  'js/ui.js'
+  'js/campaign.js',
+  'js/i18n.js',
+  'js/iso-data.js'
 ]
-
-base_dir = '/google/src/cloud/deanchen/eat-ai-fig/google3/experimental/users/deanchen/world-cup-map'
 
 print("--- FILE CHECK ---")
 for f in files:
@@ -22,49 +22,40 @@ for f in files:
     print(f"[ERROR] {f} MISSING!")
 
 print("\n--- GLOBAL SYMBOL VERIFICATION ---")
-# Check if key functions exist in files
-with open(os.path.join(base_dir, 'js/ui.js'), 'r') as f:
-  ui_content = f.read()
-
-with open(os.path.join(base_dir, 'js/map.js'), 'r') as f:
-  map_content = f.read()
-
-with open(os.path.join(base_dir, 'js/simulation.js'), 'r') as f:
-  sim_content = f.read()
 
 with open(os.path.join(base_dir, 'js/audio.js'), 'r') as f:
   audio_content = f.read()
 
+with open(os.path.join(base_dir, 'index.html'), 'r') as f:
+  html_content = f.read()
+
 symbols = [
   ('audio', audio_content),
   ('toggleAudio', audio_content),
-  ('teamMetadata', sim_content),
-  ('matches', sim_content),
-  ('dates', sim_content),
-  ('currentDateIndex', sim_content),
-  ('countryLineage', sim_content),
-  ('userOverrides', sim_content),
-  ('isLightTheme', sim_content),
-  ('initOwnership', sim_content),
-  ('runSimulationToDateIndex', sim_content),
-  ('getLeaderboard', sim_content),
-  ('parseUrlOverrides', sim_content),
-  ('toggleMatchWinner', sim_content),
-  ('resetOverrides', sim_content),
-  ('shareUniverse', sim_content),
-  ('worldData', map_content),
-  ('centroids', map_content),
-  ('getWCCodeFromMap', map_content),
-  ('getCountryColor', map_content),
-  ('showTooltip', map_content),
-  ('highlightOwner', map_content),
-  ('toggleTheme', ui_content),
-  ('loadEdition', ui_content),
-  ('updateUI', ui_content)
+  ('setAudioVolume', audio_content),
+  ('updateAudioUI', audio_content),
+  ('playClick', audio_content),
+  ('playHover', audio_content),
+  ('playAlert', audio_content),
+  ('playChime', audio_content),
+  ('playLaserShot', audio_content),
+  ('playConquestBoom', audio_content),
+  ('playUpset', audio_content),
+  ('playMatchWin', audio_content),
+  ('playVictory', audio_content),
+  ('playScan', audio_content),
+  ('sfx-volume-slider', html_content),
+  ('setMatchWinner', html_content),
+  ('toggleMatchWinner', html_content)
 ]
 
+all_passed = True
 for name, content in symbols:
   if name in content:
     print(f"[OK] Symbol '{name}' defined")
   else:
     print(f"[ERROR] Symbol '{name}' missing!")
+    all_passed = False
+
+if all_passed:
+  print("\n>>> ALL AUDIO VALIDATION CHECKS PASSED SUCCESSFULLY! <<<")

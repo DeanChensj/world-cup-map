@@ -124,11 +124,16 @@
         <i id="theme-icon" class="ph-bold ph-sun text-[10px]"></i>
         <span id="theme-label" class="hidden md:inline">THEME: DARK</span>
       </button>
-      <!-- SFX Audio Toggle -->
-      <button id="btn-audio-toggle" onclick="toggleAudio()" class="flex bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-1.5 py-1 sm:px-2 sm:py-1.5 rounded font-mono text-[9px] font-bold items-center space-x-1 transition cursor-pointer shrink-0">
-        <i id="audio-icon" class="ph-bold ph-speaker-high text-[10px]"></i>
-        <span id="audio-label" class="hidden md:inline">SFX: ON</span>
-      </button>
+      <!-- SFX Audio Toggle & Volume Slider -->
+      <div class="flex items-center shrink-0">
+        <button id="btn-audio-toggle" onclick="toggleAudio()" title="Toggle SFX Mute/Unmute" class="flex bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-1.5 py-1 sm:px-2 sm:py-1.5 rounded-l font-mono text-[9px] font-bold items-center space-x-1 transition cursor-pointer shrink-0">
+          <i id="audio-icon" class="ph-bold ph-speaker-high text-[10px]"></i>
+          <span id="audio-label" class="hidden md:inline">SFX: 70%</span>
+        </button>
+        <div class="flex items-center bg-console-bg border border-l-0 border-console-border px-1.5 py-1 sm:py-1.5 rounded-r">
+          <input type="range" id="sfx-volume-slider" min="0" max="1" step="0.05" value="0.7" oninput="setAudioVolume(this.value)" class="w-10 sm:w-14 accent-console-accent h-1.5 cursor-pointer" title="SFX Volume">
+        </div>
+      </div>
       <!-- Central Active Date & Sandbox Controls -->
       <div class="flex items-center space-x-1.5 md:space-x-2">
         <span id="sim-status-label" class="hidden lg:inline text-[10px] uppercase font-mono text-console-dimText">Status: Simulating</span>
@@ -439,9 +444,10 @@
 
     let isSandboxAction = false;
     let lastRenderedStepIndex = 0;
+    let lastVictoryStep = -1;
 
     function setMatchWinner(matchIndex, winnerCode) {
-      audio.playClick();
+      if (typeof audio !== "undefined" && audio.playMatchWin) audio.playMatchWin(); else audio.playClick();
       const match = matches[matchIndex];
       if (!match) return;
 
@@ -455,7 +461,7 @@
     }
 
     function toggleMatchWinner(matchIndex) {
-      audio.playClick();
+      if (typeof audio !== "undefined" && audio.playMatchWin) audio.playMatchWin(); else audio.playClick();
       const match = matches[matchIndex];
       if (!match) return;
 
@@ -1189,7 +1195,11 @@
 
     // --- Conquest Event Warning Banner ---
     function triggerAlert(message) {
-      audio.playAlert();
+      if (message && message.includes("[UPSET]") && typeof audio !== "undefined" && audio.playUpset) {
+        audio.playUpset();
+      } else if (typeof audio !== "undefined" && audio.playAlert) {
+        audio.playAlert();
+      }
     }
 
     // --- D3 Map rendering with Graticules ---
@@ -2127,6 +2137,10 @@
       const championContainer = document.getElementById("champion-container");
       if (championContainer) {
         if (currentStepIndex === timelineSteps.length - 1 && leaderboard.length > 0) {
+          if (lastVictoryStep !== currentStepIndex) {
+            lastVictoryStep = currentStepIndex;
+            if (typeof audio !== "undefined" && audio.playVictory) audio.playVictory();
+          }
           const champion = leaderboard[0];
           const totalCount = originalTeams.length;
           championContainer.innerHTML = `
@@ -2577,7 +2591,7 @@
     // --- Interactive Control Listeners ---
     const slider = document.getElementById("timeline-slider");
     slider.addEventListener("input", (e) => {
-      audio.playClick();
+      if (typeof audio !== "undefined" && audio.playScan) audio.playScan(); else audio.playClick();
       currentStepIndex = parseInt(e.target.value);
       updateUI();
       if (playbackInterval) stopPlayback();

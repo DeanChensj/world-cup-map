@@ -67,7 +67,9 @@ function clearCampaignTeam() {
 function selectCampaignTeam(code) {
   activeCampaignTeam = code;
   localStorage.setItem("activeCampaignTeam", code);
-  if (typeof audio !== "undefined") audio.playClick();
+  if (typeof audio !== "undefined") {
+    if (audio.playMatchWin) audio.playMatchWin(); else audio.playClick();
+  }
   closeFactionModal();
   updateCampaignHUD();
   updateUI();
