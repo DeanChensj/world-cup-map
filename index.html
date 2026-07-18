@@ -458,22 +458,27 @@
       if (!match) return;
 
       const isGroupStage = (match.stage === "Group Stage" || match.stage.includes("Group"));
-      const currentWinner = (userOverrides[matchIndex] !== undefined) ? userOverrides[matchIndex] : match.winner;
+      const homeCode = isGroupStage ? match.home : getCurrentOwner(match.home);
+      const awayCode = isGroupStage ? match.away : getCurrentOwner(match.away);
+
+      let currentWinner = (userOverrides[matchIndex] !== undefined) ? userOverrides[matchIndex] : match.winner;
+      if (currentWinner === match.home) currentWinner = homeCode;
+      else if (currentWinner === match.away) currentWinner = awayCode;
 
       if (isGroupStage) {
-        if (currentWinner === match.home) {
-          userOverrides[matchIndex] = match.away;
-        } else if (currentWinner === match.away) {
+        if (currentWinner === homeCode) {
+          userOverrides[matchIndex] = awayCode;
+        } else if (currentWinner === awayCode) {
           userOverrides[matchIndex] = "";
         } else {
-          userOverrides[matchIndex] = match.home;
+          userOverrides[matchIndex] = homeCode;
         }
       } else {
-        // Knockout Stage: strictly binary toggle between home and away
-        if (currentWinner === match.home) {
-          userOverrides[matchIndex] = match.away;
+        // Knockout Stage: strictly binary toggle between homeCode and awayCode
+        if (currentWinner === homeCode) {
+          userOverrides[matchIndex] = awayCode;
         } else {
-          userOverrides[matchIndex] = match.home;
+          userOverrides[matchIndex] = homeCode;
         }
       }
 
@@ -561,19 +566,34 @@
 
     function processSingleMatch(match, isLatestStep, logs) {
       const matchIdx = match.originalIndex;
-      const winnerCode = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
-      if (!winnerCode) return; // Skip draws
-
-      const loserCode = (winnerCode === match.home) ? match.away : match.home;
       const isGroupStage = (match.stage === "Group Stage" || match.stage.includes("Group"));
 
-      // Always log match for Live Feed
+      // Dynamic Effective Teams (Sovereign Empire Slot Succession for Knockouts)
+      const homeCode = isGroupStage ? match.home : getCurrentOwner(match.home);
+      const awayCode = isGroupStage ? match.away : getCurrentOwner(match.away);
+
+      // If both slots belong to the exact same owner empire in knockout, skip duplicate match
+      if (!isGroupStage && homeCode === awayCode) {
+        return;
+      }
+
+      let winnerCode = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
+      
+      // Resolve static winner code (e.g. "ARG") to effective sovereign empire (e.g. "NED" if NED annexed ARG)
+      if (winnerCode === match.home) winnerCode = homeCode;
+      else if (winnerCode === match.away) winnerCode = awayCode;
+
+      if (!winnerCode) return; // Skip draws in group stage
+
+      const loserCode = (winnerCode === homeCode) ? awayCode : homeCode;
+
+      // Always log match for Live Feed using dynamic effective teams!
       logs.unshift({
         matchIndex: matchIdx,
         date: match.date,
         stage: match.stage,
-        home: match.home,
-        away: match.away,
+        home: homeCode,
+        away: awayCode,
         score: match.score,
         winner: teamMetadata[winnerCode]?.name || winnerCode,
         winnerCode: winnerCode,
@@ -1047,11 +1067,11 @@
         return;
       }
 
-      const originalTeam = teamMetadata[alpha3].name;
+      const originalTeam = teamMetadata[alpha3]?.name || alpha3;
       const lineageCodes = countryLineage[alpha3] || [alpha3];
       const currentOwnerCode = lineageCodes[lineageCodes.length - 1];
-      const currentOwner = teamMetadata[currentOwnerCode].name;
-      const currentOwnerColor = teamMetadata[currentOwnerCode].color;
+      const currentOwner = teamMetadata[currentOwnerCode]?.name || currentOwnerCode;
+      const currentOwnerColor = teamMetadata[currentOwnerCode]?.color || "#00ff66";
       const lineageTrail = lineageCodes.map(code => teamMetadata[code]?.name || code).join(" ➔ ");
       let content = `
         <div class="text-[9px] text-console-dimText uppercase tracking-wider">Territory Details</div>
@@ -1138,13 +1158,18 @@
       if (!overlay) return;
 
       const matchIdx = match.originalIndex;
-      const code1 = match.home;
-      const code2 = match.away;
+      const isGroupStage = (match.stage === "Group Stage" || match.stage.includes("Group"));
+
+      const code1 = isGroupStage ? match.home : getCurrentOwner(match.home);
+      const code2 = isGroupStage ? match.away : getCurrentOwner(match.away);
 
       const name1 = teamMetadata[code1]?.name || code1;
       const name2 = teamMetadata[code2]?.name || code2;
 
-      const activeWinner = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
+      let rawWinner = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
+      if (rawWinner === match.home) rawWinner = code1;
+      else if (rawWinner === match.away) rawWinner = code2;
+      const activeWinner = rawWinner;
 
       document.getElementById("clash-card-stage").innerText = `TACTICAL CONFLICT // ${(match.stage || 'MATCH').toUpperCase()}`;
 
@@ -1337,7 +1362,7 @@
       // Render Conquest Champion Banner at end of tournament
       const championContainer = document.getElementById("champion-container");
       if (championContainer) {
-        if (currentMatchIndex === matches.length && leaderboard.length > 0) {
+        if (currentStepIndex === timelineSteps.length - 1 && leaderboard.length > 0) {
           const champion = leaderboard[0];
           const totalCount = originalTeams.length;
           championContainer.innerHTML = `
