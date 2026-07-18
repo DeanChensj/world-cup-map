@@ -377,6 +377,13 @@
     let centroids = {};
     let userOverrides = {};
 
+    const microNations = [
+      { code: "CUW", name: "Curaçao", coords: [-68.9900, 12.1696] },
+      { code: "CPV", name: "Cabo Verde", coords: [-24.0132, 16.0022] },
+      { code: "TTO", name: "Trinidad & Tobago", coords: [-61.2225, 10.6918] },
+      { code: "NIR", name: "Northern Ireland", coords: [-6.4923, 54.6538] }
+    ];
+
     // ISO A3 to ISO A2 Flag CDN mapping
     const alpha3To2 = {
       "CAN": "ca", "MEX": "mx", "USA": "us", "AUS": "au", "IRQ": "iq",
@@ -950,13 +957,6 @@
           .on("mouseover", showTooltip)
           .on("mousemove", moveTooltip)
           .on("mouseout", hideTooltip);
-
-      const microNations = [
-        { code: "CUW", name: "Curaçao", coords: [-68.9900, 12.1696] },
-        { code: "CPV", name: "Cabo Verde", coords: [-24.0132, 16.0022] },
-        { code: "TTO", name: "Trinidad & Tobago", coords: [-61.2225, 10.6918] },
-        { code: "NIR", name: "Northern Ireland", coords: [-6.4923, 54.6538] }
-      ];
 
       g.selectAll(".micro-nation")
         .data(microNations)
