@@ -95,6 +95,14 @@ body.light-theme .playing-highlight {
   filter: drop-shadow(0 0 6px rgba(0, 255, 204, 0.8));
 }
 
+.conquest-wave-ring {
+  fill: none !important;
+  stroke: #ff2255 !important;
+  stroke-dasharray: 4, 3;
+  pointer-events: none;
+  filter: drop-shadow(0 0 10px rgba(255, 34, 85, 0.9));
+}
+
 @keyframes flowDash {
   to {
     stroke-dashoffset: -12px;

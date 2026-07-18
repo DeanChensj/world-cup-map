@@ -68,6 +68,56 @@ class TacticalAudio {
     osc.start(now);
     osc.stop(now + 0.08);
   }
+
+  playLaserShot() {
+    if (this.muted) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1600, now);
+    osc.frequency.exponentialRampToValueAtTime(350, now + 0.22);
+    gain.gain.setValueAtTime(0.08, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.22);
+  }
+
+  playConquestBoom() {
+    if (this.muted) return;
+    this.init();
+    const now = this.ctx.currentTime;
+    
+    // Low sub-bass sine drop (90Hz -> 28Hz)
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(90, now);
+    osc.frequency.exponentialRampToValueAtTime(28, now + 0.75);
+    gain.gain.setValueAtTime(0.25, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.75);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.75);
+
+    // Subtle impact chime chord (220Hz + 330Hz)
+    [220, 330].forEach(freq => {
+      const o = this.ctx.createOscillator();
+      const g = this.ctx.createGain();
+      o.type = 'triangle';
+      o.frequency.setValueAtTime(freq, now);
+      g.gain.setValueAtTime(0.05, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+      o.connect(g);
+      g.connect(this.ctx.destination);
+      o.start(now);
+      o.stop(now + 0.5);
+    });
+  }
 }
 
 const audio = new TacticalAudio();

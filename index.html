@@ -1408,16 +1408,53 @@
       }
 
       if (latestAnnexation) {
-        // --- 2-STAGE CONQUEST RIPPLE ANIMATION ---
+        // --- 3-PART DRAMATIC CONQUEST ANIMATION (Spotlight + Alert Flash + Wave Ring) ---
         const loserCode = latestAnnexation.loserCode;
         const winnerCode = latestAnnexation.winnerCode;
         const loserCenter = centroids[loserCode] || centroids[latestAnnexation.away] || [0, 0];
 
-        // Trigger Shockwave Pulse at Loser Capital at Stage 1 impact (~350ms)
+        // Synthesize Stage 1 Laser Shot Sound FX
+        if (typeof audio !== "undefined" && audio.playLaserShot) {
+          audio.playLaserShot();
+        }
+
+        // 1. Tactical Spotlight: Dim non-involved countries to focus 100% eyes on conflict area
+        svg.selectAll(".country")
+          .transition()
+          .duration(350)
+          .style("opacity", d => {
+            const alpha3 = d.code || getWCCodeFromMap(d.properties ? d.properties.name : "", d.id);
+            if (!alpha3) return 0.1;
+            const owner = getCurrentOwner(alpha3);
+            return (owner === winnerCode || owner === loserCode || playingTeams.includes(alpha3)) ? 1.0 : 0.25;
+          });
+
+        // 2. Stage 1 Impact & Expanding Conquest Wave Ring at 800ms
         setTimeout(() => {
           if (typeof triggerShockwave === "function") triggerShockwave(loserCode);
-        }, 350);
+          if (typeof audio !== "undefined" && audio.playConquestBoom) audio.playConquestBoom();
 
+          // Render visible expanding tactical wave ring sweeping across continents
+          const vectorGroup = svg.select(".vector-layer");
+          vectorGroup.selectAll(".conquest-wave-ring").remove();
+
+          if (loserCenter[0] && loserCenter[1]) {
+            vectorGroup.append("circle")
+              .attr("cx", loserCenter[0])
+              .attr("cy", loserCenter[1])
+              .attr("r", 5)
+              .attr("class", "conquest-wave-ring")
+              .attr("opacity", 0.95)
+              .transition()
+              .duration(1100)
+              .ease(d3.easeQuadOut)
+              .attr("r", 280)
+              .attr("opacity", 0)
+              .remove();
+          }
+        }, 800);
+
+        // 3. Stage 2: Conquest Flash Border + Staggered Fill Transition
         svg.selectAll(".country").each(function(d) {
           const alpha3 = d.code || getWCCodeFromMap(d.properties ? d.properties.name : "", d.id);
           if (!alpha3) return;
@@ -1431,23 +1468,45 @@
           if (isNewlyConquered && centroids[alpha3]) {
             const [cx, cy] = centroids[alpha3];
             const dist = Math.hypot(cx - loserCenter[0], cy - loserCenter[1]);
-            const delayMs = 380 + Math.min(dist * 2.2, 450); // Staggered ripple outward from loser capital
+            const delayMs = 900 + Math.min(dist * 4.2, 850);
 
+            // Flash red alert border before transitioning fill color
             sel.transition()
+               .delay(800)
+               .duration(200)
+               .style("stroke", "#ff2255")
+               .style("stroke-width", "2.2px")
+               .transition()
                .delay(delayMs)
-               .duration(400)
+               .duration(650)
                .ease(d3.easeCubicOut)
-               .attr("fill", targetColor);
+               .attr("fill", targetColor)
+               .style("stroke", null)
+               .style("stroke-width", null);
           } else {
             sel.transition()
-               .duration(200)
+               .duration(350)
                .ease(d3.easeCubicOut)
                .attr("fill", targetColor);
           }
         });
+
+        // Restore full opacity to all countries after animation completes (~2.1s)
+        setTimeout(() => {
+          svg.selectAll(".country")
+             .transition()
+             .duration(400)
+             .style("opacity", 1.0);
+        }, 2100);
+
       } else {
         // Instant / Standard Transition for Group Stage or Backwards Step
+        svg.selectAll(".country").interrupt();
+        svg.selectAll(".conquest-wave-ring").remove();
         svg.selectAll(".country")
+          .style("opacity", 1.0)
+          .style("stroke", null)
+          .style("stroke-width", null)
           .transition()
           .duration(isForward ? 350 : 0)
           .ease(d3.easeCubicOut)
@@ -1598,7 +1657,7 @@
                     .attr("stroke-dasharray", len + " " + len)
                     .attr("stroke-dashoffset", len)
                     .transition()
-                    .duration(400)
+                    .duration(850)
                     .ease(d3.easeCubicOut)
                     .attr("stroke-dashoffset", 0);
                 }
