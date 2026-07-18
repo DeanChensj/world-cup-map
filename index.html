@@ -1333,7 +1333,9 @@
       } else if (step && step.type === "knockout_match") {
         currentDate = step.match.date;
         activeDayMatches = [step.match];
-        playingTeams = [step.match.home, step.match.away];
+        const ownerHome = getCurrentOwner(step.match.home);
+        const ownerAway = getCurrentOwner(step.match.away);
+        playingTeams = Array.from(new Set([step.match.home, step.match.away, ownerHome, ownerAway].filter(Boolean)));
         showClashCard(step.match);
         document.getElementById("current-date-badge").innerText = `${formatDateString(currentDate)} • ${step.match.stage}`;
       } else {
@@ -1458,8 +1460,20 @@
       if (activeDayMatches && activeDayMatches.length > 0) {
         activeDayMatches.forEach(m => {
           const isGroup = (!m.stage || m.stage === "Group Stage" || m.stage.includes("Group"));
-          const homeCode = isGroup ? m.home : getCurrentOwner(m.home);
-          const awayCode = isGroup ? m.away : getCurrentOwner(m.away);
+          let homeCode = isGroup ? m.home : getCurrentOwner(m.home);
+          let awayCode = isGroup ? m.away : getCurrentOwner(m.away);
+
+          if (!isGroup && homeCode === awayCode) {
+            const lineage2 = countryLineage[m.away];
+            if (lineage2 && lineage2.length > 1) {
+              awayCode = lineage2[lineage2.length - 2];
+            } else {
+              awayCode = m.away;
+            }
+          }
+
+          if (!centroids[homeCode] && centroids[m.home]) homeCode = m.home;
+          if (!centroids[awayCode] && centroids[m.away]) awayCode = m.away;
 
           if (homeCode && awayCode && homeCode !== awayCode && centroids[homeCode] && centroids[awayCode]) {
             const c0 = centroids[homeCode];
@@ -1479,7 +1493,7 @@
                 .attr("d", rayStr)
                 .attr("class", "active-clash-ray")
                 .attr("fill", "none")
-                .attr("stroke-width", isGroup ? "1.2px" : "1.6px");
+                .attr("stroke-width", isGroup ? "1.2px" : "1.8px");
             }
           }
         });
