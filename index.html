@@ -1252,25 +1252,14 @@
         
         const gPin = vectorGroup.append("g").attr("class", "hover-capital-pin");
 
-        // Glowing outer pulse ring around capital
-        gPin.append("circle")
-          .attr("cx", cx)
-          .attr("cy", cy)
-          .attr("r", 6)
-          .attr("fill", "none")
-          .attr("stroke", "#00ffcc")
-          .attr("stroke-width", "1.5px")
-          .attr("class", "animate-ping")
-          .attr("opacity", 0.9);
-
-        // Core capital dot
+        // Solid crisp capital dot
         gPin.append("circle")
           .attr("cx", cx)
           .attr("cy", cy)
           .attr("r", 3.5)
           .attr("fill", "#00ffcc")
-          .attr("stroke", "#000000")
-          .attr("stroke-width", "1px");
+          .attr("stroke", "#0d0f12")
+          .attr("stroke-width", "1.2px");
 
         // Capital name label on the map
         const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
