@@ -1541,21 +1541,37 @@
         .map((entry, idx) => {
           const pct = ((entry.count / totalNations) * 100).toFixed(1);
           const badgeClass = idx === 0 ? "text-yellow-400 font-bold" : idx === 1 ? "text-gray-300 font-bold" : idx === 2 ? "text-amber-600 font-bold" : "text-console-dimText";
+          const capitalCity = (typeof getCapitalName === "function") ? getCapitalName(entry.code) : (teamCapitals[entry.code]?.city || "");
+          const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+          const capTooltip = isZh ? `首都: ${capitalCity}` : `Capital: ${capitalCity}`;
+          const isCommander = (entry.code === activeCampaignTeam);
 
           return `
             <div 
               onmouseenter="highlightOwner('${entry.code}')" 
               onmouseleave="resetHighlight()"
+              title="${entry.name} • ${capTooltip} • ${entry.count} ${isZh ? '版图' : 'Sectors'}"
               class="p-2 bg-console-bg border ${entry.count > 1 ? 'border-console-accent/40 bg-console-accent/5' : 'border-console-border'} hover:border-console-accent rounded-sm cursor-pointer transition flex flex-col space-y-1.5 group"
             >
               <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-2 min-w-0">
                   <span class="w-4 text-center font-mono text-[10px] ${badgeClass}">#${idx + 1}</span>
                   ${getFlagImg(entry.code)}
                   <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${entry.color}"></span>
-                  <span class="text-xs font-semibold text-console-text font-sans truncate max-w-[120px]">${entry.name}</span>
+                  <div class="flex flex-col min-w-0">
+                    <div class="flex items-center space-x-1">
+                      <span class="text-xs font-semibold text-console-text font-sans truncate max-w-[110px]">${entry.name}</span>
+                      ${isCommander ? '<span class="text-[8px] text-amber-400 bg-amber-500/20 px-1 rounded font-bold font-mono">★</span>' : ''}
+                    </div>
+                    ${capitalCity ? `
+                      <span class="hidden group-hover:flex text-[9px] text-amber-400 font-mono items-center space-x-0.5 truncate transition-all duration-200">
+                        <i class="ph-bold ph-map-pin text-[8px]"></i>
+                        <span>${capitalCity}</span>
+                      </span>
+                    ` : ''}
+                  </div>
                 </div>
-                <div class="flex items-center space-x-1 font-mono">
+                <div class="flex items-center space-x-1 font-mono shrink-0 ml-2">
                   <span class="font-bold text-console-accent text-xs">${entry.count}</span>
                   <span class="text-[9px] text-console-dimText">(${pct}%)</span>
                 </div>

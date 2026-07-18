@@ -22,6 +22,28 @@ const TEAM_NAMES_ZH = {
   "WAL": "威尔士", "ZAF": "南非"
 };
 
+const CAPITAL_NAMES_ZH = {
+  "CAN": "渥太华", "MEX": "墨西哥城", "USA": "华盛顿特区", "AUS": "堪培拉",
+  "IRQ": "巴格达", "IRN": "德黑兰", "JPN": "东京", "JOR": "安曼",
+  "KOR": "首尔", "QAT": "多哈", "SAU": "利雅得", "UZB": "塔什干",
+  "DZA": "阿尔及尔", "CPV": "普拉亚", "COD": "金沙萨", "CIV": "雅穆苏克罗",
+  "EGY": "开罗", "GHA": "阿克拉", "MAR": "拉巴特", "SEN": "达喀尔",
+  "ZAF": "比勒陀利亚", "TUN": "突尼斯城", "HTI": "太子港", "PAN": "巴拿马城",
+  "ARG": "布宜诺斯艾利斯", "BRA": "巴西利亚", "COL": "波哥大", "ECU": "基多",
+  "PRY": "亚松森", "URY": "蒙得维的亚", "NZL": "惠灵顿", "AUT": "维也纳",
+  "BEL": "布鲁塞尔", "BIH": "萨拉热窝", "HRV": "萨格勒布", "CZE": "布拉格",
+  "ENG": "伦敦", "FRA": "巴黎", "DEU": "柏林", "NLD": "阿姆斯特丹",
+  "NOR": "奥斯陆", "PRT": "里斯本", "SCO": "爱丁堡", "WAL": "加的夫",
+  "NIR": "贝尔法斯特", "ESP": "马德里", "SWE": "斯德哥尔摩", "CHE": "伯尔尼",
+  "TUR": "安卡拉", "CUW": "威廉斯塔德", "AGO": "罗安达", "BGR": "索非亚",
+  "CMR": "雅温得", "CRI": "圣何塞", "DNK": "哥本哈根", "HND": "特古西加尔巴",
+  "IRL": "都柏林", "ISL": "雷克雅未克", "ITA": "罗马", "JAM": "金斯敦",
+  "NGA": "阿布贾", "POL": "华沙", "PRK": "平壤", "ROU": "布加勒斯特",
+  "RUS": "莫斯科", "SRB": "贝尔格莱德", "SVK": "布拉迪斯拉发", "SVN": "卢布尔雅那",
+  "TGO": "洛美", "TTO": "西班牙港", "UKR": "基辅", "CHN": "北京", "CHL": "圣地亚哥",
+  "PER": "利马"
+};
+
 const STAGE_NAMES_ZH = {
   "Group Stage": "小组赛",
   "Round of 32": "32强赛",
@@ -144,6 +166,16 @@ function getTeamName(code, defaultName) {
     return TEAM_NAMES_ZH[code];
   }
   return defaultName || code;
+}
+
+function getCapitalName(code, defaultCity) {
+  if (currentLang === "zh" && CAPITAL_NAMES_ZH[code]) {
+    return CAPITAL_NAMES_ZH[code];
+  }
+  if (typeof teamCapitals !== "undefined" && teamCapitals[code] && teamCapitals[code].city) {
+    return teamCapitals[code].city;
+  }
+  return defaultCity || getTeamName(code);
 }
 
 function getStageName(stage) {
