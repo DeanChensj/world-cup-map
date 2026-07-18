@@ -1468,12 +1468,8 @@
           let awayCode = isGroup ? m.away : getCurrentOwner(m.away);
 
           if (!isGroup && homeCode === awayCode) {
-            const lineage2 = countryLineage[m.away];
-            if (lineage2 && lineage2.length > 1) {
-              awayCode = lineage2[lineage2.length - 2];
-            } else {
-              awayCode = m.away;
-            }
+            homeCode = m.home;
+            awayCode = m.away;
           }
 
           if (!centroids[homeCode] && centroids[m.home]) homeCode = m.home;
