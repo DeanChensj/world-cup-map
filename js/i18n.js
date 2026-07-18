@@ -137,7 +137,7 @@ const I18N = {
   }
 };
 
-let currentLang = localStorage.getItem("appLang") || "zh";
+let currentLang = localStorage.getItem("appLang") || "en";
 
 function getTeamName(code, defaultName) {
   if (currentLang === "zh" && TEAM_NAMES_ZH[code]) {
