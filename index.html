@@ -650,13 +650,124 @@
       return rawScore;
     }
 
+    let tournamentGroups = [];
+    let groupSlotReplacements = {};
+
+    function calculateDynamicGroupStandings() {
+      const groupMatches = matches.filter(m => (!m.stage || m.stage === "Group Stage" || m.stage.includes("Group")));
+      if (groupMatches.length === 0) return;
+
+      const adj = {};
+      groupMatches.forEach(m => {
+        if (!adj[m.home]) adj[m.home] = new Set();
+        if (!adj[m.away]) adj[m.away] = new Set();
+        adj[m.home].add(m.away);
+        adj[m.away].add(m.home);
+      });
+
+      tournamentGroups = [];
+      const visited = new Set();
+      Object.keys(adj).forEach(team => {
+        if (!visited.has(team)) {
+          const group = [];
+          const q = [team];
+          visited.add(team);
+          while (q.length > 0) {
+            const curr = q.pop();
+            group.push(curr);
+            adj[curr].forEach(nxt => {
+              if (!visited.has(nxt)) {
+                visited.add(nxt);
+                q.push(nxt);
+              }
+            });
+          }
+          group.sort();
+          tournamentGroups.push(group);
+        }
+      });
+      tournamentGroups.sort((a, b) => a[0].localeCompare(b[0]));
+
+      function rankGroupTeams(overrideMap) {
+        const rankings = {};
+        tournamentGroups.forEach((group, gIdx) => {
+          const stats = {};
+          group.forEach(t => { stats[t] = { pts: 0, gd: 0, gf: 0, code: t }; });
+
+          const gMatches = groupMatches.filter(m => group.includes(m.home));
+          gMatches.forEach(m => {
+            const idx = m.originalIndex;
+            let winner = (overrideMap[idx] !== undefined) ? overrideMap[idx] : m.winner;
+            const scoreStr = m.score || "0-0";
+            const parts = scoreStr.split("-");
+            const sh = (parts.length === 2 && !isNaN(parts[0])) ? parseInt(parts[0], 10) : 0;
+            const sa = (parts.length === 2 && !isNaN(parts[1])) ? parseInt(parts[1], 10) : 0;
+
+            if (!winner && sh !== sa) {
+              winner = (sh > sa) ? m.home : m.away;
+            }
+
+            if (winner === m.home) {
+              stats[m.home].pts += 3;
+              stats[m.home].gd += (sh - sa);
+              stats[m.home].gf += sh;
+              stats[m.away].gd += (sa - sh);
+              stats[m.away].gf += sa;
+            } else if (winner === m.away) {
+              stats[m.away].pts += 3;
+              stats[m.away].gd += (sa - sh);
+              stats[m.away].gf += sa;
+              stats[m.home].gd += (sh - sa);
+              stats[m.home].gf += sh;
+            } else {
+              stats[m.home].pts += 1;
+              stats[m.away].pts += 1;
+            }
+          });
+
+          const sorted = Object.values(stats).sort((a, b) => {
+            if (b.pts !== a.pts) return b.pts - a.pts;
+            if (b.gd !== a.gd) return b.gd - a.gd;
+            if (b.gf !== a.gf) return b.gf - a.gf;
+            return a.code.localeCompare(b.code);
+          });
+          rankings[gIdx] = sorted.map(x => x.code);
+        });
+        return rankings;
+      }
+
+      const origRankings = rankGroupTeams({});
+      const newRankings = rankGroupTeams(userOverrides);
+
+      groupSlotReplacements = {};
+      advancingTeams = new Set();
+
+      const maxAdvancersPerGroup = (matches.length > 80) ? 3 : 2;
+
+      tournamentGroups.forEach((group, gIdx) => {
+        const origList = origRankings[gIdx] || group;
+        const newList = newRankings[gIdx] || group;
+
+        origList.forEach((origTeam, i) => {
+          const newTeam = newList[i] || origTeam;
+          groupSlotReplacements[origTeam] = newTeam;
+          if (i < maxAdvancersPerGroup) {
+            advancingTeams.add(newTeam);
+          }
+        });
+      });
+    }
+
     function processSingleMatch(match, isLatestStep, logs) {
       const matchIdx = match.originalIndex;
       const isGroupStage = (match.stage === "Group Stage" || match.stage.includes("Group"));
 
+      const slotHome = isGroupStage ? match.home : (groupSlotReplacements[match.home] || match.home);
+      const slotAway = isGroupStage ? match.away : (groupSlotReplacements[match.away] || match.away);
+
       // Dynamic Effective Teams (Sovereign Empire Slot Succession for Knockouts)
-      const homeCode = isGroupStage ? match.home : getCurrentOwner(match.home);
-      const awayCode = isGroupStage ? match.away : getCurrentOwner(match.away);
+      const homeCode = isGroupStage ? match.home : getCurrentOwner(slotHome);
+      const awayCode = isGroupStage ? match.away : getCurrentOwner(slotAway);
 
       // If both slots belong to the exact same owner empire in knockout, skip duplicate match
       if (!isGroupStage && homeCode === awayCode) {
@@ -665,7 +776,7 @@
 
       let winnerCode = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
       
-      // Resolve static winner code (e.g. "ARG") to effective sovereign empire (e.g. "NED" if NED annexed ARG)
+      // Resolve static winner code (e.g. "ARG") to effective sovereign empire
       if (winnerCode === match.home) winnerCode = homeCode;
       else if (winnerCode === match.away) winnerCode = awayCode;
 
@@ -734,6 +845,7 @@
     }
 
     function runSimulationToStep(targetStepIndex) {
+      calculateDynamicGroupStandings();
       initOwnership();
       const logs = [];
 
