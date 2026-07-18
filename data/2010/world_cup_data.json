@@ -54,7 +54,7 @@
     },
     "HND": {
       "name": "Honduras",
-      "color": "#718096"
+      "color": "#0284c7"
     },
     "ITA": {
       "name": "Italy",
@@ -147,38 +147,6 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2010-06-16",
-      "home": "ZAF",
-      "away": "URY",
-      "winner": "URY",
-      "score": "0-3",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-17",
-      "home": "FRA",
-      "away": "MEX",
-      "winner": "MEX",
-      "score": "0-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-22",
-      "home": "MEX",
-      "away": "URY",
-      "winner": "",
-      "score": "0-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-22",
-      "home": "FRA",
-      "away": "ZAF",
-      "winner": "",
-      "score": "1-2",
-      "stage": "Group Stage"
-    },
-    {
       "date": "2010-06-12",
       "home": "KOR",
       "away": "GRC",
@@ -195,38 +163,6 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2010-06-17",
-      "home": "ARG",
-      "away": "KOR",
-      "winner": "",
-      "score": "4-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-17",
-      "home": "GRC",
-      "away": "NGA",
-      "winner": "",
-      "score": "2-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-22",
-      "home": "NGA",
-      "away": "KOR",
-      "winner": "",
-      "score": "2-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-22",
-      "home": "GRC",
-      "away": "ARG",
-      "winner": "ARG",
-      "score": "0-2",
-      "stage": "Group Stage"
-    },
-    {
       "date": "2010-06-12",
       "home": "ENG",
       "away": "USA",
@@ -239,38 +175,6 @@
       "home": "DZA",
       "away": "SVN",
       "winner": "",
-      "score": "0-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-18",
-      "home": "SVN",
-      "away": "USA",
-      "winner": "",
-      "score": "2-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-18",
-      "home": "ENG",
-      "away": "DZA",
-      "winner": "",
-      "score": "0-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-23",
-      "home": "USA",
-      "away": "DZA",
-      "winner": "USA",
-      "score": "1-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-23",
-      "home": "SVN",
-      "away": "ENG",
-      "winner": "ENG",
       "score": "0-1",
       "stage": "Group Stage"
     },
@@ -291,38 +195,6 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2010-06-18",
-      "home": "DEU",
-      "away": "SRB",
-      "winner": "",
-      "score": "0-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-19",
-      "home": "GHA",
-      "away": "AUS",
-      "winner": "",
-      "score": "1-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-23",
-      "home": "AUS",
-      "away": "SRB",
-      "winner": "",
-      "score": "2-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-23",
-      "home": "GHA",
-      "away": "DEU",
-      "winner": "",
-      "score": "0-1",
-      "stage": "Group Stage"
-    },
-    {
       "date": "2010-06-14",
       "home": "NLD",
       "away": "DNK",
@@ -336,38 +208,6 @@
       "away": "CMR",
       "winner": "JPN",
       "score": "1-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-19",
-      "home": "NLD",
-      "away": "JPN",
-      "winner": "",
-      "score": "1-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-19",
-      "home": "CMR",
-      "away": "DNK",
-      "winner": "",
-      "score": "1-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-24",
-      "home": "DNK",
-      "away": "JPN",
-      "winner": "JPN",
-      "score": "1-3",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-24",
-      "home": "CMR",
-      "away": "NLD",
-      "winner": "NLD",
-      "score": "1-2",
       "stage": "Group Stage"
     },
     {
@@ -387,38 +227,6 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2010-06-20",
-      "home": "SVK",
-      "away": "PRY",
-      "winner": "",
-      "score": "0-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-20",
-      "home": "ITA",
-      "away": "NZL",
-      "winner": "",
-      "score": "1-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-24",
-      "home": "SVK",
-      "away": "ITA",
-      "winner": "SVK",
-      "score": "3-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-24",
-      "home": "PRY",
-      "away": "NZL",
-      "winner": "",
-      "score": "0-0",
-      "stage": "Group Stage"
-    },
-    {
       "date": "2010-06-15",
       "home": "CIV",
       "away": "PRT",
@@ -435,34 +243,10 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2010-06-20",
-      "home": "BRA",
-      "away": "CIV",
-      "winner": "BRA",
-      "score": "3-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-21",
-      "home": "PRT",
-      "away": "PRK",
-      "winner": "PRT",
-      "score": "7-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-25",
-      "home": "PRT",
-      "away": "BRA",
-      "winner": "",
-      "score": "0-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2010-06-25",
-      "home": "PRK",
-      "away": "CIV",
-      "winner": "",
+      "date": "2010-06-16",
+      "home": "ZAF",
+      "away": "URY",
+      "winner": "URY",
       "score": "0-3",
       "stage": "Group Stage"
     },
@@ -483,6 +267,110 @@
       "stage": "Group Stage"
     },
     {
+      "date": "2010-06-17",
+      "home": "FRA",
+      "away": "MEX",
+      "winner": "MEX",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-17",
+      "home": "ARG",
+      "away": "KOR",
+      "winner": "",
+      "score": "4-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-17",
+      "home": "GRC",
+      "away": "NGA",
+      "winner": "",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-18",
+      "home": "SVN",
+      "away": "USA",
+      "winner": "",
+      "score": "2-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-18",
+      "home": "ENG",
+      "away": "DZA",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-18",
+      "home": "DEU",
+      "away": "SRB",
+      "winner": "",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-19",
+      "home": "GHA",
+      "away": "AUS",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-19",
+      "home": "NLD",
+      "away": "JPN",
+      "winner": "",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-19",
+      "home": "CMR",
+      "away": "DNK",
+      "winner": "",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-20",
+      "home": "SVK",
+      "away": "PRY",
+      "winner": "",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-20",
+      "home": "ITA",
+      "away": "NZL",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-20",
+      "home": "BRA",
+      "away": "CIV",
+      "winner": "BRA",
+      "score": "3-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-21",
+      "home": "PRT",
+      "away": "PRK",
+      "winner": "PRT",
+      "score": "7-0",
+      "stage": "Group Stage"
+    },
+    {
       "date": "2010-06-21",
       "home": "CHL",
       "away": "CHE",
@@ -496,6 +384,126 @@
       "away": "HND",
       "winner": "ESP",
       "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-22",
+      "home": "MEX",
+      "away": "URY",
+      "winner": "",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-22",
+      "home": "FRA",
+      "away": "ZAF",
+      "winner": "",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-22",
+      "home": "NGA",
+      "away": "KOR",
+      "winner": "",
+      "score": "2-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-22",
+      "home": "GRC",
+      "away": "ARG",
+      "winner": "ARG",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-23",
+      "home": "USA",
+      "away": "DZA",
+      "winner": "USA",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-23",
+      "home": "SVN",
+      "away": "ENG",
+      "winner": "ENG",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-23",
+      "home": "AUS",
+      "away": "SRB",
+      "winner": "",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-23",
+      "home": "GHA",
+      "away": "DEU",
+      "winner": "",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-24",
+      "home": "DNK",
+      "away": "JPN",
+      "winner": "JPN",
+      "score": "1-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-24",
+      "home": "CMR",
+      "away": "NLD",
+      "winner": "NLD",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-24",
+      "home": "SVK",
+      "away": "ITA",
+      "winner": "SVK",
+      "score": "3-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-24",
+      "home": "PRY",
+      "away": "NZL",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-24",
+      "home": "PRY",
+      "away": "NZL",
+      "winner": "PRY",
+      "score": "Group Standings",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-25",
+      "home": "PRT",
+      "away": "BRA",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2010-06-25",
+      "home": "PRK",
+      "away": "CIV",
+      "winner": "",
+      "score": "0-3",
       "stage": "Group Stage"
     },
     {
@@ -641,14 +649,6 @@
       "winner": "ESP",
       "score": "0-1 (aet)",
       "stage": "Final"
-    },
-    {
-      "date": "2010-06-24",
-      "home": "PRY",
-      "away": "NZL",
-      "winner": "PRY",
-      "score": "Group Standings",
-      "stage": "Group Stage"
     }
   ]
 }

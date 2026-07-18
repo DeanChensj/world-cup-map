@@ -38,7 +38,7 @@
     },
     "CRI": {
       "name": "Costa Rica",
-      "color": "#CBD5E0"
+      "color": "#991b1b"
     },
     "HRV": {
       "name": "Croatia",
@@ -74,7 +74,7 @@
     },
     "HND": {
       "name": "Honduras",
-      "color": "#9B2C2C"
+      "color": "#0284c7"
     },
     "IRN": {
       "name": "Iran",
@@ -147,38 +147,6 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2014-06-17",
-      "home": "BRA",
-      "away": "MEX",
-      "winner": "",
-      "score": "0-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-18",
-      "home": "CMR",
-      "away": "HRV",
-      "winner": "",
-      "score": "0-4",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-23",
-      "home": "CMR",
-      "away": "BRA",
-      "winner": "BRA",
-      "score": "1-4",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-23",
-      "home": "HRV",
-      "away": "MEX",
-      "winner": "MEX",
-      "score": "1-3",
-      "stage": "Group Stage"
-    },
-    {
       "date": "2014-06-13",
       "home": "ESP",
       "away": "NLD",
@@ -195,38 +163,6 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2014-06-18",
-      "home": "AUS",
-      "away": "NLD",
-      "winner": "NLD",
-      "score": "2-3",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-18",
-      "home": "ESP",
-      "away": "CHL",
-      "winner": "CHL",
-      "score": "0-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-23",
-      "home": "AUS",
-      "away": "ESP",
-      "winner": "",
-      "score": "0-3",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-23",
-      "home": "NLD",
-      "away": "CHL",
-      "winner": "",
-      "score": "2-0",
-      "stage": "Group Stage"
-    },
-    {
       "date": "2014-06-14",
       "home": "COL",
       "away": "GRC",
@@ -239,38 +175,6 @@
       "home": "CIV",
       "away": "JPN",
       "winner": "",
-      "score": "2-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-19",
-      "home": "COL",
-      "away": "CIV",
-      "winner": "COL",
-      "score": "2-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-19",
-      "home": "JPN",
-      "away": "GRC",
-      "winner": "",
-      "score": "0-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-24",
-      "home": "JPN",
-      "away": "COL",
-      "winner": "COL",
-      "score": "1-4",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-24",
-      "home": "GRC",
-      "away": "CIV",
-      "winner": "GRC",
       "score": "2-1",
       "stage": "Group Stage"
     },
@@ -291,38 +195,6 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2014-06-19",
-      "home": "URY",
-      "away": "ENG",
-      "winner": "URY",
-      "score": "2-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-20",
-      "home": "ITA",
-      "away": "CRI",
-      "winner": "CRI",
-      "score": "0-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-24",
-      "home": "ITA",
-      "away": "URY",
-      "winner": "URY",
-      "score": "0-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-24",
-      "home": "CRI",
-      "away": "ENG",
-      "winner": "",
-      "score": "0-0",
-      "stage": "Group Stage"
-    },
-    {
       "date": "2014-06-15",
       "home": "CHE",
       "away": "ECU",
@@ -336,38 +208,6 @@
       "away": "HND",
       "winner": "FRA",
       "score": "3-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-20",
-      "home": "CHE",
-      "away": "FRA",
-      "winner": "",
-      "score": "2-5",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-20",
-      "home": "HND",
-      "away": "ECU",
-      "winner": "",
-      "score": "1-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-25",
-      "home": "HND",
-      "away": "CHE",
-      "winner": "CHE",
-      "score": "0-3",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-25",
-      "home": "ECU",
-      "away": "FRA",
-      "winner": "",
-      "score": "0-0",
       "stage": "Group Stage"
     },
     {
@@ -387,38 +227,6 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2014-06-21",
-      "home": "ARG",
-      "away": "IRN",
-      "winner": "ARG",
-      "score": "1-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-21",
-      "home": "NGA",
-      "away": "BIH",
-      "winner": "NGA",
-      "score": "1-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-25",
-      "home": "NGA",
-      "away": "ARG",
-      "winner": "",
-      "score": "2-3",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-25",
-      "home": "BIH",
-      "away": "IRN",
-      "winner": "",
-      "score": "3-1",
-      "stage": "Group Stage"
-    },
-    {
       "date": "2014-06-16",
       "home": "DEU",
       "away": "PRT",
@@ -435,35 +243,11 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2014-06-21",
-      "home": "DEU",
-      "away": "GHA",
+      "date": "2014-06-17",
+      "home": "BRA",
+      "away": "MEX",
       "winner": "",
-      "score": "2-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-22",
-      "home": "USA",
-      "away": "PRT",
-      "winner": "",
-      "score": "2-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-26",
-      "home": "USA",
-      "away": "DEU",
-      "winner": "",
-      "score": "0-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2014-06-26",
-      "home": "PRT",
-      "away": "GHA",
-      "winner": "",
-      "score": "2-1",
+      "score": "0-0",
       "stage": "Group Stage"
     },
     {
@@ -483,6 +267,110 @@
       "stage": "Group Stage"
     },
     {
+      "date": "2014-06-18",
+      "home": "CMR",
+      "away": "HRV",
+      "winner": "",
+      "score": "0-4",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-18",
+      "home": "AUS",
+      "away": "NLD",
+      "winner": "NLD",
+      "score": "2-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-18",
+      "home": "ESP",
+      "away": "CHL",
+      "winner": "CHL",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-19",
+      "home": "COL",
+      "away": "CIV",
+      "winner": "COL",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-19",
+      "home": "JPN",
+      "away": "GRC",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-19",
+      "home": "URY",
+      "away": "ENG",
+      "winner": "URY",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-20",
+      "home": "ITA",
+      "away": "CRI",
+      "winner": "CRI",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-20",
+      "home": "CHE",
+      "away": "FRA",
+      "winner": "",
+      "score": "2-5",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-20",
+      "home": "HND",
+      "away": "ECU",
+      "winner": "",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-21",
+      "home": "ARG",
+      "away": "IRN",
+      "winner": "ARG",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-21",
+      "home": "NGA",
+      "away": "BIH",
+      "winner": "NGA",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-21",
+      "home": "DEU",
+      "away": "GHA",
+      "winner": "",
+      "score": "2-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-22",
+      "home": "USA",
+      "away": "PRT",
+      "winner": "",
+      "score": "2-2",
+      "stage": "Group Stage"
+    },
+    {
       "date": "2014-06-22",
       "home": "BEL",
       "away": "RUS",
@@ -496,6 +384,118 @@
       "away": "DZA",
       "winner": "DZA",
       "score": "2-4",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-23",
+      "home": "CMR",
+      "away": "BRA",
+      "winner": "BRA",
+      "score": "1-4",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-23",
+      "home": "HRV",
+      "away": "MEX",
+      "winner": "MEX",
+      "score": "1-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-23",
+      "home": "AUS",
+      "away": "ESP",
+      "winner": "",
+      "score": "0-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-23",
+      "home": "NLD",
+      "away": "CHL",
+      "winner": "",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-24",
+      "home": "JPN",
+      "away": "COL",
+      "winner": "COL",
+      "score": "1-4",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-24",
+      "home": "GRC",
+      "away": "CIV",
+      "winner": "GRC",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-24",
+      "home": "ITA",
+      "away": "URY",
+      "winner": "URY",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-24",
+      "home": "CRI",
+      "away": "ENG",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-25",
+      "home": "HND",
+      "away": "CHE",
+      "winner": "CHE",
+      "score": "0-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-25",
+      "home": "ECU",
+      "away": "FRA",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-25",
+      "home": "NGA",
+      "away": "ARG",
+      "winner": "",
+      "score": "2-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-25",
+      "home": "BIH",
+      "away": "IRN",
+      "winner": "",
+      "score": "3-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-26",
+      "home": "USA",
+      "away": "DEU",
+      "winner": "",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2014-06-26",
+      "home": "PRT",
+      "away": "GHA",
+      "winner": "",
+      "score": "2-1",
       "stage": "Group Stage"
     },
     {

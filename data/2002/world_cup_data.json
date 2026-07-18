@@ -22,7 +22,7 @@
     },
     "CRI": {
       "name": "Costa Rica",
-      "color": "#DD6B20"
+      "color": "#991b1b"
     },
     "HRV": {
       "name": "Croatia",
@@ -147,6 +147,126 @@
       "stage": "Group Stage"
     },
     {
+      "date": "2002-06-01",
+      "home": "IRL",
+      "away": "CMR",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-01",
+      "home": "DEU",
+      "away": "SAU",
+      "winner": "DEU",
+      "score": "8-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-02",
+      "home": "PRY",
+      "away": "ZAF",
+      "winner": "",
+      "score": "2-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-02",
+      "home": "ESP",
+      "away": "SVN",
+      "winner": "ESP",
+      "score": "3-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-02",
+      "home": "ENG",
+      "away": "SWE",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-02",
+      "home": "ARG",
+      "away": "NGA",
+      "winner": "",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-03",
+      "home": "BRA",
+      "away": "TUR",
+      "winner": "",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-03",
+      "home": "HRV",
+      "away": "MEX",
+      "winner": "MEX",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-03",
+      "home": "ITA",
+      "away": "ECU",
+      "winner": "ITA",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-04",
+      "home": "CHN",
+      "away": "CRI",
+      "winner": "",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-04",
+      "home": "KOR",
+      "away": "POL",
+      "winner": "KOR",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-04",
+      "home": "JPN",
+      "away": "BEL",
+      "winner": "",
+      "score": "2-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-05",
+      "home": "USA",
+      "away": "PRT",
+      "winner": "USA",
+      "score": "3-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-05",
+      "home": "DEU",
+      "away": "IRL",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-05",
+      "home": "RUS",
+      "away": "TUN",
+      "winner": "",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
       "date": "2002-06-06",
       "home": "FRA",
       "away": "URY",
@@ -158,6 +278,110 @@
       "date": "2002-06-06",
       "home": "DNK",
       "away": "SEN",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-06",
+      "home": "CMR",
+      "away": "SAU",
+      "winner": "",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-07",
+      "home": "ESP",
+      "away": "PRY",
+      "winner": "",
+      "score": "3-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-07",
+      "home": "SWE",
+      "away": "NGA",
+      "winner": "SWE",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-07",
+      "home": "ARG",
+      "away": "ENG",
+      "winner": "ENG",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-08",
+      "home": "ZAF",
+      "away": "SVN",
+      "winner": "",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-08",
+      "home": "BRA",
+      "away": "CHN",
+      "winner": "BRA",
+      "score": "4-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-08",
+      "home": "ITA",
+      "away": "HRV",
+      "winner": "",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-09",
+      "home": "CRI",
+      "away": "TUR",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-09",
+      "home": "MEX",
+      "away": "ECU",
+      "winner": "MEX",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-09",
+      "home": "JPN",
+      "away": "RUS",
+      "winner": "JPN",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-10",
+      "home": "KOR",
+      "away": "USA",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-10",
+      "home": "PRT",
+      "away": "POL",
+      "winner": "",
+      "score": "4-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-10",
+      "home": "TUN",
+      "away": "BEL",
       "winner": "",
       "score": "1-1",
       "stage": "Group Stage"
@@ -179,35 +403,19 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2002-06-02",
-      "home": "PRY",
-      "away": "ZAF",
-      "winner": "",
-      "score": "2-2",
+      "date": "2002-06-11",
+      "home": "CMR",
+      "away": "DEU",
+      "winner": "DEU",
+      "score": "0-2",
       "stage": "Group Stage"
     },
     {
-      "date": "2002-06-02",
-      "home": "ESP",
-      "away": "SVN",
-      "winner": "ESP",
-      "score": "3-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-07",
-      "home": "ESP",
-      "away": "PRY",
-      "winner": "",
-      "score": "3-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-08",
-      "home": "ZAF",
-      "away": "SVN",
-      "winner": "",
-      "score": "1-0",
+      "date": "2002-06-11",
+      "home": "SAU",
+      "away": "IRL",
+      "winner": "IRL",
+      "score": "0-3",
       "stage": "Group Stage"
     },
     {
@@ -227,35 +435,19 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2002-06-03",
-      "home": "BRA",
-      "away": "TUR",
-      "winner": "",
-      "score": "2-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-04",
-      "home": "CHN",
-      "away": "CRI",
-      "winner": "",
-      "score": "0-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-08",
-      "home": "BRA",
-      "away": "CHN",
-      "winner": "BRA",
-      "score": "4-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-09",
-      "home": "CRI",
-      "away": "TUR",
+      "date": "2002-06-12",
+      "home": "SWE",
+      "away": "ARG",
       "winner": "",
       "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2002-06-12",
+      "home": "NGA",
+      "away": "ENG",
+      "winner": "",
+      "score": "0-0",
       "stage": "Group Stage"
     },
     {
@@ -275,182 +467,6 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2002-06-04",
-      "home": "KOR",
-      "away": "POL",
-      "winner": "KOR",
-      "score": "2-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-05",
-      "home": "USA",
-      "away": "PRT",
-      "winner": "USA",
-      "score": "3-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-10",
-      "home": "KOR",
-      "away": "USA",
-      "winner": "",
-      "score": "1-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-10",
-      "home": "PRT",
-      "away": "POL",
-      "winner": "",
-      "score": "4-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-14",
-      "home": "PRT",
-      "away": "KOR",
-      "winner": "KOR",
-      "score": "0-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-14",
-      "home": "POL",
-      "away": "USA",
-      "winner": "",
-      "score": "3-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-01",
-      "home": "IRL",
-      "away": "CMR",
-      "winner": "",
-      "score": "1-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-01",
-      "home": "DEU",
-      "away": "SAU",
-      "winner": "DEU",
-      "score": "8-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-05",
-      "home": "DEU",
-      "away": "IRL",
-      "winner": "",
-      "score": "1-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-06",
-      "home": "CMR",
-      "away": "SAU",
-      "winner": "",
-      "score": "1-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-11",
-      "home": "CMR",
-      "away": "DEU",
-      "winner": "DEU",
-      "score": "0-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-11",
-      "home": "SAU",
-      "away": "IRL",
-      "winner": "IRL",
-      "score": "0-3",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-02",
-      "home": "ENG",
-      "away": "SWE",
-      "winner": "",
-      "score": "1-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-02",
-      "home": "ARG",
-      "away": "NGA",
-      "winner": "",
-      "score": "1-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-07",
-      "home": "SWE",
-      "away": "NGA",
-      "winner": "SWE",
-      "score": "2-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-07",
-      "home": "ARG",
-      "away": "ENG",
-      "winner": "ENG",
-      "score": "0-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-12",
-      "home": "SWE",
-      "away": "ARG",
-      "winner": "",
-      "score": "1-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-12",
-      "home": "NGA",
-      "away": "ENG",
-      "winner": "",
-      "score": "0-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-03",
-      "home": "HRV",
-      "away": "MEX",
-      "winner": "MEX",
-      "score": "0-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-03",
-      "home": "ITA",
-      "away": "ECU",
-      "winner": "ITA",
-      "score": "2-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-08",
-      "home": "ITA",
-      "away": "HRV",
-      "winner": "",
-      "score": "1-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-09",
-      "home": "MEX",
-      "away": "ECU",
-      "winner": "MEX",
-      "score": "2-1",
-      "stage": "Group Stage"
-    },
-    {
       "date": "2002-06-13",
       "home": "MEX",
       "away": "ITA",
@@ -467,35 +483,19 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2002-06-04",
-      "home": "JPN",
-      "away": "BEL",
-      "winner": "",
-      "score": "2-2",
+      "date": "2002-06-14",
+      "home": "PRT",
+      "away": "KOR",
+      "winner": "KOR",
+      "score": "0-1",
       "stage": "Group Stage"
     },
     {
-      "date": "2002-06-05",
-      "home": "RUS",
-      "away": "TUN",
+      "date": "2002-06-14",
+      "home": "POL",
+      "away": "USA",
       "winner": "",
-      "score": "2-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-09",
-      "home": "JPN",
-      "away": "RUS",
-      "winner": "JPN",
-      "score": "1-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2002-06-10",
-      "home": "TUN",
-      "away": "BEL",
-      "winner": "",
-      "score": "1-1",
+      "score": "3-1",
       "stage": "Group Stage"
     },
     {

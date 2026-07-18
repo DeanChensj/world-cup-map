@@ -26,7 +26,7 @@
     },
     "CRI": {
       "name": "Costa Rica",
-      "color": "#2B6CB0"
+      "color": "#991b1b"
     },
     "HRV": {
       "name": "Croatia",
@@ -147,38 +147,6 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2022-11-25",
-      "home": "QAT",
-      "away": "SEN",
-      "winner": "SEN",
-      "score": "1-3",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-25",
-      "home": "NLD",
-      "away": "ECU",
-      "winner": "",
-      "score": "1-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-29",
-      "home": "ECU",
-      "away": "SEN",
-      "winner": "SEN",
-      "score": "1-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-29",
-      "home": "NLD",
-      "away": "QAT",
-      "winner": "NLD",
-      "score": "2-0",
-      "stage": "Group Stage"
-    },
-    {
       "date": "2022-11-21",
       "home": "ENG",
       "away": "IRN",
@@ -195,38 +163,6 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2022-11-25",
-      "home": "WAL",
-      "away": "IRN",
-      "winner": "",
-      "score": "0-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-25",
-      "home": "ENG",
-      "away": "USA",
-      "winner": "",
-      "score": "0-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-29",
-      "home": "WAL",
-      "away": "ENG",
-      "winner": "ENG",
-      "score": "0-3",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-29",
-      "home": "IRN",
-      "away": "USA",
-      "winner": "USA",
-      "score": "0-1",
-      "stage": "Group Stage"
-    },
-    {
       "date": "2022-11-22",
       "home": "ARG",
       "away": "SAU",
@@ -238,6 +174,118 @@
       "date": "2022-11-22",
       "home": "MEX",
       "away": "POL",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-22",
+      "home": "DNK",
+      "away": "TUN",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-22",
+      "home": "FRA",
+      "away": "AUS",
+      "winner": "",
+      "score": "4-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-23",
+      "home": "DEU",
+      "away": "JPN",
+      "winner": "JPN",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-23",
+      "home": "ESP",
+      "away": "CRI",
+      "winner": "ESP",
+      "score": "7-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-23",
+      "home": "MAR",
+      "away": "HRV",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-23",
+      "home": "BEL",
+      "away": "CAN",
+      "winner": "",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-24",
+      "home": "CHE",
+      "away": "CMR",
+      "winner": "CHE",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-24",
+      "home": "BRA",
+      "away": "SRB",
+      "winner": "BRA",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-24",
+      "home": "URY",
+      "away": "KOR",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-24",
+      "home": "PRT",
+      "away": "GHA",
+      "winner": "PRT",
+      "score": "3-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-25",
+      "home": "QAT",
+      "away": "SEN",
+      "winner": "SEN",
+      "score": "1-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-25",
+      "home": "NLD",
+      "away": "ECU",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-25",
+      "home": "WAL",
+      "away": "IRN",
+      "winner": "",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-25",
+      "home": "ENG",
+      "away": "USA",
       "winner": "",
       "score": "0-0",
       "stage": "Group Stage"
@@ -259,38 +307,6 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2022-11-30",
-      "home": "POL",
-      "away": "ARG",
-      "winner": "",
-      "score": "0-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-30",
-      "home": "SAU",
-      "away": "MEX",
-      "winner": "",
-      "score": "1-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-22",
-      "home": "DNK",
-      "away": "TUN",
-      "winner": "",
-      "score": "0-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-22",
-      "home": "FRA",
-      "away": "AUS",
-      "winner": "",
-      "score": "4-1",
-      "stage": "Group Stage"
-    },
-    {
       "date": "2022-11-26",
       "home": "TUN",
       "away": "AUS",
@@ -304,38 +320,6 @@
       "away": "DNK",
       "winner": "FRA",
       "score": "2-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-30",
-      "home": "AUS",
-      "away": "DNK",
-      "winner": "AUS",
-      "score": "1-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-30",
-      "home": "TUN",
-      "away": "FRA",
-      "winner": "",
-      "score": "1-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-23",
-      "home": "DEU",
-      "away": "JPN",
-      "winner": "JPN",
-      "score": "1-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-23",
-      "home": "ESP",
-      "away": "CRI",
-      "winner": "ESP",
-      "score": "7-0",
       "stage": "Group Stage"
     },
     {
@@ -355,38 +339,6 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2022-12-01",
-      "home": "JPN",
-      "away": "ESP",
-      "winner": "",
-      "score": "2-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-12-01",
-      "home": "CRI",
-      "away": "DEU",
-      "winner": "",
-      "score": "2-4",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-23",
-      "home": "MAR",
-      "away": "HRV",
-      "winner": "",
-      "score": "0-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-23",
-      "home": "BEL",
-      "away": "CAN",
-      "winner": "",
-      "score": "1-0",
-      "stage": "Group Stage"
-    },
-    {
       "date": "2022-11-27",
       "home": "BEL",
       "away": "MAR",
@@ -400,38 +352,6 @@
       "away": "CAN",
       "winner": "HRV",
       "score": "4-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-12-01",
-      "home": "HRV",
-      "away": "BEL",
-      "winner": "",
-      "score": "0-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-12-01",
-      "home": "CAN",
-      "away": "MAR",
-      "winner": "MAR",
-      "score": "1-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-24",
-      "home": "CHE",
-      "away": "CMR",
-      "winner": "CHE",
-      "score": "1-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-24",
-      "home": "BRA",
-      "away": "SRB",
-      "winner": "BRA",
-      "score": "2-0",
       "stage": "Group Stage"
     },
     {
@@ -451,38 +371,6 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2022-12-02",
-      "home": "SRB",
-      "away": "CHE",
-      "winner": "CHE",
-      "score": "2-3",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-12-02",
-      "home": "CMR",
-      "away": "BRA",
-      "winner": "",
-      "score": "1-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-24",
-      "home": "URY",
-      "away": "KOR",
-      "winner": "",
-      "score": "0-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2022-11-24",
-      "home": "PRT",
-      "away": "GHA",
-      "winner": "PRT",
-      "score": "3-2",
-      "stage": "Group Stage"
-    },
-    {
       "date": "2022-11-28",
       "home": "KOR",
       "away": "GHA",
@@ -496,6 +384,118 @@
       "away": "URY",
       "winner": "PRT",
       "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-29",
+      "home": "ECU",
+      "away": "SEN",
+      "winner": "SEN",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-29",
+      "home": "NLD",
+      "away": "QAT",
+      "winner": "NLD",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-29",
+      "home": "WAL",
+      "away": "ENG",
+      "winner": "ENG",
+      "score": "0-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-29",
+      "home": "IRN",
+      "away": "USA",
+      "winner": "USA",
+      "score": "0-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-30",
+      "home": "POL",
+      "away": "ARG",
+      "winner": "",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-30",
+      "home": "SAU",
+      "away": "MEX",
+      "winner": "",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-30",
+      "home": "AUS",
+      "away": "DNK",
+      "winner": "AUS",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-11-30",
+      "home": "TUN",
+      "away": "FRA",
+      "winner": "",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-12-01",
+      "home": "JPN",
+      "away": "ESP",
+      "winner": "",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-12-01",
+      "home": "CRI",
+      "away": "DEU",
+      "winner": "",
+      "score": "2-4",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-12-01",
+      "home": "HRV",
+      "away": "BEL",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-12-01",
+      "home": "CAN",
+      "away": "MAR",
+      "winner": "MAR",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-12-02",
+      "home": "SRB",
+      "away": "CHE",
+      "winner": "CHE",
+      "score": "2-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2022-12-02",
+      "home": "CMR",
+      "away": "BRA",
+      "winner": "",
+      "score": "1-0",
       "stage": "Group Stage"
     },
     {

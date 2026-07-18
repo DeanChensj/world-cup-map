@@ -18,7 +18,7 @@
     },
     "CRI": {
       "name": "Costa Rica",
-      "color": "#38A169"
+      "color": "#991b1b"
     },
     "HRV": {
       "name": "Croatia",
@@ -110,11 +110,11 @@
     },
     "TGO": {
       "name": "Togo",
-      "color": "#2F855A"
+      "color": "#ca8a04"
     },
     "TTO": {
       "name": "Trinidad and Tobago",
-      "color": "#4299E1"
+      "color": "#991b1b"
     },
     "TUN": {
       "name": "Tunisia",
@@ -147,38 +147,6 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2006-06-14",
-      "home": "DEU",
-      "away": "POL",
-      "winner": "DEU",
-      "score": "1-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-15",
-      "home": "ECU",
-      "away": "CRI",
-      "winner": "ECU",
-      "score": "3-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-20",
-      "home": "ECU",
-      "away": "DEU",
-      "winner": "",
-      "score": "0-3",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-20",
-      "home": "CRI",
-      "away": "POL",
-      "winner": "",
-      "score": "1-2",
-      "stage": "Group Stage"
-    },
-    {
       "date": "2006-06-10",
       "home": "ENG",
       "away": "PRY",
@@ -192,38 +160,6 @@
       "away": "SWE",
       "winner": "",
       "score": "0-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-15",
-      "home": "ENG",
-      "away": "TTO",
-      "winner": "ENG",
-      "score": "2-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-15",
-      "home": "SWE",
-      "away": "PRY",
-      "winner": "SWE",
-      "score": "1-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-20",
-      "home": "SWE",
-      "away": "ENG",
-      "winner": "",
-      "score": "2-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-20",
-      "home": "PRY",
-      "away": "TTO",
-      "winner": "",
-      "score": "2-0",
       "stage": "Group Stage"
     },
     {
@@ -243,38 +179,6 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2006-06-16",
-      "home": "ARG",
-      "away": "SRB",
-      "winner": "ARG",
-      "score": "6-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-16",
-      "home": "NLD",
-      "away": "CIV",
-      "winner": "NLD",
-      "score": "2-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-21",
-      "home": "NLD",
-      "away": "ARG",
-      "winner": "",
-      "score": "0-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-21",
-      "home": "CIV",
-      "away": "SRB",
-      "winner": "",
-      "score": "3-2",
-      "stage": "Group Stage"
-    },
-    {
       "date": "2006-06-11",
       "home": "MEX",
       "away": "IRN",
@@ -288,38 +192,6 @@
       "away": "PRT",
       "winner": "PRT",
       "score": "0-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-16",
-      "home": "MEX",
-      "away": "AGO",
-      "winner": "",
-      "score": "0-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-17",
-      "home": "PRT",
-      "away": "IRN",
-      "winner": "PRT",
-      "score": "2-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-21",
-      "home": "PRT",
-      "away": "MEX",
-      "winner": "",
-      "score": "2-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-21",
-      "home": "IRN",
-      "away": "AGO",
-      "winner": "",
-      "score": "1-1",
       "stage": "Group Stage"
     },
     {
@@ -339,46 +211,6 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2006-06-17",
-      "home": "ITA",
-      "away": "USA",
-      "winner": "",
-      "score": "1-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-17",
-      "home": "CZE",
-      "away": "GHA",
-      "winner": "GHA",
-      "score": "0-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-22",
-      "home": "CZE",
-      "away": "ITA",
-      "winner": "ITA",
-      "score": "0-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-22",
-      "home": "GHA",
-      "away": "USA",
-      "winner": "GHA",
-      "score": "2-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-13",
-      "home": "BRA",
-      "away": "HRV",
-      "winner": "BRA",
-      "score": "1-0",
-      "stage": "Group Stage"
-    },
-    {
       "date": "2006-06-12",
       "home": "AUS",
       "away": "JPN",
@@ -387,35 +219,11 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2006-06-18",
+      "date": "2006-06-13",
       "home": "BRA",
-      "away": "AUS",
-      "winner": "",
-      "score": "2-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-18",
-      "home": "JPN",
       "away": "HRV",
-      "winner": "",
-      "score": "0-0",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-22",
-      "home": "JPN",
-      "away": "BRA",
       "winner": "BRA",
-      "score": "1-4",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-22",
-      "home": "HRV",
-      "away": "AUS",
-      "winner": "",
-      "score": "2-2",
+      "score": "1-0",
       "stage": "Group Stage"
     },
     {
@@ -435,35 +243,11 @@
       "stage": "Group Stage"
     },
     {
-      "date": "2006-06-18",
-      "home": "FRA",
-      "away": "KOR",
-      "winner": "",
-      "score": "1-1",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-19",
-      "home": "TGO",
-      "away": "CHE",
-      "winner": "CHE",
-      "score": "0-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-23",
-      "home": "TGO",
-      "away": "FRA",
-      "winner": "FRA",
-      "score": "0-2",
-      "stage": "Group Stage"
-    },
-    {
-      "date": "2006-06-23",
-      "home": "CHE",
-      "away": "KOR",
-      "winner": "CHE",
-      "score": "2-0",
+      "date": "2006-06-14",
+      "home": "DEU",
+      "away": "POL",
+      "winner": "DEU",
+      "score": "1-0",
       "stage": "Group Stage"
     },
     {
@@ -483,6 +267,110 @@
       "stage": "Group Stage"
     },
     {
+      "date": "2006-06-15",
+      "home": "ECU",
+      "away": "CRI",
+      "winner": "ECU",
+      "score": "3-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-15",
+      "home": "ENG",
+      "away": "TTO",
+      "winner": "ENG",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-15",
+      "home": "SWE",
+      "away": "PRY",
+      "winner": "SWE",
+      "score": "1-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-16",
+      "home": "ARG",
+      "away": "SRB",
+      "winner": "ARG",
+      "score": "6-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-16",
+      "home": "NLD",
+      "away": "CIV",
+      "winner": "NLD",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-16",
+      "home": "MEX",
+      "away": "AGO",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-17",
+      "home": "PRT",
+      "away": "IRN",
+      "winner": "PRT",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-17",
+      "home": "ITA",
+      "away": "USA",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-17",
+      "home": "CZE",
+      "away": "GHA",
+      "winner": "GHA",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-18",
+      "home": "BRA",
+      "away": "AUS",
+      "winner": "",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-18",
+      "home": "JPN",
+      "away": "HRV",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-18",
+      "home": "FRA",
+      "away": "KOR",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-19",
+      "home": "TGO",
+      "away": "CHE",
+      "winner": "CHE",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
       "date": "2006-06-19",
       "home": "ESP",
       "away": "TUN",
@@ -496,6 +384,118 @@
       "away": "UKR",
       "winner": "UKR",
       "score": "0-4",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-20",
+      "home": "ECU",
+      "away": "DEU",
+      "winner": "",
+      "score": "0-3",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-20",
+      "home": "CRI",
+      "away": "POL",
+      "winner": "",
+      "score": "1-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-20",
+      "home": "SWE",
+      "away": "ENG",
+      "winner": "",
+      "score": "2-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-20",
+      "home": "PRY",
+      "away": "TTO",
+      "winner": "",
+      "score": "2-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-21",
+      "home": "NLD",
+      "away": "ARG",
+      "winner": "",
+      "score": "0-0",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-21",
+      "home": "CIV",
+      "away": "SRB",
+      "winner": "",
+      "score": "3-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-21",
+      "home": "PRT",
+      "away": "MEX",
+      "winner": "",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-21",
+      "home": "IRN",
+      "away": "AGO",
+      "winner": "",
+      "score": "1-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-22",
+      "home": "CZE",
+      "away": "ITA",
+      "winner": "ITA",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-22",
+      "home": "GHA",
+      "away": "USA",
+      "winner": "GHA",
+      "score": "2-1",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-22",
+      "home": "JPN",
+      "away": "BRA",
+      "winner": "BRA",
+      "score": "1-4",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-22",
+      "home": "HRV",
+      "away": "AUS",
+      "winner": "",
+      "score": "2-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-23",
+      "home": "TGO",
+      "away": "FRA",
+      "winner": "FRA",
+      "score": "0-2",
+      "stage": "Group Stage"
+    },
+    {
+      "date": "2006-06-23",
+      "home": "CHE",
+      "away": "KOR",
+      "winner": "CHE",
+      "score": "2-0",
       "stage": "Group Stage"
     },
     {
