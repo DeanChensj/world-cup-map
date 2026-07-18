@@ -539,6 +539,14 @@
       document.body.removeChild(textArea);
     }
 
+    function getTeamName(code) {
+      return teamMetadata[code]?.name || code;
+    }
+
+    function isGroupStage(stage) {
+      return !stage || stage === "Group Stage" || stage.includes("Group");
+    }
+
     function getFlagImg(code) {
       const code2 = alpha3To2[code];
       if (!code2) return `<span class="w-5 h-3.5 bg-console-border inline-block rounded-sm"></span>`;
@@ -1432,78 +1440,73 @@
         statusLabel.className = "text-[10px] uppercase font-mono text-console-dimText";
       }
 
+    function renderLogCard(log) {
+      const isLatest = log.isLatest;
+      const matchIdx = log.matchIndex;
+      const isOverridden = log.isOverridden;
+
+      const borderStyle = isLatest
+        ? 'border-console-accent bg-console-accent/5 shadow-md shadow-console-accent/5'
+        : isOverridden
+          ? 'border-console-accent/40 bg-console-accent/2'
+          : 'border-console-border hover:border-console-accent/40';
+
+      let matchDetailHTML = '';
+      if (log.isGroupMatch) {
+        const homeName = getTeamName(log.home);
+        const awayName = getTeamName(log.away);
+        const winnerName = getTeamName(log.winnerCode);
+
+        matchDetailHTML = `
+          <div class="text-console-text font-semibold mt-0.5">
+            ${getFlagImg(log.home)} ${homeName} <span class="text-console-dimText font-normal">vs</span> ${awayName} ${getFlagImg(log.away)}
+          </div>
+          <div class="text-[10px] mt-0.5 flex items-center space-x-2">
+            <span class="text-console-accent font-bold">${winnerName} WIN</span>
+            <span class="text-console-dimText/70 text-[9px]">• Real: ${log.score}</span>
+          </div>
+        `;
+      } else {
+        matchDetailHTML = `
+          <div class="text-console-text font-semibold mt-0.5">
+            ${getFlagImg(log.winnerCode)} ${log.winner} <span class="text-console-dimText font-normal">annexed</span> ${getFlagImg(log.loserCode)} ${log.loser}
+          </div>
+          <div class="text-[10px] mt-0.5 flex items-center space-x-2">
+            <span class="text-console-accent font-bold">+${log.count} Sectors</span>
+          </div>
+        `;
+      }
+
+      return `
+        <div 
+          onclick="toggleMatchWinner(${matchIdx})"
+          title="Click to cycle match result (Sandbox Mode)"
+          class="mb-1.5 p-1.5 bg-console-bg border ${borderStyle} rounded-sm cursor-pointer transition flex items-center justify-between group"
+        >
+          <div class="text-[10px] font-mono leading-tight">
+            <div class="text-[9px] text-console-dimText flex items-center space-x-1">
+              <span>${log.date}</span>
+              <span>•</span>
+              <span>${log.stage}</span>
+              ${isOverridden ? '<span class="text-console-accent font-bold ml-1">[ALT]</span>' : ''}
+              ${isLatest ? '<span class="text-console-accent bg-console-accent/10 px-1 rounded ml-1 font-bold">LATEST</span>' : ''}
+            </div>
+            ${matchDetailHTML}
+          </div>
+          <div class="text-[10px] text-console-dimText group-hover:text-console-accent transition flex items-center space-x-1">
+            <i class="ph-bold ph-pencil-simple"></i>
+          </div>
+        </div>
+      `;
+    }
+
       // Update Terminal Log / Overrides list
       const logEl = document.getElementById("conquest-log");
       
       if (logs.length === 0) {
         logEl.innerHTML = `<div class="text-console-dimText italic text-[10px]">// Console ready. Awaiting tournament kickoff...</div>`;
       } else {
-        logEl.innerHTML = logs.map(log => {
-          const isLatest = log.isLatest;
-          const matchIdx = log.matchIndex;
-          const isOverridden = log.isOverridden;
-
-          if (log.isGroupMatch) {
-            const homeName = teamMetadata[log.home]?.name || log.home;
-            const awayName = teamMetadata[log.away]?.name || log.away;
-            const winnerName = teamMetadata[log.winnerCode]?.name || log.winnerCode;
-
-            return `
-              <div 
-                onclick="toggleMatchWinner(${matchIdx})"
-                title="Click to cycle match result (Sandbox Mode)"
-                class="mb-1.5 p-1.5 bg-console-bg border ${isLatest ? 'border-console-accent bg-console-accent/5 shadow-md shadow-console-accent/5' : isOverridden ? 'border-console-accent/40 bg-console-accent/2' : 'border-console-border hover:border-console-accent/40'} rounded-sm cursor-pointer transition flex items-center justify-between group"
-              >
-                <div class="text-[10px] font-mono leading-tight">
-                  <div class="text-[9px] text-console-dimText flex items-center space-x-1">
-                    <span>${log.date}</span>
-                    <span>•</span>
-                    <span>${log.stage}</span>
-                    ${isOverridden ? '<span class="text-console-accent font-bold ml-1">[ALT]</span>' : ''}
-                    ${isLatest ? '<span class="text-console-accent bg-console-accent/10 px-1 rounded ml-1 font-bold">LATEST</span>' : ''}
-                  </div>
-                  <div class="text-console-text font-semibold mt-0.5">
-                    ${getFlagImg(log.home)} ${homeName} <span class="text-console-dimText font-normal">vs</span> ${awayName} ${getFlagImg(log.away)}
-                  </div>
-                  <div class="text-[10px] mt-0.5 flex items-center space-x-2">
-                    <span class="text-console-accent font-bold">${winnerName} WIN</span>
-                    <span class="text-console-dimText/70 text-[9px]">• Real: ${log.score}</span>
-                  </div>
-                </div>
-                <div class="text-[10px] text-console-dimText group-hover:text-console-accent transition flex items-center space-x-1">
-                  <i class="ph-bold ph-pencil-simple"></i>
-                </div>
-              </div>
-            `;
-          }
-
-          return `
-            <div 
-              onclick="toggleMatchWinner(${matchIdx})"
-              title="Click to cycle match result (Sandbox Mode)"
-              class="mb-1.5 p-1.5 bg-console-bg border ${isLatest ? 'border-console-accent bg-console-accent/5 shadow-md shadow-console-accent/5' : isOverridden ? 'border-console-accent/40 bg-console-accent/2' : 'border-console-border hover:border-console-accent/40'} rounded-sm cursor-pointer transition flex items-center justify-between group"
-            >
-              <div class="text-[10px] font-mono leading-tight">
-                <div class="text-[9px] text-console-dimText flex items-center space-x-1">
-                  <span>${log.date}</span>
-                  <span>•</span>
-                  <span>${log.stage}</span>
-                  ${isOverridden ? '<span class="text-console-accent font-bold ml-1">[ALT]</span>' : ''}
-                  ${isLatest ? '<span class="text-console-accent bg-console-accent/10 px-1 rounded ml-1 font-bold">LATEST</span>' : ''}
-                </div>
-                <div class="text-console-text font-semibold mt-0.5">
-                  ${getFlagImg(log.winnerCode)} ${log.winner} <span class="text-console-dimText font-normal">annexed</span> ${getFlagImg(log.loserCode)} ${log.loser}
-                </div>
-                <div class="text-[10px] mt-0.5 flex items-center space-x-2">
-                  <span class="text-console-accent font-bold">+${log.count} Sectors</span>
-                </div>
-              </div>
-              <div class="text-[10px] text-console-dimText group-hover:text-console-accent transition flex items-center space-x-1">
-                <i class="ph-bold ph-pencil-simple"></i>
-              </div>
-            </div>
-          `;
-        }).join("");
+        logEl.innerHTML = logs.map(renderLogCard).join("");
       }
 
       // Update Campaign Mode HUD
