@@ -370,6 +370,7 @@
     var matches = [];
 
     var dates = [];
+    var timelineSteps = [];
     var currentMatchIndex = 0;
     var playbackInterval = null;
     var worldData = null;
@@ -499,9 +500,25 @@
       }
     }
 
-    let isSandboxAction = false;
-    let lastRenderedStepIndex = 0;
-    let lastVictoryStep = -1;
+    var isSandboxAction = false;
+    var currentStepIndex = 0;
+    var lastRenderedStepIndex = 0;
+    var lastVictoryStep = -1;
+
+    function jumpToMatchStep(matchIndex) {
+      const stepIdx = timelineSteps.findIndex(s => {
+        if (s.type === "group_day" && s.matches) {
+          return s.matches.some(m => m.originalIndex === matchIndex);
+        }
+        if (s.type === "knockout_match" && s.match) {
+          return s.match.originalIndex === matchIndex;
+        }
+        return false;
+      });
+      if (stepIdx !== -1) {
+        currentStepIndex = stepIdx;
+      }
+    }
 
     function setMatchWinner(matchIndex, winnerCode) {
       if (typeof audio !== "undefined" && audio.playMatchWin) audio.playMatchWin(); else audio.playClick();
@@ -513,6 +530,7 @@
       } else {
         userOverrides[matchIndex] = winnerCode;
       }
+      jumpToMatchStep(matchIndex);
       isSandboxAction = true;
       updateUI();
     }
@@ -523,12 +541,18 @@
       if (!match) return;
 
       const isGroupStage = (match.stage === "Group Stage" || match.stage.includes("Group"));
-      const homeCode = isGroupStage ? match.home : getCurrentOwner(match.home);
-      const awayCode = isGroupStage ? match.away : getCurrentOwner(match.away);
+      const homeEff = getEffectiveTeamCode(match.home);
+      const awayEff = getEffectiveTeamCode(match.away);
+
+      const slotHome = isGroupStage ? homeEff : (groupSlotReplacements[homeEff] || homeEff);
+      const slotAway = isGroupStage ? awayEff : (groupSlotReplacements[awayEff] || awayEff);
+
+      const homeCode = isGroupStage ? homeEff : getCurrentOwner(slotHome);
+      const awayCode = isGroupStage ? awayEff : getCurrentOwner(slotAway);
 
       let currentWinner = (userOverrides[matchIndex] !== undefined) ? userOverrides[matchIndex] : match.winner;
-      if (currentWinner === match.home) currentWinner = homeCode;
-      else if (currentWinner === match.away) currentWinner = awayCode;
+      if (currentWinner === match.home || currentWinner === homeEff) currentWinner = homeCode;
+      else if (currentWinner === match.away || currentWinner === awayEff) currentWinner = awayCode;
 
       if (isGroupStage) {
         if (currentWinner === homeCode) {
@@ -539,7 +563,6 @@
           userOverrides[matchIndex] = homeCode;
         }
       } else {
-        // Knockout Stage: strictly binary toggle between homeCode and awayCode
         if (currentWinner === homeCode) {
           userOverrides[matchIndex] = awayCode;
         } else {
@@ -547,6 +570,7 @@
         }
       }
 
+      jumpToMatchStep(matchIndex);
       isSandboxAction = true;
       updateUI();
     }
@@ -1183,15 +1207,15 @@
       }
 
       let rawWinner = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
-      let winnerCode = getEffectiveTeamCode(rawWinner);
+      let winnerCode = rawWinner ? getEffectiveTeamCode(rawWinner) : null;
       
       // Resolve static winner code (e.g. "ARG") to effective sovereign empire
       if (winnerCode === homeEffRaw) winnerCode = homeCode;
       else if (winnerCode === awayEffRaw) winnerCode = awayCode;
 
-      if (!winnerCode) return; // Skip draws in group stage
+      if (!isGroupStage && !winnerCode) return;
 
-      const loserCode = (winnerCode === homeCode) ? awayCode : homeCode;
+      const loserCode = winnerCode ? ((winnerCode === homeCode) ? awayCode : homeCode) : null;
 
       const dynamicScore = getEffectiveMatchScore(match, (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner);
 
@@ -1203,15 +1227,25 @@
         home: homeCode,
         away: awayCode,
         score: dynamicScore,
-        winner: getTeamName(winnerCode),
+        winner: winnerCode ? getTeamName(winnerCode) : null,
         winnerCode: winnerCode,
-        loser: getTeamName(loserCode),
+        loser: loserCode ? getTeamName(loserCode) : null,
         loserCode: loserCode,
-        isOverridden: (userOverrides[matchIdx] !== undefined),
-        isLatest: isLatestStep,
         isGroupMatch: isGroupStage,
-        count: 0
+        isAnnexation: !isGroupStage,
+        count: (isGroupStage || !loserCode) ? 0 : originalTeams.filter(t => getCurrentOwner(t) === loserCode).length,
+        isOverridden: (userOverrides[matchIdx] !== undefined),
+        isLatest: isLatestStep
       });
+
+      // Territory Annexation only in Knockout Stage
+      if (!isGroupStage && winnerCode && loserCode && countryLineage) {
+        originalTeams.forEach(origTeam => {
+          if (getCurrentOwner(origTeam) === loserCode) {
+            countryLineage[origTeam].push(winnerCode);
+          }
+        });
+      }
 
       // NO territory annexation in Group Stage!
       if (isGroupStage) {
@@ -1391,9 +1425,12 @@
       }
       
       // Update URL parameters to match selected edition
+      userOverrides = {};
+      Object.keys(teamSwaps).forEach(k => delete teamSwaps[k]);
       const url = new URL(window.location.href);
       url.searchParams.set("edition", edition);
-      url.searchParams.delete("alt"); // Clear overrides to prevent cross-pollution and crash bugs
+      url.searchParams.delete("alt");
+      url.searchParams.delete("swap");
       window.history.replaceState({}, "", url.toString());
       
       loadEdition(edition);
@@ -1856,28 +1893,34 @@
       const overlay = document.getElementById("clash-card-overlay");
       if (!overlay) return;
 
-      const matchIdx = match.originalIndex;
-      const isGroupStage = (match.stage === "Group Stage" || match.stage.includes("Group"));
+      const matchIdx = (match.originalIndex !== undefined) ? match.originalIndex : matches.indexOf(match);
+      const isGroupStage = (!match.stage || match.stage === "Group Stage" || match.stage.includes("Group"));
 
       let code1, code2, activeWinner;
+      const homeEff = getEffectiveTeamCode(match.home);
+      const awayEff = getEffectiveTeamCode(match.away);
 
-      if (latestLog && latestLog.matchIndex === matchIdx) {
+      if (latestLog && (latestLog.matchIndex === matchIdx || latestLog.matchIndex === matches.indexOf(match))) {
         code1 = latestLog.home;
         code2 = latestLog.away;
         activeWinner = latestLog.winnerCode;
       } else {
-        code1 = isGroupStage ? match.home : getCurrentOwner(match.home);
-        code2 = isGroupStage ? match.away : getCurrentOwner(match.away);
+        const slotHome = isGroupStage ? homeEff : (groupSlotReplacements[homeEff] || homeEff);
+        const slotAway = isGroupStage ? awayEff : (groupSlotReplacements[awayEff] || awayEff);
+
+        code1 = isGroupStage ? homeEff : getCurrentOwner(slotHome);
+        code2 = isGroupStage ? awayEff : getCurrentOwner(slotAway);
 
         if (!isGroupStage && code1 === code2) {
-          code1 = match.home;
-          code2 = match.away;
+          code1 = homeEff;
+          code2 = awayEff;
         }
 
         let rawWinner = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
-        if (rawWinner === match.home) rawWinner = code1;
-        else if (rawWinner === match.away) rawWinner = code2;
-        activeWinner = rawWinner;
+        let wCode = rawWinner ? getEffectiveTeamCode(rawWinner) : null;
+        if (wCode === homeEff || rawWinner === match.home) wCode = code1;
+        else if (wCode === awayEff || rawWinner === match.away) wCode = code2;
+        activeWinner = wCode;
       }
 
       const name1 = getTeamName(code1, teamMetadata[code1]?.name);
@@ -1943,7 +1986,8 @@
       } else if (step && step.type === "knockout_match") {
         currentDate = step.match.date;
         activeDayMatches = [step.match];
-        const latestLog = (logs.length > 0 && logs[0].matchIndex === step.match.originalIndex) ? logs[0] : null;
+        const mIdx = (step.match.originalIndex !== undefined) ? step.match.originalIndex : matches.indexOf(step.match);
+        const latestLog = (logs.length > 0 && (logs[0].matchIndex === mIdx || logs[0].matchIndex === matches.indexOf(step.match))) ? logs[0] : null;
 
         const homeEff = getEffectiveTeamCode(step.match.home);
         const awayEff = getEffectiveTeamCode(step.match.away);
@@ -1975,6 +2019,13 @@
       const latestAnnexation = (isForward && logs.length > 0 && logs[0].isAnnexation && logs[0].isLatest) ? logs[0] : null;
 
       lastRenderedStepIndex = currentStepIndex;
+
+      if (currentStepIndex === timelineSteps.length - 1 && isSandboxAction) {
+        if (typeof audio !== "undefined" && audio.playVictory) {
+          audio.playVictory();
+        }
+      }
+
       isSandboxAction = false; // Reset sandbox action flag
 
       // Stop any ongoing D3 transitions immediately if scrubbing or stepping backward
