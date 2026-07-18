@@ -1560,8 +1560,8 @@
       const stageName = (isKnockout && step.match) ? step.match.stage : "";
       const isR32 = isKnockout && stageName === "Round of 32";
       const isR16 = isKnockout && stageName === "Round of 16";
-      const isQF = isKnockout && stageName === "Quarterfinals";
-      const isSF = isKnockout && (stageName === "Semifinals" || stageName === "3rd Place Match") && !isFinal;
+      const isQF = isKnockout && (stageName.includes("Quarter"));
+      const isSF = isKnockout && (stageName.includes("Semi") || stageName.includes("third")) && !isFinal;
 
       bar.innerHTML = `
         <div class="flex items-center space-x-1 flex-wrap gap-y-1 py-0.5">
@@ -1592,13 +1592,14 @@
         const idx = timelineSteps.findIndex(s => s.type === 'knockout_match' && s.match.stage === 'Round of 16');
         currentStepIndex = idx !== -1 ? idx : 0;
       } else if (stage === 'qf') {
-        const idx = timelineSteps.findIndex(s => s.type === 'knockout_match' && s.match.stage === 'Quarterfinals');
+        const idx = timelineSteps.findIndex(s => s.type === 'knockout_match' && s.match.stage.includes('Quarter'));
         currentStepIndex = idx !== -1 ? idx : 0;
       } else if (stage === 'sf') {
-        const idx = timelineSteps.findIndex(s => s.type === 'knockout_match' && s.match.stage === 'Semifinals');
+        const idx = timelineSteps.findIndex(s => s.type === 'knockout_match' && s.match.stage.includes('Semi'));
         currentStepIndex = idx !== -1 ? idx : 0;
       } else if (stage === 'final') {
-        currentStepIndex = timelineSteps.length - 1;
+        const idx = timelineSteps.findIndex(s => s.type === 'knockout_match' && s.match.stage === 'Final');
+        currentStepIndex = idx !== -1 ? idx : timelineSteps.length - 1;
       }
       updateUI();
     }
