@@ -100,15 +100,15 @@
     <div class="flex items-center space-x-2 md:space-x-4 lg:space-x-6">
       <div class="flex items-center space-x-1 md:space-x-2">
         <span class="hidden sm:inline text-[9px] uppercase font-mono text-console-dimText">Edition:</span>
-        <select id="edition-select" onchange="switchEdition(this.value)" class="bg-console-bg border border-console-border text-console-text font-mono text-[10px] font-bold rounded px-1.5 py-0.5 md:px-2 md:py-1 focus:outline-none focus:border-console-accent transition cursor-pointer">
-          <option value="2026" selected>2026 USA/MEX/CAN</option>
-          <option value="2022">2022 QATAR</option>
-          <option value="2018">2018 RUSSIA</option>
-          <option value="2014">2014 BRAZIL</option>
-          <option value="2010">2010 SOUTH AFRICA</option>
-          <option value="2006">2006 GERMANY</option>
-          <option value="2002">2002 KOREA/JAPAN</option>
-          <option value="1998">1998 FRANCE</option>
+        <select id="edition-select" onchange="switchEdition(this.value)" class="bg-console-panel border border-amber-500/50 hover:border-amber-400 text-amber-400 font-mono text-[10px] sm:text-xs font-bold rounded-md px-2 py-1 shadow-[0_0_12px_rgba(245,158,11,0.2)] focus:outline-none focus:ring-1 focus:ring-amber-400 transition cursor-pointer">
+          <option value="2026" selected class="bg-console-panel text-white">2026 USA/MEX/CAN ▾</option>
+          <option value="2022" class="bg-console-panel text-white">2022 QATAR ▾</option>
+          <option value="2018" class="bg-console-panel text-white">2018 RUSSIA ▾</option>
+          <option value="2014" class="bg-console-panel text-white">2014 BRAZIL ▾</option>
+          <option value="2010" class="bg-console-panel text-white">2010 SOUTH AFRICA ▾</option>
+          <option value="2006" class="bg-console-panel text-white">2006 GERMANY ▾</option>
+          <option value="2002" class="bg-console-panel text-white">2002 KOREA/JAPAN ▾</option>
+          <option value="1998" class="bg-console-panel text-white">1998 FRANCE ▾</option>
         </select>
       </div>
       <!-- Theme Toggle -->
@@ -266,39 +266,7 @@
       <div id="map-container" class="w-full h-full flex items-center justify-center relative">
         <svg id="world-map" class="w-full h-full drop-shadow-2xl"></svg>
         
-        <!-- Collapsible Legend Overlay -->
-        <div id="legend-overlay" class="absolute bottom-4 left-4 bg-console-panel/95 border border-console-border p-3 rounded font-mono text-[10px] text-console-dimText space-y-1.5 backdrop-blur-md shadow-2xl z-30 hidden sm:block">
-          <div class="flex items-center space-x-2">
-            <span class="w-2.5 h-2.5 bg-console-accent/25 border border-console-accent rounded-sm"></span>
-            <span class="text-console-text">Active Factions</span>
-          </div>
-          <div class="flex items-center space-x-2">
-            <span class="w-2.5 h-2.5 bg-[#1e2430] border border-console-border rounded-sm"></span>
-            <span>Independent / Eliminated</span>
-          </div>
-          <!-- Quick Configs inside Legend on Mobile -->
-          <div class="flex items-center space-x-2 pt-1.5 border-t border-console-border/40 sm:hidden">
-            <button onclick="toggleTheme()" class="text-console-accent hover:text-console-accentHover flex items-center space-x-1 cursor-pointer">
-              <i id="legend-theme-icon" class="ph-bold ph-sun text-xs"></i>
-              <span>THEME</span>
-            </button>
-            <span class="text-console-border/40">|</span>
-            <button onclick="toggleAudio()" class="text-console-accent hover:text-console-accentHover flex items-center space-x-1 cursor-pointer">
-              <i id="legend-audio-icon" class="ph-bold ph-speaker-high text-xs"></i>
-              <span>SFX</span>
-            </button>
-          </div>
-        </div>
 
-        <!-- Floating "?" icon button to toggle Legend on mobile -->
-        <button id="btn-legend-toggle" onclick="toggleMobileLegend()" class="sm:hidden absolute bottom-4 left-4 w-8 h-8 bg-console-panel border border-console-border hover:border-console-accent text-console-accent flex items-center justify-center rounded-full shadow-2xl z-30 cursor-pointer">
-          <i class="ph-bold ph-question text-sm"></i>
-        </button>
-
-        <!-- Floating Mobile Match Carousel Overlay -->
-        <div id="mobile-match-carousel" class="sm:hidden absolute bottom-4 right-4 left-16 flex items-center space-x-2 overflow-x-auto py-1 pr-2 pointer-events-auto z-20">
-          <!-- Populated dynamically via JS -->
-        </div>
 
         <!-- Custom Tooltip (Anti-slop style) -->
         <div id="tooltip" class="absolute hidden bg-console-panel border border-console-border text-console-text text-xs rounded-sm p-3 pointer-events-none shadow-2xl z-50 font-mono space-y-1 backdrop-blur-md max-w-sm">
