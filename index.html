@@ -740,11 +740,18 @@
           if (!hasPassedGroupStage) {
             hasPassedGroupStage = true;
             // Group Stage Elimination Annexation:
+            // Annex each eliminated team to the top advancing team from its own group
             originalTeams.forEach(team => {
               if (!advancingTeams.has(team)) {
-                const suzerain = Array.from(advancingTeams)[0];
-                if (suzerain && countryLineage[team]) {
-                  countryLineage[team].push(suzerain);
+                const groupMatches = matches.filter(m => 
+                  (m.stage === "Group Stage" || m.stage.includes("Group")) && 
+                  (m.home === team || m.away === team)
+                );
+                const groupOpponents = Array.from(new Set(groupMatches.flatMap(m => [m.home, m.away]))).filter(t => t !== team);
+                const groupAdvancer = groupOpponents.find(t => advancingTeams.has(t)) || Array.from(advancingTeams)[0];
+                
+                if (groupAdvancer && countryLineage[team]) {
+                  countryLineage[team].push(groupAdvancer);
                 }
               }
             });
@@ -1638,39 +1645,23 @@
 
     function renderStageJumpBar() {
       const bar = document.getElementById("stage-jump-bar");
-      if (!matches || matches.length === 0 || !bar) return;
+      if (!timelineSteps || timelineSteps.length === 0 || !bar) return;
 
-      const stageMap = {};
-      matches.forEach((m, idx) => {
-        let key = m.stage;
-        if (key.includes("Group")) key = "Group Stage";
-        if (stageMap[key] === undefined) {
-          stageMap[key] = idx + 1;
-        }
-      });
+      const step = timelineSteps[currentStepIndex] || timelineSteps[0];
+      const isKickoff = currentStepIndex === 0;
+      const isGroup = step && step.type === "group_day";
+      const isKnockout = step && step.type === "knockout_match";
+      const isFinal = currentStepIndex === timelineSteps.length - 1;
 
-      const stageLabels = {
-        "Group Stage": "GROUP",
-        "Round of 16": "R16",
-        "Quarterfinal": "QUARTER",
-        "Semifinal": "SEMI",
-        "Third-Place Match": "3RD PLACE",
-        "Final": "FINAL"
-      };
-
-      bar.innerHTML = Object.entries(stageMap).map(([stage, matchIdx]) => {
-        const label = stageLabels[stage] || stage.toUpperCase();
-        const isActive = (currentMatchIndex >= matchIdx);
-        return `
-          <button 
-            onclick="jumpToMatchIndex(${matchIdx})" 
-            title="Jump to ${stage}"
-            class="px-1.5 py-0.5 rounded transition cursor-pointer font-mono text-[9px] ${isActive ? 'text-console-accent font-bold bg-console-accent/10 border border-console-accent/30' : 'hover:text-console-text text-console-dimText'}"
-          >
-            • ${label}
-          </button>
-        `;
-      }).join("");
+      bar.innerHTML = `
+        <div class="flex items-center space-x-1.5 py-0.5">
+          <button onclick="jumpToStage('kickoff')" class="px-2 py-0.5 ${isKickoff ? 'bg-console-accent text-console-bg font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-accent text-console-accent'} rounded-sm transition cursor-pointer">⚽ 开幕 KICKOFF</button>
+          <button onclick="jumpToStage('group')" class="px-2 py-0.5 ${isGroup && !isKickoff ? 'bg-console-accent text-console-bg font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-accent text-console-text'} rounded-sm transition cursor-pointer">📅 小组赛 (17天)</button>
+          <button onclick="jumpToStage('r32')" class="px-2 py-0.5 ${isKnockout && !isFinal ? 'bg-console-red text-console-text font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-red text-console-red'} rounded-sm transition cursor-pointer">⚔️ 淘汰赛 (32强)</button>
+          <button onclick="jumpToStage('final')" class="px-2 py-0.5 ${isFinal ? 'bg-console-yellow text-console-bg font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-yellow text-console-yellow'} rounded-sm transition cursor-pointer">👑 决胜夜 FINAL</button>
+        </div>
+        <span class="text-console-dimText text-[9px] hidden md:inline">${isGroup ? '小组赛 0 领土吞并 (48 国初始版图)' : '淘汰赛单败领土实时割据'}</span>
+      `;
     }
 
     function jumpToStage(stage) {
