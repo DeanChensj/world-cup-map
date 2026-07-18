@@ -758,7 +758,7 @@
     }
 
     function loadEdition(edition) {
-      d3.json(`data/${edition}/world_cup_data.json`).then(wcData => {
+      d3.json(`data/${edition}/world_cup_data.json?v=${Date.now()}`).then(wcData => {
         teamMetadata = wcData.teams;
         matches = wcData.matches;
         matches.forEach((m, idx) => m.originalIndex = idx);
