@@ -1118,6 +1118,10 @@
     // --- Interactive Linkage Highlight / Fade ---
     function highlightOwner(ownerCode) {
       d3.selectAll(".country")
+        .classed("suzerain-hover-highlight", d => {
+          const alpha3 = d.code || getWCCodeFromMap(d.properties ? d.properties.name : "", d.id);
+          return alpha3 && getCurrentOwner(alpha3) === ownerCode;
+        })
         .transition()
         .duration(200)
         .style("opacity", d => {
@@ -1130,6 +1134,7 @@
 
     function resetHighlight() {
       d3.selectAll(".country")
+        .classed("suzerain-hover-highlight", false)
         .transition()
         .duration(200)
         .style("opacity", 1.0);
