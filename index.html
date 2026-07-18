@@ -54,6 +54,7 @@
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
   <!-- Modular Application Scripts -->
+  <script src="js/i18n.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/iso-data.js"></script>
   <script src="js/campaign.js"></script>
@@ -101,7 +102,7 @@
     
     <div class="flex items-center space-x-2 md:space-x-4 lg:space-x-6">
       <div class="flex items-center space-x-1 md:space-x-2">
-        <span class="hidden sm:inline text-[9px] uppercase font-mono text-console-dimText">Edition:</span>
+        <span id="edition-label" class="hidden sm:inline text-[9px] uppercase font-mono text-console-dimText">Edition:</span>
         <select id="edition-select" onchange="switchEdition(this.value)" class="bg-console-panel border border-amber-500/50 hover:border-amber-400 text-amber-400 font-mono text-[10px] sm:text-xs font-bold rounded-md px-2 py-1 shadow-[0_0_12px_rgba(245,158,11,0.2)] focus:outline-none focus:ring-1 focus:ring-amber-400 transition cursor-pointer">
           <option value="2026" selected class="bg-console-panel text-white">2026 USA/MEX/CAN ▾</option>
           <option value="2022" class="bg-console-panel text-white">2022 QATAR ▾</option>
@@ -113,6 +114,11 @@
           <option value="1998" class="bg-console-panel text-white">1998 FRANCE ▾</option>
         </select>
       </div>
+      <!-- Language Toggle -->
+      <button id="btn-lang-toggle" onclick="toggleLanguage()" title="Switch Language (中文 / English)" class="flex bg-console-bg border border-console-border text-amber-400 hover:border-amber-400/60 px-2 py-1.5 rounded font-mono text-[9px] font-bold items-center space-x-1.5 transition cursor-pointer">
+        <i class="ph-bold ph-translate text-[10px]"></i>
+        <span id="lang-label">语言: 中文</span>
+      </button>
       <!-- Theme Toggle -->
       <button id="btn-theme-toggle" onclick="toggleTheme()" title="Switch Light / Dark Theme" class="hidden sm:flex bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-2 py-1.5 rounded font-mono text-[9px] font-bold items-center space-x-1.5 transition cursor-pointer">
         <i id="theme-icon" class="ph-bold ph-sun text-[10px]"></i>
@@ -1066,6 +1072,7 @@
       const urlEdition = params.get("edition");
       const defaultEdition = ["2026", "2022", "2018", "2014", "2010", "2006", "2002", "1998"].includes(urlEdition) ? urlEdition : "2026";
       document.getElementById("edition-select").value = defaultEdition;
+      updateLanguageUI();
       loadEdition(defaultEdition);
 
       // Resize listener for D3 projection
@@ -1152,14 +1159,15 @@
         return;
       }
 
-      const originalTeam = teamMetadata[alpha3]?.name || alpha3;
+      const originalTeam = getTeamName(alpha3, teamMetadata[alpha3]?.name);
       const lineageCodes = countryLineage[alpha3] || [alpha3];
       const currentOwnerCode = lineageCodes[lineageCodes.length - 1];
-      const currentOwner = teamMetadata[currentOwnerCode]?.name || currentOwnerCode;
+      const currentOwner = getTeamName(currentOwnerCode, teamMetadata[currentOwnerCode]?.name);
       const currentOwnerColor = teamMetadata[currentOwnerCode]?.color || "#00ff66";
-      const lineageTrail = lineageCodes.map(code => teamMetadata[code]?.name || code).join(" ➔ ");
+      const lineageTrail = lineageCodes.map(code => getTeamName(code, teamMetadata[code]?.name)).join(" ➔ ");
+      const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
       let content = `
-        <div class="text-[9px] text-console-dimText uppercase tracking-wider">Territory Details</div>
+        <div class="text-[9px] text-console-dimText uppercase tracking-wider">${isZh ? '领土详情' : 'Territory Details'}</div>
         <div class="flex items-center space-x-2 mt-1">
           ${getFlagImg(alpha3)}
           <span class="font-bold text-console-text font-sans text-sm">${originalTeam}</span>
@@ -1551,27 +1559,30 @@
           : 'border-console-border hover:border-console-accent/40';
 
       let matchDetailHTML = '';
-      if (log.isGroupMatch) {
-        const homeName = getTeamName(log.home);
-        const awayName = getTeamName(log.away);
-        const winnerName = getTeamName(log.winnerCode);
+      const homeName = getTeamName(log.home, teamMetadata[log.home]?.name);
+      const awayName = getTeamName(log.away, teamMetadata[log.away]?.name);
+      const winnerName = getTeamName(log.winnerCode, teamMetadata[log.winnerCode]?.name);
+      const loserName = getTeamName(log.loserCode, teamMetadata[log.loserCode]?.name);
+      const stageName = getStageName(log.stage);
+      const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
 
+      if (log.isGroupMatch) {
         matchDetailHTML = `
           <div class="text-console-text font-semibold mt-0.5">
             ${getFlagImg(log.home)} ${homeName} <span class="text-console-dimText font-normal">vs</span> ${awayName} ${getFlagImg(log.away)}
           </div>
           <div class="text-[10px] mt-0.5 flex items-center space-x-2">
-            <span class="text-console-accent font-bold">${winnerName} WIN</span>
-            <span class="text-console-dimText/70 text-[9px]">• Real: ${log.score}</span>
+            <span class="text-console-accent font-bold">${winnerName} ${isZh ? '胜' : 'WIN'}</span>
+            <span class="text-console-dimText/70 text-[9px]">• ${isZh ? '实际比分' : 'Real'}: ${log.score}</span>
           </div>
         `;
       } else {
         matchDetailHTML = `
           <div class="text-console-text font-semibold mt-0.5">
-            ${getFlagImg(log.winnerCode)} ${log.winner} <span class="text-console-dimText font-normal">annexed</span> ${getFlagImg(log.loserCode)} ${log.loser}
+            ${getFlagImg(log.winnerCode)} ${winnerName} <span class="text-console-dimText font-normal">${isZh ? '占领' : 'annexed'}</span> ${getFlagImg(log.loserCode)} ${loserName}
           </div>
           <div class="text-[10px] mt-0.5 flex items-center space-x-2">
-            <span class="text-console-accent font-bold">+${log.count} Sectors</span>
+            <span class="text-console-accent font-bold">+${log.count} ${isZh ? '版图' : 'Sectors'}</span>
             <span class="text-console-dimText/70 text-[9px]">• ${formatScoreDisplay(log.score)}</span>
           </div>
         `;
@@ -1587,9 +1598,9 @@
             <div class="text-[9px] text-console-dimText flex items-center space-x-1">
               <span>${log.date}</span>
               <span>•</span>
-              <span>${log.stage}</span>
+              <span>${stageName}</span>
               ${isOverridden ? '<span class="text-console-accent font-bold ml-1">[ALT]</span>' : ''}
-              ${isLatest ? '<span class="text-console-accent bg-console-accent/10 px-1 rounded ml-1 font-bold">LATEST</span>' : ''}
+              ${isLatest ? `<span class="text-console-accent bg-console-accent/10 px-1 rounded ml-1 font-bold">${isZh ? '最新' : 'LATEST'}</span>` : ''}
             </div>
             ${matchDetailHTML}
           </div>
@@ -2033,9 +2044,9 @@
         <div>
           <h2 class="text-sm font-bold font-sans text-white tracking-wide flex items-center space-x-2">
             <i class="ph-bold ph-flag-banner text-amber-400"></i>
-            <span>CAMPAIGN MODE: SELECT YOUR FACTION</span>
+            <span id="modal-faction-title">CAMPAIGN MODE: SELECT YOUR FACTION</span>
           </h2>
-          <p class="text-[9px] font-mono text-console-dimText mt-0.5">Choose your nation to lead global conquest across the 2026 World Cup map.</p>
+          <p id="modal-faction-sub" class="text-[9px] font-mono text-console-dimText mt-0.5">Choose your nation to lead global conquest across the 2026 World Cup map.</p>
         </div>
         <button onclick="closeFactionModal()" class="text-console-dimText hover:text-white transition font-mono text-base p-1 cursor-pointer">✕</button>
       </div>

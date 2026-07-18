@@ -7,7 +7,7 @@ function openFactionModal() {
 
   grid.innerHTML = originalTeams.map(code => {
     const team = teamMetadata[code];
-    const name = team?.name || code;
+    const name = (typeof getTeamName === "function") ? getTeamName(code, team?.name) : (team?.name || code);
     const isSelected = activeCampaignTeam === code;
 
     return `
@@ -43,7 +43,8 @@ function selectCampaignTeam(code) {
   if (centroids[code]) {
     focusMapOnTeams([code]);
   }
-  triggerAlert(`COMMANDER ASSIGNED TO ${teamMetadata[code]?.name || code}!`);
+  const teamName = (typeof getTeamName === "function") ? getTeamName(code, teamMetadata[code]?.name) : (teamMetadata[code]?.name || code);
+  triggerAlert(`COMMANDER ASSIGNED TO ${teamName.toUpperCase()}!`);
 }
 
 function updateCampaignHUD() {
@@ -51,12 +52,13 @@ function updateCampaignHUD() {
   const selectBtnText = document.getElementById("campaign-select-text");
   const bannerTitle = document.getElementById("hero-banner-title");
   const bannerContent = document.getElementById("hero-banner-content");
+  const t = (typeof I18N !== "undefined" && typeof currentLang !== "undefined") ? (I18N[currentLang] || I18N.en) : null;
 
   if (!activeCampaignTeam || !originalTeams.includes(activeCampaignTeam)) {
     if (hud) hud.classList.add("hidden");
-    if (selectBtnText) selectBtnText.innerText = "FACTION";
-    if (bannerTitle) bannerTitle.innerText = "SELECT CAMPAIGN FACTION";
-    if (bannerContent) bannerContent.innerHTML = `<span>Choose your nation to lead global conquest</span>`;
+    if (selectBtnText) selectBtnText.innerText = t ? t.factionHud : "FACTION HUD";
+    if (bannerTitle) bannerTitle.innerText = t ? t.selectFactionTitle : "SELECT CAMPAIGN FACTION";
+    if (bannerContent) bannerContent.innerHTML = `<span>${t ? t.selectFactionDesc : 'Choose your nation to lead global conquest'}</span>`;
     if (activeCampaignTeam && !originalTeams.includes(activeCampaignTeam) && typeof triggerAlert === "function") {
       const year = document.getElementById("header-year")?.innerText || "";
       triggerAlert(`${activeCampaignTeam} DID NOT QUALIFY FOR THE ${year} WORLD CUP`);
@@ -67,22 +69,24 @@ function updateCampaignHUD() {
   if (hud) hud.classList.remove("hidden");
   if (selectBtnText) selectBtnText.innerText = activeCampaignTeam;
 
-  const teamName = teamMetadata[activeCampaignTeam]?.name || activeCampaignTeam;
+  const teamName = (typeof getTeamName === "function") ? getTeamName(activeCampaignTeam, teamMetadata[activeCampaignTeam]?.name) : (teamMetadata[activeCampaignTeam]?.name || activeCampaignTeam);
   document.getElementById("hud-flag").innerHTML = getFlagImg(activeCampaignTeam).replace('w-5 h-3.5', 'w-8 h-5 rounded shadow');
   document.getElementById("hud-name").innerText = teamName;
 
   const sectors = originalTeams.filter(t => getCurrentOwner(t) === activeCampaignTeam).length;
   document.getElementById("hud-sectors").innerText = sectors;
 
-  let title = "INDEPENDENT STATE";
-  if (sectors >= 24) title = "GLOBAL HEGEMON";
-  else if (sectors >= 8) title = "CONTINENTAL EMPIRE";
-  else if (sectors >= 3) title = "REGIONAL POWER";
-  else if (sectors > 1) title = "EXPANDING KINGDOM";
+  let titleKey = "independentState";
+  if (sectors >= 24) titleKey = "globalHegemon";
+  else if (sectors >= 8) titleKey = "continentalEmpire";
+  else if (sectors >= 3) titleKey = "regionalPower";
+  else if (sectors > 1) titleKey = "expandingKingdom";
+
+  const title = t ? t[titleKey] : titleKey.toUpperCase();
 
   document.getElementById("hud-title").innerText = title;
 
-  if (bannerTitle) bannerTitle.innerText = `FACTION COMMANDER: ${activeCampaignTeam}`;
+  if (bannerTitle) bannerTitle.innerText = `${t ? (currentLang === 'zh' ? '阵营指挥官' : 'FACTION COMMANDER') : 'FACTION COMMANDER'}: ${activeCampaignTeam}`;
   if (bannerContent) {
     bannerContent.innerHTML = `
       ${getFlagImg(activeCampaignTeam)}
