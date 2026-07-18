@@ -1316,6 +1316,26 @@
         }
       });
 
+      // Render active clash ray for current playing teams in knockout matches
+      if (playingTeams.length === 2 && centroids[playingTeams[0]] && centroids[playingTeams[1]]) {
+        const c0 = centroids[playingTeams[0]];
+        const c1 = centroids[playingTeams[1]];
+        const midX = (c0[0] + c1[0]) / 2;
+        const midY = (c0[1] + c1[1]) / 2;
+        const dx = c1[0] - c0[0];
+        const dy = c1[1] - c0[1];
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const offset = Math.min(dist * 0.3, 50);
+        const ctrlX = midX - (dy / (dist || 1)) * offset;
+        const ctrlY = midY + (dx / (dist || 1)) * offset;
+        const rayStr = `M ${c0[0]} ${c0[1]} Q ${ctrlX} ${ctrlY} ${c1[0]} ${c1[1]}`;
+
+        vectorGroup.append("path")
+          .attr("d", rayStr)
+          .attr("class", "active-clash-ray")
+          .attr("stroke-width", "2.2px");
+      }
+
       // Update Leaderboard
       const leaderboard = getLeaderboard();
       const activeFactionsCount = leaderboard.filter(e => e.count > 0).length;
