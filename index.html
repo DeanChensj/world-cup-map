@@ -97,7 +97,7 @@
   <header class="h-16 bg-console-panel border-b border-console-border px-3 sm:px-6 flex items-center justify-between shadow-sm z-10">
     <div class="flex items-center space-x-2 sm:space-x-3">
       <div class="w-2.5 h-2.5 bg-console-accent rounded-sm animate-pulse"></div>
-      <span class="hidden min-[380px]:inline font-mono text-xs sm:text-sm tracking-wider font-bold uppercase text-console-accent">World Cup Map // <span id="header-year">2026</span></span>
+      <span class="hidden min-[380px]:inline font-mono text-xs sm:text-sm tracking-wider font-bold uppercase text-console-accent"><span id="site-header-title">World Cup Map //</span> <span id="header-year">2026</span></span>
     </div>
     
     <div class="flex items-center space-x-2 md:space-x-4 lg:space-x-6">
@@ -137,7 +137,7 @@
         </div>
         <button id="btn-share-universe" onclick="shareUniverse()" title="Share Parallel Universe Link" class="bg-console-bg border border-console-border text-console-accent hover:border-console-accent px-2 py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer">
           <i class="ph-bold ph-share-network text-[10px]"></i>
-          <span class="hidden sm:inline">SHARE</span>
+          <span id="share-btn-text" class="hidden sm:inline">SHARE</span>
         </button>
         <button id="btn-reset-overrides" onclick="resetOverrides()" title="Reset to Real History" class="hidden bg-console-bg border border-console-red text-console-red hover:bg-console-red/10 px-2 py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer">
           <i class="ph-bold ph-arrow-counter-clockwise text-[10px]"></i>
@@ -165,7 +165,7 @@
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-[10px] font-mono uppercase tracking-widest text-console-dimText flex items-center space-x-1.5">
             <i class="ph-bold ph-globe"></i>
-            <span>Territorial Holdings</span>
+            <span id="leaderboard-title">Territorial Holdings</span>
           </h2>
           <span id="active-factions" class="text-[10px] font-mono text-console-accent bg-console-accent/10 px-1.5 py-0.5 rounded">48 Factions</span>
         </div>
@@ -197,7 +197,7 @@
       <div id="logs-section" class="h-48 p-5 flex flex-col overflow-hidden bg-console-bg/50">
         <h2 class="text-[10px] font-mono uppercase tracking-widest text-console-dimText mb-3 flex items-center space-x-1.5">
           <i class="ph-bold ph-terminal"></i>
-          <span>Live Feed [Conquest log]</span>
+          <span id="logs-header-title">Live Feed [Conquest log]</span>
         </h2>
         <div id="conquest-log" class="space-y-2 overflow-y-auto flex-1 text-[11px] font-mono text-console-dimText leading-normal pr-1">
           <!-- Terminal logs injected here -->
@@ -266,7 +266,7 @@
           </div>
         </div>
         <div class="mt-2 text-[9px] text-console-dimText flex items-center justify-between border-t border-console-border/40 pt-1.5">
-          <span>SECTORS HELD:</span>
+          <span id="sectors-held-label">SECTORS HELD:</span>
           <span id="hud-sectors" class="font-bold text-console-accent text-xs">1</span>
         </div>
       </div>
@@ -284,13 +284,13 @@
         <div id="legend-overlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" onclick="toggleMobileLegend()">
           <div class="bg-console-panel border border-console-border p-4 rounded-lg max-w-xs w-full text-xs font-mono space-y-2 text-console-text" onclick="event.stopPropagation()">
             <div class="flex items-center justify-between border-b border-console-border pb-2">
-              <span class="font-bold text-amber-400">TACTICAL MAP LEGEND</span>
+              <span id="map-legend-title" class="font-bold text-amber-400">TACTICAL MAP LEGEND</span>
               <button onclick="toggleMobileLegend()" class="text-console-dimText hover:text-white"><i class="ph-bold ph-x text-sm"></i></button>
             </div>
             <div class="space-y-1.5 text-[11px]">
-              <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded bg-amber-500/80 inline-block"></span><span>Annexed Territory</span></div>
-              <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded bg-cyan-400 inline-block"></span><span>Active Clash Focus</span></div>
-              <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded bg-emerald-500 inline-block"></span><span>Faction Headquarters</span></div>
+              <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded bg-amber-500/80 inline-block"></span><span id="legend-item-annexed">Annexed Territory</span></div>
+              <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded bg-cyan-400 inline-block"></span><span id="legend-item-clash">Active Clash Focus</span></div>
+              <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded bg-emerald-500 inline-block"></span><span id="legend-item-hq">Faction Headquarters</span></div>
             </div>
           </div>
         </div>
@@ -1270,15 +1270,18 @@
         }
       }
 
-      const name1 = teamMetadata[code1]?.name || code1;
-      const name2 = teamMetadata[code2]?.name || code2;
+      const name1 = getTeamName(code1, teamMetadata[code1]?.name);
+      const name2 = getTeamName(code2, teamMetadata[code2]?.name);
+      const stageTranslated = getStageName(match.stage || 'MATCH');
+      const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+      const winnerTag = isZh ? '[胜者]' : '[WINNER]';
 
       let rawWinner = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
       if (rawWinner === match.home) rawWinner = code1;
       else if (rawWinner === match.away) rawWinner = code2;
       const activeWinner = rawWinner;
 
-      document.getElementById("clash-card-stage").innerText = `TACTICAL CONFLICT // ${(match.stage || 'MATCH').toUpperCase()}`;
+      document.getElementById("clash-card-stage").innerText = isZh ? `焦点对决战报 // ${stageTranslated}` : `TACTICAL CONFLICT // ${(match.stage || 'MATCH').toUpperCase()}`;
 
       // Team A element
       const cardA = document.getElementById("clash-card-teamA");
@@ -1286,7 +1289,7 @@
       document.getElementById("clash-teamA-flag").innerHTML = getFlagImg(code1).replace('w-5 h-3.5', 'w-10 h-7 sm:w-12 sm:h-8 shadow-md border border-amber-500/40');
       document.getElementById("clash-teamA-name").innerHTML = `
         <span>${name1}</span>
-        ${activeWinner === code1 ? '<span class="block text-[8px] text-amber-400 font-mono uppercase font-bold">[WINNER]</span>' : ''}
+        ${activeWinner === code1 ? `<span class="block text-[8px] text-amber-400 font-mono uppercase font-bold">${winnerTag}</span>` : ''}
       `;
       cardA.className = `flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1.5 rounded-lg cursor-pointer transition border ${activeWinner === code1 ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'border-transparent hover:border-amber-500/50 hover:bg-amber-500/5'} group`;
 
@@ -1296,7 +1299,7 @@
       document.getElementById("clash-teamB-flag").innerHTML = getFlagImg(code2).replace('w-5 h-3.5', 'w-10 h-7 sm:w-12 sm:h-8 shadow-md border border-amber-500/40');
       document.getElementById("clash-teamB-name").innerHTML = `
         <span>${name2}</span>
-        ${activeWinner === code2 ? '<span class="block text-[8px] text-amber-400 font-mono uppercase font-bold">[WINNER]</span>' : ''}
+        ${activeWinner === code2 ? `<span class="block text-[8px] text-amber-400 font-mono uppercase font-bold">${winnerTag}</span>` : ''}
       `;
       cardB.className = `flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1.5 rounded-lg cursor-pointer transition border ${activeWinner === code2 ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'border-transparent hover:border-amber-500/50 hover:bg-amber-500/5'} group`;
 
@@ -1822,29 +1825,30 @@
 
       const hasR32 = timelineSteps.some(s => s.type === 'knockout_match' && s.match && s.match.stage && s.match.stage.includes("32"));
 
+      const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
       let buttonsHtml = `
-        <button onclick="jumpToStage('kickoff')" class="px-2 py-0.5 text-xs ${isKickoff ? 'bg-console-accent text-console-bg font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-accent text-console-accent'} rounded-sm transition cursor-pointer">Kickoff</button>
-        <button onclick="jumpToStage('group')" class="px-2 py-0.5 text-xs ${isGroup && !isKickoff ? 'bg-console-accent text-console-bg font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-accent text-console-text'} rounded-sm transition cursor-pointer">Group Stage</button>
+        <button onclick="jumpToStage('kickoff')" class="px-2 py-0.5 text-xs ${isKickoff ? 'bg-console-accent text-console-bg font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-accent text-console-accent'} rounded-sm transition cursor-pointer">${isZh ? '开幕战' : 'Kickoff'}</button>
+        <button onclick="jumpToStage('group')" class="px-2 py-0.5 text-xs ${isGroup && !isKickoff ? 'bg-console-accent text-console-bg font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-accent text-console-text'} rounded-sm transition cursor-pointer">${isZh ? '小组赛' : 'Group Stage'}</button>
       `;
 
       if (hasR32) {
         buttonsHtml += `
-          <button onclick="jumpToStage('r32')" class="px-2 py-0.5 text-xs ${isR32 ? 'bg-console-red text-console-text font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-red text-console-red'} rounded-sm transition cursor-pointer">Round of 32</button>
+          <button onclick="jumpToStage('r32')" class="px-2 py-0.5 text-xs ${isR32 ? 'bg-console-red text-console-text font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-red text-console-red'} rounded-sm transition cursor-pointer">${isZh ? '32强赛' : 'Round of 32'}</button>
         `;
       }
 
       buttonsHtml += `
-        <button onclick="jumpToStage('r16')" class="px-2 py-0.5 text-xs ${isR16 ? 'bg-console-red text-console-text font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-red text-console-red'} rounded-sm transition cursor-pointer">Round of 16</button>
-        <button onclick="jumpToStage('qf')" class="px-2 py-0.5 text-xs ${isQF ? 'bg-console-red text-console-text font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-red text-console-red'} rounded-sm transition cursor-pointer">Quarterfinals</button>
-        <button onclick="jumpToStage('sf')" class="px-2 py-0.5 text-xs ${isSF ? 'bg-console-red text-console-text font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-red text-console-red'} rounded-sm transition cursor-pointer">Semifinals</button>
-        <button onclick="jumpToStage('final')" class="px-2 py-0.5 text-xs ${isFinal ? 'bg-console-yellow text-console-bg font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-yellow text-console-yellow'} rounded-sm transition cursor-pointer">Final</button>
+        <button onclick="jumpToStage('r16')" class="px-2 py-0.5 text-xs ${isR16 ? 'bg-console-red text-console-text font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-red text-console-red'} rounded-sm transition cursor-pointer">${isZh ? '1/8决赛' : 'Round of 16'}</button>
+        <button onclick="jumpToStage('qf')" class="px-2 py-0.5 text-xs ${isQF ? 'bg-console-red text-console-text font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-red text-console-red'} rounded-sm transition cursor-pointer">${isZh ? '1/4决赛' : 'Quarterfinals'}</button>
+        <button onclick="jumpToStage('sf')" class="px-2 py-0.5 text-xs ${isSF ? 'bg-console-red text-console-text font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-red text-console-red'} rounded-sm transition cursor-pointer">${isZh ? '半决赛' : 'Semifinals'}</button>
+        <button onclick="jumpToStage('final')" class="px-2 py-0.5 text-xs ${isFinal ? 'bg-console-yellow text-console-bg font-bold shadow' : 'bg-console-bg border border-console-border hover:border-console-yellow text-console-yellow'} rounded-sm transition cursor-pointer">${isZh ? '决赛' : 'Final'}</button>
       `;
 
       bar.innerHTML = `
         <div class="flex items-center space-x-1 flex-wrap gap-y-1 py-0.5">
           ${buttonsHtml}
         </div>
-        <span class="text-console-dimText text-[9px] hidden md:inline ml-auto">${isGroup ? 'Group Stage: 0 Annexation' : 'Knockout Stage: Single Elimination Annexation'}</span>
+        <span class="text-console-dimText text-[9px] hidden md:inline ml-auto">${isGroup ? (isZh ? '小组赛阶段：积分为主' : 'Group Stage: 0 Annexation') : (isZh ? '淘汰赛阶段：单败淘汰领土吞并' : 'Knockout Stage: Single Elimination Annexation')}</span>
       `;
     }
 
@@ -1986,7 +1990,7 @@
       playBtn.classList.remove("bg-console-accent", "text-console-bg");
       playBtn.classList.add("bg-console-red", "text-console-text");
       document.getElementById("play-icon").className = "ph-fill ph-pause text-xs";
-      document.getElementById("play-text").innerText = "Pause";
+      document.getElementById("play-text").innerText = (typeof currentLang !== "undefined" && currentLang === "zh") ? "暂停" : "Pause";
       
       playbackInterval = setInterval(() => {
         if (currentStepIndex < timelineSteps.length - 1) {
@@ -2005,7 +2009,7 @@
       playBtn.classList.add("bg-console-accent", "text-console-bg");
       playBtn.classList.remove("bg-console-red", "text-console-text");
       document.getElementById("play-icon").className = "ph-fill ph-play text-xs";
-      document.getElementById("play-text").innerText = "Play";
+      document.getElementById("play-text").innerText = (typeof currentLang !== "undefined" && currentLang === "zh") ? "推演" : "Play";
     }
 
     // --- Vertical Resizer for Live Feed [Desktop] ---
