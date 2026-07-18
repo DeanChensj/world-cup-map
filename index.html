@@ -1177,30 +1177,32 @@
       const vectorGroup = svg.select(".vector-layer");
       vectorGroup.selectAll("*").remove(); // Clear previous arcs
 
-      // Render subtle 1.2px micro-dots for active nations
+      // Render High-Contrast Micro Capital City Pins for all 48 teams
       originalTeams.forEach(code => {
         if (centroids[code]) {
           const [cx, cy] = centroids[code];
           const owner = getCurrentOwner(code);
-          const color = teamMetadata[owner]?.color || "#00ff66";
           const isEmpire = originalTeams.filter(t => getCurrentOwner(t) === owner).length > 1;
 
-          if (isEmpire && code === owner) {
+          if (code === owner && isEmpire) {
+            // Empire Capital: Micro Gold Pin (r = 2.2px)
             vectorGroup.append("circle")
               .attr("cx", cx)
               .attr("cy", cy)
               .attr("r", 2.2)
-              .attr("fill", "none")
-              .attr("stroke", color)
-              .attr("stroke-width", "1.2px")
-              .attr("opacity", 0.9);
+              .attr("fill", "#ffd700")
+              .attr("stroke", "#0a0b0d")
+              .attr("stroke-width", "0.8px");
           } else {
+            // Regular Capital Pin: Micro White Core Pin (r = 1.6px)
             vectorGroup.append("circle")
               .attr("cx", cx)
               .attr("cy", cy)
-              .attr("r", 1.0)
-              .attr("fill", color)
-              .attr("opacity", 0.6);
+              .attr("r", 1.6)
+              .attr("fill", "#ffffff")
+              .attr("stroke", "#0a0b0d")
+              .attr("stroke-width", "0.6px")
+              .attr("opacity", 0.95);
           }
         }
       });
