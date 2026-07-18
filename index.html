@@ -541,11 +541,11 @@
         const parts = scoreStr.split("(");
         const mainScore = parts[0].trim();
         const pScore = parts[1].replace("p)", "").replace("p", "").trim();
-        return `${mainScore} <span class="text-amber-400 font-bold text-[9px] bg-amber-400/10 px-1 py-0.5 rounded border border-amber-500/30">点球 ${pScore}</span>`;
+        return `${mainScore} <span class="text-amber-400 font-bold text-[9px] bg-amber-400/10 px-1 py-0.5 rounded border border-amber-500/30">PEN ${pScore}</span>`;
       }
       if (scoreStr.includes("(aet)")) {
         const mainScore = scoreStr.replace("(aet)", "").trim();
-        return `${mainScore} <span class="text-console-accent font-bold text-[9px] bg-console-accent/10 px-1 py-0.5 rounded border border-console-accent/30">加时</span>`;
+        return `${mainScore} <span class="text-console-accent font-bold text-[9px] bg-console-accent/10 px-1 py-0.5 rounded border border-console-accent/30">AET</span>`;
       }
       return scoreStr;
     }
