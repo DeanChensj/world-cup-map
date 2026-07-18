@@ -173,7 +173,7 @@
   <header class="h-16 bg-console-panel border-b border-console-border px-3 sm:px-6 flex items-center justify-between shadow-sm z-10">
     <div class="flex items-center space-x-2 sm:space-x-3">
       <div class="w-2.5 h-2.5 bg-console-accent rounded-sm animate-pulse"></div>
-      <span class="font-mono text-xs sm:text-sm tracking-wider font-bold uppercase text-console-accent">Conquest // <span id="header-year">2026</span></span>
+      <span class="hidden min-[380px]:inline font-mono text-xs sm:text-sm tracking-wider font-bold uppercase text-console-accent">Conquest // <span id="header-year">2026</span></span>
     </div>
     
     <div class="flex items-center space-x-2 md:space-x-4 lg:space-x-6">
@@ -191,12 +191,12 @@
         </select>
       </div>
       <!-- Theme Toggle -->
-      <button id="btn-theme-toggle" onclick="toggleTheme()" title="Switch Light / Dark Theme" class="bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-2 py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1.5 transition cursor-pointer">
+      <button id="btn-theme-toggle" onclick="toggleTheme()" title="Switch Light / Dark Theme" class="hidden sm:flex bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-2 py-1.5 rounded font-mono text-[9px] font-bold items-center space-x-1.5 transition cursor-pointer">
         <i id="theme-icon" class="ph-bold ph-sun text-[10px]"></i>
         <span id="theme-label" class="hidden md:inline">THEME: DARK</span>
       </button>
       <!-- SFX Audio Toggle -->
-      <button id="btn-audio-toggle" onclick="toggleAudio()" class="bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-2 py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1.5 transition cursor-pointer">
+      <button id="btn-audio-toggle" onclick="toggleAudio()" class="hidden sm:flex bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-2 py-1.5 rounded font-mono text-[9px] font-bold items-center space-x-1.5 transition cursor-pointer">
         <i id="audio-icon" class="ph-bold ph-speaker-high text-[10px]"></i>
         <span id="audio-label" class="hidden md:inline">SFX: ON</span>
       </button>
@@ -283,6 +283,18 @@
           <div class="flex items-center space-x-2">
             <span class="w-2.5 h-2.5 bg-[#1e2430] border border-console-border rounded-sm"></span>
             <span>Unoccupied / Eliminated</span>
+          </div>
+          <!-- Quick Configs inside Legend on Mobile -->
+          <div class="flex items-center space-x-2 pt-1.5 border-t border-console-border/40 sm:hidden">
+            <button onclick="toggleTheme()" class="text-console-accent hover:text-console-accentHover flex items-center space-x-1 cursor-pointer">
+              <i id="legend-theme-icon" class="ph-bold ph-sun text-xs"></i>
+              <span>THEME</span>
+            </button>
+            <span class="text-console-border/40">|</span>
+            <button onclick="toggleAudio()" class="text-console-accent hover:text-console-accentHover flex items-center space-x-1 cursor-pointer">
+              <i id="legend-audio-icon" class="ph-bold ph-speaker-high text-xs"></i>
+              <span>SFX</span>
+            </button>
           </div>
         </div>
 
@@ -445,41 +457,55 @@
     function toggleAudio() {
       audio.muted = !audio.muted;
       const btn = document.getElementById("btn-audio-toggle");
-      const icon = document.getElementById("audio-icon");
-      const label = document.getElementById("audio-label");
+      const updateEl = (id, callback) => {
+        const el = document.getElementById(id);
+        if (el) callback(el);
+      };
       
       if (audio.muted) {
-        btn.classList.add("text-console-dimText");
-        btn.classList.remove("text-console-accent");
-        icon.className = "ph-bold ph-speaker-slash text-[10px]";
-        label.innerText = "SFX: OFF";
+        if (btn) {
+          btn.classList.add("text-console-dimText");
+          btn.classList.remove("text-console-accent");
+        }
+        updateEl("audio-icon", e => e.className = "ph-bold ph-speaker-slash text-[10px]");
+        updateEl("audio-label", e => e.innerText = "SFX: OFF");
+        updateEl("legend-audio-icon", e => e.className = "ph-bold ph-speaker-slash text-xs text-console-dimText");
       } else {
-        btn.classList.remove("text-console-dimText");
-        btn.classList.add("text-console-accent");
-        icon.className = "ph-bold ph-speaker-high text-[10px]";
+        if (btn) {
+          btn.classList.remove("text-console-dimText");
+          btn.classList.add("text-console-accent");
+        }
+        updateEl("audio-icon", e => e.className = "ph-bold ph-speaker-high text-[10px]");
+        updateEl("audio-label", e => e.innerText = "SFX: ON");
+        updateEl("legend-audio-icon", e => e.className = "ph-bold ph-speaker-high text-xs text-console-accent");
+        audio.playClick();
       }
     }
 
     let isLightTheme = false;
 
     function toggleTheme() {
-      audio.playClick();
       isLightTheme = !isLightTheme;
       const body = document.body;
-      const icon = document.getElementById("theme-icon");
-      const label = document.getElementById("theme-label");
+      const updateEl = (id, callback) => {
+        const el = document.getElementById(id);
+        if (el) callback(el);
+      };
 
       if (isLightTheme) {
         body.classList.add("light-theme");
-        icon.className = "ph-bold ph-moon text-[10px]";
-        label.innerText = "THEME: LIGHT";
+        updateEl("theme-icon", e => e.className = "ph-bold ph-moon text-[10px]");
+        updateEl("theme-label", e => e.innerText = "THEME: LIGHT");
+        updateEl("legend-theme-icon", e => e.className = "ph-bold ph-moon text-xs");
       } else {
         body.classList.remove("light-theme");
-        icon.className = "ph-bold ph-sun text-[10px]";
-        label.innerText = "THEME: DARK";
+        updateEl("theme-icon", e => e.className = "ph-bold ph-sun text-[10px]");
+        updateEl("theme-label", e => e.innerText = "THEME: DARK");
+        updateEl("legend-theme-icon", e => e.className = "ph-bold ph-sun text-xs");
       }
 
       updateUI();
+      audio.playClick();
     }
 
     function parseUrlOverrides() {
