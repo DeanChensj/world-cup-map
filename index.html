@@ -630,29 +630,25 @@
         const { hCode, aCode, wCode } = getMatchCardTeams(s);
         const isChampMatch = champ && (wCode === champ.code);
 
-        const cardWidth = hasR32 ? 'w-[54px] sm:w-[60px]' : 'w-[72px] sm:w-[84px]';
+        const cardWidth = hasR32 ? 'w-[50px] sm:w-[56px]' : 'w-[62px] sm:w-[72px]';
         const flagSize = hasR32 ? 'w-3.5 h-2.5' : 'w-4 h-3';
-        const textSize = hasR32 ? 'text-[8.5px] sm:text-[9px]' : 'text-[10px] sm:text-[10.5px]';
+        const textSize = hasR32 ? 'text-[8.5px] sm:text-[9.5px]' : 'text-[9.5px] sm:text-[10.5px]';
 
         return `
-          <div class="bg-[#10141d] border ${isChampMatch ? 'border-amber-400/90 shadow-[0_0_12px_rgba(245,158,11,0.4)] bg-amber-500/15' : isOverridden ? 'border-amber-400/70 bg-amber-500/10' : 'border-console-border/70'} rounded px-1 sm:px-1.5 py-0.5 sm:py-1 flex flex-col relative shrink-0 ${cardWidth} font-mono select-none transition-all">
+          <div class="bg-[#10141d] border ${isChampMatch ? 'border-amber-400/90 shadow-[0_0_10px_rgba(245,158,11,0.4)] bg-amber-500/15' : isOverridden ? 'border-amber-400/70 bg-amber-500/10' : 'border-console-border/70'} rounded px-1.5 py-0.5 sm:py-1 flex flex-col relative shrink-0 ${cardWidth} font-mono select-none transition-all">
             <!-- Team Home -->
-            <div class="flex items-center justify-between py-[1px] ${wCode === hCode ? (isChampMatch ? 'text-amber-300 font-bold' : 'text-amber-300/90 font-bold') : 'text-console-dimText/60'}">
-              <div class="flex items-center space-x-1 min-w-0">
-                ${getFlagImg(hCode).replace('w-5 h-3.5', flagSize + ' rounded-xs shrink-0')}
-                <span class="${textSize} tracking-wider leading-none font-bold">${hCode}</span>
-              </div>
+            <div class="flex items-center space-x-1 sm:space-x-1.5 py-[1px] ${wCode === hCode ? (isChampMatch ? 'text-amber-300 font-bold' : 'text-amber-300/90 font-bold') : 'text-console-dimText/60'}">
+              ${getFlagImg(hCode).replace('w-5 h-3.5', flagSize + ' rounded-xs shrink-0')}
+              <span class="${textSize} tracking-wider leading-none font-bold">${hCode}</span>
             </div>
 
             <!-- VS Divider -->
-            <div class="border-t ${isChampMatch ? 'border-amber-500/40' : 'border-console-border/30'} my-[1.5px]"></div>
+            <div class="border-t ${isChampMatch ? 'border-amber-500/40' : 'border-console-border/30'} my-[1px]"></div>
 
             <!-- Team Away -->
-            <div class="flex items-center justify-between py-[1px] ${wCode === aCode ? (isChampMatch ? 'text-amber-300 font-bold' : 'text-amber-300/90 font-bold') : 'text-console-dimText/60'}">
-              <div class="flex items-center space-x-1 min-w-0">
-                ${getFlagImg(aCode).replace('w-5 h-3.5', flagSize + ' rounded-xs shrink-0')}
-                <span class="${textSize} tracking-wider leading-none font-bold">${aCode}</span>
-              </div>
+            <div class="flex items-center space-x-1 sm:space-x-1.5 py-[1px] ${wCode === aCode ? (isChampMatch ? 'text-amber-300 font-bold' : 'text-amber-300/90 font-bold') : 'text-console-dimText/60'}">
+              ${getFlagImg(aCode).replace('w-5 h-3.5', flagSize + ' rounded-xs shrink-0')}
+              <span class="${textSize} tracking-wider leading-none font-bold">${aCode}</span>
             </div>
 
             ${isChampMatch ? `<div class="absolute -top-1 -right-1 text-[5px] sm:text-[6px] bg-amber-400 text-black px-0.5 rounded font-bold shadow"><i class="ph-bold ph-trophy text-[6px]"></i></div>` : isOverridden ? `<div class="absolute -top-1 -right-1 text-[5px] sm:text-[6px] bg-amber-500 text-black px-0.5 rounded font-bold shadow">⚡</div>` : ''}
