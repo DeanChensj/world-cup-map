@@ -652,13 +652,15 @@
       function resolveFeeders(parentStep, prevList) {
         if (!parentStep || !prevList || prevList.length === 0) return [];
         const m = parentStep.match;
-        const matchLog = finalLogs.find(l => l.matchIndex === m.originalIndex);
+        const mIdx = (m.originalIndex !== undefined) ? m.originalIndex : matches.indexOf(m);
+        const matchLog = finalLogs.find(l => l.matchIndex === mIdx || l.matchIndex === matches.indexOf(m));
         const hCode = matchLog ? matchLog.home : getCurrentOwner(getEffectiveTeamCode(m.home));
         const aCode = matchLog ? matchLog.away : getCurrentOwner(getEffectiveTeamCode(m.away));
 
         return prevList.filter(ps => {
           const pm = ps.match;
-          const pLog = finalLogs.find(l => l.matchIndex === pm.originalIndex);
+          const pmIdx = (pm.originalIndex !== undefined) ? pm.originalIndex : matches.indexOf(pm);
+          const pLog = finalLogs.find(l => l.matchIndex === pmIdx || l.matchIndex === matches.indexOf(pm));
           const ph = pLog ? pLog.home : getCurrentOwner(getEffectiveTeamCode(pm.home));
           const pa = pLog ? pLog.away : getCurrentOwner(getEffectiveTeamCode(pm.away));
           const pw = pLog ? pLog.winnerCode : getEffectiveTeamCode(pm.winner);
@@ -691,9 +693,9 @@
       function getMatchCardTeams(s) {
         if (!s || !s.match) return { hCode: '', aCode: '', wCode: '' };
         const m = s.match;
-        const mIdx = m.originalIndex;
+        const mIdx = (m.originalIndex !== undefined) ? m.originalIndex : matches.indexOf(m);
 
-        const matchLog = finalLogs.find(l => l.matchIndex === mIdx);
+        const matchLog = finalLogs.find(l => l.matchIndex === mIdx || l.matchIndex === matches.indexOf(m));
 
         let hCode = matchLog ? matchLog.home : getEffectiveTeamCode(m.home);
         let aCode = matchLog ? matchLog.away : getEffectiveTeamCode(m.away);
