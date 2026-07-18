@@ -248,7 +248,7 @@
         <div class="text-[9px] uppercase tracking-widest text-amber-400 font-bold flex items-center justify-between border-b border-amber-500/20 pb-1.5 mb-2">
           <span class="flex items-center space-x-1">
             <i class="ph-bold ph-crown text-amber-400"></i>
-            <span>FACTION HUD</span>
+            <span id="campaign-select-text">FACTION HUD</span>
           </span>
           <button onclick="openFactionModal()" class="text-[8px] text-console-dimText hover:text-amber-400 underline cursor-pointer">CHANGE</button>
         </div>
@@ -268,7 +268,26 @@
       <div id="map-container" class="w-full h-full flex items-center justify-center relative">
         <svg id="world-map" class="w-full h-full drop-shadow-2xl"></svg>
         
+        <!-- Mobile Floating Match Carousel Overlay -->
+        <div id="mobile-match-carousel" class="absolute bottom-4 left-4 right-4 sm:hidden flex overflow-x-auto space-x-2 p-2 z-40 hidden scrollbar-none"></div>
 
+        <!-- Mobile Legend Toggle & Overlay -->
+        <button id="btn-legend-toggle" onclick="toggleMobileLegend()" class="sm:hidden absolute top-4 left-4 z-40 w-8 h-8 bg-console-panel/90 border border-console-border text-console-accent flex items-center justify-center rounded-sm shadow-md">
+          <i class="ph-bold ph-question text-sm"></i>
+        </button>
+        <div id="legend-overlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" onclick="toggleMobileLegend()">
+          <div class="bg-console-panel border border-console-border p-4 rounded-lg max-w-xs w-full text-xs font-mono space-y-2 text-console-text" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between border-b border-console-border pb-2">
+              <span class="font-bold text-amber-400">TACTICAL MAP LEGEND</span>
+              <button onclick="toggleMobileLegend()" class="text-console-dimText hover:text-white"><i class="ph-bold ph-x text-sm"></i></button>
+            </div>
+            <div class="space-y-1.5 text-[11px]">
+              <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded bg-amber-500/80 inline-block"></span><span>Annexed Territory</span></div>
+              <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded bg-cyan-400 inline-block"></span><span>Active Clash Focus</span></div>
+              <div class="flex items-center space-x-2"><span class="w-3 h-3 rounded bg-emerald-500 inline-block"></span><span>Faction Headquarters</span></div>
+            </div>
+          </div>
+        </div>
 
         <!-- Custom Tooltip (Anti-slop style) -->
         <div id="tooltip" class="absolute hidden bg-console-panel border border-console-border text-console-text text-xs rounded-sm p-3 pointer-events-none shadow-2xl z-50 font-mono space-y-1 backdrop-blur-md max-w-sm">
@@ -562,17 +581,22 @@
 
       if (rawScore.includes("(p)")) {
         const parts = rawScore.split("(");
-        const mainScore = parts[0].trim();
-        const pPart = parts[1].replace("p)", "").replace("p", "").trim();
-        const pScores = pPart.split("-").map(s => parseInt(s.trim()));
+        const firstPart = parts[0].trim();
+        const pInside = parts[1] ? parts[1].replace("p)", "").replace("p", "").trim() : "";
+
+        let pScores = pInside.split("-").map(s => parseInt(s.trim()));
+        let mainScore = firstPart;
+
+        if (pScores.length < 2 || isNaN(pScores[0]) || isNaN(pScores[1])) {
+          pScores = firstPart.split("-").map(s => parseInt(s.trim()));
+          mainScore = "";
+        }
+
         if (pScores.length === 2 && !isNaN(pScores[0]) && !isNaN(pScores[1])) {
           const pMax = Math.max(pScores[0], pScores[1]);
           const pMin = Math.min(pScores[0], pScores[1]);
-          if (effectiveWinnerCode === match.home) {
-            return `${mainScore} (${pMax}-${pMin} p)`;
-          } else {
-            return `${mainScore} (${pMin}-${pMax} p)`;
-          }
+          const newP = (effectiveWinnerCode === match.home) ? `${pMax}-${pMin}` : `${pMin}-${pMax}`;
+          return mainScore ? `${mainScore} (${newP} p)` : `${newP} (p)`;
         }
       }
 
@@ -1673,14 +1697,17 @@
       isMobileLegendExpanded = !isMobileLegendExpanded;
       const overlay = document.getElementById("legend-overlay");
       const btn = document.getElementById("btn-legend-toggle");
-      if (isMobileLegendExpanded) {
-        overlay.classList.remove("hidden");
-        overlay.classList.add("block");
-        btn.innerHTML = `<i class="ph-bold ph-x text-sm"></i>`;
-      } else {
-        overlay.classList.add("hidden");
-        overlay.classList.remove("block");
-        btn.innerHTML = `<i class="ph-bold ph-question text-sm"></i>`;
+      if (overlay) {
+        if (isMobileLegendExpanded) {
+          overlay.classList.remove("hidden");
+          overlay.classList.add("flex");
+        } else {
+          overlay.classList.add("hidden");
+          overlay.classList.remove("flex");
+        }
+      }
+      if (btn) {
+        btn.innerHTML = isMobileLegendExpanded ? `<i class="ph-bold ph-x text-sm"></i>` : `<i class="ph-bold ph-question text-sm"></i>`;
       }
     }
 
