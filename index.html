@@ -282,7 +282,7 @@
           </div>
           <div class="flex items-center space-x-2">
             <span class="w-2.5 h-2.5 bg-[#1e2430] border border-console-border rounded-sm"></span>
-            <span>Unoccupied / Eliminated</span>
+            <span>Independent / Eliminated</span>
           </div>
           <!-- Quick Configs inside Legend on Mobile -->
           <div class="flex items-center space-x-2 pt-1.5 border-t border-console-border/40 sm:hidden">
@@ -684,10 +684,10 @@
 
           // Trigger massive conquest visual alert banner on active play
           if (count >= 4 && isLatestMatch) {
-            triggerAlert(`[EVENT]: ${teamMetadata[ownerOfWinner].name.toUpperCase()} annexed ${teamMetadata[loserCode].name.toUpperCase()}'s holdings (+${count} sectors)`);
+            triggerAlert(`[CAPTURE]: ${teamMetadata[ownerOfWinner].name.toUpperCase()} captured ${teamMetadata[loserCode].name.toUpperCase()}'s sectors (+${count} sectors)`);
           }
         } else {
-          // Rebellion check: if the winner overthrows their supreme master
+          // Rebellion check: if the underdog beats their suzerain (Reclaim)
           if (ownerOfWinner === loserCode) {
             let count = 0;
             originalTeams.forEach(team => {
@@ -704,13 +704,13 @@
               loser: teamMetadata[loserCode].name,
               loserCode: loserCode,
               count: count,
-              stage: `${match.stage} (Rebellion)`,
+              stage: `${match.stage} (Reclaim)`,
               isLatest: isLatestMatch
             });
 
-            // Trigger rebellion visual alert banner on active play
+            // Trigger upset visual alert banner on active play
             if (isLatestMatch) {
-              triggerAlert(`[REBELLION]: ${teamMetadata[winnerCode].name.toUpperCase()} overthrew ${teamMetadata[loserCode].name.toUpperCase()}!`);
+              triggerAlert(`[UPSET]: ${teamMetadata[winnerCode].name.toUpperCase()} reclaimed their sectors from ${teamMetadata[loserCode].name.toUpperCase()}!`);
             }
           }
         }
@@ -1100,7 +1100,7 @@
         content += `
           <div class="flex items-center space-x-2 mt-2 pt-1.5 border-t border-console-border">
             ${getFlagImg(currentOwnerCode)}
-            <span class="text-[11px] text-console-dimText">Occupied by:</span>
+            <span class="text-[11px] text-console-dimText">Held by:</span>
             <span class="text-[11px] text-console-accent font-bold font-sans">${currentOwner}</span>
           </div>
           <div class="mt-2 text-[9px] leading-relaxed text-console-dimText font-mono border-t border-console-border/50 pt-1.5">
@@ -1110,7 +1110,7 @@
         `;
       } else {
         content += `
-          <div class="text-[10px] text-console-accent mt-2 pt-1 font-bold font-mono">// Independent Sovereign</div>
+          <div class="text-[10px] text-console-accent mt-2 pt-1 font-bold font-mono">// Independent</div>
         `;
       }
 
