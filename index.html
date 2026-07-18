@@ -176,10 +176,10 @@
       <span class="font-mono text-sm tracking-wider font-bold uppercase text-console-accent">Conquest.io // World Cup <span id="header-year">2026</span></span>
     </div>
     
-    <div class="flex items-center space-x-6">
-      <div class="flex items-center space-x-2">
-        <span class="text-[9px] uppercase font-mono text-console-dimText">Edition:</span>
-        <select id="edition-select" onchange="switchEdition(this.value)" class="bg-console-bg border border-console-border text-console-text font-mono text-[10px] font-bold rounded px-2 py-1 focus:outline-none focus:border-console-accent transition cursor-pointer">
+    <div class="flex items-center space-x-2 md:space-x-4 lg:space-x-6">
+      <div class="flex items-center space-x-1 md:space-x-2">
+        <span class="hidden sm:inline text-[9px] uppercase font-mono text-console-dimText">Edition:</span>
+        <select id="edition-select" onchange="switchEdition(this.value)" class="bg-console-bg border border-console-border text-console-text font-mono text-[10px] font-bold rounded px-1.5 py-0.5 md:px-2 md:py-1 focus:outline-none focus:border-console-accent transition cursor-pointer">
           <option value="2026" selected>2026 USA/MEX/CAN</option>
           <option value="2022">2022 QATAR</option>
           <option value="2018">2018 RUSSIA</option>
@@ -193,26 +193,26 @@
       <!-- Theme Toggle -->
       <button id="btn-theme-toggle" onclick="toggleTheme()" title="Switch Light / Dark Theme" class="bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-2 py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1.5 transition cursor-pointer">
         <i id="theme-icon" class="ph-bold ph-sun text-[10px]"></i>
-        <span id="theme-label">THEME: DARK</span>
+        <span id="theme-label" class="hidden md:inline">THEME: DARK</span>
       </button>
       <!-- SFX Audio Toggle -->
       <button id="btn-audio-toggle" onclick="toggleAudio()" class="bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-2 py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1.5 transition cursor-pointer">
         <i id="audio-icon" class="ph-bold ph-speaker-high text-[10px]"></i>
-        <span id="audio-label">SFX: ON</span>
+        <span id="audio-label" class="hidden md:inline">SFX: ON</span>
       </button>
       <!-- Central Active Date & Sandbox Controls -->
-      <div class="flex items-center space-x-2">
-        <span id="sim-status-label" class="text-[10px] uppercase font-mono text-console-dimText">Status: Simulating</span>
-        <div id="current-date-badge" class="bg-console-bg border border-console-border px-3 py-1 font-mono text-xs font-bold text-console-accent tracking-widest rounded">
+      <div class="flex items-center space-x-1.5 md:space-x-2">
+        <span id="sim-status-label" class="hidden lg:inline text-[10px] uppercase font-mono text-console-dimText">Status: Simulating</span>
+        <div id="current-date-badge" class="bg-console-bg border border-console-border px-2 py-0.5 md:px-3 md:py-1 font-mono text-[10px] md:text-xs font-bold text-console-accent tracking-wider md:tracking-widest rounded">
           2026-06-11
         </div>
         <button id="btn-share-universe" onclick="shareUniverse()" title="Share Parallel Universe Link" class="bg-console-bg border border-console-border text-console-accent hover:border-console-accent px-2 py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer">
           <i class="ph-bold ph-share-network text-[10px]"></i>
-          <span>SHARE</span>
+          <span class="hidden sm:inline">SHARE</span>
         </button>
         <button id="btn-reset-overrides" onclick="resetOverrides()" title="Reset to Real History" class="hidden bg-console-bg border border-console-red text-console-red hover:bg-console-red/10 px-2 py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer">
           <i class="ph-bold ph-arrow-counter-clockwise text-[10px]"></i>
-          <span>RESET</span>
+          <span class="hidden sm:inline">RESET</span>
         </button>
       </div>
     </div>
@@ -914,6 +914,38 @@
 
       // Load initial default edition (2026)
       loadEdition("2026");
+
+      // Resize listener for D3 projection
+      window.addEventListener("resize", () => {
+        const width = container.node().clientWidth || 800;
+        const height = container.node().clientHeight || 500;
+        svg.attr("viewBox", `0 0 ${width} ${height}`);
+        projection.fitSize([width, height], worldData);
+        g.selectAll(".country").attr("d", path);
+        g.selectAll(".graticule").attr("d", path);
+
+        // Recalculate centroids
+        centroids = {};
+        worldData.features.forEach(f => {
+          const code = getWCCodeFromMap(f.properties ? f.properties.name : "", f.id);
+          if (code) {
+            centroids[code] = path.centroid(f);
+          }
+        });
+        if (centroids["ENG"]) {
+          centroids["ENG"] = projection([-1.1743, 52.3555]);
+        }
+        microNations.forEach(m => {
+          centroids[m.code] = projection(m.coords);
+        });
+
+        // Re-project micro nations coordinates
+        g.selectAll(".micro-nation")
+          .attr("cx", d => projection(d.coords)[0])
+          .attr("cy", d => projection(d.coords)[1]);
+
+        updateUI();
+      });
     });
 
     function formatDateString(dateStr) {
