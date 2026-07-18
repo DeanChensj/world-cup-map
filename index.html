@@ -1166,23 +1166,21 @@
 
       const code1 = match.home;
       const code2 = match.away;
-      const owner1 = getCurrentOwner(code1);
-      const owner2 = getCurrentOwner(code2);
 
-      const name1 = teamMetadata[owner1]?.name || owner1;
-      const name2 = teamMetadata[owner2]?.name || owner2;
+      const name1 = teamMetadata[code1]?.name || code1;
+      const name2 = teamMetadata[code2]?.name || code2;
 
       document.getElementById("clash-card-stage").innerText = `TACTICAL CONFLICT // ${(match.stage || 'MATCH').toUpperCase()}`;
 
-      document.getElementById("clash-teamA-flag").innerHTML = getFlagImg(owner1).replace('w-5 h-3.5', 'w-12 h-8 shadow-md border border-amber-500/40');
+      document.getElementById("clash-teamA-flag").innerHTML = getFlagImg(code1).replace('w-5 h-3.5', 'w-12 h-8 shadow-md border border-amber-500/40');
       document.getElementById("clash-teamA-name").innerText = name1;
 
-      document.getElementById("clash-teamB-flag").innerHTML = getFlagImg(owner2).replace('w-5 h-3.5', 'w-12 h-8 shadow-md border border-amber-500/40');
+      document.getElementById("clash-teamB-flag").innerHTML = getFlagImg(code2).replace('w-5 h-3.5', 'w-12 h-8 shadow-md border border-amber-500/40');
       document.getElementById("clash-teamB-name").innerText = name2;
 
       const scoreStr = (match.score1 !== undefined && match.score2 !== undefined)
         ? `${match.score1} - ${match.score2}`
-        : `SCHEDULED`;
+        : (match.score || `SCHEDULED`);
       document.getElementById("clash-match-score").innerText = scoreStr;
 
       overlay.classList.remove("hidden");
