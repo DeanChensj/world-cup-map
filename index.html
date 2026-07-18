@@ -94,16 +94,19 @@
 <body class="text-console-text h-dvh overflow-hidden flex flex-col font-sans select-none antialiased">
 
   <!-- Header (Max Height Cap: 64px) -->
-  <header class="h-16 bg-console-panel border-b border-console-border px-3 sm:px-6 flex items-center justify-between shadow-sm z-10">
-    <div class="flex items-center space-x-2 sm:space-x-3">
-      <div class="w-2.5 h-2.5 bg-console-accent rounded-sm animate-pulse"></div>
-      <span class="hidden min-[380px]:inline font-mono text-xs sm:text-sm tracking-wider font-bold uppercase text-console-accent"><span id="site-header-title">World Cup Map //</span> <span id="header-year">2026</span></span>
+  <header class="h-14 sm:h-16 bg-console-panel border-b border-console-border px-2 sm:px-6 flex items-center justify-between shadow-sm z-10 shrink-0 select-none overflow-hidden">
+    <div class="flex items-center space-x-1.5 sm:space-x-3 shrink-0">
+      <div class="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-console-accent rounded-sm animate-pulse shrink-0"></div>
+      <span class="font-mono text-[11px] sm:text-sm tracking-wide font-bold uppercase text-console-accent shrink-0">
+        <span id="site-header-title" class="hidden sm:inline">World Cup Map //</span>
+        <span class="sm:hidden">WC //</span>
+        <span id="header-year">2026</span>
+      </span>
     </div>
     
-    <div class="flex items-center space-x-2 md:space-x-4 lg:space-x-6">
-      <div class="flex items-center space-x-1 md:space-x-2">
-        <span id="edition-label" class="hidden sm:inline text-[9px] uppercase font-mono text-console-dimText">Edition:</span>
-        <select id="edition-select" onchange="switchEdition(this.value)" class="bg-console-panel border border-amber-500/50 hover:border-amber-400 text-amber-400 font-mono text-[10px] sm:text-xs font-bold rounded-md px-2 py-1 shadow-[0_0_12px_rgba(245,158,11,0.2)] focus:outline-none focus:ring-1 focus:ring-amber-400 transition cursor-pointer">
+    <div class="flex items-center space-x-1 sm:space-x-2 md:space-x-3 shrink-0 overflow-hidden">
+      <div class="flex items-center shrink-0">
+        <select id="edition-select" onchange="switchEdition(this.value)" class="bg-console-panel border border-amber-500/50 hover:border-amber-400 text-amber-400 font-mono text-[9.5px] sm:text-xs font-bold rounded px-1.5 py-0.5 sm:px-2 sm:py-1 max-w-[105px] sm:max-w-none truncate shadow-[0_0_12px_rgba(245,158,11,0.2)] focus:outline-none focus:ring-1 focus:ring-amber-400 transition cursor-pointer">
           <option value="2026" selected class="bg-console-panel text-white">2026 USA/MEX/CAN ▾</option>
           <option value="2022" class="bg-console-panel text-white">2022 QATAR ▾</option>
           <option value="2018" class="bg-console-panel text-white">2018 RUSSIA ▾</option>
@@ -114,37 +117,41 @@
           <option value="1998" class="bg-console-panel text-white">1998 FRANCE ▾</option>
         </select>
       </div>
+
       <!-- Language Toggle -->
-      <button id="btn-lang-toggle" onclick="toggleLanguage()" title="Switch Language (中文 / English)" class="flex bg-console-bg border border-console-border text-amber-400 hover:border-amber-400/60 px-1.5 py-1 sm:px-2 sm:py-1.5 rounded font-mono text-[9px] font-bold items-center space-x-1 transition cursor-pointer shrink-0">
+      <button id="btn-lang-toggle" onclick="toggleLanguage()" title="Switch Language (中文 / English)" class="flex bg-console-bg border border-console-border text-amber-400 hover:border-amber-400/60 px-1 py-0.5 sm:px-2 sm:py-1 rounded font-mono text-[9px] font-bold items-center space-x-1 transition cursor-pointer shrink-0">
         <i class="ph-bold ph-translate text-[10px]"></i>
-        <span id="lang-label" class="hidden min-[420px]:inline">LANG: EN</span>
+        <span id="lang-label" class="hidden md:inline">LANG: EN</span>
       </button>
+
       <!-- Theme Toggle -->
-      <button id="btn-theme-toggle" onclick="toggleTheme()" title="Switch Light / Dark Theme" class="flex bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-1.5 py-1 sm:px-2 sm:py-1.5 rounded font-mono text-[9px] font-bold items-center space-x-1 transition cursor-pointer shrink-0">
+      <button id="btn-theme-toggle" onclick="toggleTheme()" title="Switch Light / Dark Theme" class="flex bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-1 py-0.5 sm:px-2 sm:py-1 rounded font-mono text-[9px] font-bold items-center space-x-1 transition cursor-pointer shrink-0">
         <i id="theme-icon" class="ph-bold ph-sun text-[10px]"></i>
         <span id="theme-label" class="hidden md:inline">THEME: DARK</span>
       </button>
+
       <!-- SFX Audio Toggle & Volume Slider -->
       <div class="flex items-center shrink-0">
-        <button id="btn-audio-toggle" onclick="toggleAudio()" title="Toggle SFX Mute/Unmute" class="flex bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-1.5 py-1 sm:px-2 sm:py-1.5 rounded-l font-mono text-[9px] font-bold items-center space-x-1 transition cursor-pointer shrink-0">
+        <button id="btn-audio-toggle" onclick="toggleAudio()" title="Toggle SFX Mute/Unmute" class="flex bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-1 py-0.5 sm:px-2 sm:py-1 rounded sm:rounded-r-none font-mono text-[9px] font-bold items-center space-x-1 transition cursor-pointer shrink-0">
           <i id="audio-icon" class="ph-bold ph-speaker-high text-[10px]"></i>
           <span id="audio-label" class="hidden md:inline">SFX: 70%</span>
         </button>
-        <div class="flex items-center bg-console-bg border border-l-0 border-console-border px-1.5 py-1 sm:py-1.5 rounded-r">
+        <div class="hidden sm:flex items-center bg-console-bg border border-l-0 border-console-border px-1.5 py-1 sm:py-1 rounded-r">
           <input type="range" id="sfx-volume-slider" min="0" max="1" step="0.05" value="0.7" oninput="setAudioVolume(this.value)" class="w-10 sm:w-14 accent-console-accent h-1.5 cursor-pointer" title="SFX Volume">
         </div>
       </div>
+
       <!-- Central Active Date & Sandbox Controls -->
-      <div class="flex items-center space-x-1.5 md:space-x-2">
+      <div class="flex items-center space-x-1 sm:space-x-2 shrink-0">
         <span id="sim-status-label" class="hidden lg:inline text-[10px] uppercase font-mono text-console-dimText">Status: Simulating</span>
-        <div id="current-date-badge" class="bg-console-bg border border-console-border px-2 py-0.5 md:px-3 md:py-1 font-mono text-[10px] md:text-xs font-bold text-console-accent tracking-wider md:tracking-widest rounded">
+        <div id="current-date-badge" class="bg-console-bg border border-console-border px-1.5 py-0.5 sm:px-2.5 sm:py-1 font-mono text-[9px] sm:text-xs font-bold text-console-accent tracking-normal sm:tracking-wider rounded shrink-0">
           2026-06-11
         </div>
-        <button id="btn-share-universe" onclick="shareUniverse()" title="Share Parallel Universe Link" class="bg-console-bg border border-console-border text-console-accent hover:border-console-accent px-1.5 py-1 sm:px-2 sm:py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer shrink-0">
+        <button id="btn-share-universe" onclick="shareUniverse()" title="Share Parallel Universe Link" class="bg-console-bg border border-console-border text-console-accent hover:border-console-accent px-1 py-0.5 sm:px-2 sm:py-1 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer shrink-0">
           <i class="ph-bold ph-share-network text-[10px]"></i>
           <span id="share-btn-text" class="hidden sm:inline">SHARE</span>
         </button>
-        <button id="btn-reset-overrides" onclick="resetOverrides()" title="Reset to Real History" class="hidden bg-console-bg border border-console-red text-console-red hover:bg-console-red/10 px-1.5 py-1 sm:px-2 sm:py-1.5 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer shrink-0">
+        <button id="btn-reset-overrides" onclick="resetOverrides()" title="Reset to Real History" class="hidden bg-console-bg border border-console-red text-console-red hover:bg-console-red/10 px-1 py-0.5 sm:px-2 sm:py-1 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer shrink-0">
           <i class="ph-bold ph-arrow-counter-clockwise text-[10px]"></i>
           <span class="hidden sm:inline">RESET</span>
         </button>
@@ -2480,8 +2487,15 @@
       // Update Terminal Log / Overrides list
       const logEl = document.getElementById("conquest-log");
       
-      if (logs.length === 0) {
-        logEl.innerHTML = `<div class="text-console-dimText italic text-[10px]">// Console ready. Awaiting tournament kickoff...</div>`;
+      if (!logs || logs.length === 0) {
+        const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+        logEl.innerHTML = `
+          <div class="flex flex-col items-center justify-center h-full py-10 text-center text-console-dimText my-auto">
+            <i class="ph-bold ph-terminal-window text-3xl text-console-accent/60 mb-2 animate-pulse"></i>
+            <div class="font-bold text-xs text-console-accent mb-1">${isZh ? '模拟就绪 • 暂无战报 Feed' : 'CONSOLE READY • NO MATCH FEEDS'}</div>
+            <div class="text-[10px] opacity-70 max-w-[240px] leading-relaxed">${isZh ? '拖动底部时间轴推进至比赛日，或点击战术卡片改写胜负以生成战报日志。' : 'Advance timeline to match days or click match cards to generate live feeds.'}</div>
+          </div>
+        `;
       } else {
         logEl.innerHTML = logs.map(renderLogCard).join("");
       }
@@ -2510,35 +2524,43 @@
         } else {
           carouselEl.classList.remove("hidden");
           carouselEl.innerHTML = activeDayMatches.map(match => {
-            const idx = match.originalIndex;
-            const currentWinner = (userOverrides[idx] !== undefined) ? userOverrides[idx] : match.winner;
-            const isOverridden = (userOverrides[idx] !== undefined);
+            const idx = (match.originalIndex !== undefined) ? match.originalIndex : matches.indexOf(match);
+            const hCode = getEffectiveTeamCode(match.home);
+            const aCode = getEffectiveTeamCode(match.away);
             
+            let rawW = (userOverrides[idx] !== undefined) ? userOverrides[idx] : match.winner;
+            let wCode = rawW ? getEffectiveTeamCode(rawW) : null;
+            if (rawW === match.home) wCode = hCode;
+            else if (rawW === match.away) wCode = aCode;
+
+            const isOverridden = (userOverrides[idx] !== undefined);
+            const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+
             let simmedScoreText = "";
-            if (currentWinner === match.home) {
-              simmedScoreText = "H-WIN";
-            } else if (currentWinner === match.away) {
-              simmedScoreText = "A-WIN";
+            if (wCode === hCode) {
+              simmedScoreText = isZh ? "主胜" : "H-WIN";
+            } else if (wCode === aCode) {
+              simmedScoreText = isZh ? "客胜" : "A-WIN";
             } else {
-              simmedScoreText = "DRAW";
+              simmedScoreText = isZh ? "平局" : "DRAW";
             }
             
             return `
               <div 
-                onclick="toggleMobileSandbox(${idx})"
-                class="flex items-center justify-between bg-console-panel border ${isOverridden ? 'border-console-accent bg-console-accent/5' : 'border-console-border'} p-2 rounded-sm font-mono text-[9px] space-x-2.5 shadow-lg min-w-[170px] shrink-0 active:scale-95 transition cursor-pointer"
+                onclick="toggleMatchWinner(${idx})"
+                class="flex items-center justify-between bg-console-panel border ${isOverridden ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_12px_rgba(245,158,11,0.3)]' : 'border-console-border hover:border-amber-500/40'} p-2 rounded-lg font-mono text-[9px] space-x-2.5 shadow-lg min-w-[175px] shrink-0 active:scale-95 transition cursor-pointer"
               >
                 <div class="flex items-center space-x-1">
-                  ${getFlagImg(match.home)}
-                  <span class="font-bold ${currentWinner === match.home ? 'text-console-accent' : 'text-console-text'}">${match.home}</span>
+                  ${getFlagImg(hCode)}
+                  <span class="font-bold ${wCode === hCode ? 'text-amber-400 font-extrabold' : 'text-console-text'}">${hCode}</span>
                 </div>
                 <div class="flex flex-col items-center leading-tight">
-                  <span class="text-console-dimText text-[8px]">Real: ${match.score}</span>
-                  <span class="text-console-accent font-bold text-[8px]">${simmedScoreText}</span>
+                  <span class="text-console-dimText text-[8px] opacity-75">${match.score || 'VS'}</span>
+                  <span class="text-amber-400 font-bold text-[8px]">${simmedScoreText}</span>
                 </div>
                 <div class="flex items-center space-x-1">
-                  <span class="font-bold ${currentWinner === match.away ? 'text-console-accent' : 'text-console-text'}">${match.away}</span>
-                  ${getFlagImg(match.away)}
+                  <span class="font-bold ${wCode === aCode ? 'text-amber-400 font-extrabold' : 'text-console-text'}">${aCode}</span>
+                  ${getFlagImg(aCode)}
                 </div>
               </div>
             `;
@@ -2548,28 +2570,7 @@
     }
 
     function toggleMobileSandbox(matchIdx) {
-      const match = matches[matchIdx];
-      const currentWinner = userOverrides[matchIdx];
-      if (currentWinner === match.home) {
-        userOverrides[matchIdx] = match.away;
-      } else if (currentWinner === match.away) {
-        userOverrides[matchIdx] = "";
-      } else {
-        userOverrides[matchIdx] = match.home;
-      }
-      updateUI();
-      if (match) showClashCard(match);
-      // Sync overrides to URL
-      const overridesStr = Object.entries(userOverrides)
-        .map(([idx, winner]) => `${idx}:${winner}`)
-        .join(",");
-      const url = new URL(window.location.href);
-      if (overridesStr) {
-        url.searchParams.set("alt", overridesStr);
-      } else {
-        url.searchParams.delete("alt");
-      }
-      window.history.replaceState({}, "", url.toString());
+      toggleMatchWinner(matchIdx);
     }
 
     let isMobileLegendExpanded = false;
@@ -2655,13 +2656,25 @@
         sidePanel.classList.remove("hidden");
         lbSec.classList.remove("hidden");
         logsSec.classList.add("hidden");
-        sidePanel.className = "w-full bg-console-panel border-b border-console-border flex flex-col h-auto overflow-hidden";
+        sidePanel.className = "w-full flex-1 bg-console-panel flex flex-col h-full overflow-hidden";
+        lbSec.className = "flex-1 p-4 flex flex-col overflow-hidden border-b border-console-border h-full";
       } else if (tab === 'logs') {
         mapSec.classList.add("hidden");
         sidePanel.classList.remove("hidden");
         lbSec.classList.add("hidden");
         logsSec.classList.remove("hidden");
-        sidePanel.className = "w-full bg-console-panel border-b border-console-border flex flex-col h-auto overflow-hidden";
+        sidePanel.className = "w-full flex-1 bg-console-panel flex flex-col h-full overflow-hidden";
+        logsSec.className = "flex-1 p-4 flex flex-col overflow-hidden bg-console-bg/50 h-full";
+      }
+
+      if (window.innerWidth >= 1024) {
+        mapSec.classList.remove("hidden");
+        sidePanel.classList.remove("hidden");
+        lbSec.classList.remove("hidden");
+        logsSec.classList.remove("hidden");
+        sidePanel.className = "w-full lg:w-96 bg-console-panel border-b lg:border-b-0 lg:border-r border-console-border flex flex-col h-[400px] lg:h-auto overflow-hidden";
+        lbSec.className = "flex-1 p-5 flex flex-col overflow-hidden border-b border-console-border";
+        logsSec.className = "h-48 lg:h-56 p-5 flex flex-col overflow-hidden bg-console-bg/50";
       }
     }
 
