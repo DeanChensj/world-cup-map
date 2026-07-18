@@ -614,9 +614,13 @@
           }
         }
 
-        let wCode = (userOverrides[mIdx] !== undefined) ? userOverrides[mIdx] : m.winner;
-        if (wCode === m.home) wCode = hCode;
-        else if (wCode === m.away) wCode = aCode;
+        let rawWinner = (userOverrides[mIdx] !== undefined) ? userOverrides[mIdx] : m.winner;
+        let wCode = rawWinner;
+        if (rawWinner === hCode || rawWinner === m.home) {
+          wCode = hCode;
+        } else if (rawWinner === aCode || rawWinner === m.away) {
+          wCode = aCode;
+        }
 
         return { hCode, aCode, wCode };
       }
