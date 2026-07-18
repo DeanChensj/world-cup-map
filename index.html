@@ -836,9 +836,9 @@
           .duration(300)
           .attr("fill", d => {
             if (d.code) {
-              return getCountryColor(d.name, null, d.code);
+              return getCountryColor(d.properties ? d.properties.name : (d.name || ""), null, d.code);
             }
-            return getCountryColor(d.properties.name, d.id);
+            return getCountryColor(d.properties ? d.properties.name : "", d.id);
           })
           .style("opacity", 1.0);
 
@@ -941,7 +941,7 @@
         .append("path")
           .attr("d", path)
           .attr("id", d => {
-            const alpha3 = getWCCodeFromMap(d.properties.name, d.id);
+            const alpha3 = getWCCodeFromMap(d.properties ? d.properties.name : "", d.id, d.code);
             return alpha3 ? `country-${alpha3}` : `country-numeric-${d.id}`;
           })
           .attr("class", "country")
@@ -991,7 +991,7 @@
       // Compute and cache centroids for features and micro-nations
       centroids = {};
       worldData.features.forEach(f => {
-        const code = getWCCodeFromMap(f.properties ? f.properties.name : "", f.id);
+        const code = getWCCodeFromMap(f.properties ? f.properties.name : "", f.id, f.code);
         if (code) {
           centroids[code] = path.centroid(f);
         }
@@ -1134,7 +1134,7 @@
       tooltip.style("display", "none");
       
       if (d) {
-        const alpha3 = getWCCodeFromMap(d.properties.name, d.id);
+        const alpha3 = d.code || getWCCodeFromMap(d.properties ? d.properties.name : "", d.id);
         if (alpha3) {
           const owner = getCurrentOwner(alpha3);
           if (owner && owner !== alpha3) {
@@ -1150,7 +1150,7 @@
         .transition()
         .duration(200)
         .style("opacity", d => {
-          const alpha3 = d.code || getWCCodeFromMap(d.properties.name, d.id);
+          const alpha3 = d.code || getWCCodeFromMap(d.properties ? d.properties.name : "", d.id);
           if (!alpha3) return 0.05;
           const currentOwner = getCurrentOwner(alpha3);
           return currentOwner === ownerCode ? 1.0 : 0.12;
@@ -1191,12 +1191,12 @@
         .ease(d3.easeCubicOut)
         .attr("fill", d => {
           if (d.code) {
-            return getCountryColor(d.name, null, d.code);
+            return getCountryColor(d.properties ? d.properties.name : (d.name || ""), null, d.code);
           }
-          return getCountryColor(d.properties.name, d.id);
+          return getCountryColor(d.properties ? d.properties.name : "", d.id);
         })
         .attr("class", d => {
-          const alpha3 = d.code || getWCCodeFromMap(d.properties.name, d.id);
+          const alpha3 = d.code || getWCCodeFromMap(d.properties ? d.properties.name : "", d.id);
           let classes = d.code ? "country micro-nation" : "country";
           if (alpha3) {
             const owner = getCurrentOwner(alpha3);
