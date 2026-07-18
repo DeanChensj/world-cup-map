@@ -990,19 +990,7 @@
       g.append("g").attr("class", "vector-layer");
 
       // Compute and cache centroids for features and micro-nations
-      centroids = {};
-      worldData.features.forEach(f => {
-        const code = getWCCodeFromMap(f.properties ? f.properties.name : "", f.id, f.code);
-        if (code) {
-          centroids[code] = path.centroid(f);
-        }
-      });
-      if (centroids["ENG"]) {
-        centroids["ENG"] = projection([-1.1743, 52.3555]);
-      }
-      microNations.forEach(m => {
-        centroids[m.code] = projection(m.coords);
-      });
+      updateCentroidsCache();
 
       // Load initial default edition or URL-specified edition
       const params = new URLSearchParams(window.location.search);
@@ -1021,19 +1009,7 @@
         g.selectAll(".graticule").attr("d", path);
 
         // Recalculate centroids
-        centroids = {};
-        worldData.features.forEach(f => {
-          const code = getWCCodeFromMap(f.properties ? f.properties.name : "", f.id);
-          if (code) {
-            centroids[code] = path.centroid(f);
-          }
-        });
-        if (centroids["ENG"]) {
-          centroids["ENG"] = projection([-1.1743, 52.3555]);
-        }
-        microNations.forEach(m => {
-          centroids[m.code] = projection(m.coords);
-        });
+        updateCentroidsCache();
 
         // Re-project micro nations coordinates
         g.selectAll(".micro-nation")
@@ -1056,6 +1032,22 @@
         return "ENG";
       }
       return alpha3;
+    }
+
+    function updateCentroidsCache() {
+      centroids = {};
+      worldData.features.forEach(f => {
+        const code = getWCCodeFromMap(f.properties ? f.properties.name : "", f.id, f.code);
+        if (code) {
+          centroids[code] = path.centroid(f);
+        }
+      });
+      if (centroids["ENG"]) {
+        centroids["ENG"] = projection([-1.1743, 52.3555]);
+      }
+      microNations.forEach(m => {
+        centroids[m.code] = projection(m.coords);
+      });
     }
 
     function getCountryColor(name, id, code) {
