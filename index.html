@@ -808,17 +808,38 @@
     const zoom = d3.zoom()
       .scaleExtent([1, 8])
       .on("zoom", (event) => {
+        const k = event.transform.k;
         svg.select("g").attr("transform", event.transform);
-        // Scale down micro-nation dots and flow arcs during zoom to keep them clean
-        svg.selectAll(".micro-nation")
-          .attr("r", 3.5 / event.transform.k);
-        svg.selectAll(".flow-arc")
-          .style("stroke-width", (1.2 / event.transform.k) + "px");
 
-        // Toggle capital labels visibility on zoom threshold >= 2.2
-        const isZoomedIn = event.transform.k >= 2.2;
-        svg.selectAll(".capital-label:not(.active-clash-label)")
-          .style("display", isZoomedIn ? "block" : "none");
+        const isMobile = window.innerWidth < 640;
+
+        if (isMobile) {
+          // Mobile Mode Only: Counter-scale text labels & pins so physical font size on mobile screen remains CONSTANT during map zoom!
+          svg.selectAll(".capital-label").each(function() {
+            const el = d3.select(this);
+            const baseSz = parseFloat(el.attr("data-base-size") || 7.0);
+            el.attr("font-size", (baseSz / k) + "px");
+          });
+
+          svg.selectAll(".vector-layer circle:not(.conquest-wave-ring)").each(function() {
+            const circle = d3.select(this);
+            const baseR = parseFloat(circle.attr("data-base-r") || circle.attr("r") || 1.1);
+            circle.attr("r", baseR / k);
+          });
+
+          svg.selectAll(".active-clash-ray")
+            .style("stroke-width", (1.5 / k) + "px");
+        } else {
+          // Desktop Mode: Standard untouched D3 zoom behavior
+          svg.selectAll(".micro-nation")
+            .attr("r", 3.5 / k);
+          svg.selectAll(".flow-arc")
+            .style("stroke-width", (1.2 / k) + "px");
+
+          const isZoomedIn = k >= 2.2;
+          svg.selectAll(".capital-label:not(.active-clash-label)")
+            .style("display", isZoomedIn ? "block" : "none");
+        }
       });
 
     svg.call(zoom);
@@ -1259,29 +1280,34 @@
         const gPin = vectorGroup.append("g").attr("class", "hover-capital-pin");
 
         const isMobile = window.innerWidth < 640;
+        const k = d3.zoomTransform(svg.node()).k || 1.0;
+        const baseDotR = isMobile ? 2.2 : 3.5;
+        const baseTextSz = isMobile ? 8.5 : 11.0;
         
-        // Solid crisp capital dot (Scaled down for mobile screens)
+        // Solid crisp capital dot (Counter-scaled by zoom level k so physical size remains constant)
         gPin.append("circle")
           .attr("cx", cx)
           .attr("cy", cy)
-          .attr("r", isMobile ? 2.2 : 3.5)
+          .attr("r", baseDotR / k)
+          .attr("data-base-r", baseDotR)
           .attr("fill", "#00ffcc")
           .attr("stroke", "#0d0f12")
-          .attr("stroke-width", isMobile ? "0.8px" : "1.2px");
+          .attr("stroke-width", (isMobile ? 0.8 : 1.2) / k + "px");
 
         // Capital name label on the map
         const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
         const labelText = isZh ? capCity : capCity.toUpperCase();
 
         gPin.append("text")
-          .attr("x", cx + (isMobile ? 4.5 : 7))
-          .attr("y", cy + (isMobile ? 2 : 3))
+          .attr("x", cx + (isMobile ? 4.5 : 7) / k)
+          .attr("y", cy + (isMobile ? 2 : 3) / k)
           .attr("font-family", "monospace")
-          .attr("font-size", isMobile ? "8.5px" : "11px")
+          .attr("font-size", (baseTextSz / k) + "px")
+          .attr("data-base-size", baseTextSz)
           .attr("font-weight", "bold")
           .attr("fill", "#00ffcc")
           .attr("stroke", "#0d0f12")
-          .attr("stroke-width", isMobile ? "1.6px" : "2.5px")
+          .attr("stroke-width", (isMobile ? 1.6 : 2.5) / k + "px")
           .attr("paint-order", "stroke fill")
           .text(labelText);
       }
@@ -1554,44 +1580,53 @@
           const isEmpire = originalTeams.filter(t => getCurrentOwner(t) === owner).length > 1;
 
           const isMobile = window.innerWidth < 640;
+          const currentZoom = d3.zoomTransform(svg.node()).k || 1.0;
 
           if (code === activeCampaignTeam) {
             // Main Campaign Team Capital: Refined Hairline Dual-Ring Micro Pin (r = 1.8px + 2.8px ring on mobile)
+            const rOuter = isMobile ? 2.8 : 3.6;
+            const rInner = isMobile ? 1.8 : 2.4;
             vectorGroup.append("circle")
               .attr("cx", cx)
               .attr("cy", cy)
-              .attr("r", isMobile ? 2.8 : 3.6)
+              .attr("r", rOuter / currentZoom)
+              .attr("data-base-r", rOuter)
               .attr("fill", "none")
               .attr("stroke", "#f59e0b")
-              .attr("stroke-width", "0.6px")
+              .attr("stroke-width", (0.6 / currentZoom) + "px")
               .attr("stroke-dasharray", "1.5,1.5")
               .attr("opacity", 0.9);
 
             vectorGroup.append("circle")
               .attr("cx", cx)
               .attr("cy", cy)
-              .attr("r", isMobile ? 1.8 : 2.4)
+              .attr("r", rInner / currentZoom)
+              .attr("data-base-r", rInner)
               .attr("fill", "#f59e0b")
               .attr("stroke", "#0a0b0d")
-              .attr("stroke-width", "0.8px");
+              .attr("stroke-width", (0.8 / currentZoom) + "px");
           } else if (code === owner && isEmpire) {
             // Empire Capital: Micro Gold Pin (r = 1.5px on mobile)
+            const rPin = isMobile ? 1.5 : 2.2;
             vectorGroup.append("circle")
               .attr("cx", cx)
               .attr("cy", cy)
-              .attr("r", isMobile ? 1.5 : 2.2)
+              .attr("r", rPin / currentZoom)
+              .attr("data-base-r", rPin)
               .attr("fill", "#ffd700")
               .attr("stroke", "#0a0b0d")
-              .attr("stroke-width", "0.8px");
+              .attr("stroke-width", (0.8 / currentZoom) + "px");
           } else {
             // Regular Capital Pin: Micro White Core Pin (r = 1.1px on mobile)
+            const rPin = isMobile ? 1.1 : 1.6;
             vectorGroup.append("circle")
               .attr("cx", cx)
               .attr("cy", cy)
-              .attr("r", isMobile ? 1.1 : 1.6)
+              .attr("r", rPin / currentZoom)
+              .attr("data-base-r", rPin)
               .attr("fill", "#ffffff")
               .attr("stroke", "#0a0b0d")
-              .attr("stroke-width", "0.6px")
+              .attr("stroke-width", (0.6 / currentZoom) + "px")
               .attr("opacity", 0.95);
           }
 
@@ -1599,7 +1634,6 @@
           const capCity = teamCapitals[code]?.city || teamMetadata[code]?.name || code;
           const isPlaying = playingTeams.includes(code);
           const isCampaignHQ = (activeCampaignTeam && code === activeCampaignTeam);
-          const currentZoom = d3.zoomTransform(svg.node()).k || 1.0;
 
           // On mobile screens, strictly show labels ONLY for active playing teams or campaign HQ (never show non-competing capitals even when zooming)
           const shouldShowLabel = isMobile 
@@ -1607,13 +1641,14 @@
             : (isPlaying || currentZoom >= 2.0);
           
           if (shouldShowLabel) {
-            const fontSz = isMobile ? (isPlaying ? "7.5px" : "6.5px") : (isPlaying ? "9px" : "8px");
+            const fontSzNum = isMobile ? (isPlaying ? 7.5 : 6.5) : (isPlaying ? 9.0 : 8.0);
             vectorGroup.append("text")
-              .attr("x", cx + (isMobile ? 2.5 : 3.5))
-              .attr("y", cy + (isMobile ? 1.8 : 2.5))
+              .attr("x", cx + (isMobile ? 2.5 : 3.5) / currentZoom)
+              .attr("y", cy + (isMobile ? 1.8 : 2.5) / currentZoom)
               .attr("class", `capital-label ${isPlaying ? 'active-clash-label' : ''}`)
               .attr("font-family", "monospace")
-              .attr("font-size", fontSz)
+              .attr("font-size", (fontSzNum / currentZoom) + "px")
+              .attr("data-base-size", fontSzNum)
               .attr("font-weight", isPlaying ? "bold" : "600")
               .attr("letter-spacing", "0.03em")
               .attr("fill", isPlaying ? "#00ffcc" : "#f59e0b")
