@@ -399,15 +399,16 @@
         if (el) callback(el);
       };
 
+      const t = (typeof I18N !== "undefined" && typeof currentLang !== "undefined") ? (I18N[currentLang] || I18N.en) : null;
       if (isLightTheme) {
         body.classList.add("light-theme");
         updateEl("theme-icon", e => e.className = "ph-bold ph-moon text-[10px]");
-        updateEl("theme-label", e => e.innerText = "THEME: LIGHT");
+        updateEl("theme-label", e => e.innerText = t ? t.themeLight : "THEME: LIGHT");
         updateEl("legend-theme-icon", e => e.className = "ph-bold ph-moon text-xs");
       } else {
         body.classList.remove("light-theme");
         updateEl("theme-icon", e => e.className = "ph-bold ph-sun text-[10px]");
-        updateEl("theme-label", e => e.innerText = "THEME: DARK");
+        updateEl("theme-label", e => e.innerText = t ? t.themeDark : "THEME: DARK");
         updateEl("legend-theme-icon", e => e.className = "ph-bold ph-sun text-xs");
       }
 
@@ -1552,13 +1553,14 @@
       const overrideCount = Object.keys(userOverrides).length;
       const resetBtn = document.getElementById("btn-reset-overrides");
       const statusLabel = document.getElementById("sim-status-label");
+      const t = (typeof I18N !== "undefined" && typeof currentLang !== "undefined") ? (I18N[currentLang] || I18N.en) : null;
       if (overrideCount > 0) {
         resetBtn.classList.remove("hidden");
-        statusLabel.innerText = `Status: Parallel Universe (${overrideCount} Alt)`;
+        statusLabel.innerText = t ? t.statusParallel(overrideCount) : `Status: Parallel Universe (${overrideCount} Alt)`;
         statusLabel.className = "text-[10px] uppercase font-mono text-console-accent font-bold animate-pulse";
       } else {
         resetBtn.classList.add("hidden");
-        statusLabel.innerText = "Status: Simulating";
+        statusLabel.innerText = t ? t.statusSimulating : "Status: Simulating";
         statusLabel.className = "text-[10px] uppercase font-mono text-console-dimText";
       }
 

@@ -50,8 +50,8 @@ const I18N = {
     tabLogs: "FEED",
     leaderboardTitle: "Territorial Holdings",
     activeFactionsCount: (n) => `${n} Active Factions`,
-    heroBannerTitleDefault: "SELECT CAMPAIGN FACTION",
-    heroBannerDescDefault: "Choose your nation to lead global conquest",
+    selectFactionTitle: "SELECT CAMPAIGN FACTION",
+    selectFactionDesc: "Choose your nation to lead global conquest",
     heroBannerCommander: "FACTION COMMANDER:",
     liveFeedTitle: "Live Feed [Conquest log]",
     clashCardDefaultStage: "TACTICAL CONFLICT // MATCH",
@@ -100,8 +100,8 @@ const I18N = {
     tabLogs: "战报流",
     leaderboardTitle: "战功排行榜",
     activeFactionsCount: (n) => `${n} 支活跃球队`,
-    heroBannerTitleDefault: "选择征服阵营",
-    heroBannerDescDefault: "选择你的国家，带领军队征服全球",
+    selectFactionTitle: "选择征服阵营",
+    selectFactionDesc: "选择你的国家，带领军队征服全球",
     heroBannerCommander: "阵营指挥官:",
     liveFeedTitle: "比赛实时征服战报",
     clashCardDefaultStage: "焦点战术决战",
@@ -173,6 +173,18 @@ function updateLanguageUI() {
   updateEl("lang-label", t.langBtn);
   updateEl("site-header-title", t.siteTitle);
   updateEl("edition-label", t.editionLabel);
+
+  const themeLabel = document.getElementById("theme-label");
+  if (themeLabel) {
+    const isLight = document.body.classList.contains("light-theme");
+    themeLabel.innerText = isLight ? t.themeLight : t.themeDark;
+  }
+
+  const sfxLabel = document.getElementById("audio-label");
+  if (sfxLabel) {
+    const isMuted = (typeof audio !== "undefined" && audio.isMuted);
+    sfxLabel.innerText = isMuted ? t.sfxOff : t.sfxOn;
+  }
 
   const shareText = document.getElementById("share-btn-text");
   if (shareText) shareText.innerText = t.shareBtn;
