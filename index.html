@@ -745,11 +745,10 @@
     const path = d3.geoPath().projection(projection);
     const graticule = d3.geoGraticule();
 
-    // Map Zooming capability (D3 Zoom)
     const zoom = d3.zoom()
       .scaleExtent([1, 8])
       .on("zoom", (event) => {
-        svg.selectAll("g").attr("transform", event.transform);
+        svg.select("g").attr("transform", event.transform);
         // Scale down micro-nation dots and flow arcs during zoom to keep them clean
         svg.selectAll(".micro-nation")
           .attr("r", 3.5 / event.transform.k);
