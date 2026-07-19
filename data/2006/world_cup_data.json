@@ -559,7 +559,7 @@
       "home": "CHE",
       "away": "UKR",
       "winner": "UKR",
-      "score": "0-3 (p)",
+      "score": "0-0 (0-3 p)",
       "stage": "Round of 16"
     },
     {
@@ -583,7 +583,7 @@
       "home": "DEU",
       "away": "ARG",
       "winner": "DEU",
-      "score": "4-2 (p)",
+      "score": "1-1 (4-2 p)",
       "stage": "Quarterfinal"
     },
     {
@@ -599,7 +599,7 @@
       "home": "ENG",
       "away": "PRT",
       "winner": "PRT",
-      "score": "1-3 (p)",
+      "score": "0-0 (1-3 p)",
       "stage": "Quarterfinal"
     },
     {
@@ -639,7 +639,7 @@
       "home": "ITA",
       "away": "FRA",
       "winner": "ITA",
-      "score": "5-3 (p)",
+      "score": "1-1 (5-3 p)",
       "stage": "Final"
     }
   ]
