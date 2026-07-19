@@ -1534,7 +1534,17 @@
         stopPlayback();
       }
       
-      // Update URL parameters to match selected edition
+      // Reset active campaign team, step flags, and user overrides when switching editions
+      activeCampaignTeam = null;
+      localStorage.removeItem("activeCampaignTeam");
+      if (typeof updateCampaignHUD === "function") updateCampaignHUD();
+      closeClashCard();
+
+      lastCampaignPauseStep = -1;
+      lastVictoryStep = -1;
+      lastRenderedStepIndex = 0;
+      isSandboxAction = false;
+
       userOverrides = {};
       Object.keys(teamSwaps).forEach(k => delete teamSwaps[k]);
       const url = new URL(window.location.href);
@@ -1561,6 +1571,12 @@
           dates.unshift(preTournamentDate);
         }
         originalTeams = Object.keys(teamMetadata);
+
+        if (activeCampaignTeam && !originalTeams.includes(activeCampaignTeam)) {
+          activeCampaignTeam = null;
+          localStorage.removeItem("activeCampaignTeam");
+          if (typeof updateCampaignHUD === "function") updateCampaignHUD();
+        }
 
         // Calculate advancing teams and last group stage match index dynamically
         advancingTeams = new Set();
