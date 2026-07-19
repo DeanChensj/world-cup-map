@@ -2102,11 +2102,12 @@
       let currentDate = dates[0];
       let playingTeams = [];
       let activeDayMatches = [];
+      let isCampaignPlayingToday = false;
 
       if (step && step.type === "group_day") {
         currentDate = step.date;
         activeDayMatches = step.matches;
-        playingTeams = Array.from(new Set(step.matches.flatMap(m => [m.home, m.away])));
+        playingTeams = Array.from(new Set(step.matches.flatMap(m => [getEffectiveTeamCode(m.home), getEffectiveTeamCode(m.away)])));
         document.getElementById("current-date-badge").innerText = `${formatDateString(currentDate)} • Group Stage`;
 
         const campaignMatch = activeCampaignTeam ? step.matches.find(m => {
@@ -2116,6 +2117,7 @@
         }) : null;
 
         if (campaignMatch) {
+          isCampaignPlayingToday = true;
           const mIdx = (campaignMatch.originalIndex !== undefined) ? campaignMatch.originalIndex : matches.indexOf(campaignMatch);
           const latestLog = (logs.length > 0 && (logs[0].matchIndex === mIdx || logs[0].matchIndex === matches.indexOf(campaignMatch))) ? logs[0] : null;
           showClashCard(campaignMatch, latestLog);
@@ -2154,16 +2156,27 @@
           }
         }
 
-        playingTeams = Array.from(new Set([homeEff, awayEff, ownerHome, ownerAway].filter(Boolean)));
-        showClashCard(step.match, latestLog);
+        playingTeams = Array.from(new Set([ownerHome, ownerAway].filter(Boolean)));
+        
+        if (activeCampaignTeam) {
+          isCampaignPlayingToday = (ownerHome === activeCampaignTeam || ownerAway === activeCampaignTeam);
+          if (isCampaignPlayingToday) {
+            showClashCard(step.match, latestLog);
+          } else {
+            closeClashCard();
+          }
+        } else {
+          showClashCard(step.match, latestLog);
+        }
+
         document.getElementById("current-date-badge").innerText = `${formatDateString(currentDate)} • ${step.match.stage}`;
       } else {
         closeClashCard();
         document.getElementById("current-date-badge").innerText = `${currentDate || 'KICKOFF'} • Kickoff`;
       }
 
-      // Campaign Faction engagement (Autoplay pause & Manual mode notification popup)
-      if (activeCampaignTeam && playingTeams.includes(activeCampaignTeam)) {
+      // Campaign Faction engagement (Autoplay pause & Notification popup ONLY when activeCampaignTeam is ACTUALLY playing)
+      if (activeCampaignTeam && isCampaignPlayingToday) {
         if (currentStepIndex !== lastCampaignPauseStep) {
           lastCampaignPauseStep = currentStepIndex;
           if (playbackInterval) {
