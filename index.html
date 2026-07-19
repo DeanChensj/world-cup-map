@@ -512,6 +512,7 @@
     var lastRenderedStepIndex = 0;
     var lastVictoryStep = -1;
     var lastCampaignPauseStep = -1;
+    var animationTimeouts = [];
 
     function jumpToMatchStep(matchIndex) {
       const stepIdx = timelineSteps.findIndex(s => {
@@ -564,17 +565,17 @@
 
       if (isGroupStage) {
         if (currentWinner === homeCode) {
-          userOverrides[matchIndex] = awayCode;
+          userOverrides[matchIndex] = awayEff;
         } else if (currentWinner === awayCode) {
           userOverrides[matchIndex] = "";
         } else {
-          userOverrides[matchIndex] = homeCode;
+          userOverrides[matchIndex] = homeEff;
         }
       } else {
         if (currentWinner === homeCode) {
-          userOverrides[matchIndex] = awayCode;
+          userOverrides[matchIndex] = awayEff;
         } else {
-          userOverrides[matchIndex] = homeCode;
+          userOverrides[matchIndex] = homeEff;
         }
       }
 
@@ -987,7 +988,7 @@
 
     function formatScoreDisplay(scoreStr) {
       if (!scoreStr) return "";
-      if (scoreStr.includes("(p)")) {
+      if (scoreStr.includes("p)")) {
         const parts = scoreStr.split("(");
         const mainScore = parts[0].trim();
         const pScore = parts[1].replace("p)", "").replace("p", "").trim();
@@ -1009,7 +1010,7 @@
         return rawScore;
       }
 
-      if (rawScore.includes("(p)")) {
+      if (rawScore.includes("p)")) {
         const parts = rawScore.split("(");
         const firstPart = parts[0].trim();
         const pInside = parts[1] ? parts[1].replace("p)", "").replace("p", "").trim() : "";
@@ -1110,14 +1111,27 @@
             const idx = m.originalIndex;
             const homeEff = getEffectiveTeamCode(m.home);
             const awayEff = getEffectiveTeamCode(m.away);
-            let winnerEff = (overrideMap[idx] !== undefined) ? getEffectiveTeamCode(overrideMap[idx]) : getEffectiveTeamCode(m.winner);
+            const isOverridden = (overrideMap[idx] !== undefined);
+            let winnerEff = isOverridden ? getEffectiveTeamCode(overrideMap[idx]) : getEffectiveTeamCode(m.winner);
             const scoreStr = m.score || "0-0";
             const parts = scoreStr.split("-");
-            const sh = (parts.length === 2 && !isNaN(parts[0])) ? parseInt(parts[0], 10) : 0;
-            const sa = (parts.length === 2 && !isNaN(parts[1])) ? parseInt(parts[1], 10) : 0;
+            let sh = (parts.length === 2 && !isNaN(parts[0])) ? parseInt(parts[0], 10) : 0;
+            let sa = (parts.length === 2 && !isNaN(parts[1])) ? parseInt(parts[1], 10) : 0;
 
-            if (!winnerEff && sh !== sa) {
+            if (!isOverridden && !winnerEff && sh !== sa) {
               winnerEff = (sh > sa) ? homeEff : awayEff;
+            }
+
+            if (isOverridden) {
+              if (winnerEff === homeEff && sa > sh) { const temp = sh; sh = sa; sa = temp; }
+              else if (winnerEff === awayEff && sh > sa) { const temp = sh; sh = sa; sa = temp; }
+              else if (!winnerEff && sh !== sa) {
+                const avg = Math.floor((sh + sa) / 2);
+                sh = avg; sa = avg;
+              } else if (winnerEff && sh === sa) {
+                if (winnerEff === homeEff) sh += 1;
+                else sa += 1;
+              }
             }
 
             if (winnerEff === homeEff) {
@@ -1135,6 +1149,8 @@
             } else {
               stats[homeEff].pts += 1;
               stats[awayEff].pts += 1;
+              stats[homeEff].gf += sh;
+              stats[awayEff].gf += sa;
             }
           });
 
@@ -1353,7 +1369,10 @@
             color: meta?.color || "#7f8c8d"
           };
         })
-        .sort((a, b) => b.count - a.count);
+        .sort((a, b) => {
+          if (b.count !== a.count) return b.count - a.count;
+          return a.name.localeCompare(b.name);
+        });
     }
 
     // --- Conquest Event Warning Banner ---
@@ -1980,7 +1999,7 @@
 
       // Team A element
       const cardA = document.getElementById("clash-card-teamA");
-      cardA.onclick = () => setMatchWinner(matchIdx, code1);
+      cardA.onclick = () => setMatchWinner(matchIdx, homeEff);
       document.getElementById("clash-teamA-flag").innerHTML = getFlagImg(code1).replace('w-5 h-3.5', 'w-6 h-4 sm:w-10 sm:h-7 shadow-md border border-amber-500/40');
       document.getElementById("clash-teamA-name").innerHTML = `
         <div class="flex items-center space-x-1 justify-center">
@@ -1993,7 +2012,7 @@
 
       // Team B element
       const cardB = document.getElementById("clash-card-teamB");
-      cardB.onclick = () => setMatchWinner(matchIdx, code2);
+      cardB.onclick = () => setMatchWinner(matchIdx, awayEff);
       document.getElementById("clash-teamB-flag").innerHTML = getFlagImg(code2).replace('w-5 h-3.5', 'w-6 h-4 sm:w-10 sm:h-7 shadow-md border border-amber-500/40');
       document.getElementById("clash-teamB-name").innerHTML = `
         <div class="flex items-center space-x-1 justify-center">
@@ -2017,6 +2036,10 @@
 
     // --- UI Update Loop ---
     function updateUI() {
+      // Clear any pending animation timeouts to prevent ghost effects when scrubbing
+      animationTimeouts.forEach(clearTimeout);
+      animationTimeouts = [];
+
       // Run simulation step FIRST to ensure ownership state is 100% synchronized for currentStepIndex (forwards & backwards)
       const logs = runSimulationToStep(currentStepIndex);
 
@@ -2088,7 +2111,7 @@
 
       // Stop any ongoing D3 transitions immediately if scrubbing or stepping backward
       if (!isForward) {
-        svg.selectAll(".country").interrupt();
+        svg.selectAll(".country").interrupt().interrupt("spotlight").interrupt("restoreOpacity");
       }
 
       if (latestAnnexation) {
@@ -2104,7 +2127,7 @@
 
         // 1. Tactical Spotlight: Dim non-involved countries gently so land mass remains visible without turning pitch black
         svg.selectAll(".country")
-          .transition()
+          .transition("spotlight")
           .duration(350)
           .style("opacity", d => {
             const alpha3 = d.code || getWCCodeFromMap(d.properties ? d.properties.name : "", d.id);
@@ -2114,7 +2137,7 @@
           });
 
         // 2. Stage 1 Impact & Expanding Conquest Wave Ring at 800ms
-        setTimeout(() => {
+        animationTimeouts.push(setTimeout(() => {
           if (typeof triggerShockwave === "function") triggerShockwave(loserCode);
           if (typeof audio !== "undefined" && audio.playConquestBoom) audio.playConquestBoom();
 
@@ -2136,7 +2159,7 @@
               .attr("opacity", 0)
               .remove();
           }
-        }, 800);
+        }, 800));
 
         // 3. Stage 2: Conquest Flash Border + Staggered Fill Transition
         svg.selectAll(".country").each(function(d) {
@@ -2176,16 +2199,16 @@
         });
 
         // Restore full opacity to all countries after animation completes (~2.1s)
-        setTimeout(() => {
+        animationTimeouts.push(setTimeout(() => {
           svg.selectAll(".country")
-             .transition()
+             .transition("restoreOpacity")
              .duration(400)
              .style("opacity", 1.0);
-        }, 2100);
+        }, 2100));
 
       } else {
         // Instant / Standard Transition for Group Stage or Backwards Step
-        svg.selectAll(".country").interrupt();
+        svg.selectAll(".country").interrupt().interrupt("spotlight").interrupt("restoreOpacity");
         svg.selectAll(".conquest-wave-ring").remove();
         svg.selectAll(".country")
           .style("opacity", 1.0)
