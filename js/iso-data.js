@@ -73,7 +73,7 @@ const numericToAlpha3 = {
   "724": "ESP", "736": "SDN", "752": "SWE", "756": "CHE", "762": "TJK",
   "764": "THA", "788": "TUN", "792": "TUR", "800": "UGA", "804": "UKR",
   "807": "MKD", "818": "EGY", "826": "GBR", "840": "USA", "858": "URY",
-  "860": "UZB", "862": "VEN", "887": "YEM", "894": "ZMB", "716": "ZWE", "531": "CUW", "688": "SRB", "132": "CPV", "254": "GUF"
+  "860": "UZB", "862": "VEN", "887": "YEM", "894": "ZMB", "716": "ZWE", "531": "CUW", "688": "SRB", "132": "CPV", "254": "GUF", "188": "CRI", "768": "TGO", "780": "TTO"
 };
 
 // --- World Cup 2026 Team Capitals Coordinates Database ---
@@ -143,5 +143,15 @@ const teamCapitals = {
   "SRB": { "city": "Belgrade", "coords": [20.4489, 44.7866] },
   "UKR": { "city": "Kyiv", "coords": [30.5234, 50.4501] },
   "NGA": { "city": "Abuja", "coords": [7.4951, 9.0579] },
-  "CMR": { "city": "Yaoundé", "coords": [11.5021, 3.8480] }
+  "CMR": { "city": "Yaoundé", "coords": [11.5021, 3.8480] },
+  "AGO": { "city": "Luanda", "coords": [13.2343, -8.8390] },
+  "BGR": { "city": "Sofia", "coords": [23.3219, 42.6977] },
+  "CRI": { "city": "San José", "coords": [-84.0833, 9.9281] },
+  "DNK": { "city": "Copenhagen", "coords": [12.5683, 55.6761] },
+  "HND": { "city": "Tegucigalpa", "coords": [-87.2068, 14.0818] },
+  "ISL": { "city": "Reykjavik", "coords": [-21.8954, 64.1355] },
+  "JAM": { "city": "Kingston", "coords": [-76.7920, 17.9716] },
+  "ROU": { "city": "Bucharest", "coords": [26.1025, 44.4268] },
+  "TGO": { "city": "Lomé", "coords": [1.2125, 6.1375] },
+  "TTO": { "city": "Port of Spain", "coords": [-61.5180, 10.6660] }
 };
