@@ -552,14 +552,26 @@
       if (!match) return;
 
       const isGroupStage = (match.stage === "Group Stage" || match.stage.includes("Group"));
+      const isThirdPlace = match.stage && (match.stage.includes("Third") || match.stage.includes("third") || match.stage.includes("3rd"));
       const homeEff = getEffectiveTeamCode(match.home);
       const awayEff = getEffectiveTeamCode(match.away);
 
       const slotHome = isGroupStage ? homeEff : (groupSlotReplacements[homeEff] || homeEff);
       const slotAway = isGroupStage ? awayEff : (groupSlotReplacements[awayEff] || awayEff);
 
-      const homeCode = isGroupStage ? homeEff : getCurrentOwner(slotHome);
-      const awayCode = isGroupStage ? awayEff : getCurrentOwner(slotAway);
+      let homeCode, awayCode;
+      if (isGroupStage) {
+        homeCode = homeEff;
+        awayCode = awayEff;
+      } else if (isThirdPlace) {
+        const logs = runSimulationToStep(currentStepIndex);
+        const res = getThirdPlaceTeams(slotHome, slotAway, logs);
+        homeCode = res.homeCode;
+        awayCode = res.awayCode;
+      } else {
+        homeCode = getCurrentOwner(slotHome);
+        awayCode = getCurrentOwner(slotAway);
+      }
 
       let currentWinner = (userOverrides[matchIndex] !== undefined) ? userOverrides[matchIndex] : match.winner;
       if (currentWinner === match.home || currentWinner === homeEff) currentWinner = homeCode;
@@ -711,7 +723,7 @@
         let hCode = matchLog ? matchLog.home : getEffectiveTeamCode(m.home);
         let aCode = matchLog ? matchLog.away : getEffectiveTeamCode(m.away);
 
-        if (typeof groupSlotReplacements !== "undefined") {
+        if (!matchLog && typeof groupSlotReplacements !== "undefined") {
           const rawH = getEffectiveTeamCode(m.home);
           const rawA = getEffectiveTeamCode(m.away);
           if (groupSlotReplacements[rawH]) hCode = groupSlotReplacements[rawH];
@@ -963,6 +975,26 @@
       const code2 = alpha3To2[code];
       if (!code2) return `<span class="w-5 h-3.5 bg-console-border inline-block rounded-sm"></span>`;
       return `<img src="https://flagcdn.com/20x15/${code2}.png" class="w-5 h-3.5 object-cover rounded-sm border border-console-border/40 shadow-sm" alt="${code}" />`;
+    }
+
+    function getThirdPlaceTeams(slotHome, slotAway, logs) {
+      const sfLogs = (logs || []).filter(l => l.stage && (l.stage.includes("Semi") || l.stage.includes("semi")));
+      let homeCode = slotHome;
+      let awayCode = slotAway;
+
+      if (sfLogs.length >= 1) {
+        const matchHome = sfLogs.find(l => l.home === slotHome || l.away === slotHome || l.loserCode === slotHome);
+        if (matchHome && matchHome.loserCode) homeCode = matchHome.loserCode;
+        else if (sfLogs.length >= 2 && sfLogs[1].loserCode) homeCode = sfLogs[1].loserCode;
+      }
+
+      if (sfLogs.length >= 1) {
+        const matchAway = sfLogs.find(l => l.home === slotAway || l.away === slotAway || l.loserCode === slotAway);
+        if (matchAway && matchAway.loserCode) awayCode = matchAway.loserCode;
+        else if (sfLogs.length >= 2 && sfLogs[0].loserCode && sfLogs[0].loserCode !== homeCode) awayCode = sfLogs[0].loserCode;
+      }
+
+      return { homeCode, awayCode };
     }
 
     let originalTeams = [];
@@ -1218,6 +1250,7 @@
     function processSingleMatch(match, isLatestStep, logs) {
       const matchIdx = match.originalIndex;
       const isGroupStage = (match.stage === "Group Stage" || match.stage.includes("Group"));
+      const isThirdPlace = match.stage && (match.stage.includes("Third") || match.stage.includes("third") || match.stage.includes("3rd"));
 
       const homeEffRaw = getEffectiveTeamCode(match.home);
       const awayEffRaw = getEffectiveTeamCode(match.away);
@@ -1225,9 +1258,18 @@
       const slotHome = isGroupStage ? homeEffRaw : (groupSlotReplacements[homeEffRaw] || homeEffRaw);
       const slotAway = isGroupStage ? awayEffRaw : (groupSlotReplacements[awayEffRaw] || awayEffRaw);
 
-      // Dynamic Effective Teams (Sovereign Empire Slot Succession for Knockouts)
-      const homeCode = isGroupStage ? homeEffRaw : getCurrentOwner(slotHome);
-      const awayCode = isGroupStage ? awayEffRaw : getCurrentOwner(slotAway);
+      let homeCode, awayCode;
+      if (isGroupStage) {
+        homeCode = homeEffRaw;
+        awayCode = awayEffRaw;
+      } else if (isThirdPlace) {
+        const res = getThirdPlaceTeams(slotHome, slotAway, logs);
+        homeCode = res.homeCode;
+        awayCode = res.awayCode;
+      } else {
+        homeCode = getCurrentOwner(slotHome);
+        awayCode = getCurrentOwner(slotAway);
+      }
 
       // If both slots belong to the exact same owner empire in knockout, skip duplicate match
       if (!isGroupStage && homeCode === awayCode) {
@@ -1963,6 +2005,7 @@
 
       const matchIdx = (match.originalIndex !== undefined) ? match.originalIndex : matches.indexOf(match);
       const isGroupStage = (!match.stage || match.stage === "Group Stage" || match.stage.includes("Group"));
+      const isThirdPlace = match.stage && (match.stage.includes("Third") || match.stage.includes("third") || match.stage.includes("3rd"));
 
       let code1, code2, activeWinner;
       const homeEff = getEffectiveTeamCode(match.home);
@@ -1976,10 +2019,20 @@
         const slotHome = isGroupStage ? homeEff : (groupSlotReplacements[homeEff] || homeEff);
         const slotAway = isGroupStage ? awayEff : (groupSlotReplacements[awayEff] || awayEff);
 
-        code1 = isGroupStage ? homeEff : getCurrentOwner(slotHome);
-        code2 = isGroupStage ? awayEff : getCurrentOwner(slotAway);
+        if (isGroupStage) {
+          code1 = homeEff;
+          code2 = awayEff;
+        } else if (isThirdPlace) {
+          const logs = runSimulationToStep(currentStepIndex);
+          const res = getThirdPlaceTeams(slotHome, slotAway, logs);
+          code1 = res.homeCode;
+          code2 = res.awayCode;
+        } else {
+          code1 = getCurrentOwner(slotHome);
+          code2 = getCurrentOwner(slotAway);
+        }
 
-        if (!isGroupStage && code1 === code2) {
+        if (!isGroupStage && !isThirdPlace && code1 === code2) {
           code1 = homeEff;
           code2 = awayEff;
         }
@@ -2084,10 +2137,21 @@
           ownerAway = latestLog.away;
         } else {
           const isGrp = (!step.match.stage || step.match.stage === "Group Stage" || step.match.stage.includes("Group"));
+          const isThird = step.match.stage && (step.match.stage.includes("Third") || step.match.stage.includes("third") || step.match.stage.includes("3rd"));
           const slotHome = isGrp ? homeEff : (groupSlotReplacements[homeEff] || homeEff);
           const slotAway = isGrp ? awayEff : (groupSlotReplacements[awayEff] || awayEff);
-          ownerHome = isGrp ? homeEff : getCurrentOwner(slotHome);
-          ownerAway = isGrp ? awayEff : getCurrentOwner(slotAway);
+
+          if (isGrp) {
+            ownerHome = homeEff;
+            ownerAway = awayEff;
+          } else if (isThird) {
+            const res = getThirdPlaceTeams(slotHome, slotAway, logs);
+            ownerHome = res.homeCode;
+            ownerAway = res.awayCode;
+          } else {
+            ownerHome = getCurrentOwner(slotHome);
+            ownerAway = getCurrentOwner(slotAway);
+          }
         }
 
         playingTeams = Array.from(new Set([homeEff, awayEff, ownerHome, ownerAway].filter(Boolean)));
