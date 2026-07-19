@@ -1219,6 +1219,16 @@
       let rawWinner = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
       let winnerCode = rawWinner ? getEffectiveTeamCode(rawWinner) : null;
       
+      const dynamicScore = getEffectiveMatchScore(match, (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner);
+
+      if (!winnerCode && dynamicScore) {
+        const parts = dynamicScore.split("-");
+        const sh = (parts.length === 2 && !isNaN(parts[0])) ? parseInt(parts[0], 10) : 0;
+        const sa = (parts.length === 2 && !isNaN(parts[1])) ? parseInt(parts[1], 10) : 0;
+        if (sh > sa) winnerCode = homeEffRaw;
+        else if (sa > sh) winnerCode = awayEffRaw;
+      }
+      
       // Resolve static winner code (e.g. "ARG") to effective sovereign empire
       if (winnerCode === homeEffRaw) winnerCode = homeCode;
       else if (winnerCode === awayEffRaw) winnerCode = awayCode;
@@ -1226,8 +1236,6 @@
       if (!isGroupStage && !winnerCode) return;
 
       const loserCode = winnerCode ? ((winnerCode === homeCode) ? awayCode : homeCode) : null;
-
-      const dynamicScore = getEffectiveMatchScore(match, (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner);
 
       // Always log match for Live Feed using dynamic effective teams!
       logs.unshift({
@@ -2481,12 +2489,15 @@
       const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
 
       if (log.isGroupMatch) {
+        const resultHTML = log.winnerCode 
+          ? `<span class="text-console-accent font-bold">${winnerName} ${isZh ? '胜' : 'WIN'}</span>`
+          : `<span class="text-console-dimText font-bold">${isZh ? '平局' : 'DRAW'}</span>`;
         matchDetailHTML = `
           <div class="text-console-text font-semibold mt-0.5">
             ${getFlagImg(log.home)} ${homeName} <span class="text-console-dimText font-normal">vs</span> ${awayName} ${getFlagImg(log.away)}
           </div>
           <div class="text-[10px] mt-0.5 flex items-center space-x-2">
-            <span class="text-console-accent font-bold">${winnerName} ${isZh ? '胜' : 'WIN'}</span>
+            ${resultHTML}
             <span class="text-console-dimText/70 text-[9px]">• ${isZh ? '实际比分' : 'Real'}: ${log.score}</span>
           </div>
         `;
