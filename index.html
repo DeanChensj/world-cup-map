@@ -2055,6 +2055,20 @@
         activeDayMatches = step.matches;
         playingTeams = Array.from(new Set(step.matches.flatMap(m => [m.home, m.away])));
         document.getElementById("current-date-badge").innerText = `${formatDateString(currentDate)} • Group Stage`;
+
+        const campaignMatch = activeCampaignTeam ? step.matches.find(m => {
+          const hEff = getEffectiveTeamCode(m.home);
+          const aEff = getEffectiveTeamCode(m.away);
+          return hEff === activeCampaignTeam || aEff === activeCampaignTeam || m.home === activeCampaignTeam || m.away === activeCampaignTeam;
+        }) : null;
+
+        if (campaignMatch) {
+          const mIdx = (campaignMatch.originalIndex !== undefined) ? campaignMatch.originalIndex : matches.indexOf(campaignMatch);
+          const latestLog = (logs.length > 0 && (logs[0].matchIndex === mIdx || logs[0].matchIndex === matches.indexOf(campaignMatch))) ? logs[0] : null;
+          showClashCard(campaignMatch, latestLog);
+        } else {
+          closeClashCard();
+        }
       } else if (step && step.type === "knockout_match") {
         currentDate = step.match.date;
         activeDayMatches = [step.match];
@@ -2084,14 +2098,16 @@
         document.getElementById("current-date-badge").innerText = `${currentDate || 'KICKOFF'} • Kickoff`;
       }
 
-      // Auto-pause for Campaign Faction engagement
-      if (activeCampaignTeam && playingTeams.includes(activeCampaignTeam) && playbackInterval) {
+      // Campaign Faction engagement (Autoplay pause & Manual mode notification popup)
+      if (activeCampaignTeam && playingTeams.includes(activeCampaignTeam)) {
         if (currentStepIndex !== lastCampaignPauseStep) {
-          stopPlayback();
           lastCampaignPauseStep = currentStepIndex;
+          if (playbackInterval) {
+            stopPlayback();
+          }
           if (typeof audio !== "undefined" && audio.playAlert) audio.playAlert();
           const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
-          triggerAlert(isZh ? "⚠️ 指挥官请注意：您的主队出战！推演已自动暂停" : "⚠️ COMMANDER: FACTION DEPLOYED! PLAYBACK PAUSED");
+          triggerAlert(isZh ? "⚠️ 指挥官请注意：您的主队出战！" : "⚠️ COMMANDER: FACTION DEPLOYED!");
         }
       }
 
