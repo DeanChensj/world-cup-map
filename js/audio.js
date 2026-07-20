@@ -450,6 +450,86 @@ class TacticalAudio {
     });
   }
 
+  // 13. Authentic Cristiano Ronaldo "SIUUU!" Audio Sample Playback
+  playSiuuuSFX(side = '1') {
+    if (this.muted) return;
+    this.init();
+
+    try {
+      if (!this.siuuuAudio) {
+        this.siuuuAudio = new Audio('assets/audio/siuuu.mp3');
+      }
+      this.siuuuAudio.volume = Math.min(1.0, this.volume * 1.1);
+      this.siuuuAudio.currentTime = 0;
+      const playPromise = this.siuuuAudio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(err => {
+          this.playSiuuuSynth(side);
+        });
+      }
+    } catch (e) {
+      this.playSiuuuSynth(side);
+    }
+  }
+
+  // Fallback Synthesizer for SIUUU
+  playSiuuuSynth(side = '1') {
+    if (this.muted) return;
+    this.init();
+    const now = this.ctx.currentTime;
+
+    const panVal = (side === '1') ? -0.35 : (side === '2') ? 0.35 : 0;
+    let panner = null;
+    if (this.ctx.createStereoPanner && panVal !== 0) {
+      panner = this.ctx.createStereoPanner();
+      panner.pan.setValueAtTime(panVal, now);
+      panner.connect(this.compressor);
+    }
+    const outputNode = panner || this.compressor;
+
+    // High crisp whistle / "SI..." entrance (0ms -> 120ms)
+    const sOsc = this.ctx.createOscillator();
+    const sGain = this.ctx.createGain();
+    sOsc.type = 'sine';
+    sOsc.frequency.setValueAtTime(1400, now);
+    sOsc.frequency.exponentialRampToValueAtTime(1000, now + 0.12);
+
+    sGain.gain.setValueAtTime(0.001, now);
+    sGain.gain.linearRampToValueAtTime(0.09, now + 0.015);
+    sGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+
+    sOsc.connect(sGain);
+    sGain.connect(outputNode);
+    sOsc.start(now);
+    sOsc.stop(now + 0.12);
+
+    const chordGlide = [
+      { startFreq: 587.33, endFreq: 440.00, time: 0.10 },
+      { startFreq: 739.99, endFreq: 554.37, time: 0.10 },
+      { startFreq: 880.00, endFreq: 659.25, time: 0.10 },
+      { startFreq: 1174.66, endFreq: 880.00, time: 0.10 }
+    ];
+
+    chordGlide.forEach(note => {
+      const start = now + note.time;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(note.startFreq, start);
+      osc.frequency.exponentialRampToValueAtTime(note.endFreq, start + 0.85);
+
+      gain.gain.setValueAtTime(0.001, start);
+      gain.gain.linearRampToValueAtTime(0.07, start + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.90);
+
+      osc.connect(gain);
+      gain.connect(outputNode);
+      osc.start(start);
+      osc.stop(start + 0.90);
+    });
+  }
+
   playGoalSFX(type = 'regular', teamGoalCount = 1, side = '1') {
     if (this.muted) return;
     this.init();

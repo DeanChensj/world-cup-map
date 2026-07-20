@@ -130,6 +130,7 @@
         <span id="theme-label" class="hidden md:inline">THEME: DARK</span>
       </button>
 
+
       <!-- SFX Audio Toggle & Volume Slider -->
       <div class="flex items-center shrink-0">
         <button id="btn-audio-toggle" onclick="toggleAudio()" title="Toggle SFX Mute/Unmute" class="flex bg-console-bg border border-console-border text-console-accent hover:border-console-accent/60 px-1 py-0.5 sm:px-2 sm:py-1 rounded sm:rounded-r-none font-mono text-[9px] font-bold items-center space-x-1 transition cursor-pointer shrink-0">
@@ -1524,15 +1525,23 @@
       if (!toastContainer) {
         toastContainer = document.createElement("div");
         toastContainer.id = "toast-container";
-        toastContainer.className = "fixed top-20 left-1/2 transform -translate-x-1/2 z-[100] flex flex-col items-center space-y-2 pointer-events-none w-[90%] max-w-md";
+        toastContainer.className = "fixed top-20 left-1/2 transform -translate-x-1/2 z-[9999] flex flex-col items-center space-y-2 pointer-events-none w-[92%] max-w-lg";
         document.body.appendChild(toastContainer);
       }
 
       // Create and append the toast element
       const toast = document.createElement("div");
+      const isSiuuu = message.includes("SIUUUUU");
       const isWarning = message.includes("⚠️") || message.includes("[UPSET]");
-      const bgClass = isWarning ? "bg-console-red/95 border-red-400" : "bg-console-accent/95 border-amber-400 text-black";
-      toast.className = `${bgClass} px-4 py-2.5 rounded shadow-[0_0_20px_rgba(0,0,0,0.5)] font-mono text-[10px] sm:text-xs font-bold border tracking-wider backdrop-blur-md transition-all duration-300 transform translate-y-4 opacity-0 text-center uppercase`;
+
+      let bgClass = "bg-[#0f141c]/98 text-amber-300 border-2 border-amber-400/90 shadow-[0_0_25px_rgba(245,158,11,0.6)]";
+      if (isSiuuu) {
+        bgClass = "bg-gradient-to-r from-[#2c0b0e] via-[#120a16] to-[#2b1c08] text-amber-300 border-2 border-amber-400 shadow-[0_0_35px_rgba(245,158,11,0.95)]";
+      } else if (isWarning) {
+        bgClass = "bg-[#280808]/98 text-red-200 border-2 border-red-500 shadow-[0_0_25px_rgba(239,68,68,0.6)]";
+      }
+
+      toast.className = `${bgClass} px-5 py-3 rounded-lg font-mono text-xs sm:text-sm font-extrabold tracking-widest backdrop-blur-xl transition-all duration-300 transform translate-y-4 opacity-0 text-center uppercase shadow-2xl z-[9999]`;
       toast.innerHTML = message;
       toastContainer.appendChild(toast);
 
@@ -2230,7 +2239,19 @@
           scoreEl.innerHTML = `${currentA} - ${currentB}`;
 
           const teamGoalCount = (goal.side === '1') ? currentA : currentB;
-          if (typeof audio !== "undefined" && audio.playGoalSFX) {
+          const isRonaldoGoal = goal.player && (
+            goal.player.toLowerCase().includes("ronaldo") ||
+            goal.player.toLowerCase().includes("cr7") ||
+            goal.player.toLowerCase().includes("c. ronaldo")
+          );
+
+          if (isRonaldoGoal) {
+            if (typeof audio !== "undefined" && audio.playSiuuuSFX) {
+              audio.playSiuuuSFX(goal.side);
+            }
+            const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+            triggerAlert(isZh ? "🔥 SIUUUUU! C罗破门得分！ 🇵🇹" : "🔥 SIUUUUU! CRISTIANO RONALDO SCORES! 🇵🇹");
+          } else if (typeof audio !== "undefined" && audio.playGoalSFX) {
             let soundType = 'regular';
             if (goal.minute.includes("(p)") || goal.minute.includes("(pen.)")) soundType = 'penalty';
             else if (goal.minute.includes("OG") || goal.minute.includes("o.g.")) soundType = 'og';
