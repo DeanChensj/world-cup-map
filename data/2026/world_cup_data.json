@@ -1012,18 +1012,18 @@
     },
     {
       "date": "2026-07-18",
-      "home": "FRA",
-      "away": "ENG",
-      "winner": "FRA",
-      "score": "0-0 (4-2 p)",
+      "home": "ENG",
+      "away": "FRA",
+      "winner": "ENG",
+      "score": "6-4",
       "stage": "Match for third place"
     },
     {
       "date": "2026-07-19",
       "home": "ESP",
       "away": "ARG",
-      "winner": "ARG",
-      "score": "0-1 (aet)",
+      "winner": "ESP",
+      "score": "1-0 (aet)",
       "stage": "Final"
     }
   ]
