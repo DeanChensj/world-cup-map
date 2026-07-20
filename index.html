@@ -3339,18 +3339,46 @@
       const stepData = timelineSteps[currentStepIndex];
       const stepMatches = stepData ? (stepData.matches || (stepData.match ? [stepData.match] : [])) : [];
       
-      let maxGoals = 0;
+      const goalInterval = Math.max(250, Math.round(500 * (playbackSpeedMs / 1500)));
+      const postPause = Math.round(1200 * (playbackSpeedMs / 1500));
+      const isMuted = typeof audio !== "undefined" && audio.muted;
+      const defaultSiuuuDuration = isMuted
+        ? 1200
+        : ((typeof audio !== "undefined" && audio.getSiuuuDurationMs) ? audio.getSiuuuDurationMs() : 6660);
+
+      let maxRequiredMatchDelay = 0;
+
       stepMatches.forEach(m => {
         const isGroup = (!m.stage || m.stage === "Group Stage" || m.stage.includes("Group"));
         if (!isGroup && m && m.scorers && m.scorers.length > 0) {
-          maxGoals = Math.max(maxGoals, m.scorers.length);
+          let matchDelay = 0;
+          m.scorers.forEach(g => {
+            matchDelay += goalInterval;
+            const goalTeamCode = g.team || (m.home ? getEffectiveTeamCode(m.home) : '');
+            const isPortugal = (goalTeamCode === 'PRT' || goalTeamCode === 'POR');
+            const pName = (typeof g === 'string' ? g : (g.player || "")).toLowerCase().trim();
+            const isRonaldinho = pName.includes("ronaldinho");
+
+            const isRonaldoGoal = !isRonaldinho && (
+              pName.includes("cristiano ronaldo") ||
+              pName.includes("c. ronaldo") ||
+              pName.includes("cr7") ||
+              (pName.includes("ronaldo") && isPortugal)
+            );
+
+            if (isRonaldoGoal) {
+              matchDelay += defaultSiuuuDuration;
+            }
+          });
+          matchDelay += goalInterval + postPause;
+          if (matchDelay > maxRequiredMatchDelay) {
+            maxRequiredMatchDelay = matchDelay;
+          }
         }
       });
 
-      if (maxGoals > 0) {
-        const goalInterval = Math.max(250, Math.round(500 * (playbackSpeedMs / 1500)));
-        const postPause = Math.round(1200 * (playbackSpeedMs / 1500));
-        stepDelay = Math.max(playbackSpeedMs, (maxGoals * goalInterval) + postPause);
+      if (maxRequiredMatchDelay > 0) {
+        stepDelay = Math.max(playbackSpeedMs, maxRequiredMatchDelay);
       }
 
       playbackTimeout = setTimeout(() => {
