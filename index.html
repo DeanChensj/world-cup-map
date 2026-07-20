@@ -1628,6 +1628,17 @@
         .remove();
     }
 
+    function triggerLateGoalVisualEffect(teamCode) {
+      const clashCard = document.getElementById("clash-card-overlay");
+      if (clashCard) {
+        clashCard.classList.add("border-red-500", "shadow-[0_0_60px_rgba(239,68,68,1.0)]");
+        setTimeout(() => {
+          clashCard.classList.remove("border-red-500", "shadow-[0_0_60px_rgba(239,68,68,1.0)]");
+        }, 1200);
+      }
+      triggerShockwave(teamCode);
+    }
+
     function switchEdition(edition) {
       if (playbackInterval) {
         stopPlayback();
@@ -2245,18 +2256,38 @@
             goal.player.toLowerCase().includes("c. ronaldo")
           );
 
+          const isStoppageTime = goal.minute.includes("90+") || goal.minute.includes("120+") || goal.minute.includes("105+");
+          const isEqualizer = (currentA === currentB);
+          const isGoAhead = (goal.side === '1' && currentA === currentB + 1) || (goal.side === '2' && currentB === currentA + 1);
+          const isTrueLateDrama = isStoppageTime && (isEqualizer || isGoAhead);
+
           if (isRonaldoGoal) {
             if (typeof audio !== "undefined" && audio.playSiuuuSFX) {
               audio.playSiuuuSFX(goal.side);
             }
             const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
             triggerAlert(isZh ? "🔥 SIUUUUU! C罗破门得分！ 🇵🇹" : "🔥 SIUUUUU! CRISTIANO RONALDO SCORES! 🇵🇹");
-          } else if (typeof audio !== "undefined" && audio.playGoalSFX) {
+          } else {
             let soundType = 'regular';
             if (goal.minute.includes("(p)") || goal.minute.includes("(pen.)")) soundType = 'penalty';
             else if (goal.minute.includes("OG") || goal.minute.includes("o.g.")) soundType = 'og';
-            else if (goal.minute.includes("90+") || goal.minute.includes("120+")) soundType = 'late';
-            audio.playGoalSFX(soundType, teamGoalCount, goal.side);
+            else if (isTrueLateDrama) soundType = 'late';
+
+            if (typeof audio !== "undefined" && audio.playGoalSFX) {
+              audio.playGoalSFX(soundType, teamGoalCount, goal.side);
+            }
+
+            if (isTrueLateDrama) {
+              const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+              let bannerMsg = "";
+              if (isEqualizer) {
+                bannerMsg = isZh ? "⚡ 90+分钟读秒绝平！绝处逢生！ ⚽" : "⚡ 90+ DRAMATIC EQUALIZER! LATE EQUALIZER! ⚽";
+              } else {
+                bannerMsg = isZh ? "🔥 90+分钟读秒绝杀！全场点燃！ ⚽" : "🔥 90+ DRAMATIC LATE WINNER! STADIUM EXPLODES! ⚽";
+              }
+              triggerAlert(bannerMsg);
+              triggerLateGoalVisualEffect(goal.side === '1' ? code1 : code2);
+            }
           }
 
           setTimeout(() => item.classList.remove("animate-pulse", "font-bold"), 400);
