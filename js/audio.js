@@ -39,6 +39,75 @@ class TacticalAudio {
     if (this.ctx.state === 'suspended') {
       this.ctx.resume();
     }
+    this.loadSiuuuBuffer();
+  }
+
+  // Preload and decode SIUUU audio sample into Web Audio buffer for 100% mobile Safari compatibility
+  loadSiuuuBuffer() {
+    if (this.siuuuBuffer || this.loadingSiuuu || !this.ctx) return;
+    this.loadingSiuuu = true;
+    fetch('assets/audio/siuuu.mp3')
+      .then(res => res.arrayBuffer())
+      .then(buffer => {
+        if (this.ctx) {
+          return this.ctx.decodeAudioData(buffer);
+        }
+      })
+      .then(decoded => {
+        if (decoded) {
+          this.siuuuBuffer = decoded;
+        }
+      })
+      .catch(e => {
+        this.loadingSiuuu = false;
+      });
+  }
+
+  // 13. Authentic Cristiano Ronaldo "SIUUU!" Audio Sample Playback (Mobile Web Audio Ready)
+  playSiuuuSFX(side = '1') {
+    if (this.muted) return;
+    this.init();
+
+    // If Web Audio buffer is loaded, play via Web Audio (100% mobile Safari compatible + 3D panning)
+    if (this.siuuuBuffer && this.ctx) {
+      const now = this.ctx.currentTime;
+      const panVal = (side === '1') ? -0.35 : (side === '2') ? 0.35 : 0;
+      let panner = null;
+      if (this.ctx.createStereoPanner && panVal !== 0) {
+        panner = this.ctx.createStereoPanner();
+        panner.pan.setValueAtTime(panVal, now);
+        panner.connect(this.compressor);
+      }
+      const outputNode = panner || this.compressor;
+
+      const source = this.ctx.createBufferSource();
+      source.buffer = this.siuuuBuffer;
+
+      const gainNode = this.ctx.createGain();
+      gainNode.gain.setValueAtTime(Math.min(1.2, this.volume * 1.2), now);
+
+      source.connect(gainNode);
+      gainNode.connect(outputNode);
+      source.start(now);
+      return;
+    }
+
+    // HTML5 Audio fallback
+    try {
+      if (!this.siuuuAudio) {
+        this.siuuuAudio = new Audio('assets/audio/siuuu.mp3');
+      }
+      this.siuuuAudio.volume = Math.min(1.0, this.volume * 1.1);
+      this.siuuuAudio.currentTime = 0;
+      const playPromise = this.siuuuAudio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(err => {
+          this.playSiuuuSynth(side);
+        });
+      }
+    } catch (e) {
+      this.playSiuuuSynth(side);
+    }
   }
 
   setVolume(vol) {
@@ -612,9 +681,23 @@ function updateAudioUI() {
   }
 }
 
-// Auto sync UI when DOM is ready
+// Auto sync UI and unlock mobile audio context on first user interaction
 if (typeof window !== "undefined") {
   window.addEventListener("DOMContentLoaded", () => {
     updateAudioUI();
   });
+
+  const unlockMobileAudio = () => {
+    if (typeof audio !== "undefined") {
+      audio.init();
+      audio.loadSiuuuBuffer();
+    }
+    window.removeEventListener("touchstart", unlockMobileAudio);
+    window.removeEventListener("touchend", unlockMobileAudio);
+    window.removeEventListener("click", unlockMobileAudio);
+  };
+
+  window.addEventListener("touchstart", unlockMobileAudio, { passive: true });
+  window.addEventListener("touchend", unlockMobileAudio, { passive: true });
+  window.addEventListener("click", unlockMobileAudio, { passive: true });
 }
