@@ -196,93 +196,49 @@ class TacticalAudio {
     }
   }
 
-  // 5. Tactical Energy Laser Sweep
-  playLaserShot() {
+  // 5. Official Referee Whistle Sound FX (Replaces sci-fi laser shot)
+  playWhistle() {
     if (this.muted) return;
     this.init();
     const now = this.ctx.currentTime;
-    
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-    const filter = this.ctx.createBiquadFilter();
-    
-    filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(3000, now);
-    filter.frequency.exponentialRampToValueAtTime(400, now + 0.2);
 
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(1500, now);
-    osc.frequency.exponentialRampToValueAtTime(260, now + 0.2);
+    // Dual trill sine frequencies for realistic referee whistle
+    [2600, 3100].forEach((freq) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      
+      // 35Hz fast trill modulation
+      const mod = this.ctx.createOscillator();
+      const modGain = this.ctx.createGain();
+      mod.frequency.value = 35;
+      modGain.gain.value = 80;
+      mod.connect(osc.frequency);
+      mod.start(now);
+      mod.stop(now + 0.22);
 
-    gain.gain.setValueAtTime(0.12, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now);
 
-    osc.connect(filter);
-    filter.connect(gain);
-    gain.connect(this.compressor);
-    
-    osc.start(now);
-    osc.stop(now + 0.2);
+      gain.gain.setValueAtTime(0.001, now);
+      gain.gain.linearRampToValueAtTime(0.06, now + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+      osc.connect(gain);
+      gain.connect(this.compressor);
+      osc.start(now);
+      osc.stop(now + 0.22);
+    });
   }
 
-  // 6. Multi-Layered Conquest Boom (Sub-bass drop + Noise transient + Resonance)
+  playLaserShot() {
+    this.playWhistle();
+  }
+
+  // 6. Clean Stadium Match Annexation Cheer (Replaces heavy missile bombardment boom)
   playConquestBoom() {
     if (this.muted) return;
     this.init();
-    const now = this.ctx.currentTime;
-
-    // Layer 1: Sub-Bass Sine Drop (90Hz -> 25Hz)
-    const subOsc = this.ctx.createOscillator();
-    const subGain = this.ctx.createGain();
-    subOsc.type = 'sine';
-    subOsc.frequency.setValueAtTime(95, now);
-    subOsc.frequency.exponentialRampToValueAtTime(25, now + 0.8);
-
-    subGain.gain.setValueAtTime(0.35, now);
-    subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
-
-    subOsc.connect(subGain);
-    subGain.connect(this.compressor);
-    subOsc.start(now);
-    subOsc.stop(now + 0.8);
-
-    // Layer 2: Filtered Transient Noise Thud
-    const noiseBuf = this._getNoiseBuffer();
-    if (noiseBuf) {
-      const noise = this.ctx.createBufferSource();
-      noise.buffer = noiseBuf;
-      const noiseFilter = this.ctx.createBiquadFilter();
-      const noiseGain = this.ctx.createGain();
-
-      noiseFilter.type = 'lowpass';
-      noiseFilter.frequency.setValueAtTime(350, now);
-      noiseFilter.frequency.exponentialRampToValueAtTime(60, now + 0.15);
-
-      noiseGain.gain.setValueAtTime(0.2, now);
-      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-
-      noise.connect(noiseFilter);
-      noiseFilter.connect(noiseGain);
-      noiseGain.connect(this.compressor);
-
-      noise.start(now);
-      noise.stop(now + 0.15);
-    }
-
-    // Layer 3: Harmonic Shimmer (Triangle Chords 220Hz & 330Hz)
-    [220, 329.63].forEach(freq => {
-      const o = this.ctx.createOscillator();
-      const g = this.ctx.createGain();
-      o.type = 'triangle';
-      o.frequency.setValueAtTime(freq, now);
-      g.gain.setValueAtTime(0.05, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
-      
-      o.connect(g);
-      g.connect(this.compressor);
-      o.start(now);
-      o.stop(now + 0.5);
-    });
+    this.playMatchWin();
   }
 
   // 7. Dramatic Upset Reclaim Alarm (Underdog Annexation Reclaim)
@@ -412,19 +368,110 @@ class TacticalAudio {
     osc.stop(now + 0.012);
   }
 
-  // 11. Specialized Goal Sound Effect (Regular, Penalty, Own Goal, Late Drama)
-  playGoalSFX(type = 'regular') {
+  // 11. Warm Broadcast Goal Notification Chime with Spatial Stereo Panning & Pitch Escalation
+  playGoalPop(semitones = 0, pan = 0) {
     if (this.muted) return;
     this.init();
+    const now = this.ctx.currentTime;
+
+    const mult = Math.pow(2, (semitones || 0) / 12);
+
+    // Optional Spatial Stereo Panner
+    let panner = null;
+    if (this.ctx.createStereoPanner && pan !== 0) {
+      panner = this.ctx.createStereoPanner();
+      panner.pan.setValueAtTime(pan, now);
+      panner.connect(this.compressor);
+    }
+
+    const outputNode = panner || this.compressor;
+
+    // Melodic bell arpeggio dynamically transposed by pitch escalation factor
+    const chord = [
+      { freq: 523.25 * mult, time: 0 },
+      { freq: 659.25 * mult, time: 0.05 },
+      { freq: 783.99 * mult, time: 0.10 },
+      { freq: 1046.50 * mult, time: 0.16 }
+    ];
+
+    chord.forEach(note => {
+      const start = now + note.time;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(note.freq, start);
+
+      // Soft envelope (Soft 15ms ramp, zero click, zero gunshot snap)
+      gain.gain.setValueAtTime(0.001, start);
+      gain.gain.linearRampToValueAtTime(note.time === 0.16 ? 0.08 : 0.05, start + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + (note.time === 0.16 ? 0.45 : 0.25));
+
+      osc.connect(gain);
+      gain.connect(outputNode);
+      osc.start(start);
+      osc.stop(start + 0.45);
+    });
+  }
+
+  // 12. Clean Downward Own Goal (OG) Sound Signature with Stereo Panning
+  playOGPop(pan = 0) {
+    if (this.muted) return;
+    this.init();
+    const now = this.ctx.currentTime;
+
+    let panner = null;
+    if (this.ctx.createStereoPanner && pan !== 0) {
+      panner = this.ctx.createStereoPanner();
+      panner.pan.setValueAtTime(pan, now);
+      panner.connect(this.compressor);
+    }
+
+    const outputNode = panner || this.compressor;
+
+    // Downward 3-note drop: E5 (659Hz) -> C5 (523Hz) -> A4 (440Hz)
+    const ogNotes = [659.25, 523.25, 440.00];
+    ogNotes.forEach((freq, idx) => {
+      const start = now + idx * 0.06;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, start);
+
+      gain.gain.setValueAtTime(0.001, start);
+      gain.gain.linearRampToValueAtTime(0.06, start + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.3);
+
+      osc.connect(gain);
+      gain.connect(outputNode);
+      osc.start(start);
+      osc.stop(start + 0.3);
+    });
+  }
+
+  playGoalSFX(type = 'regular', teamGoalCount = 1, side = '1') {
+    if (this.muted) return;
+    this.init();
+
+    // Side 1 (Home/Left) starts at base, Side 2 (Away/Right) starts slightly higher for tonal contrast
+    const baseOffset = (side === '2') ? 2 : 0;
+    const teamCountShift = Math.min(6, (teamGoalCount - 1) * 2);
+    const pitchShift = baseOffset + teamCountShift;
+
+    // Spatial stereo panning (-0.35 for Team A / +0.35 for Team B)
+    const panVal = (side === '1') ? -0.35 : (side === '2') ? 0.35 : 0;
+
     if (type === 'penalty') {
-      this.playLaserShot();
-      setTimeout(() => this.playMatchWin(), 100);
+      this.playWhistle();
+      setTimeout(() => this.playGoalPop(pitchShift, panVal), 120);
     } else if (type === 'og') {
-      this.playAlert();
+      this.playOGPop(panVal);
     } else if (type === 'late') {
-      this.playUpset();
+      this.playGoalPop(pitchShift + 3, panVal);
+      setTimeout(() => this.playVictory(), 200);
     } else {
-      this.playChime(true);
+      this.playGoalPop(pitchShift, panVal);
     }
   }
 }

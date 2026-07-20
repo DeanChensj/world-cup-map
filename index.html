@@ -2233,12 +2233,13 @@
 
           scoreEl.innerHTML = `${currentA} - ${currentB}`;
 
+          const teamGoalCount = (goal.side === '1') ? currentA : currentB;
           if (typeof audio !== "undefined" && audio.playGoalSFX) {
             let soundType = 'regular';
             if (goal.minute.includes("(p)") || goal.minute.includes("(pen.)")) soundType = 'penalty';
             else if (goal.minute.includes("OG") || goal.minute.includes("o.g.")) soundType = 'og';
             else if (goal.minute.includes("90+") || goal.minute.includes("120+")) soundType = 'late';
-            audio.playGoalSFX(soundType);
+            audio.playGoalSFX(soundType, teamGoalCount, goal.side);
           }
 
           setTimeout(() => item.classList.remove("animate-pulse", "font-bold"), 400);
@@ -2440,11 +2441,6 @@
         const winnerCode = latestAnnexation.winnerCode;
         const loserCenter = centroids[loserCode] || centroids[latestAnnexation.away] || [0, 0];
 
-        // Synthesize Stage 1 Laser Shot Sound FX
-        if (typeof audio !== "undefined" && audio.playLaserShot) {
-          audio.playLaserShot();
-        }
-
         // 1. Tactical Spotlight: Dim non-involved countries gently so land mass remains visible without turning pitch black
         svg.selectAll(".country")
           .transition("spotlight")
@@ -2459,7 +2455,6 @@
         // 2. Stage 1 Impact & Expanding Conquest Wave Ring at 800ms
         animationTimeouts.push(setTimeout(() => {
           if (typeof triggerShockwave === "function") triggerShockwave(loserCode);
-          if (typeof audio !== "undefined" && audio.playConquestBoom) audio.playConquestBoom();
 
           // Render visible expanding tactical wave ring sweeping across continents
           const vectorGroup = svg.select(".vector-layer");
