@@ -148,9 +148,9 @@
         <div id="current-date-badge" class="bg-console-bg border border-console-border px-1.5 py-0.5 sm:px-2.5 sm:py-1 font-mono text-[9px] sm:text-xs font-bold text-console-accent tracking-normal sm:tracking-wider rounded shrink-0">
           2026-06-11
         </div>
-        <button id="btn-share-universe" onclick="shareUniverse()" title="Share Parallel Universe Link" class="bg-console-bg border border-console-border text-console-accent hover:border-console-accent px-1 py-0.5 sm:px-2 sm:py-1 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer shrink-0">
-          <i class="ph-bold ph-share-network text-[10px]"></i>
-          <span id="share-btn-text" class="hidden sm:inline">SHARE</span>
+        <button id="btn-share-universe" onclick="shareUniverse()" title="Share Parallel Universe & Tournament Bracket" class="bg-amber-500/20 border border-amber-500/60 text-amber-300 hover:bg-amber-500/30 px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded font-mono text-[9px] sm:text-xs font-bold flex items-center space-x-1 transition cursor-pointer shrink-0 shadow-sm">
+          <i class="ph-bold ph-tree-structure text-[11px] sm:text-xs text-amber-400"></i>
+          <span id="share-btn-text" class="inline">SHARE</span>
         </button>
         <button id="btn-reset-overrides" onclick="resetOverrides()" title="Reset to Real History" class="hidden bg-console-bg border border-console-red text-console-red hover:bg-console-red/10 px-1 py-0.5 sm:px-2 sm:py-1 rounded font-mono text-[9px] font-bold flex items-center space-x-1 transition cursor-pointer shrink-0">
           <i class="ph-bold ph-arrow-counter-clockwise text-[10px]"></i>
@@ -180,7 +180,13 @@
             <i class="ph-bold ph-globe"></i>
             <span id="leaderboard-title">Territorial Holdings</span>
           </h2>
-          <span id="active-factions" class="text-[10px] font-mono text-console-accent bg-console-accent/10 px-1.5 py-0.5 rounded">48 Factions</span>
+          <div class="flex items-center space-x-1.5">
+            <button id="btn-sidebar-share" onclick="shareUniverse()" title="View Tournament Bracket & Share" class="bg-amber-500/20 border border-amber-500/60 hover:bg-amber-500/30 text-amber-300 px-2 py-0.5 rounded text-[10px] font-mono font-bold flex items-center space-x-1 transition cursor-pointer shrink-0">
+              <i class="ph-bold ph-tree-structure text-[11px] text-amber-400"></i>
+              <span id="sidebar-share-btn-text">BRACKET & SHARE</span>
+            </button>
+            <span id="active-factions" class="text-[10px] font-mono text-console-accent bg-console-accent/10 px-1.5 py-0.5 rounded">48 Factions</span>
+          </div>
         </div>
         
         <!-- Hero Campaign Faction Banner -->

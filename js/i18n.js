@@ -65,7 +65,7 @@ const I18N = {
     sfxOn: "SFX: ON",
     sfxOff: "SFX: OFF",
     editionLabel: "Edition:",
-    shareBtn: "SHARE",
+    shareBtn: "BRACKET & SHARE",
     resetOverridesBtn: "RESET",
     tabMap: "MAP VIEW",
     tabLeaderboard: "HOLDINGS",
@@ -238,6 +238,8 @@ function updateLanguageUI() {
 
   const shareText = document.getElementById("share-btn-text");
   if (shareText) shareText.innerText = t.shareBtn;
+  const sidebarShareText = document.getElementById("sidebar-share-btn-text");
+  if (sidebarShareText) sidebarShareText.innerText = t.shareBtn;
 
   const btnResetOverrides = document.getElementById("btn-reset-overrides");
   if (btnResetOverrides) {
