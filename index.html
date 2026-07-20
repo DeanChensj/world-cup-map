@@ -1516,11 +1516,8 @@
     // --- Conquest Event Warning Banner ---
     function triggerAlert(message) {
       if (!message) return;
-      if (message.includes("[UPSET]") && typeof audio !== "undefined" && audio.playUpset) {
-        audio.playUpset();
-      } else if (typeof audio !== "undefined" && audio.playAlert) {
-        audio.playAlert();
-      }
+
+      // Create visual toast container if it doesn't exist
 
       // Create visual toast container if it doesn't exist
       let toastContainer = document.getElementById("toast-container");
@@ -1600,7 +1597,6 @@
     svg.call(zoom);
 
     function triggerShockwave(teamCode) {
-      audio.playAlert();
       if (!centroids[teamCode]) return;
       const [cx, cy] = centroids[teamCode];
       const vectorGroup = svg.select(".vector-layer");
@@ -2408,7 +2404,6 @@
           if (playbackInterval) {
             stopPlayback();
           }
-          if (typeof audio !== "undefined" && audio.playAlert) audio.playAlert();
           const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
           triggerAlert(isZh ? "⚠️ 指挥官请注意：您的主队出战！" : "⚠️ COMMANDER: FACTION DEPLOYED!");
         }
