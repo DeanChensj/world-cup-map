@@ -776,7 +776,19 @@
       "away": "CAN",
       "winner": "CAN",
       "score": "1-2",
-      "stage": "Round of 32"
+      "stage": "Round of 32",
+      "scorers": [
+        {
+          "team": "ZAF",
+          "player": "Foster",
+          "minute": "38'"
+        },
+        {
+          "team": "CAN",
+          "player": "Eustáquio",
+          "minute": "90+2'"
+        }
+      ]
     },
     {
       "date": "2026-06-29",
@@ -784,7 +796,19 @@
       "away": "PRY",
       "winner": "PRY",
       "score": "1-1 (2-4 p)",
-      "stage": "Round of 32"
+      "stage": "Round of 32",
+      "scorers": [
+        {
+          "team": "DEU",
+          "player": "Havertz",
+          "minute": "54'"
+        },
+        {
+          "team": "PRY",
+          "player": "Enciso",
+          "minute": "42'"
+        }
+      ]
     },
     {
       "date": "2026-06-29",
@@ -792,7 +816,19 @@
       "away": "MAR",
       "winner": "MAR",
       "score": "1-1 (3-4 p)",
-      "stage": "Round of 32"
+      "stage": "Round of 32",
+      "scorers": [
+        {
+          "team": "NLD",
+          "player": "Gakpo",
+          "minute": "72'"
+        },
+        {
+          "team": "MAR",
+          "player": "Diop",
+          "minute": "90+1'"
+        }
+      ]
     },
     {
       "date": "2026-06-29",
@@ -800,7 +836,24 @@
       "away": "JPN",
       "winner": "BRA",
       "score": "2-1",
-      "stage": "Round of 32"
+      "stage": "Round of 32",
+      "scorers": [
+        {
+          "team": "JPN",
+          "player": "Sano",
+          "minute": "29'"
+        },
+        {
+          "team": "BRA",
+          "player": "Casemiro",
+          "minute": "56'"
+        },
+        {
+          "team": "BRA",
+          "player": "Martinelli",
+          "minute": "90+5'"
+        }
+      ]
     },
     {
       "date": "2026-06-30",
@@ -808,7 +861,24 @@
       "away": "SWE",
       "winner": "FRA",
       "score": "3-0",
-      "stage": "Round of 32"
+      "stage": "Round of 32",
+      "scorers": [
+        {
+          "team": "FRA",
+          "player": "Mbappé",
+          "minute": "45'"
+        },
+        {
+          "team": "FRA",
+          "player": "Barcola",
+          "minute": "53'"
+        },
+        {
+          "team": "FRA",
+          "player": "Mbappé",
+          "minute": "74'"
+        }
+      ]
     },
     {
       "date": "2026-06-30",
@@ -816,7 +886,24 @@
       "away": "NOR",
       "winner": "NOR",
       "score": "1-2",
-      "stage": "Round of 32"
+      "stage": "Round of 32",
+      "scorers": [
+        {
+          "team": "NOR",
+          "player": "Nusa",
+          "minute": "39'"
+        },
+        {
+          "team": "CIV",
+          "player": "Diallo",
+          "minute": "74'"
+        },
+        {
+          "team": "NOR",
+          "player": "Haaland",
+          "minute": "86'"
+        }
+      ]
     },
     {
       "date": "2026-06-30",
@@ -824,7 +911,19 @@
       "away": "ECU",
       "winner": "MEX",
       "score": "2-0",
-      "stage": "Round of 32"
+      "stage": "Round of 32",
+      "scorers": [
+        {
+          "team": "MEX",
+          "player": "Quiñones",
+          "minute": "22'"
+        },
+        {
+          "team": "MEX",
+          "player": "Jiménez",
+          "minute": "31'"
+        }
+      ]
     },
     {
       "date": "2026-07-01",
@@ -832,7 +931,24 @@
       "away": "COD",
       "winner": "ENG",
       "score": "2-1",
-      "stage": "Round of 32"
+      "stage": "Round of 32",
+      "scorers": [
+        {
+          "team": "COD",
+          "player": "Cipenga",
+          "minute": "7'"
+        },
+        {
+          "team": "ENG",
+          "player": "Kane",
+          "minute": "75'"
+        },
+        {
+          "team": "ENG",
+          "player": "Kane",
+          "minute": "86'"
+        }
+      ]
     },
     {
       "date": "2026-07-01",
@@ -840,7 +956,19 @@
       "away": "BIH",
       "winner": "USA",
       "score": "2-0",
-      "stage": "Round of 32"
+      "stage": "Round of 32",
+      "scorers": [
+        {
+          "team": "USA",
+          "player": "Balogun",
+          "minute": "45'"
+        },
+        {
+          "team": "USA",
+          "player": "Tillman",
+          "minute": "82'"
+        }
+      ]
     },
     {
       "date": "2026-07-01",
@@ -857,7 +985,7 @@
         },
         {
           "team": "SEN",
-          "player": "Sarr",
+          "player": "I. Sarr",
           "minute": "51'"
         },
         {
@@ -883,7 +1011,24 @@
       "away": "HRV",
       "winner": "PRT",
       "score": "2-1",
-      "stage": "Round of 32"
+      "stage": "Round of 32",
+      "scorers": [
+        {
+          "team": "HRV",
+          "player": "Perišić",
+          "minute": "53'"
+        },
+        {
+          "team": "PRT",
+          "player": "Ronaldo",
+          "minute": "68' (p)"
+        },
+        {
+          "team": "PRT",
+          "player": "Ramos",
+          "minute": "90+4'"
+        }
+      ]
     },
     {
       "date": "2026-07-02",
@@ -891,7 +1036,24 @@
       "away": "AUT",
       "winner": "ESP",
       "score": "3-0",
-      "stage": "Round of 32"
+      "stage": "Round of 32",
+      "scorers": [
+        {
+          "team": "ESP",
+          "player": "Oyarzabal",
+          "minute": "36'"
+        },
+        {
+          "team": "ESP",
+          "player": "Porro",
+          "minute": "66'"
+        },
+        {
+          "team": "ESP",
+          "player": "Oyarzabal",
+          "minute": "89'"
+        }
+      ]
     },
     {
       "date": "2026-07-02",
@@ -899,7 +1061,19 @@
       "away": "DZA",
       "winner": "CHE",
       "score": "2-0",
-      "stage": "Round of 32"
+      "stage": "Round of 32",
+      "scorers": [
+        {
+          "team": "CHE",
+          "player": "Embolo",
+          "minute": "10'"
+        },
+        {
+          "team": "CHE",
+          "player": "Ndoye",
+          "minute": "46'"
+        }
+      ]
     },
     {
       "date": "2026-07-03",
@@ -916,12 +1090,12 @@
         },
         {
           "team": "CPV",
-          "player": "Duarte",
+          "player": "D. Duarte",
           "minute": "59'"
         },
         {
           "team": "ARG",
-          "player": "L. Martinez",
+          "player": "Li. Martínez",
           "minute": "92'"
         },
         {
@@ -931,7 +1105,7 @@
         },
         {
           "team": "ARG",
-          "player": "Borges (OG)",
+          "player": "Diney (OG)",
           "minute": "111'"
         }
       ]
@@ -942,7 +1116,14 @@
       "away": "GHA",
       "winner": "COL",
       "score": "1-0",
-      "stage": "Round of 32"
+      "stage": "Round of 32",
+      "scorers": [
+        {
+          "team": "COL",
+          "player": "J. Arias",
+          "minute": "14'"
+        }
+      ]
     },
     {
       "date": "2026-07-03",
@@ -970,7 +1151,14 @@
       "away": "FRA",
       "winner": "FRA",
       "score": "0-1",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "FRA",
+          "player": "Mbappé",
+          "minute": "70' (p)"
+        }
+      ]
     },
     {
       "date": "2026-07-04",
@@ -978,7 +1166,24 @@
       "away": "MAR",
       "winner": "MAR",
       "score": "0-3",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "MAR",
+          "player": "Ounahi",
+          "minute": "50'"
+        },
+        {
+          "team": "MAR",
+          "player": "Ounahi",
+          "minute": "82'"
+        },
+        {
+          "team": "MAR",
+          "player": "Rahimi",
+          "minute": "90+8'"
+        }
+      ]
     },
     {
       "date": "2026-07-05",
@@ -986,7 +1191,24 @@
       "away": "NOR",
       "winner": "NOR",
       "score": "1-2",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "NOR",
+          "player": "Haaland",
+          "minute": "79'"
+        },
+        {
+          "team": "NOR",
+          "player": "Haaland",
+          "minute": "90'"
+        },
+        {
+          "team": "BRA",
+          "player": "Neymar",
+          "minute": "90+10' (p)"
+        }
+      ]
     },
     {
       "date": "2026-07-05",
@@ -994,7 +1216,34 @@
       "away": "ENG",
       "winner": "ENG",
       "score": "2-3",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "ENG",
+          "player": "Bellingham",
+          "minute": "36'"
+        },
+        {
+          "team": "ENG",
+          "player": "Bellingham",
+          "minute": "38'"
+        },
+        {
+          "team": "MEX",
+          "player": "Quiñones",
+          "minute": "42'"
+        },
+        {
+          "team": "ENG",
+          "player": "Kane",
+          "minute": "60' (p)"
+        },
+        {
+          "team": "MEX",
+          "player": "Jiménez",
+          "minute": "69' (p)"
+        }
+      ]
     },
     {
       "date": "2026-07-06",
@@ -1002,7 +1251,14 @@
       "away": "ESP",
       "winner": "ESP",
       "score": "0-1",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "ESP",
+          "player": "Merino",
+          "minute": "90+1'"
+        }
+      ]
     },
     {
       "date": "2026-07-06",
@@ -1010,7 +1266,34 @@
       "away": "BEL",
       "winner": "BEL",
       "score": "1-4",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "BEL",
+          "player": "De Ketelaere",
+          "minute": "9'"
+        },
+        {
+          "team": "USA",
+          "player": "Tillman",
+          "minute": "31'"
+        },
+        {
+          "team": "BEL",
+          "player": "De Ketelaere",
+          "minute": "33'"
+        },
+        {
+          "team": "BEL",
+          "player": "Vanaken",
+          "minute": "57'"
+        },
+        {
+          "team": "BEL",
+          "player": "Lukaku",
+          "minute": "90+3'"
+        }
+      ]
     },
     {
       "date": "2026-07-07",
@@ -1018,7 +1301,34 @@
       "away": "EGY",
       "winner": "ARG",
       "score": "3-2",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "EGY",
+          "player": "Ibrahim",
+          "minute": "15'"
+        },
+        {
+          "team": "EGY",
+          "player": "Ziko",
+          "minute": "67'"
+        },
+        {
+          "team": "ARG",
+          "player": "Romero",
+          "minute": "79'"
+        },
+        {
+          "team": "ARG",
+          "player": "Messi",
+          "minute": "83'"
+        },
+        {
+          "team": "ARG",
+          "player": "Fernández",
+          "minute": "90+2'"
+        }
+      ]
     },
     {
       "date": "2026-07-07",
@@ -1026,7 +1336,8 @@
       "away": "COL",
       "winner": "CHE",
       "score": "0-0 (5-4 p)",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": []
     },
     {
       "date": "2026-07-09",
@@ -1034,7 +1345,19 @@
       "away": "MAR",
       "winner": "FRA",
       "score": "2-0",
-      "stage": "Quarter-final"
+      "stage": "Quarter-final",
+      "scorers": [
+        {
+          "team": "FRA",
+          "player": "Mbappé",
+          "minute": "60'"
+        },
+        {
+          "team": "FRA",
+          "player": "Dembélé",
+          "minute": "66'"
+        }
+      ]
     },
     {
       "date": "2026-07-10",
@@ -1042,7 +1365,24 @@
       "away": "BEL",
       "winner": "ESP",
       "score": "2-1",
-      "stage": "Quarter-final"
+      "stage": "Quarter-final",
+      "scorers": [
+        {
+          "team": "ESP",
+          "player": "Fabián",
+          "minute": "30'"
+        },
+        {
+          "team": "BEL",
+          "player": "De Ketelaere",
+          "minute": "41'"
+        },
+        {
+          "team": "ESP",
+          "player": "Merino",
+          "minute": "88'"
+        }
+      ]
     },
     {
       "date": "2026-07-11",
@@ -1050,7 +1390,24 @@
       "away": "ENG",
       "winner": "ENG",
       "score": "1-2 (aet)",
-      "stage": "Quarter-final"
+      "stage": "Quarter-final",
+      "scorers": [
+        {
+          "team": "NOR",
+          "player": "Schjelderup",
+          "minute": "36'"
+        },
+        {
+          "team": "ENG",
+          "player": "Bellingham",
+          "minute": "45+2'"
+        },
+        {
+          "team": "ENG",
+          "player": "Bellingham",
+          "minute": "93'"
+        }
+      ]
     },
     {
       "date": "2026-07-11",
@@ -1092,13 +1449,13 @@
       "scorers": [
         {
           "team": "ESP",
-          "player": "Mikel Oyarzabal",
-          "minute": "22'"
+          "player": "Oyarzabal",
+          "minute": "22' (p)"
         },
         {
           "team": "ESP",
-          "player": "Pedro Porro",
-          "minute": "58' (p)"
+          "player": "Porro",
+          "minute": "58'"
         }
       ]
     },
@@ -1133,7 +1490,59 @@
       "away": "FRA",
       "winner": "ENG",
       "score": "6-4",
-      "stage": "Match for third place"
+      "stage": "Match for third place",
+      "scorers": [
+        {
+          "team": "ENG",
+          "player": "Kane",
+          "minute": "9'"
+        },
+        {
+          "team": "FRA",
+          "player": "Mbappé",
+          "minute": "17'"
+        },
+        {
+          "team": "ENG",
+          "player": "Saka",
+          "minute": "22'"
+        },
+        {
+          "team": "FRA",
+          "player": "Barcola",
+          "minute": "35'"
+        },
+        {
+          "team": "ENG",
+          "player": "Palmer",
+          "minute": "41'"
+        },
+        {
+          "team": "ENG",
+          "player": "Foden",
+          "minute": "59'"
+        },
+        {
+          "team": "FRA",
+          "player": "Olise",
+          "minute": "68'"
+        },
+        {
+          "team": "ENG",
+          "player": "Bellingham",
+          "minute": "74'"
+        },
+        {
+          "team": "FRA",
+          "player": "Kolo Muani",
+          "minute": "81'"
+        },
+        {
+          "team": "ENG",
+          "player": "Watkins",
+          "minute": "88'"
+        }
+      ]
     },
     {
       "date": "2026-07-19",
