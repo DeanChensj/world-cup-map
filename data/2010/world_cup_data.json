@@ -528,7 +528,24 @@
       "away": "KOR",
       "winner": "URY",
       "score": "2-1",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "URY",
+          "player": "Luis Suárez",
+          "minute": "8'"
+        },
+        {
+          "team": "KOR",
+          "player": "Lee Chung-yong",
+          "minute": "68'"
+        },
+        {
+          "team": "URY",
+          "player": "Luis Suárez",
+          "minute": "80'"
+        }
+      ]
     },
     {
       "date": "2010-06-26",
@@ -536,7 +553,24 @@
       "away": "GHA",
       "winner": "GHA",
       "score": "1-2 (aet)",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "GHA",
+          "player": "Kevin-Prince Boateng",
+          "minute": "5'"
+        },
+        {
+          "team": "USA",
+          "player": "Landon Donovan",
+          "minute": "62' (p)"
+        },
+        {
+          "team": "GHA",
+          "player": "Asamoah Gyan",
+          "minute": "93'"
+        }
+      ]
     },
     {
       "date": "2010-06-27",
@@ -544,7 +578,34 @@
       "away": "ENG",
       "winner": "DEU",
       "score": "4-1",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "DEU",
+          "player": "Miroslav Klose",
+          "minute": "20'"
+        },
+        {
+          "team": "DEU",
+          "player": "Lukas Podolski",
+          "minute": "32'"
+        },
+        {
+          "team": "ENG",
+          "player": "Matthew Upson",
+          "minute": "37'"
+        },
+        {
+          "team": "DEU",
+          "player": "Thomas Müller",
+          "minute": "67'"
+        },
+        {
+          "team": "DEU",
+          "player": "Thomas Müller",
+          "minute": "70'"
+        }
+      ]
     },
     {
       "date": "2010-06-27",
@@ -552,7 +613,29 @@
       "away": "MEX",
       "winner": "ARG",
       "score": "3-1",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "ARG",
+          "player": "Carlos Tévez",
+          "minute": "26'"
+        },
+        {
+          "team": "ARG",
+          "player": "Gonzalo Higuaín",
+          "minute": "33'"
+        },
+        {
+          "team": "ARG",
+          "player": "Carlos Tévez",
+          "minute": "52'"
+        },
+        {
+          "team": "MEX",
+          "player": "Javier Hernández",
+          "minute": "71'"
+        }
+      ]
     },
     {
       "date": "2010-06-28",
@@ -560,7 +643,24 @@
       "away": "SVK",
       "winner": "NLD",
       "score": "2-1",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "NLD",
+          "player": "Arjen Robben",
+          "minute": "18'"
+        },
+        {
+          "team": "NLD",
+          "player": "Wesley Sneijder",
+          "minute": "84'"
+        },
+        {
+          "team": "SVK",
+          "player": "Róbert Vittek",
+          "minute": "90+4' (p)"
+        }
+      ]
     },
     {
       "date": "2010-06-28",
@@ -568,7 +668,24 @@
       "away": "CHL",
       "winner": "BRA",
       "score": "3-0",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "BRA",
+          "player": "Juan",
+          "minute": "35'"
+        },
+        {
+          "team": "BRA",
+          "player": "Luís Fabiano",
+          "minute": "38'"
+        },
+        {
+          "team": "BRA",
+          "player": "Robinho",
+          "minute": "59'"
+        }
+      ]
     },
     {
       "date": "2010-06-29",
@@ -576,7 +693,8 @@
       "away": "JPN",
       "winner": "PRY",
       "score": "0-0 (5-3 p)",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": []
     },
     {
       "date": "2010-06-29",
@@ -584,7 +702,14 @@
       "away": "PRT",
       "winner": "ESP",
       "score": "1-0",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "ESP",
+          "player": "David Villa",
+          "minute": "63'"
+        }
+      ]
     },
     {
       "date": "2010-07-02",
@@ -592,7 +717,24 @@
       "away": "BRA",
       "winner": "NLD",
       "score": "2-1",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "BRA",
+          "player": "Robinho",
+          "minute": "10'"
+        },
+        {
+          "team": "NLD",
+          "player": "Wesley Sneijder",
+          "minute": "53'"
+        },
+        {
+          "team": "NLD",
+          "player": "Wesley Sneijder",
+          "minute": "68'"
+        }
+      ]
     },
     {
       "date": "2010-07-02",
@@ -600,7 +742,19 @@
       "away": "GHA",
       "winner": "URY",
       "score": "1-1 (4-2 p)",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "GHA",
+          "player": "Sulley Muntari",
+          "minute": "45+2'"
+        },
+        {
+          "team": "URY",
+          "player": "Diego Forlán",
+          "minute": "55'"
+        }
+      ]
     },
     {
       "date": "2010-07-03",
@@ -608,7 +762,29 @@
       "away": "DEU",
       "winner": "DEU",
       "score": "0-4",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "DEU",
+          "player": "Thomas Müller",
+          "minute": "3'"
+        },
+        {
+          "team": "DEU",
+          "player": "Miroslav Klose",
+          "minute": "68'"
+        },
+        {
+          "team": "DEU",
+          "player": "Arne Friedrich",
+          "minute": "74'"
+        },
+        {
+          "team": "DEU",
+          "player": "Miroslav Klose",
+          "minute": "89'"
+        }
+      ]
     },
     {
       "date": "2010-07-03",
@@ -616,7 +792,14 @@
       "away": "ESP",
       "winner": "ESP",
       "score": "0-1",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "ESP",
+          "player": "David Villa",
+          "minute": "83'"
+        }
+      ]
     },
     {
       "date": "2010-07-06",
@@ -624,7 +807,34 @@
       "away": "NLD",
       "winner": "NLD",
       "score": "2-3",
-      "stage": "Semifinal"
+      "stage": "Semifinal",
+      "scorers": [
+        {
+          "team": "NLD",
+          "player": "Giovanni van Bronckhorst",
+          "minute": "18'"
+        },
+        {
+          "team": "URY",
+          "player": "Diego Forlán",
+          "minute": "41'"
+        },
+        {
+          "team": "NLD",
+          "player": "Wesley Sneijder",
+          "minute": "70'"
+        },
+        {
+          "team": "NLD",
+          "player": "Arjen Robben",
+          "minute": "73'"
+        },
+        {
+          "team": "URY",
+          "player": "Maxi Pereira",
+          "minute": "90+2'"
+        }
+      ]
     },
     {
       "date": "2010-07-07",
@@ -632,7 +842,14 @@
       "away": "ESP",
       "winner": "ESP",
       "score": "0-1",
-      "stage": "Semifinal"
+      "stage": "Semifinal",
+      "scorers": [
+        {
+          "team": "ESP",
+          "player": "Carles Puyol",
+          "minute": "73'"
+        }
+      ]
     },
     {
       "date": "2010-07-10",
@@ -640,7 +857,34 @@
       "away": "DEU",
       "winner": "DEU",
       "score": "2-3",
-      "stage": "Third-Place Match"
+      "stage": "Third-Place Match",
+      "scorers": [
+        {
+          "team": "DEU",
+          "player": "Thomas Müller",
+          "minute": "19'"
+        },
+        {
+          "team": "URY",
+          "player": "Edinson Cavani",
+          "minute": "28'"
+        },
+        {
+          "team": "URY",
+          "player": "Diego Forlán",
+          "minute": "51'"
+        },
+        {
+          "team": "DEU",
+          "player": "Marcell Jansen",
+          "minute": "56'"
+        },
+        {
+          "team": "DEU",
+          "player": "Sami Khedira",
+          "minute": "82'"
+        }
+      ]
     },
     {
       "date": "2010-07-11",
@@ -648,7 +892,14 @@
       "away": "ESP",
       "winner": "ESP",
       "score": "0-1 (aet)",
-      "stage": "Final"
+      "stage": "Final",
+      "scorers": [
+        {
+          "team": "ESP",
+          "player": "Andrés Iniesta",
+          "minute": "116'"
+        }
+      ]
     }
   ]
 }

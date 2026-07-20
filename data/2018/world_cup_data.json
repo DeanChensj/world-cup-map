@@ -136,7 +136,34 @@
       "away": "SAU",
       "winner": "RUS",
       "score": "5-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "RUS",
+          "player": "Gazinsky",
+          "minute": "12'"
+        },
+        {
+          "team": "RUS",
+          "player": "Cheryshev",
+          "minute": "43'"
+        },
+        {
+          "team": "RUS",
+          "player": "Cheryshev",
+          "minute": "90+1'"
+        },
+        {
+          "team": "RUS",
+          "player": "Dzyuba",
+          "minute": "71'"
+        },
+        {
+          "team": "RUS",
+          "player": "Golovin",
+          "minute": "90+4'"
+        }
+      ]
     },
     {
       "date": "2018-06-15",
@@ -152,7 +179,14 @@
       "away": "IRN",
       "winner": "",
       "score": "0-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "IRN",
+          "player": "Bouhaddouz",
+          "minute": "90+5' (og)"
+        }
+      ]
     },
     {
       "date": "2018-06-15",
@@ -160,7 +194,39 @@
       "away": "ESP",
       "winner": "",
       "score": "3-3",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "PRT",
+          "player": "Ronaldo",
+          "minute": "4' (p)"
+        },
+        {
+          "team": "PRT",
+          "player": "Ronaldo",
+          "minute": "44'"
+        },
+        {
+          "team": "PRT",
+          "player": "Ronaldo",
+          "minute": "88'"
+        },
+        {
+          "team": "ESP",
+          "player": "Costa",
+          "minute": "24'"
+        },
+        {
+          "team": "ESP",
+          "player": "Costa",
+          "minute": "55'"
+        },
+        {
+          "team": "ESP",
+          "player": "Nacho",
+          "minute": "58'"
+        }
+      ]
     },
     {
       "date": "2018-06-16",
@@ -168,7 +234,24 @@
       "away": "AUS",
       "winner": "FRA",
       "score": "2-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "FRA",
+          "player": "Griezmann",
+          "minute": "58' (p)"
+        },
+        {
+          "team": "FRA",
+          "player": "Behich",
+          "minute": "81' (og)"
+        },
+        {
+          "team": "AUS",
+          "player": "Jedinak",
+          "minute": "62' (p)"
+        }
+      ]
     },
     {
       "date": "2018-06-16",
@@ -192,7 +275,19 @@
       "away": "NGA",
       "winner": "HRV",
       "score": "2-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "HRV",
+          "player": "Etebo",
+          "minute": "32' (og)"
+        },
+        {
+          "team": "HRV",
+          "player": "Modrić",
+          "minute": "71' (p)"
+        }
+      ]
     },
     {
       "date": "2018-06-17",
@@ -200,7 +295,14 @@
       "away": "SRB",
       "winner": "",
       "score": "0-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "SRB",
+          "player": "Kolarov",
+          "minute": "56'"
+        }
+      ]
     },
     {
       "date": "2018-06-17",
@@ -208,7 +310,19 @@
       "away": "CHE",
       "winner": "",
       "score": "1-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "BRA",
+          "player": "Coutinho",
+          "minute": "20'"
+        },
+        {
+          "team": "CHE",
+          "player": "Zuber",
+          "minute": "50'"
+        }
+      ]
     },
     {
       "date": "2018-06-17",
@@ -216,7 +330,14 @@
       "away": "MEX",
       "winner": "MEX",
       "score": "0-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "MEX",
+          "player": "Lozano",
+          "minute": "35'"
+        }
+      ]
     },
     {
       "date": "2018-06-18",
@@ -224,7 +345,14 @@
       "away": "KOR",
       "winner": "SWE",
       "score": "1-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "SWE",
+          "player": "Granqvist",
+          "minute": "65' (p)"
+        }
+      ]
     },
     {
       "date": "2018-06-18",
@@ -240,7 +368,24 @@
       "away": "ENG",
       "winner": "ENG",
       "score": "1-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "TUN",
+          "player": "Sassi",
+          "minute": "35' (p)"
+        },
+        {
+          "team": "ENG",
+          "player": "Kane",
+          "minute": "11'"
+        },
+        {
+          "team": "ENG",
+          "player": "Kane",
+          "minute": "90+1'"
+        }
+      ]
     },
     {
       "date": "2018-06-19",
@@ -256,7 +401,24 @@
       "away": "JPN",
       "winner": "",
       "score": "1-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "COL",
+          "player": "J. Quintero",
+          "minute": "39'"
+        },
+        {
+          "team": "JPN",
+          "player": "Kagawa",
+          "minute": "6' (p)"
+        },
+        {
+          "team": "JPN",
+          "player": "Osako",
+          "minute": "73'"
+        }
+      ]
     },
     {
       "date": "2018-06-19",
@@ -264,7 +426,24 @@
       "away": "SEN",
       "winner": "",
       "score": "1-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "POL",
+          "player": "Krychowiak",
+          "minute": "86'"
+        },
+        {
+          "team": "SEN",
+          "player": "Cionek",
+          "minute": "37' (og)"
+        },
+        {
+          "team": "SEN",
+          "player": "Niang",
+          "minute": "60'"
+        }
+      ]
     },
     {
       "date": "2018-06-20",
@@ -272,7 +451,14 @@
       "away": "SAU",
       "winner": "URY",
       "score": "1-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "URY",
+          "player": "L. Suárez",
+          "minute": "23'"
+        }
+      ]
     },
     {
       "date": "2018-06-20",
@@ -280,7 +466,14 @@
       "away": "MAR",
       "winner": "PRT",
       "score": "1-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "PRT",
+          "player": "Ronaldo",
+          "minute": "4'"
+        }
+      ]
     },
     {
       "date": "2018-06-20",
@@ -288,7 +481,14 @@
       "away": "ESP",
       "winner": "ESP",
       "score": "0-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "ESP",
+          "player": "Diego Costa",
+          "minute": "54'"
+        }
+      ]
     },
     {
       "date": "2018-06-21",
@@ -296,7 +496,19 @@
       "away": "AUS",
       "winner": "",
       "score": "1-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "DNK",
+          "player": "Eriksen",
+          "minute": "7'"
+        },
+        {
+          "team": "AUS",
+          "player": "Jedinak",
+          "minute": "38' (p)"
+        }
+      ]
     },
     {
       "date": "2018-06-21",
@@ -312,7 +524,24 @@
       "away": "HRV",
       "winner": "",
       "score": "0-3",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "HRV",
+          "player": "Rebić",
+          "minute": "53'"
+        },
+        {
+          "team": "HRV",
+          "player": "Modrić",
+          "minute": "80'"
+        },
+        {
+          "team": "HRV",
+          "player": "Rakitić",
+          "minute": "90+1'"
+        }
+      ]
     },
     {
       "date": "2018-06-22",
@@ -328,7 +557,19 @@
       "away": "CRI",
       "winner": "BRA",
       "score": "2-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "BRA",
+          "player": "P. Coutinho",
+          "minute": "90+1'"
+        },
+        {
+          "team": "BRA",
+          "player": "Neymar Jr",
+          "minute": "90+7'"
+        }
+      ]
     },
     {
       "date": "2018-06-22",
@@ -336,7 +577,24 @@
       "away": "CHE",
       "winner": "CHE",
       "score": "1-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "SRB",
+          "player": "Mitrović",
+          "minute": "5'"
+        },
+        {
+          "team": "CHE",
+          "player": "Xhaka",
+          "minute": "52'"
+        },
+        {
+          "team": "CHE",
+          "player": "Shaqiri",
+          "minute": "90'"
+        }
+      ]
     },
     {
       "date": "2018-06-23",
@@ -344,7 +602,24 @@
       "away": "MEX",
       "winner": "MEX",
       "score": "1-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "KOR",
+          "player": "Son Heung-min",
+          "minute": "90+3'"
+        },
+        {
+          "team": "MEX",
+          "player": "Carlos Vela",
+          "minute": "26' (p)"
+        },
+        {
+          "team": "MEX",
+          "player": "J. Hernández",
+          "minute": "66'"
+        }
+      ]
     },
     {
       "date": "2018-06-23",
@@ -352,7 +627,24 @@
       "away": "SWE",
       "winner": "",
       "score": "2-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "DEU",
+          "player": "Reus",
+          "minute": "48'"
+        },
+        {
+          "team": "DEU",
+          "player": "Kroos",
+          "minute": "90+5'"
+        },
+        {
+          "team": "SWE",
+          "player": "Toivonen",
+          "minute": "32'"
+        }
+      ]
     },
     {
       "date": "2018-06-23",
@@ -360,7 +652,44 @@
       "away": "TUN",
       "winner": "BEL",
       "score": "5-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "BEL",
+          "player": "E. Hazard",
+          "minute": "6' (p)"
+        },
+        {
+          "team": "BEL",
+          "player": "E. Hazard",
+          "minute": "51'"
+        },
+        {
+          "team": "BEL",
+          "player": "R. Lukaku",
+          "minute": "16'"
+        },
+        {
+          "team": "BEL",
+          "player": "R. Lukaku",
+          "minute": "45+3'"
+        },
+        {
+          "team": "BEL",
+          "player": "Batshuayi",
+          "minute": "90'"
+        },
+        {
+          "team": "TUN",
+          "player": "Bronn",
+          "minute": "18'"
+        },
+        {
+          "team": "TUN",
+          "player": "Khazri",
+          "minute": "90+3'"
+        }
+      ]
     },
     {
       "date": "2018-06-24",
@@ -376,7 +705,29 @@
       "away": "SEN",
       "winner": "",
       "score": "2-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "JPN",
+          "player": "Inui",
+          "minute": "34'"
+        },
+        {
+          "team": "JPN",
+          "player": "Honda",
+          "minute": "78'"
+        },
+        {
+          "team": "SEN",
+          "player": "Mané",
+          "minute": "11'"
+        },
+        {
+          "team": "SEN",
+          "player": "M. Wagué",
+          "minute": "71'"
+        }
+      ]
     },
     {
       "date": "2018-06-24",
@@ -384,7 +735,24 @@
       "away": "COL",
       "winner": "COL",
       "score": "0-3",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "COL",
+          "player": "Y. Mina",
+          "minute": "40'"
+        },
+        {
+          "team": "COL",
+          "player": "Falcao",
+          "minute": "70'"
+        },
+        {
+          "team": "COL",
+          "player": "Cuadrado",
+          "minute": "75'"
+        }
+      ]
     },
     {
       "date": "2018-06-25",
@@ -392,7 +760,24 @@
       "away": "RUS",
       "winner": "",
       "score": "3-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "URY",
+          "player": "L. Suárez",
+          "minute": "10'"
+        },
+        {
+          "team": "URY",
+          "player": "Cheryshev",
+          "minute": "23' (og)"
+        },
+        {
+          "team": "URY",
+          "player": "E. Cavani",
+          "minute": "90'"
+        }
+      ]
     },
     {
       "date": "2018-06-25",
@@ -408,7 +793,19 @@
       "away": "PRT",
       "winner": "",
       "score": "1-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "IRN",
+          "player": "Karim Ansarifard",
+          "minute": "90+3' (p)"
+        },
+        {
+          "team": "PRT",
+          "player": "Quaresma",
+          "minute": "45'"
+        }
+      ]
     },
     {
       "date": "2018-06-25",
@@ -416,7 +813,29 @@
       "away": "MAR",
       "winner": "",
       "score": "2-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "ESP",
+          "player": "Isco",
+          "minute": "19'"
+        },
+        {
+          "team": "ESP",
+          "player": "Iago Aspas",
+          "minute": "90+1'"
+        },
+        {
+          "team": "MAR",
+          "player": "Boutaib",
+          "minute": "14'"
+        },
+        {
+          "team": "MAR",
+          "player": "En-Nesyri",
+          "minute": "81'"
+        }
+      ]
     },
     {
       "date": "2018-06-26",
@@ -440,7 +859,24 @@
       "away": "ARG",
       "winner": "ARG",
       "score": "1-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "NGA",
+          "player": "Moses",
+          "minute": "51' (p)"
+        },
+        {
+          "team": "ARG",
+          "player": "Messi",
+          "minute": "14'"
+        },
+        {
+          "team": "ARG",
+          "player": "Marcos Rojo",
+          "minute": "86'"
+        }
+      ]
     },
     {
       "date": "2018-06-26",
@@ -456,7 +892,19 @@
       "away": "BRA",
       "winner": "BRA",
       "score": "0-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "BRA",
+          "player": "Paulinho",
+          "minute": "36'"
+        },
+        {
+          "team": "BRA",
+          "player": "Thiago Silva",
+          "minute": "68'"
+        }
+      ]
     },
     {
       "date": "2018-06-27",
@@ -464,7 +912,29 @@
       "away": "CRI",
       "winner": "",
       "score": "2-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "CHE",
+          "player": "Džemaili",
+          "minute": "31'"
+        },
+        {
+          "team": "CHE",
+          "player": "Drmić",
+          "minute": "88'"
+        },
+        {
+          "team": "CRI",
+          "player": "Waston",
+          "minute": "56'"
+        },
+        {
+          "team": "CRI",
+          "player": "Sommer",
+          "minute": "90+3' (og)"
+        }
+      ]
     },
     {
       "date": "2018-06-27",
@@ -472,7 +942,19 @@
       "away": "DEU",
       "winner": "",
       "score": "2-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "KOR",
+          "player": "Kim Young-gwon",
+          "minute": "90+2'"
+        },
+        {
+          "team": "KOR",
+          "player": "Son Heung-min",
+          "minute": "90+6'"
+        }
+      ]
     },
     {
       "date": "2018-06-27",
@@ -480,7 +962,24 @@
       "away": "SWE",
       "winner": "",
       "score": "0-3",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "SWE",
+          "player": "Augustinsson",
+          "minute": "50'"
+        },
+        {
+          "team": "SWE",
+          "player": "Granqvist",
+          "minute": "62' (p)"
+        },
+        {
+          "team": "SWE",
+          "player": "Álvarez",
+          "minute": "74' (og)"
+        }
+      ]
     },
     {
       "date": "2018-06-28",
@@ -488,7 +987,14 @@
       "away": "BEL",
       "winner": "",
       "score": "0-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "BEL",
+          "player": "Adnan Januzaj",
+          "minute": "51'"
+        }
+      ]
     },
     {
       "date": "2018-06-28",
@@ -504,7 +1010,14 @@
       "away": "POL",
       "winner": "",
       "score": "0-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "POL",
+          "player": "Bednarek",
+          "minute": "59'"
+        }
+      ]
     },
     {
       "date": "2018-06-28",
@@ -512,7 +1025,14 @@
       "away": "COL",
       "winner": "COL",
       "score": "0-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "COL",
+          "player": "Y. Mina",
+          "minute": "74'"
+        }
+      ]
     },
     {
       "date": "2018-06-30",
@@ -520,7 +1040,44 @@
       "away": "ARG",
       "winner": "FRA",
       "score": "4-3",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "FRA",
+          "player": "Antoine Griezmann",
+          "minute": "13' (p)"
+        },
+        {
+          "team": "FRA",
+          "player": "Benjamin Pavard",
+          "minute": "57'"
+        },
+        {
+          "team": "FRA",
+          "player": "Kylian Mbappé",
+          "minute": "64'"
+        },
+        {
+          "team": "FRA",
+          "player": "Kylian Mbappé",
+          "minute": "68'"
+        },
+        {
+          "team": "ARG",
+          "player": "Ángel Di María",
+          "minute": "41'"
+        },
+        {
+          "team": "ARG",
+          "player": "Gabriel Mercado",
+          "minute": "48'"
+        },
+        {
+          "team": "ARG",
+          "player": "Sergio Agüero",
+          "minute": "90+3'"
+        }
+      ]
     },
     {
       "date": "2018-06-30",
@@ -528,7 +1085,24 @@
       "away": "PRT",
       "winner": "URY",
       "score": "2-1",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "URY",
+          "player": "Edinson Cavani",
+          "minute": "7'"
+        },
+        {
+          "team": "URY",
+          "player": "Edinson Cavani",
+          "minute": "62'"
+        },
+        {
+          "team": "PRT",
+          "player": "Pepe",
+          "minute": "55'"
+        }
+      ]
     },
     {
       "date": "2018-07-01",
@@ -536,7 +1110,19 @@
       "away": "RUS",
       "winner": "RUS",
       "score": "1-1 (3-4 p)",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "ESP",
+          "player": "Sergei Ignashevich",
+          "minute": "12' (og)"
+        },
+        {
+          "team": "RUS",
+          "player": "Artem Dzyuba",
+          "minute": "41' (p)"
+        }
+      ]
     },
     {
       "date": "2018-07-01",
@@ -544,7 +1130,19 @@
       "away": "DNK",
       "winner": "HRV",
       "score": "1-1 (3-2 p)",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "HRV",
+          "player": "Mario Mandžukić",
+          "minute": "4'"
+        },
+        {
+          "team": "DNK",
+          "player": "Mathias Jørgensen",
+          "minute": "1'"
+        }
+      ]
     },
     {
       "date": "2018-07-02",
@@ -552,7 +1150,19 @@
       "away": "MEX",
       "winner": "BRA",
       "score": "2-0",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "BRA",
+          "player": "Neymar",
+          "minute": "51'"
+        },
+        {
+          "team": "BRA",
+          "player": "Roberto Firmino",
+          "minute": "88'"
+        }
+      ]
     },
     {
       "date": "2018-07-02",
@@ -560,7 +1170,34 @@
       "away": "JPN",
       "winner": "BEL",
       "score": "3-2",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "BEL",
+          "player": "Jan Vertonghen",
+          "minute": "69'"
+        },
+        {
+          "team": "BEL",
+          "player": "Marouane Fellaini",
+          "minute": "74'"
+        },
+        {
+          "team": "BEL",
+          "player": "Nacer Chadli",
+          "minute": "90+4'"
+        },
+        {
+          "team": "JPN",
+          "player": "Genki Haraguchi",
+          "minute": "48'"
+        },
+        {
+          "team": "JPN",
+          "player": "Takashi Inui",
+          "minute": "52'"
+        }
+      ]
     },
     {
       "date": "2018-07-03",
@@ -568,7 +1205,14 @@
       "away": "CHE",
       "winner": "SWE",
       "score": "1-0",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "SWE",
+          "player": "Emil Forsberg",
+          "minute": "66'"
+        }
+      ]
     },
     {
       "date": "2018-07-03",
@@ -576,7 +1220,19 @@
       "away": "ENG",
       "winner": "ENG",
       "score": "1-1 (3-4 p)",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "COL",
+          "player": "Yerry Mina",
+          "minute": "90+3'"
+        },
+        {
+          "team": "ENG",
+          "player": "Harry Kane",
+          "minute": "57' (p)"
+        }
+      ]
     },
     {
       "date": "2018-07-06",
@@ -584,7 +1240,19 @@
       "away": "FRA",
       "winner": "FRA",
       "score": "0-2",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "FRA",
+          "player": "Raphaël Varane",
+          "minute": "40'"
+        },
+        {
+          "team": "FRA",
+          "player": "Antoine Griezmann",
+          "minute": "61'"
+        }
+      ]
     },
     {
       "date": "2018-07-06",
@@ -592,7 +1260,24 @@
       "away": "BEL",
       "winner": "BEL",
       "score": "1-2",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "BRA",
+          "player": "Renato Augusto",
+          "minute": "76'"
+        },
+        {
+          "team": "BEL",
+          "player": "Fernandinho",
+          "minute": "13' (og)"
+        },
+        {
+          "team": "BEL",
+          "player": "Kevin De Bruyne",
+          "minute": "31'"
+        }
+      ]
     },
     {
       "date": "2018-07-07",
@@ -600,7 +1285,19 @@
       "away": "ENG",
       "winner": "ENG",
       "score": "0-2",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "ENG",
+          "player": "Harry Maguire",
+          "minute": "30'"
+        },
+        {
+          "team": "ENG",
+          "player": "Dele Alli",
+          "minute": "58'"
+        }
+      ]
     },
     {
       "date": "2018-07-07",
@@ -608,7 +1305,29 @@
       "away": "HRV",
       "winner": "HRV",
       "score": "2-2 (3-4 p)",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "RUS",
+          "player": "Denis Cheryshev",
+          "minute": "31'"
+        },
+        {
+          "team": "RUS",
+          "player": "Mário Figueira Fernandes",
+          "minute": "115'"
+        },
+        {
+          "team": "HRV",
+          "player": "Andrej Kramarić",
+          "minute": "39'"
+        },
+        {
+          "team": "HRV",
+          "player": "Domagoj Vida",
+          "minute": "100'"
+        }
+      ]
     },
     {
       "date": "2018-07-10",
@@ -616,7 +1335,14 @@
       "away": "BEL",
       "winner": "FRA",
       "score": "1-0",
-      "stage": "Semifinal"
+      "stage": "Semifinal",
+      "scorers": [
+        {
+          "team": "FRA",
+          "player": "Samuel Umtiti",
+          "minute": "51'"
+        }
+      ]
     },
     {
       "date": "2018-07-11",
@@ -624,7 +1350,24 @@
       "away": "ENG",
       "winner": "HRV",
       "score": "2-1 (aet)",
-      "stage": "Semifinal"
+      "stage": "Semifinal",
+      "scorers": [
+        {
+          "team": "HRV",
+          "player": "Ivan Perišić",
+          "minute": "68'"
+        },
+        {
+          "team": "HRV",
+          "player": "Mario Mandžukić",
+          "minute": "109'"
+        },
+        {
+          "team": "ENG",
+          "player": "Kieran Trippier",
+          "minute": "5'"
+        }
+      ]
     },
     {
       "date": "2018-07-14",
@@ -632,7 +1375,14 @@
       "away": "ENG",
       "winner": "BEL",
       "score": "2-0",
-      "stage": "Third-Place Match"
+      "stage": "Third-Place Match",
+      "scorers": [
+        {
+          "team": "BEL",
+          "player": "Adnan Januzaj",
+          "minute": "51'"
+        }
+      ]
     },
     {
       "date": "2018-07-15",
@@ -640,7 +1390,39 @@
       "away": "HRV",
       "winner": "FRA",
       "score": "4-2",
-      "stage": "Final"
+      "stage": "Final",
+      "scorers": [
+        {
+          "team": "FRA",
+          "player": "Mandžukić",
+          "minute": "18' (og)"
+        },
+        {
+          "team": "FRA",
+          "player": "Griezmann",
+          "minute": "38' (p)"
+        },
+        {
+          "team": "FRA",
+          "player": "Pogba",
+          "minute": "59'"
+        },
+        {
+          "team": "FRA",
+          "player": "Mbappé",
+          "minute": "65'"
+        },
+        {
+          "team": "HRV",
+          "player": "Perišić",
+          "minute": "28'"
+        },
+        {
+          "team": "HRV",
+          "player": "Mandžukić",
+          "minute": "69'"
+        }
+      ]
     }
   ]
 }

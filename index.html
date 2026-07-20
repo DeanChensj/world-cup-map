@@ -260,6 +260,14 @@
             <div id="clash-teamB-name" class="font-bold text-white font-sans text-[10px] sm:text-sm tracking-wide">FRANCE</div>
           </div>
         </div>
+
+        <!-- Goal Scorers Row -->
+        <div id="clash-scorers-container" class="mt-1.5 sm:mt-2 pt-1.5 border-t border-amber-500/20 text-[7px] sm:text-[9px] font-mono text-console-dimText hidden">
+          <div class="flex justify-between items-start space-x-2">
+            <div id="clash-scorers-teamA" class="flex-1 text-left space-y-0.5 text-amber-300/90 leading-tight"></div>
+            <div id="clash-scorers-teamB" class="flex-1 text-right space-y-0.5 text-amber-300/90 leading-tight"></div>
+          </div>
+        </div>
       </div>
 
       <!-- Campaign HUD Panel (Main Faction Status) -->
@@ -1017,6 +1025,64 @@
       }
 
       return { homeCode, awayCode };
+    }
+
+    function getScorersDisplay(match, activeWinner, code1, code2) {
+      if (!match) return { scorers1: "", scorers2: "" };
+
+      const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+      const name1 = getTeamName(code1);
+      const name2 = getTeamName(code2);
+
+      const homeEff = getEffectiveTeamCode(match.home);
+      const awayEff = getEffectiveTeamCode(match.away);
+
+      const matchIdx = (match.originalIndex !== undefined) ? match.originalIndex : matches.indexOf(match);
+      const isOverridden = (userOverrides[matchIdx] !== undefined && userOverrides[matchIdx] !== match.winner);
+      const isSwapped1 = (teamSwaps[match.home] && teamSwaps[match.home] === code1);
+      const isSwapped2 = (teamSwaps[match.away] && teamSwaps[match.away] === code2);
+
+      let rawScorers = match.scorers || [];
+
+      let list1 = [];
+      let list2 = [];
+
+      if (rawScorers.length > 0 && !isOverridden) {
+        rawScorers.forEach(s => {
+          let sTeam = getEffectiveTeamCode(s.team);
+          let pName = s.player;
+          let mText = s.minute;
+
+          if (sTeam === code1 || sTeam === match.home || sTeam === homeEff) {
+            if (isSwapped1) pName = `${name1} ${isZh ? '进球' : 'Goal'}`;
+            list1.push(`${pName} ${mText}`);
+          } else if (sTeam === code2 || sTeam === match.away || sTeam === awayEff) {
+            if (isSwapped2) pName = `${name2} ${isZh ? '进球' : 'Goal'}`;
+            list2.push(`${pName} ${mText}`);
+          }
+        });
+      }
+
+      const effectiveScore = getEffectiveMatchScore(match, activeWinner);
+      if (effectiveScore && (list1.length === 0 || list2.length === 0 || isOverridden)) {
+        const mainPart = effectiveScore.split("(")[0].trim();
+        const parts = mainPart.split("-").map(s => parseInt(s.trim(), 10));
+        if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+          const s1 = parts[0];
+          const s2 = parts[1];
+          if (list1.length === 0 && s1 > 0) {
+            list1.push(`${name1} ${isZh ? '关键进球' : 'Goal'} (${s1})`);
+          }
+          if (list2.length === 0 && s2 > 0) {
+            list2.push(`${name2} ${isZh ? '关键进球' : 'Goal'} (${s2})`);
+          }
+        }
+      }
+
+      return {
+        scorers1: list1.length > 0 ? `⚽ ${list1.join("<br>⚽ ")}` : "",
+        scorers2: list2.length > 0 ? `⚽ ${list2.join("<br>⚽ ")}` : ""
+      };
     }
 
     let originalTeams = [];
@@ -2118,6 +2184,22 @@
 
       const effectiveScore = getEffectiveMatchScore(match, activeWinner);
       document.getElementById("clash-match-score").innerHTML = formatScoreDisplay(effectiveScore);
+
+      // Render Goal Scorers
+      const scorersContainer = document.getElementById("clash-scorers-container");
+      const scorersA = document.getElementById("clash-scorers-teamA");
+      const scorersB = document.getElementById("clash-scorers-teamB");
+
+      if (scorersContainer && scorersA && scorersB) {
+        const { scorers1, scorers2 } = getScorersDisplay(match, activeWinner, code1, code2);
+        if (scorers1 || scorers2) {
+          scorersA.innerHTML = scorers1;
+          scorersB.innerHTML = scorers2;
+          scorersContainer.classList.remove("hidden");
+        } else {
+          scorersContainer.classList.add("hidden");
+        }
+      }
 
       overlay.classList.remove("hidden");
     }

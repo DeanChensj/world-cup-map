@@ -528,7 +528,34 @@
       "away": "CHL",
       "winner": "BRA",
       "score": "4-1",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "BRA",
+          "player": "César Sampaio",
+          "minute": "11'"
+        },
+        {
+          "team": "BRA",
+          "player": "César Sampaio",
+          "minute": "27'"
+        },
+        {
+          "team": "BRA",
+          "player": "Ronaldo",
+          "minute": "45+1' (p)"
+        },
+        {
+          "team": "BRA",
+          "player": "Ronaldo",
+          "minute": "70'"
+        },
+        {
+          "team": "CHL",
+          "player": "Marcelo Salas",
+          "minute": "68'"
+        }
+      ]
     },
     {
       "date": "1998-06-27",
@@ -536,7 +563,14 @@
       "away": "NOR",
       "winner": "ITA",
       "score": "1-0",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "ITA",
+          "player": "Christian Vieri",
+          "minute": "18'"
+        }
+      ]
     },
     {
       "date": "1998-06-28",
@@ -544,7 +578,34 @@
       "away": "DNK",
       "winner": "DNK",
       "score": "1-4",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "DNK",
+          "player": "Peter Møller",
+          "minute": "3'"
+        },
+        {
+          "team": "DNK",
+          "player": "Brian Laudrup",
+          "minute": "12'"
+        },
+        {
+          "team": "DNK",
+          "player": "Ebbe Sand",
+          "minute": "60'"
+        },
+        {
+          "team": "DNK",
+          "player": "Thomas Helveg",
+          "minute": "76'"
+        },
+        {
+          "team": "NGA",
+          "player": "Tijani Babangida",
+          "minute": "78'"
+        }
+      ]
     },
     {
       "date": "1998-06-28",
@@ -552,7 +613,14 @@
       "away": "PRY",
       "winner": "FRA",
       "score": "1-0 (aet)",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "FRA",
+          "player": "Laurent Blanc",
+          "minute": "114'"
+        }
+      ]
     },
     {
       "date": "1998-06-29",
@@ -560,7 +628,24 @@
       "away": "MEX",
       "winner": "DEU",
       "score": "2-1",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "MEX",
+          "player": "Luis Hernández",
+          "minute": "47'"
+        },
+        {
+          "team": "DEU",
+          "player": "Jürgen Klinsmann",
+          "minute": "75'"
+        },
+        {
+          "team": "DEU",
+          "player": "Oliver Bierhoff",
+          "minute": "86'"
+        }
+      ]
     },
     {
       "date": "1998-06-29",
@@ -568,7 +653,24 @@
       "away": "SRB",
       "winner": "NLD",
       "score": "2-1",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "NLD",
+          "player": "Dennis Bergkamp",
+          "minute": "38'"
+        },
+        {
+          "team": "SRB",
+          "player": "Slobodan Komljenović",
+          "minute": "48'"
+        },
+        {
+          "team": "NLD",
+          "player": "Edgar Davids",
+          "minute": "90+2'"
+        }
+      ]
     },
     {
       "date": "1998-06-30",
@@ -576,7 +678,29 @@
       "away": "ENG",
       "winner": "ARG",
       "score": "2-2 (4-3 p)",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "ARG",
+          "player": "Gabriel Batistuta",
+          "minute": "6' (p)"
+        },
+        {
+          "team": "ENG",
+          "player": "Alan Shearer",
+          "minute": "10' (p)"
+        },
+        {
+          "team": "ENG",
+          "player": "Michael Owen",
+          "minute": "16'"
+        },
+        {
+          "team": "ARG",
+          "player": "Javier Zanetti",
+          "minute": "45+1'"
+        }
+      ]
     },
     {
       "date": "1998-06-30",
@@ -584,7 +708,14 @@
       "away": "HRV",
       "winner": "HRV",
       "score": "0-1",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "HRV",
+          "player": "Davor Šuker",
+          "minute": "45+2' (p)"
+        }
+      ]
     },
     {
       "date": "1998-07-03",
@@ -592,7 +723,8 @@
       "away": "FRA",
       "winner": "FRA",
       "score": "0-0 (3-4 p)",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": []
     },
     {
       "date": "1998-07-03",
@@ -600,7 +732,34 @@
       "away": "DNK",
       "winner": "BRA",
       "score": "3-2",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "DNK",
+          "player": "Martin Jørgensen",
+          "minute": "2'"
+        },
+        {
+          "team": "BRA",
+          "player": "Bebeto",
+          "minute": "11'"
+        },
+        {
+          "team": "BRA",
+          "player": "Rivaldo",
+          "minute": "27'"
+        },
+        {
+          "team": "DNK",
+          "player": "Brian Laudrup",
+          "minute": "50'"
+        },
+        {
+          "team": "BRA",
+          "player": "Rivaldo",
+          "minute": "60'"
+        }
+      ]
     },
     {
       "date": "1998-07-04",
@@ -608,7 +767,24 @@
       "away": "HRV",
       "winner": "HRV",
       "score": "0-3",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "HRV",
+          "player": "Robert Jarni",
+          "minute": "45+3'"
+        },
+        {
+          "team": "HRV",
+          "player": "Goran Vlaović",
+          "minute": "80'"
+        },
+        {
+          "team": "HRV",
+          "player": "Davor Šuker",
+          "minute": "85'"
+        }
+      ]
     },
     {
       "date": "1998-07-04",
@@ -616,7 +792,24 @@
       "away": "ARG",
       "winner": "NLD",
       "score": "2-1",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "NLD",
+          "player": "Patrick Kluivert",
+          "minute": "12'"
+        },
+        {
+          "team": "ARG",
+          "player": "Claudio López",
+          "minute": "17'"
+        },
+        {
+          "team": "NLD",
+          "player": "Dennis Bergkamp",
+          "minute": "90'"
+        }
+      ]
     },
     {
       "date": "1998-07-07",
@@ -624,7 +817,19 @@
       "away": "NLD",
       "winner": "BRA",
       "score": "1-1 (4-2 p)",
-      "stage": "Semifinal"
+      "stage": "Semifinal",
+      "scorers": [
+        {
+          "team": "BRA",
+          "player": "Ronaldo",
+          "minute": "46'"
+        },
+        {
+          "team": "NLD",
+          "player": "Patrick Kluivert",
+          "minute": "87'"
+        }
+      ]
     },
     {
       "date": "1998-07-08",
@@ -632,7 +837,24 @@
       "away": "HRV",
       "winner": "FRA",
       "score": "2-1",
-      "stage": "Semifinal"
+      "stage": "Semifinal",
+      "scorers": [
+        {
+          "team": "HRV",
+          "player": "Davor Šuker",
+          "minute": "47'"
+        },
+        {
+          "team": "FRA",
+          "player": "Lilian Thuram",
+          "minute": "47'"
+        },
+        {
+          "team": "FRA",
+          "player": "Lilian Thuram",
+          "minute": "69'"
+        }
+      ]
     },
     {
       "date": "1998-07-11",
@@ -640,7 +862,24 @@
       "away": "HRV",
       "winner": "HRV",
       "score": "1-2",
-      "stage": "Third-Place Match"
+      "stage": "Third-Place Match",
+      "scorers": [
+        {
+          "team": "HRV",
+          "player": "Robert Prosinečki",
+          "minute": "13'"
+        },
+        {
+          "team": "NLD",
+          "player": "Boudewijn Zenden",
+          "minute": "21'"
+        },
+        {
+          "team": "HRV",
+          "player": "Davor Šuker",
+          "minute": "35'"
+        }
+      ]
     },
     {
       "date": "1998-07-12",
@@ -648,7 +887,24 @@
       "away": "FRA",
       "winner": "FRA",
       "score": "0-3",
-      "stage": "Final"
+      "stage": "Final",
+      "scorers": [
+        {
+          "team": "FRA",
+          "player": "Zinédine Zidane",
+          "minute": "27'"
+        },
+        {
+          "team": "FRA",
+          "player": "Zinédine Zidane",
+          "minute": "45+1'"
+        },
+        {
+          "team": "FRA",
+          "player": "Emmanuel Petit",
+          "minute": "90+3'"
+        }
+      ]
     }
   ]
 }

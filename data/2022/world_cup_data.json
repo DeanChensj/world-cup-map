@@ -136,7 +136,19 @@
       "away": "ECU",
       "winner": "",
       "score": "0-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "ECU",
+          "player": "Enner Valencia",
+          "minute": "16' (p)"
+        },
+        {
+          "team": "ECU",
+          "player": "Enner Valencia",
+          "minute": "31'"
+        }
+      ]
     },
     {
       "date": "2022-11-21",
@@ -144,7 +156,19 @@
       "away": "NLD",
       "winner": "",
       "score": "0-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "NLD",
+          "player": "Cody Gakpo",
+          "minute": "84'"
+        },
+        {
+          "team": "NLD",
+          "player": "Davy Klaassen",
+          "minute": "90+9'"
+        }
+      ]
     },
     {
       "date": "2022-11-21",
@@ -152,7 +176,49 @@
       "away": "IRN",
       "winner": "ENG",
       "score": "6-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "ENG",
+          "player": "Jude Bellingham",
+          "minute": "35'"
+        },
+        {
+          "team": "ENG",
+          "player": "Bukayo Saka",
+          "minute": "43'"
+        },
+        {
+          "team": "ENG",
+          "player": "Bukayo Saka",
+          "minute": "62'"
+        },
+        {
+          "team": "ENG",
+          "player": "Raheem Sterling",
+          "minute": "45+1'"
+        },
+        {
+          "team": "ENG",
+          "player": "Marcus Rashford",
+          "minute": "71'"
+        },
+        {
+          "team": "ENG",
+          "player": "Jack Grealish",
+          "minute": "90'"
+        },
+        {
+          "team": "IRN",
+          "player": "Mehdi Taremi",
+          "minute": "65'"
+        },
+        {
+          "team": "IRN",
+          "player": "Mehdi Taremi",
+          "minute": "90+13' (p)"
+        }
+      ]
     },
     {
       "date": "2022-11-21",
@@ -160,7 +226,19 @@
       "away": "WAL",
       "winner": "",
       "score": "1-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "USA",
+          "player": "Timothy Weah",
+          "minute": "36'"
+        },
+        {
+          "team": "WAL",
+          "player": "Gareth Bale",
+          "minute": "82' (p)"
+        }
+      ]
     },
     {
       "date": "2022-11-22",
@@ -168,7 +246,24 @@
       "away": "SAU",
       "winner": "",
       "score": "1-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "ARG",
+          "player": "Lionel Messi",
+          "minute": "10' (p)"
+        },
+        {
+          "team": "SAU",
+          "player": "Saleh Al Shehri",
+          "minute": "48'"
+        },
+        {
+          "team": "SAU",
+          "player": "Salem Al Dawsari",
+          "minute": "53'"
+        }
+      ]
     },
     {
       "date": "2022-11-22",
@@ -192,7 +287,34 @@
       "away": "AUS",
       "winner": "",
       "score": "4-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "FRA",
+          "player": "Adrien Rabiot",
+          "minute": "27'"
+        },
+        {
+          "team": "FRA",
+          "player": "Olivier Giroud",
+          "minute": "32'"
+        },
+        {
+          "team": "FRA",
+          "player": "Olivier Giroud",
+          "minute": "71'"
+        },
+        {
+          "team": "FRA",
+          "player": "Kylian Mbappé",
+          "minute": "68'"
+        },
+        {
+          "team": "AUS",
+          "player": "Craig Goodwin",
+          "minute": "9'"
+        }
+      ]
     },
     {
       "date": "2022-11-23",
@@ -200,7 +322,24 @@
       "away": "JPN",
       "winner": "JPN",
       "score": "1-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "DEU",
+          "player": "Ilkay Gündogan",
+          "minute": "33' (p)"
+        },
+        {
+          "team": "JPN",
+          "player": "Ritsu Doan",
+          "minute": "75'"
+        },
+        {
+          "team": "JPN",
+          "player": "Takuma Asano",
+          "minute": "83'"
+        }
+      ]
     },
     {
       "date": "2022-11-23",
@@ -208,7 +347,44 @@
       "away": "CRI",
       "winner": "ESP",
       "score": "7-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "ESP",
+          "player": "Dani Olmo",
+          "minute": "11'"
+        },
+        {
+          "team": "ESP",
+          "player": "Marco Asensio",
+          "minute": "21'"
+        },
+        {
+          "team": "ESP",
+          "player": "Ferran Torres",
+          "minute": "31' (p)"
+        },
+        {
+          "team": "ESP",
+          "player": "Ferran Torres",
+          "minute": "54'"
+        },
+        {
+          "team": "ESP",
+          "player": "Gavi",
+          "minute": "74'"
+        },
+        {
+          "team": "ESP",
+          "player": "Carlos Soler",
+          "minute": "90'"
+        },
+        {
+          "team": "ESP",
+          "player": "Álvaro Morata",
+          "minute": "90+2'"
+        }
+      ]
     },
     {
       "date": "2022-11-23",
@@ -224,7 +400,14 @@
       "away": "CAN",
       "winner": "",
       "score": "1-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "BEL",
+          "player": "Michy Batshuayi",
+          "minute": "44'"
+        }
+      ]
     },
     {
       "date": "2022-11-24",
@@ -232,7 +415,14 @@
       "away": "CMR",
       "winner": "CHE",
       "score": "1-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "CHE",
+          "player": "Breel Embolo",
+          "minute": "48'"
+        }
+      ]
     },
     {
       "date": "2022-11-24",
@@ -240,7 +430,19 @@
       "away": "SRB",
       "winner": "BRA",
       "score": "2-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "BRA",
+          "player": "Richarlison",
+          "minute": "62'"
+        },
+        {
+          "team": "BRA",
+          "player": "Richarlison",
+          "minute": "73'"
+        }
+      ]
     },
     {
       "date": "2022-11-24",
@@ -256,7 +458,34 @@
       "away": "GHA",
       "winner": "PRT",
       "score": "3-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "PRT",
+          "player": "Cristiano Ronaldo",
+          "minute": "65' (p)"
+        },
+        {
+          "team": "PRT",
+          "player": "João Félix",
+          "minute": "78'"
+        },
+        {
+          "team": "PRT",
+          "player": "Rafael Leão",
+          "minute": "80'"
+        },
+        {
+          "team": "GHA",
+          "player": "André Ayew",
+          "minute": "73'"
+        },
+        {
+          "team": "GHA",
+          "player": "Osman Bukari",
+          "minute": "89'"
+        }
+      ]
     },
     {
       "date": "2022-11-25",
@@ -264,7 +493,29 @@
       "away": "SEN",
       "winner": "SEN",
       "score": "1-3",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "QAT",
+          "player": "Mohammed Muntari",
+          "minute": "78'"
+        },
+        {
+          "team": "SEN",
+          "player": "Boulaye Dia",
+          "minute": "41'"
+        },
+        {
+          "team": "SEN",
+          "player": "Famara Diédhiou",
+          "minute": "48'"
+        },
+        {
+          "team": "SEN",
+          "player": "Bamba Dieng",
+          "minute": "84'"
+        }
+      ]
     },
     {
       "date": "2022-11-25",
@@ -272,7 +523,19 @@
       "away": "ECU",
       "winner": "",
       "score": "1-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "NLD",
+          "player": "Cody Gakpo",
+          "minute": "6'"
+        },
+        {
+          "team": "ECU",
+          "player": "Enner Valencia",
+          "minute": "49'"
+        }
+      ]
     },
     {
       "date": "2022-11-25",
@@ -280,7 +543,19 @@
       "away": "IRN",
       "winner": "",
       "score": "0-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "IRN",
+          "player": "Roozbeh Cheshmi",
+          "minute": "90+8'"
+        },
+        {
+          "team": "IRN",
+          "player": "Ramin Rezaeian",
+          "minute": "90+11'"
+        }
+      ]
     },
     {
       "date": "2022-11-25",
@@ -296,7 +571,19 @@
       "away": "SAU",
       "winner": "POL",
       "score": "2-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "POL",
+          "player": "Piotr Zielinski",
+          "minute": "39'"
+        },
+        {
+          "team": "POL",
+          "player": "Robert Lewandowski",
+          "minute": "82'"
+        }
+      ]
     },
     {
       "date": "2022-11-26",
@@ -304,7 +591,19 @@
       "away": "MEX",
       "winner": "ARG",
       "score": "2-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "ARG",
+          "player": "Lionel Messi",
+          "minute": "64'"
+        },
+        {
+          "team": "ARG",
+          "player": "Enzo Fernández",
+          "minute": "87'"
+        }
+      ]
     },
     {
       "date": "2022-11-26",
@@ -312,7 +611,14 @@
       "away": "AUS",
       "winner": "AUS",
       "score": "0-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "AUS",
+          "player": "Mitchell Duke",
+          "minute": "23'"
+        }
+      ]
     },
     {
       "date": "2022-11-26",
@@ -320,7 +626,24 @@
       "away": "DNK",
       "winner": "FRA",
       "score": "2-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "FRA",
+          "player": "Kylian Mbappé",
+          "minute": "61'"
+        },
+        {
+          "team": "FRA",
+          "player": "Kylian Mbappé",
+          "minute": "86'"
+        },
+        {
+          "team": "DNK",
+          "player": "Andreas Christensen",
+          "minute": "68'"
+        }
+      ]
     },
     {
       "date": "2022-11-27",
@@ -328,7 +651,14 @@
       "away": "CRI",
       "winner": "",
       "score": "0-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "CRI",
+          "player": "Keysher Fuller",
+          "minute": "81'"
+        }
+      ]
     },
     {
       "date": "2022-11-27",
@@ -336,7 +666,19 @@
       "away": "DEU",
       "winner": "",
       "score": "1-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "ESP",
+          "player": "Álvaro Morata",
+          "minute": "62'"
+        },
+        {
+          "team": "DEU",
+          "player": "Niclas Füllkrug",
+          "minute": "83'"
+        }
+      ]
     },
     {
       "date": "2022-11-27",
@@ -344,7 +686,19 @@
       "away": "MAR",
       "winner": "MAR",
       "score": "0-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "MAR",
+          "player": "Romain Saïss",
+          "minute": "73'"
+        },
+        {
+          "team": "MAR",
+          "player": "Zakaria Aboukhlal",
+          "minute": "90+2'"
+        }
+      ]
     },
     {
       "date": "2022-11-27",
@@ -352,7 +706,34 @@
       "away": "CAN",
       "winner": "HRV",
       "score": "4-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "HRV",
+          "player": "Andrej Kramarić",
+          "minute": "36'"
+        },
+        {
+          "team": "HRV",
+          "player": "Marko Livaja",
+          "minute": "44'"
+        },
+        {
+          "team": "HRV",
+          "player": "Andrej Kramarić",
+          "minute": "70'"
+        },
+        {
+          "team": "HRV",
+          "player": "Lovro Majer",
+          "minute": "90+4'"
+        },
+        {
+          "team": "CAN",
+          "player": "Alphonso Davies",
+          "minute": "2'"
+        }
+      ]
     },
     {
       "date": "2022-11-28",
@@ -360,7 +741,39 @@
       "away": "SRB",
       "winner": "",
       "score": "3-3",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "CMR",
+          "player": "Jean-Charles Castelletto",
+          "minute": "29'"
+        },
+        {
+          "team": "CMR",
+          "player": "Vincent Aboubakar",
+          "minute": "63'"
+        },
+        {
+          "team": "CMR",
+          "player": "Jean-Eric Choupo-Moting",
+          "minute": "66'"
+        },
+        {
+          "team": "SRB",
+          "player": "Strahinja Pavlović",
+          "minute": "45+1'"
+        },
+        {
+          "team": "SRB",
+          "player": "Sergej Milinković-Savić",
+          "minute": "45+3'"
+        },
+        {
+          "team": "SRB",
+          "player": "Aleksandar Mitrović",
+          "minute": "53'"
+        }
+      ]
     },
     {
       "date": "2022-11-28",
@@ -368,7 +781,14 @@
       "away": "CHE",
       "winner": "",
       "score": "1-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "BRA",
+          "player": "Casemiro",
+          "minute": "83'"
+        }
+      ]
     },
     {
       "date": "2022-11-28",
@@ -376,7 +796,34 @@
       "away": "GHA",
       "winner": "",
       "score": "2-3",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "KOR",
+          "player": "Cho Gue-sung",
+          "minute": "58'"
+        },
+        {
+          "team": "KOR",
+          "player": "Cho Gue-sung",
+          "minute": "61'"
+        },
+        {
+          "team": "GHA",
+          "player": "Mohammed Salisu",
+          "minute": "24'"
+        },
+        {
+          "team": "GHA",
+          "player": "Mohammed Kudus",
+          "minute": "34'"
+        },
+        {
+          "team": "GHA",
+          "player": "Mohammed Kudus",
+          "minute": "68'"
+        }
+      ]
     },
     {
       "date": "2022-11-28",
@@ -384,7 +831,19 @@
       "away": "URY",
       "winner": "PRT",
       "score": "2-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "PRT",
+          "player": "Bruno Fernandes",
+          "minute": "54'"
+        },
+        {
+          "team": "PRT",
+          "player": "Bruno Fernandes",
+          "minute": "90+3' (p)"
+        }
+      ]
     },
     {
       "date": "2022-11-29",
@@ -392,7 +851,24 @@
       "away": "SEN",
       "winner": "SEN",
       "score": "1-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "ECU",
+          "player": "Moisés Caicedo",
+          "minute": "67'"
+        },
+        {
+          "team": "SEN",
+          "player": "Ismaila Sarr",
+          "minute": "44' (p)"
+        },
+        {
+          "team": "SEN",
+          "player": "Koulibaly",
+          "minute": "70'"
+        }
+      ]
     },
     {
       "date": "2022-11-29",
@@ -400,7 +876,19 @@
       "away": "QAT",
       "winner": "NLD",
       "score": "2-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "NLD",
+          "player": "Cody Gakpo",
+          "minute": "26'"
+        },
+        {
+          "team": "NLD",
+          "player": "Frenkie de Jong",
+          "minute": "49'"
+        }
+      ]
     },
     {
       "date": "2022-11-29",
@@ -408,7 +896,24 @@
       "away": "ENG",
       "winner": "ENG",
       "score": "0-3",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "ENG",
+          "player": "Rashford",
+          "minute": "50'"
+        },
+        {
+          "team": "ENG",
+          "player": "Foden",
+          "minute": "51'"
+        },
+        {
+          "team": "ENG",
+          "player": "Rashford",
+          "minute": "68'"
+        }
+      ]
     },
     {
       "date": "2022-11-29",
@@ -416,7 +921,14 @@
       "away": "USA",
       "winner": "USA",
       "score": "0-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "USA",
+          "player": "Pulisic",
+          "minute": "38'"
+        }
+      ]
     },
     {
       "date": "2022-11-30",
@@ -424,7 +936,19 @@
       "away": "ARG",
       "winner": "",
       "score": "0-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "ARG",
+          "player": "Mac Allister",
+          "minute": "46'"
+        },
+        {
+          "team": "ARG",
+          "player": "Julián Álvarez",
+          "minute": "67'"
+        }
+      ]
     },
     {
       "date": "2022-11-30",
@@ -432,7 +956,24 @@
       "away": "MEX",
       "winner": "",
       "score": "1-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "SAU",
+          "player": "Salem Al Dawasari",
+          "minute": "90+5'"
+        },
+        {
+          "team": "MEX",
+          "player": "Henry Martín",
+          "minute": "47'"
+        },
+        {
+          "team": "MEX",
+          "player": "Luis Chávez",
+          "minute": "52'"
+        }
+      ]
     },
     {
       "date": "2022-11-30",
@@ -440,7 +981,14 @@
       "away": "DNK",
       "winner": "AUS",
       "score": "1-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "AUS",
+          "player": "Mathew Leckie",
+          "minute": "60'"
+        }
+      ]
     },
     {
       "date": "2022-11-30",
@@ -448,7 +996,14 @@
       "away": "FRA",
       "winner": "",
       "score": "1-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "TUN",
+          "player": "Wahbi Khazri",
+          "minute": "58'"
+        }
+      ]
     },
     {
       "date": "2022-12-01",
@@ -456,7 +1011,24 @@
       "away": "ESP",
       "winner": "",
       "score": "2-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "JPN",
+          "player": "Ritsu Dōan",
+          "minute": "48'"
+        },
+        {
+          "team": "JPN",
+          "player": "Ao Tanaka",
+          "minute": "51'"
+        },
+        {
+          "team": "ESP",
+          "player": "Álvaro Morata",
+          "minute": "11'"
+        }
+      ]
     },
     {
       "date": "2022-12-01",
@@ -464,7 +1036,39 @@
       "away": "DEU",
       "winner": "",
       "score": "2-4",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "CRI",
+          "player": "Yeltsin Tejeda",
+          "minute": "58'"
+        },
+        {
+          "team": "CRI",
+          "player": "Juan Vargas",
+          "minute": "70'"
+        },
+        {
+          "team": "DEU",
+          "player": "Serge Gnabry",
+          "minute": "10'"
+        },
+        {
+          "team": "DEU",
+          "player": "Kai Lukas Havertz",
+          "minute": "73'"
+        },
+        {
+          "team": "DEU",
+          "player": "Kai Lukas Havertz",
+          "minute": "85'"
+        },
+        {
+          "team": "DEU",
+          "player": "Niclas Füllkrug",
+          "minute": "89'"
+        }
+      ]
     },
     {
       "date": "2022-12-01",
@@ -480,7 +1084,24 @@
       "away": "MAR",
       "winner": "MAR",
       "score": "1-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "CAN",
+          "player": "Nayef Aguerd",
+          "minute": "40' (og)"
+        },
+        {
+          "team": "MAR",
+          "player": "Hakim Zyiech",
+          "minute": "4'"
+        },
+        {
+          "team": "MAR",
+          "player": "Youssef En-Nesyri",
+          "minute": "23'"
+        }
+      ]
     },
     {
       "date": "2022-12-02",
@@ -488,7 +1109,34 @@
       "away": "CHE",
       "winner": "CHE",
       "score": "2-3",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "SRB",
+          "player": "Aleksandar Mitrović",
+          "minute": "26'"
+        },
+        {
+          "team": "SRB",
+          "player": "Dušan Vlahović",
+          "minute": "35'"
+        },
+        {
+          "team": "CHE",
+          "player": "Xherdan Shaqiri",
+          "minute": "20'"
+        },
+        {
+          "team": "CHE",
+          "player": "Breel Embolo",
+          "minute": "44'"
+        },
+        {
+          "team": "CHE",
+          "player": "Freuler",
+          "minute": "48'"
+        }
+      ]
     },
     {
       "date": "2022-12-02",
@@ -496,7 +1144,14 @@
       "away": "BRA",
       "winner": "",
       "score": "1-0",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "CMR",
+          "player": "Vincent Aboubakar",
+          "minute": "90+2'"
+        }
+      ]
     },
     {
       "date": "2022-12-02",
@@ -504,7 +1159,19 @@
       "away": "URY",
       "winner": "",
       "score": "0-2",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "URY",
+          "player": "Giorgian De Arrascaeta",
+          "minute": "26'"
+        },
+        {
+          "team": "URY",
+          "player": "Giorgian De Arrascaeta",
+          "minute": "32'"
+        }
+      ]
     },
     {
       "date": "2022-12-02",
@@ -512,7 +1179,24 @@
       "away": "PRT",
       "winner": "",
       "score": "2-1",
-      "stage": "Group Stage"
+      "stage": "Group Stage",
+      "scorers": [
+        {
+          "team": "KOR",
+          "player": "Kim Young-gwon",
+          "minute": "27'"
+        },
+        {
+          "team": "KOR",
+          "player": "Hwang Hee-chan",
+          "minute": "90+1'"
+        },
+        {
+          "team": "PRT",
+          "player": "Ricardo Horta",
+          "minute": "5'"
+        }
+      ]
     },
     {
       "date": "2022-12-03",
@@ -520,7 +1204,29 @@
       "away": "USA",
       "winner": "NLD",
       "score": "3-1",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "NLD",
+          "player": "Memphis Depay",
+          "minute": "10'"
+        },
+        {
+          "team": "NLD",
+          "player": "Daley Blind",
+          "minute": "45+1'"
+        },
+        {
+          "team": "NLD",
+          "player": "Denzel Dumfries",
+          "minute": "81'"
+        },
+        {
+          "team": "USA",
+          "player": "Haji Wright",
+          "minute": "76'"
+        }
+      ]
     },
     {
       "date": "2022-12-03",
@@ -528,7 +1234,24 @@
       "away": "AUS",
       "winner": "ARG",
       "score": "2-1",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "ARG",
+          "player": "Lionel Messi",
+          "minute": "35'"
+        },
+        {
+          "team": "ARG",
+          "player": "Julián Álvarez",
+          "minute": "57'"
+        },
+        {
+          "team": "AUS",
+          "player": "Enzo Fernández",
+          "minute": "77' (og)"
+        }
+      ]
     },
     {
       "date": "2022-12-04",
@@ -536,7 +1259,29 @@
       "away": "POL",
       "winner": "FRA",
       "score": "3-1",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "FRA",
+          "player": "Olivier Giroud",
+          "minute": "44'"
+        },
+        {
+          "team": "FRA",
+          "player": "Mbappé",
+          "minute": "74'"
+        },
+        {
+          "team": "FRA",
+          "player": "Mbappé",
+          "minute": "90+1'"
+        },
+        {
+          "team": "POL",
+          "player": "Robert Lewandowski",
+          "minute": "90+9' (p)"
+        }
+      ]
     },
     {
       "date": "2022-12-04",
@@ -544,7 +1289,24 @@
       "away": "SEN",
       "winner": "ENG",
       "score": "3-0",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "ENG",
+          "player": "Jordan Henderson",
+          "minute": "38'"
+        },
+        {
+          "team": "ENG",
+          "player": "Harry Kane",
+          "minute": "45+3'"
+        },
+        {
+          "team": "ENG",
+          "player": "Bukayo Saka",
+          "minute": "57'"
+        }
+      ]
     },
     {
       "date": "2022-12-05",
@@ -552,7 +1314,19 @@
       "away": "HRV",
       "winner": "HRV",
       "score": "1-1 (1-3 p)",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "JPN",
+          "player": "Daizen Maeda",
+          "minute": "43'"
+        },
+        {
+          "team": "HRV",
+          "player": "Ivan Perišić",
+          "minute": "55'"
+        }
+      ]
     },
     {
       "date": "2022-12-05",
@@ -560,7 +1334,34 @@
       "away": "KOR",
       "winner": "BRA",
       "score": "4-1",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "BRA",
+          "player": "Vinícius Jr.",
+          "minute": "7'"
+        },
+        {
+          "team": "BRA",
+          "player": "Neymar",
+          "minute": "13' (p)"
+        },
+        {
+          "team": "BRA",
+          "player": "Richarlison",
+          "minute": "29'"
+        },
+        {
+          "team": "BRA",
+          "player": "Lucas Paquetá",
+          "minute": "36'"
+        },
+        {
+          "team": "KOR",
+          "player": "Paik Seung-ho",
+          "minute": "76'"
+        }
+      ]
     },
     {
       "date": "2022-12-06",
@@ -576,7 +1377,44 @@
       "away": "CHE",
       "winner": "PRT",
       "score": "6-1",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "PRT",
+          "player": "Gonçalo Ramos",
+          "minute": "17'"
+        },
+        {
+          "team": "PRT",
+          "player": "Gonçalo Ramos",
+          "minute": "51'"
+        },
+        {
+          "team": "PRT",
+          "player": "Gonçalo Ramos",
+          "minute": "67'"
+        },
+        {
+          "team": "PRT",
+          "player": "Pepe",
+          "minute": "33'"
+        },
+        {
+          "team": "PRT",
+          "player": "Raphaël Guerreiro",
+          "minute": "55'"
+        },
+        {
+          "team": "PRT",
+          "player": "Rafael Leão",
+          "minute": "90+2'"
+        },
+        {
+          "team": "CHE",
+          "player": "Manuel Akanji",
+          "minute": "58'"
+        }
+      ]
     },
     {
       "date": "2022-12-09",
@@ -584,7 +1422,19 @@
       "away": "BRA",
       "winner": "HRV",
       "score": "1-1 (4-2 p)",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "HRV",
+          "player": "Bruno Petković",
+          "minute": "117'"
+        },
+        {
+          "team": "BRA",
+          "player": "Neymar",
+          "minute": "105+1'"
+        }
+      ]
     },
     {
       "date": "2022-12-09",
@@ -592,7 +1442,29 @@
       "away": "ARG",
       "winner": "ARG",
       "score": "2-2 (3-4 p)",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "NLD",
+          "player": "Wout Werghost",
+          "minute": "83'"
+        },
+        {
+          "team": "NLD",
+          "player": "Wout Werghost",
+          "minute": "90+11'"
+        },
+        {
+          "team": "ARG",
+          "player": "Nahuel Molina",
+          "minute": "35'"
+        },
+        {
+          "team": "ARG",
+          "player": "Lionel Messi",
+          "minute": "73' (p)"
+        }
+      ]
     },
     {
       "date": "2022-12-10",
@@ -600,7 +1472,14 @@
       "away": "PRT",
       "winner": "MAR",
       "score": "1-0",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "MAR",
+          "player": "Youssef En-Nesyri",
+          "minute": "42'"
+        }
+      ]
     },
     {
       "date": "2022-12-10",
@@ -608,7 +1487,24 @@
       "away": "FRA",
       "winner": "FRA",
       "score": "1-2",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "ENG",
+          "player": "Harry Kane",
+          "minute": "54' (p)"
+        },
+        {
+          "team": "FRA",
+          "player": "Aurelién Tchouaméni",
+          "minute": "17'"
+        },
+        {
+          "team": "FRA",
+          "player": "Olivier Giroud",
+          "minute": "78'"
+        }
+      ]
     },
     {
       "date": "2022-12-13",
@@ -616,7 +1512,24 @@
       "away": "HRV",
       "winner": "ARG",
       "score": "3-0",
-      "stage": "Semifinal"
+      "stage": "Semifinal",
+      "scorers": [
+        {
+          "team": "ARG",
+          "player": "Lionel Messi",
+          "minute": "34' (p)"
+        },
+        {
+          "team": "ARG",
+          "player": "Julián Álvarez",
+          "minute": "39'"
+        },
+        {
+          "team": "ARG",
+          "player": "Julián Álvarez",
+          "minute": "69'"
+        }
+      ]
     },
     {
       "date": "2022-12-14",
@@ -624,7 +1537,19 @@
       "away": "MAR",
       "winner": "FRA",
       "score": "2-0",
-      "stage": "Semifinal"
+      "stage": "Semifinal",
+      "scorers": [
+        {
+          "team": "FRA",
+          "player": "Théo Hernandez",
+          "minute": "5'"
+        },
+        {
+          "team": "FRA",
+          "player": "Kolo Muani",
+          "minute": "79'"
+        }
+      ]
     },
     {
       "date": "2022-12-17",
@@ -632,7 +1557,24 @@
       "away": "MAR",
       "winner": "HRV",
       "score": "2-1",
-      "stage": "Third-Place Match"
+      "stage": "Third-Place Match",
+      "scorers": [
+        {
+          "team": "HRV",
+          "player": "Joško Gvardiol",
+          "minute": "7'"
+        },
+        {
+          "team": "HRV",
+          "player": "Mislav Oršić",
+          "minute": "42'"
+        },
+        {
+          "team": "MAR",
+          "player": "Achraf Dari",
+          "minute": "9'"
+        }
+      ]
     },
     {
       "date": "2022-12-18",
@@ -640,7 +1582,39 @@
       "away": "FRA",
       "winner": "ARG",
       "score": "3-3 (4-2 p)",
-      "stage": "Final"
+      "stage": "Final",
+      "scorers": [
+        {
+          "team": "ARG",
+          "player": "Lionel Messi",
+          "minute": "23' (p)"
+        },
+        {
+          "team": "ARG",
+          "player": "Lionel Messi",
+          "minute": "108'"
+        },
+        {
+          "team": "ARG",
+          "player": "Ángel Di María",
+          "minute": "36'"
+        },
+        {
+          "team": "FRA",
+          "player": "Kylian Mbappé",
+          "minute": "80' (p)"
+        },
+        {
+          "team": "FRA",
+          "player": "Kylian Mbappé",
+          "minute": "81'"
+        },
+        {
+          "team": "FRA",
+          "player": "Kylian Mbappé",
+          "minute": "118' (p)"
+        }
+      ]
     }
   ]
 }

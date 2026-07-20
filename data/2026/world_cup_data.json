@@ -775,7 +775,7 @@
       "home": "ZAF",
       "away": "CAN",
       "winner": "CAN",
-      "score": "0-1",
+      "score": "1-2",
       "stage": "Round of 32"
     },
     {
@@ -847,8 +847,35 @@
       "home": "BEL",
       "away": "SEN",
       "winner": "BEL",
-      "score": "2-2 (4-2 p)",
-      "stage": "Round of 32"
+      "score": "3-2 (aet)",
+      "stage": "Round of 32",
+      "scorers": [
+        {
+          "team": "SEN",
+          "player": "Diarra",
+          "minute": "25'"
+        },
+        {
+          "team": "SEN",
+          "player": "Sarr",
+          "minute": "51'"
+        },
+        {
+          "team": "BEL",
+          "player": "Lukaku",
+          "minute": "86'"
+        },
+        {
+          "team": "BEL",
+          "player": "Tielemans",
+          "minute": "89'"
+        },
+        {
+          "team": "BEL",
+          "player": "Tielemans",
+          "minute": "120+5' (p)"
+        }
+      ]
     },
     {
       "date": "2026-07-02",
@@ -879,8 +906,35 @@
       "home": "ARG",
       "away": "CPV",
       "winner": "ARG",
-      "score": "1-1 (4-3 p)",
-      "stage": "Round of 32"
+      "score": "3-2 (aet)",
+      "stage": "Round of 32",
+      "scorers": [
+        {
+          "team": "ARG",
+          "player": "Messi",
+          "minute": "29'"
+        },
+        {
+          "team": "CPV",
+          "player": "Duarte",
+          "minute": "59'"
+        },
+        {
+          "team": "ARG",
+          "player": "L. Martinez",
+          "minute": "92'"
+        },
+        {
+          "team": "CPV",
+          "player": "Lopes Cabral",
+          "minute": "103'"
+        },
+        {
+          "team": "ARG",
+          "player": "Borges (OG)",
+          "minute": "111'"
+        }
+      ]
     },
     {
       "date": "2026-07-03",
@@ -896,7 +950,19 @@
       "away": "EGY",
       "winner": "EGY",
       "score": "1-1 (3-4 p)",
-      "stage": "Round of 32"
+      "stage": "Round of 32",
+      "scorers": [
+        {
+          "team": "EGY",
+          "player": "Ashour",
+          "minute": "13'"
+        },
+        {
+          "team": "AUS",
+          "player": "Hany (OG)",
+          "minute": "55'"
+        }
+      ]
     },
     {
       "date": "2026-07-04",
@@ -991,8 +1057,30 @@
       "home": "ARG",
       "away": "CHE",
       "winner": "ARG",
-      "score": "2-1 (aet)",
-      "stage": "Quarter-final"
+      "score": "3-1 (aet)",
+      "stage": "Quarter-final",
+      "scorers": [
+        {
+          "team": "ARG",
+          "player": "Alexis Mac Allister",
+          "minute": "10'"
+        },
+        {
+          "team": "CHE",
+          "player": "Dan Ndoye",
+          "minute": "67'"
+        },
+        {
+          "team": "ARG",
+          "player": "Julián Álvarez",
+          "minute": "112'"
+        },
+        {
+          "team": "ARG",
+          "player": "Lautaro Martínez",
+          "minute": "120+1'"
+        }
+      ]
     },
     {
       "date": "2026-07-14",
@@ -1000,7 +1088,19 @@
       "away": "ESP",
       "winner": "ESP",
       "score": "0-2",
-      "stage": "Semi-final"
+      "stage": "Semi-final",
+      "scorers": [
+        {
+          "team": "ESP",
+          "player": "Mikel Oyarzabal",
+          "minute": "22'"
+        },
+        {
+          "team": "ESP",
+          "player": "Pedro Porro",
+          "minute": "58' (p)"
+        }
+      ]
     },
     {
       "date": "2026-07-15",
@@ -1008,7 +1108,24 @@
       "away": "ARG",
       "winner": "ARG",
       "score": "1-2",
-      "stage": "Semi-final"
+      "stage": "Semi-final",
+      "scorers": [
+        {
+          "team": "ENG",
+          "player": "Gordon",
+          "minute": "55'"
+        },
+        {
+          "team": "ARG",
+          "player": "Fernandez",
+          "minute": "85'"
+        },
+        {
+          "team": "ARG",
+          "player": "Lautaro Martinez",
+          "minute": "90+2'"
+        }
+      ]
     },
     {
       "date": "2026-07-18",
@@ -1024,7 +1141,14 @@
       "away": "ARG",
       "winner": "ESP",
       "score": "1-0 (aet)",
-      "stage": "Final"
+      "stage": "Final",
+      "scorers": [
+        {
+          "team": "ESP",
+          "player": "Torres",
+          "minute": "106'"
+        }
+      ]
     }
   ]
 }

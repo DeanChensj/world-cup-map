@@ -520,7 +520,19 @@
       "away": "SWE",
       "winner": "DEU",
       "score": "2-0",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "DEU",
+          "player": "Lukas Podolski",
+          "minute": "4'"
+        },
+        {
+          "team": "DEU",
+          "player": "Lukas Podolski",
+          "minute": "12'"
+        }
+      ]
     },
     {
       "date": "2006-06-24",
@@ -528,7 +540,24 @@
       "away": "MEX",
       "winner": "ARG",
       "score": "2-1 (aet)",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "MEX",
+          "player": "Rafael Márquez",
+          "minute": "6'"
+        },
+        {
+          "team": "ARG",
+          "player": "Hernán Crespo",
+          "minute": "10'"
+        },
+        {
+          "team": "ARG",
+          "player": "Maxi Rodríguez",
+          "minute": "98'"
+        }
+      ]
     },
     {
       "date": "2006-06-25",
@@ -536,7 +565,14 @@
       "away": "ECU",
       "winner": "ENG",
       "score": "1-0",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "ENG",
+          "player": "David Beckham",
+          "minute": "60'"
+        }
+      ]
     },
     {
       "date": "2006-06-25",
@@ -544,7 +580,14 @@
       "away": "NLD",
       "winner": "PRT",
       "score": "1-0",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "PRT",
+          "player": "Maniche",
+          "minute": "23'"
+        }
+      ]
     },
     {
       "date": "2006-06-26",
@@ -552,7 +595,14 @@
       "away": "AUS",
       "winner": "ITA",
       "score": "1-0",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "ITA",
+          "player": "Francesco Totti",
+          "minute": "90+5' (p)"
+        }
+      ]
     },
     {
       "date": "2006-06-26",
@@ -560,7 +610,8 @@
       "away": "UKR",
       "winner": "UKR",
       "score": "0-0 (0-3 p)",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": []
     },
     {
       "date": "2006-06-27",
@@ -568,7 +619,24 @@
       "away": "GHA",
       "winner": "BRA",
       "score": "3-0",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "BRA",
+          "player": "Ronaldo",
+          "minute": "5'"
+        },
+        {
+          "team": "BRA",
+          "player": "Adriano",
+          "minute": "45+1'"
+        },
+        {
+          "team": "BRA",
+          "player": "Zé Roberto",
+          "minute": "84'"
+        }
+      ]
     },
     {
       "date": "2006-06-27",
@@ -576,7 +644,29 @@
       "away": "FRA",
       "winner": "FRA",
       "score": "1-3",
-      "stage": "Round of 16"
+      "stage": "Round of 16",
+      "scorers": [
+        {
+          "team": "ESP",
+          "player": "David Villa",
+          "minute": "28' (p)"
+        },
+        {
+          "team": "FRA",
+          "player": "Franck Ribéry",
+          "minute": "41'"
+        },
+        {
+          "team": "FRA",
+          "player": "Patrick Vieira",
+          "minute": "83'"
+        },
+        {
+          "team": "FRA",
+          "player": "Zinédine Zidane",
+          "minute": "90+2'"
+        }
+      ]
     },
     {
       "date": "2006-06-30",
@@ -584,7 +674,19 @@
       "away": "ARG",
       "winner": "DEU",
       "score": "1-1 (4-2 p)",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "ARG",
+          "player": "Roberto Ayala",
+          "minute": "49'"
+        },
+        {
+          "team": "DEU",
+          "player": "Miroslav Klose",
+          "minute": "80'"
+        }
+      ]
     },
     {
       "date": "2006-06-30",
@@ -592,7 +694,24 @@
       "away": "UKR",
       "winner": "ITA",
       "score": "3-0",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "ITA",
+          "player": "Gianluca Zambrotta",
+          "minute": "6'"
+        },
+        {
+          "team": "ITA",
+          "player": "Luca Toni",
+          "minute": "59'"
+        },
+        {
+          "team": "ITA",
+          "player": "Luca Toni",
+          "minute": "69'"
+        }
+      ]
     },
     {
       "date": "2006-07-01",
@@ -600,7 +719,8 @@
       "away": "PRT",
       "winner": "PRT",
       "score": "0-0 (1-3 p)",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": []
     },
     {
       "date": "2006-07-01",
@@ -608,7 +728,14 @@
       "away": "FRA",
       "winner": "FRA",
       "score": "0-1",
-      "stage": "Quarterfinal"
+      "stage": "Quarterfinal",
+      "scorers": [
+        {
+          "team": "FRA",
+          "player": "Thierry Henry",
+          "minute": "57'"
+        }
+      ]
     },
     {
       "date": "2006-07-04",
@@ -616,7 +743,19 @@
       "away": "ITA",
       "winner": "ITA",
       "score": "0-2 (aet)",
-      "stage": "Semifinal"
+      "stage": "Semifinal",
+      "scorers": [
+        {
+          "team": "ITA",
+          "player": "Grosso",
+          "minute": "119'"
+        },
+        {
+          "team": "ITA",
+          "player": "Del Piero",
+          "minute": "120+1'"
+        }
+      ]
     },
     {
       "date": "2006-07-05",
@@ -624,7 +763,14 @@
       "away": "FRA",
       "winner": "FRA",
       "score": "0-1",
-      "stage": "Semifinal"
+      "stage": "Semifinal",
+      "scorers": [
+        {
+          "team": "FRA",
+          "player": "Zidane",
+          "minute": "33' (p)"
+        }
+      ]
     },
     {
       "date": "2006-07-08",
@@ -632,7 +778,29 @@
       "away": "PRT",
       "winner": "DEU",
       "score": "3-1",
-      "stage": "Third-Place Match"
+      "stage": "Third-Place Match",
+      "scorers": [
+        {
+          "team": "DEU",
+          "player": "Schweinsteiger",
+          "minute": "56'"
+        },
+        {
+          "team": "DEU",
+          "player": "Schweinsteiger",
+          "minute": "78'"
+        },
+        {
+          "team": "DEU",
+          "player": "Petit",
+          "minute": "60' (og)"
+        },
+        {
+          "team": "PRT",
+          "player": "Nuno Gomes",
+          "minute": "88'"
+        }
+      ]
     },
     {
       "date": "2006-07-09",
@@ -640,7 +808,19 @@
       "away": "FRA",
       "winner": "ITA",
       "score": "1-1 (5-3 p)",
-      "stage": "Final"
+      "stage": "Final",
+      "scorers": [
+        {
+          "team": "ITA",
+          "player": "Materazzi",
+          "minute": "19'"
+        },
+        {
+          "team": "FRA",
+          "player": "Zidane",
+          "minute": "7' (p)"
+        }
+      ]
     }
   ]
 }
