@@ -1379,8 +1379,13 @@
       "scorers": [
         {
           "team": "BEL",
-          "player": "Adnan Januzaj",
-          "minute": "51'"
+          "player": "Thomas Meunier",
+          "minute": "4'"
+        },
+        {
+          "team": "BEL",
+          "player": "Eden Hazard",
+          "minute": "82'"
         }
       ]
     },
