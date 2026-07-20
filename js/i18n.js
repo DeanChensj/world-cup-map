@@ -113,7 +113,9 @@ const I18N = {
     swapCandidatesTitle: "Featured Preset Candidates",
     swapCloseBtn: "CLOSE",
     swapSlot: "SLOT",
-    swapCurrent: "CURRENT"
+    swapCurrent: "CURRENT",
+    clashReplay: "REPLAY",
+    clashSkip: "SKIP ⏩"
   },
   zh: {
     siteTitle: "世界杯地图 //",
@@ -171,7 +173,9 @@ const I18N = {
     swapCandidatesTitle: "热门替换国",
     swapCloseBtn: "关闭",
     swapSlot: "目标席位",
-    swapCurrent: "当前阵营"
+    swapCurrent: "当前阵营",
+    clashReplay: "重播进球",
+    clashSkip: "跳过 ⏩"
   }
 };
 

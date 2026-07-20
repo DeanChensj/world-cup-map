@@ -267,6 +267,12 @@
             <div id="clash-scorers-teamA" class="flex-1 text-left space-y-0.5 text-amber-300/90 leading-tight"></div>
             <div id="clash-scorers-teamB" class="flex-1 text-right space-y-0.5 text-amber-300/90 leading-tight"></div>
           </div>
+          <div id="clash-playback-controls" class="flex items-center justify-end mt-1.5 pt-1 border-t border-amber-500/10 text-[7px] sm:text-[8px] text-console-dimText">
+            <button id="btn-clash-replay" onclick="replayClashCardScorers()" class="flex items-center space-x-1 text-amber-400/80 hover:text-amber-300 transition cursor-pointer">
+              <i class="ph-bold ph-play text-[9px]"></i>
+              <span id="clash-replay-label">REPLAY</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -2099,98 +2105,97 @@
       svg.select(".vector-layer").selectAll(".hover-capital-pin").remove();
     }
 
-    function showClashCard(match, latestLog) {
-      if (!match || !match.home || !match.away) {
-        closeClashCard();
-        return;
-      }
-      const overlay = document.getElementById("clash-card-overlay");
-      if (!overlay) return;
+    function parseGoalMinuteValue(mStr) {
+      if (!mStr) return { val: 0, isLate: false, isOG: false, isPenalty: false };
+      const str = String(mStr);
+      const isOG = str.includes("OG") || str.includes("o.g.");
+      const isPenalty = str.includes("(p)") || str.includes("(pen.)");
+      const isLate = str.includes("90+") || str.includes("120+");
+      let val = 0;
+      const matchPlus = str.match(/(\d+)\+(\d+)/);
+      if (matchPlus) { val = parseInt(matchPlus[1], 10) + parseInt(matchPlus[2], 10); }
+      else { const matchSingle = str.match(/(\d+)/); if (matchSingle) val = parseInt(matchSingle[1], 10); }
+      return { val, isLate, isOG, isPenalty };
+    }
 
-      const matchIdx = (match.originalIndex !== undefined) ? match.originalIndex : matches.indexOf(match);
-      const isGroupStage = (!match.stage || match.stage === "Group Stage" || match.stage.includes("Group"));
-      const isThirdPlace = match.stage && (match.stage.includes("Third") || match.stage.includes("third") || match.stage.includes("3rd"));
-
-      let code1, code2, activeWinner;
+    function getChronologicalScorers(match, activeWinner, code1, code2) {
+      if (!match) return [];
       const homeEff = getEffectiveTeamCode(match.home);
       const awayEff = getEffectiveTeamCode(match.away);
-
-      if (latestLog && (latestLog.matchIndex === matchIdx || latestLog.matchIndex === matches.indexOf(match))) {
-        code1 = latestLog.home;
-        code2 = latestLog.away;
-        activeWinner = latestLog.winnerCode;
-      } else {
-        const slotHome = isGroupStage ? homeEff : (groupSlotReplacements[homeEff] || homeEff);
-        const slotAway = isGroupStage ? awayEff : (groupSlotReplacements[awayEff] || awayEff);
-
-        if (isGroupStage) {
-          code1 = homeEff;
-          code2 = awayEff;
-        } else if (isThirdPlace) {
-          const logs = runSimulationToStep(currentStepIndex);
-          const res = getThirdPlaceTeams(slotHome, slotAway, logs);
-          code1 = res.homeCode;
-          code2 = res.awayCode;
-        } else {
-          code1 = getCurrentOwner(slotHome);
-          code2 = getCurrentOwner(slotAway);
-        }
-
-        if (!isGroupStage && !isThirdPlace && code1 === code2) {
-          code1 = homeEff;
-          code2 = awayEff;
-        }
-
-        let rawWinner = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
-        let wCode = rawWinner ? getEffectiveTeamCode(rawWinner) : null;
-        if (wCode === homeEff || rawWinner === match.home) wCode = code1;
-        else if (wCode === awayEff || rawWinner === match.away) wCode = code2;
-        activeWinner = wCode;
+      const matchIdx = (match.originalIndex !== undefined) ? match.originalIndex : matches.indexOf(match);
+      const isOverridden = (userOverrides[matchIdx] !== undefined && userOverrides[matchIdx] !== match.winner);
+      let list = [];
+      if (match.scorers && match.scorers.length > 0 && !isOverridden) {
+        match.scorers.forEach((s, idx) => {
+          let sTeam = getEffectiveTeamCode(s.team);
+          let info = parseGoalMinuteValue(s.minute);
+          list.push({ id: idx, side: (sTeam === code1 || sTeam === match.home || sTeam === homeEff) ? '1' : '2', player: s.player, minute: s.minute, val: info.val, text: `⚽ ${s.player} ${s.minute}` });
+        });
       }
+      list.sort((a, b) => a.val - b.val);
+      return list;
+    }
 
-      const name1 = getTeamName(code1, teamMetadata[code1]?.name);
-      const name2 = getTeamName(code2, teamMetadata[code2]?.name);
-      const stageTranslated = getStageName(match.stage || 'MATCH');
+    let clashAnimationTimeouts = [];
+    let activeClashContext = null;
+
+    function resetClashCardWinner(code1, code2, name1, name2) {
+      const cardA = document.getElementById("clash-card-teamA");
+      const cardB = document.getElementById("clash-card-teamB");
+      const name1El = document.getElementById("clash-teamA-name");
+      const name2El = document.getElementById("clash-teamB-name");
+
+      if (name1El) {
+        name1El.innerHTML = `<div class="flex items-center space-x-1 justify-center"><span class="truncate max-w-[70px] sm:max-w-[110px] block text-[10px] sm:text-xs font-bold">${name1}</span><button onclick="event.stopPropagation(); openSwapModal('${activeClashContext?.match?.home || ''}')" title="Swap Nation Slot" class="text-[8px] px-1 py-0.2 bg-console-bg border border-console-border hover:border-amber-400 text-console-dimText hover:text-amber-400 rounded transition cursor-pointer shrink-0">↻</button></div>`;
+      }
+      if (name2El) {
+        name2El.innerHTML = `<div class="flex items-center space-x-1 justify-center"><span class="truncate max-w-[70px] sm:max-w-[110px] block text-[10px] sm:text-xs font-bold">${name2}</span><button onclick="event.stopPropagation(); openSwapModal('${activeClashContext?.match?.away || ''}')" title="Swap Nation Slot" class="text-[8px] px-1 py-0.2 bg-console-bg border border-console-border hover:border-amber-400 text-console-dimText hover:text-amber-400 rounded transition cursor-pointer shrink-0">↻</button></div>`;
+      }
+      if (cardA) cardA.className = `flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1 sm:p-1.5 rounded-lg cursor-pointer transition border border-transparent hover:border-amber-500/50 hover:bg-amber-500/5 group`;
+      if (cardB) cardB.className = `flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1 sm:p-1.5 rounded-lg cursor-pointer transition border border-transparent hover:border-amber-500/50 hover:bg-amber-500/5 group`;
+    }
+
+    function revealClashCardWinner(activeWinner, code1, code2, name1, name2) {
       const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
       const winnerTag = isZh ? '[胜者]' : '[WINNER]';
-
-      document.getElementById("clash-card-stage").innerText = isZh ? `焦点对决战报 // ${stageTranslated}` : `TACTICAL CONFLICT // ${(match.stage || 'MATCH').toUpperCase()}`;
-
-      // Team A element
       const cardA = document.getElementById("clash-card-teamA");
-      cardA.onclick = () => setMatchWinner(matchIdx, homeEff);
-      document.getElementById("clash-teamA-flag").innerHTML = getFlagImg(code1).replace('w-5 h-3.5', 'w-6 h-4 sm:w-10 sm:h-7 shadow-md border border-amber-500/40');
-      document.getElementById("clash-teamA-name").innerHTML = `
-        <div class="flex items-center space-x-1 justify-center">
-          <span class="truncate max-w-[70px] sm:max-w-[110px] block text-[10px] sm:text-xs font-bold">${name1}</span>
-          <button onclick="event.stopPropagation(); openSwapModal('${match.home}')" title="Swap Nation Slot" class="text-[8px] px-1 py-0.2 bg-console-bg border border-console-border hover:border-amber-400 text-console-dimText hover:text-amber-400 rounded transition cursor-pointer shrink-0">↻</button>
-        </div>
-        ${activeWinner === code1 ? `<span class="block text-[7px] sm:text-[8px] text-amber-400 font-mono uppercase font-bold">${winnerTag}</span>` : ''}
-      `;
-      cardA.className = `flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1 sm:p-1.5 rounded-lg cursor-pointer transition border ${activeWinner === code1 ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'border-transparent hover:border-amber-500/50 hover:bg-amber-500/5'} group`;
-
-      // Team B element
       const cardB = document.getElementById("clash-card-teamB");
-      cardB.onclick = () => setMatchWinner(matchIdx, awayEff);
-      document.getElementById("clash-teamB-flag").innerHTML = getFlagImg(code2).replace('w-5 h-3.5', 'w-6 h-4 sm:w-10 sm:h-7 shadow-md border border-amber-500/40');
-      document.getElementById("clash-teamB-name").innerHTML = `
-        <div class="flex items-center space-x-1 justify-center">
-          <span class="truncate max-w-[70px] sm:max-w-[110px] block text-[10px] sm:text-xs font-bold">${name2}</span>
-          <button onclick="event.stopPropagation(); openSwapModal('${match.away}')" title="Swap Nation Slot" class="text-[8px] px-1 py-0.2 bg-console-bg border border-console-border hover:border-amber-400 text-console-dimText hover:text-amber-400 rounded transition cursor-pointer shrink-0">↻</button>
-        </div>
-        ${activeWinner === code2 ? `<span class="block text-[7px] sm:text-[8px] text-amber-400 font-mono uppercase font-bold">${winnerTag}</span>` : ''}
-      `;
-      cardB.className = `flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1 sm:p-1.5 rounded-lg cursor-pointer transition border ${activeWinner === code2 ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)]' : 'border-transparent hover:border-amber-500/50 hover:bg-amber-500/5'} group`;
+      const name1El = document.getElementById("clash-teamA-name");
+      const name2El = document.getElementById("clash-teamB-name");
 
-      const effectiveScore = getEffectiveMatchScore(match, activeWinner);
-      document.getElementById("clash-match-score").innerHTML = formatScoreDisplay(effectiveScore);
+      if (name1El) {
+        name1El.innerHTML = `<div class="flex items-center space-x-1 justify-center"><span class="truncate max-w-[70px] sm:max-w-[110px] block text-[10px] sm:text-xs font-bold">${name1}</span><button onclick="event.stopPropagation(); openSwapModal('${activeClashContext?.match?.home || ''}')" title="Swap Nation Slot" class="text-[8px] px-1 py-0.2 bg-console-bg border border-console-border hover:border-amber-400 text-console-dimText hover:text-amber-400 rounded transition cursor-pointer shrink-0">↻</button></div>${activeWinner === code1 ? `<span class="block text-[7px] sm:text-[8px] text-amber-400 font-mono uppercase font-bold animate-pulse">${winnerTag}</span>` : ''}`;
+      }
 
-      // Render Goal Scorers
+      if (name2El) {
+        name2El.innerHTML = `<div class="flex items-center space-x-1 justify-center"><span class="truncate max-w-[70px] sm:max-w-[110px] block text-[10px] sm:text-xs font-bold">${name2}</span><button onclick="event.stopPropagation(); openSwapModal('${activeClashContext?.match?.away || ''}')" title="Swap Nation Slot" class="text-[8px] px-1 py-0.2 bg-console-bg border border-console-border hover:border-amber-400 text-console-dimText hover:text-amber-400 rounded transition cursor-pointer shrink-0">↻</button></div>${activeWinner === code2 ? `<span class="block text-[7px] sm:text-[8px] text-amber-400 font-mono uppercase font-bold animate-pulse">${winnerTag}</span>` : ''}`;
+      }
+
+      if (cardA) {
+        cardA.className = `flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1 sm:p-1.5 rounded-lg cursor-pointer transition border ${activeWinner === code1 ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)] animate-pulse' : 'border-transparent hover:border-amber-500/50 hover:bg-amber-500/5'} group`;
+      }
+
+      if (cardB) {
+        cardB.className = `flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1 sm:p-1.5 rounded-lg cursor-pointer transition border ${activeWinner === code2 ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)] animate-pulse' : 'border-transparent hover:border-amber-500/50 hover:bg-amber-500/5'} group`;
+      }
+    }
+
+    function playClashCardAnimation(match, activeWinner, code1, code2, name1, name2) {
+      clashAnimationTimeouts.forEach(clearTimeout);
+      clashAnimationTimeouts = [];
       const scorersContainer = document.getElementById("clash-scorers-container");
       const scorersA = document.getElementById("clash-scorers-teamA");
       const scorersB = document.getElementById("clash-scorers-teamB");
+      const scoreEl = document.getElementById("clash-match-score");
+      if (!scorersContainer || !scorersA || !scorersB || !scoreEl) return;
 
-      if (scorersContainer && scorersA && scorersB) {
+      const goalsList = getChronologicalScorers(match, activeWinner, code1, code2);
+      const effectiveScore = getEffectiveMatchScore(match, activeWinner);
+      activeClashContext = { match, activeWinner, code1, code2, name1, name2, finalScore: effectiveScore };
+
+      resetClashCardWinner(code1, code2, name1, name2);
+
+      if (goalsList.length === 0) {
         const { scorers1, scorers2 } = getScorersDisplay(match, activeWinner, code1, code2);
         if (scorers1 || scorers2) {
           scorersA.innerHTML = scorers1;
@@ -2199,12 +2204,110 @@
         } else {
           scorersContainer.classList.add("hidden");
         }
+        scoreEl.innerHTML = formatScoreDisplay(effectiveScore);
+        revealClashCardWinner(activeWinner, code1, code2, name1, name2);
+        return;
       }
 
+      scorersContainer.classList.remove("hidden");
+      scorersA.innerHTML = ""; scorersB.innerHTML = "";
+      let currentA = 0; let currentB = 0;
+
+      scoreEl.innerHTML = `0 - 0`;
+
+      const goalInterval = Math.max(250, Math.round(500 * ((typeof playbackSpeedMs !== "undefined" ? playbackSpeedMs : 1500) / 1500)));
+
+      goalsList.forEach((goal, idx) => {
+        clashAnimationTimeouts.push(setTimeout(() => {
+          const item = document.createElement("div");
+          item.className = "animate-pulse text-amber-300 font-bold text-shadow-glow transition duration-300";
+          item.innerHTML = goal.text;
+
+          if (goal.side === '1') {
+            currentA++;
+            scorersA.appendChild(item);
+          } else {
+            currentB++;
+            scorersB.appendChild(item);
+          }
+
+          scoreEl.innerHTML = `${currentA} - ${currentB}`;
+
+          if (typeof audio !== "undefined" && audio.playGoalSFX) {
+            let soundType = 'regular';
+            if (goal.minute.includes("(p)") || goal.minute.includes("(pen.)")) soundType = 'penalty';
+            else if (goal.minute.includes("OG") || goal.minute.includes("o.g.")) soundType = 'og';
+            else if (goal.minute.includes("90+") || goal.minute.includes("120+")) soundType = 'late';
+            audio.playGoalSFX(soundType);
+          }
+
+          setTimeout(() => item.classList.remove("animate-pulse", "font-bold"), 400);
+        }, (idx + 1) * goalInterval));
+      });
+
+      clashAnimationTimeouts.push(setTimeout(() => {
+        scoreEl.innerHTML = formatScoreDisplay(effectiveScore);
+        revealClashCardWinner(activeWinner, code1, code2, name1, name2);
+        if (typeof audio !== "undefined" && audio.playMatchWin) audio.playMatchWin();
+      }, (goalsList.length + 1) * goalInterval));
+    }
+
+    function replayClashCardScorers() {
+      if (activeClashContext) {
+        const { match, activeWinner, code1, code2, name1, name2 } = activeClashContext;
+        playClashCardAnimation(match, activeWinner, code1, code2, name1, name2);
+      }
+    }
+
+    function showClashCard(match, latestLog) {
+      if (!match || !match.home || !match.away) { closeClashCard(); return; }
+      const overlay = document.getElementById("clash-card-overlay");
+      if (!overlay) return;
+      const matchIdx = (match.originalIndex !== undefined) ? match.originalIndex : matches.indexOf(match);
+      const isGroupStage = (!match.stage || match.stage === "Group Stage" || match.stage.includes("Group"));
+      const isThirdPlace = match.stage && (match.stage.includes("Third") || match.stage.includes("third") || match.stage.includes("3rd"));
+      let code1, code2, activeWinner;
+      const homeEff = getEffectiveTeamCode(match.home);
+      const awayEff = getEffectiveTeamCode(match.away);
+      if (latestLog && (latestLog.matchIndex === matchIdx || latestLog.matchIndex === matches.indexOf(match))) {
+        code1 = latestLog.home; code2 = latestLog.away; activeWinner = latestLog.winnerCode;
+      } else {
+        const slotHome = isGroupStage ? homeEff : (groupSlotReplacements[homeEff] || homeEff);
+        const slotAway = isGroupStage ? awayEff : (groupSlotReplacements[awayEff] || awayEff);
+        if (isGroupStage) { code1 = homeEff; code2 = awayEff; }
+        else if (isThirdPlace) { const logs = runSimulationToStep(currentStepIndex); const res = getThirdPlaceTeams(slotHome, slotAway, logs); code1 = res.homeCode; code2 = res.awayCode; }
+        else { code1 = getCurrentOwner(slotHome); code2 = getCurrentOwner(slotAway); }
+        if (!isGroupStage && !isThirdPlace && code1 === code2) { code1 = homeEff; code2 = awayEff; }
+        let rawWinner = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
+        let wCode = rawWinner ? getEffectiveTeamCode(rawWinner) : null;
+        if (wCode === homeEff || rawWinner === match.home) wCode = code1;
+        else if (wCode === awayEff || rawWinner === match.away) wCode = code2;
+        activeWinner = wCode;
+      }
+      const name1 = getTeamName(code1, teamMetadata[code1]?.name);
+      const name2 = getTeamName(code2, teamMetadata[code2]?.name);
+      const stageTranslated = getStageName(match.stage || 'MATCH');
+      const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+      document.getElementById("clash-card-stage").innerText = isZh ? `焦点对决战报 // ${stageTranslated}` : `TACTICAL CONFLICT // ${(match.stage || 'MATCH').toUpperCase()}`;
+      const cardA = document.getElementById("clash-card-teamA");
+      cardA.onclick = () => setMatchWinner(matchIdx, homeEff);
+      document.getElementById("clash-teamA-flag").innerHTML = getFlagImg(code1).replace('w-5 h-3.5', 'w-6 h-4 sm:w-10 sm:h-7 shadow-md border border-amber-500/40');
+      const cardB = document.getElementById("clash-card-teamB");
+      cardB.onclick = () => setMatchWinner(matchIdx, awayEff);
+      document.getElementById("clash-teamB-flag").innerHTML = getFlagImg(code2).replace('w-5 h-3.5', 'w-6 h-4 sm:w-10 sm:h-7 shadow-md border border-amber-500/40');
+      
+      resetClashCardWinner(code1, code2, name1, name2);
+
+      document.getElementById("clash-match-score").innerHTML = formatScoreDisplay(getEffectiveMatchScore(match, activeWinner));
+      playClashCardAnimation(match, activeWinner, code1, code2, name1, name2);
       overlay.classList.remove("hidden");
     }
 
     function closeClashCard() {
+      clashAnimationTimeouts.forEach(clearTimeout);
+      clashAnimationTimeouts = [];
+      animationTimeouts.forEach(clearTimeout);
+      animationTimeouts = [];
       const overlay = document.getElementById("clash-card-overlay");
       if (overlay) overlay.classList.add("hidden");
     }
@@ -2214,6 +2317,8 @@
       // Clear any pending animation timeouts to prevent ghost effects when scrubbing
       animationTimeouts.forEach(clearTimeout);
       animationTimeouts = [];
+      clashAnimationTimeouts.forEach(clearTimeout);
+      clashAnimationTimeouts = [];
 
       // Run simulation step FIRST to ensure ownership state is 100% synchronized for currentStepIndex (forwards & backwards)
       const logs = runSimulationToStep(currentStepIndex);
@@ -3147,6 +3252,44 @@
       }
     }
 
+    let playbackTimeout = null;
+
+    function scheduleNextPlaybackStep() {
+      if (!playbackInterval && !playbackTimeout) return;
+      if (playbackTimeout) clearTimeout(playbackTimeout);
+
+      let stepDelay = playbackSpeedMs;
+
+      // Dynamically calculate required playback time for goals in current step (Knockout Stage only)
+      const stepData = timelineSteps[currentStepIndex];
+      const stepMatches = stepData ? (stepData.matches || (stepData.match ? [stepData.match] : [])) : [];
+      
+      let maxGoals = 0;
+      stepMatches.forEach(m => {
+        const isGroup = (!m.stage || m.stage === "Group Stage" || m.stage.includes("Group"));
+        if (!isGroup && m && m.scorers && m.scorers.length > 0) {
+          maxGoals = Math.max(maxGoals, m.scorers.length);
+        }
+      });
+
+      if (maxGoals > 0) {
+        const goalInterval = Math.max(250, Math.round(500 * (playbackSpeedMs / 1500)));
+        const postPause = Math.round(1200 * (playbackSpeedMs / 1500));
+        stepDelay = Math.max(playbackSpeedMs, (maxGoals * goalInterval) + postPause);
+      }
+
+      playbackTimeout = setTimeout(() => {
+        if (!playbackInterval && !playbackTimeout) return;
+        if (currentStepIndex < timelineSteps.length - 1) {
+          currentStepIndex++;
+          updateUI();
+          scheduleNextPlaybackStep();
+        } else {
+          stopPlayback();
+        }
+      }, stepDelay);
+    }
+
     function startPlayback() {
       audio.playChime(true);
       if (currentStepIndex >= timelineSteps.length - 1) {
@@ -3158,19 +3301,19 @@
       document.getElementById("play-icon").className = "ph-fill ph-pause text-xs";
       document.getElementById("play-text").innerText = (typeof currentLang !== "undefined" && currentLang === "zh") ? "暂停" : "Pause";
       
-      playbackInterval = setInterval(() => {
-        if (currentStepIndex < timelineSteps.length - 1) {
-          currentStepIndex++;
-          updateUI();
-        } else {
-          stopPlayback();
-        }
-      }, playbackSpeedMs);
+      playbackInterval = true;
+      scheduleNextPlaybackStep();
     }
 
     function stopPlayback() {
       audio.playChime(false);
-      clearInterval(playbackInterval);
+      if (playbackTimeout) {
+        clearTimeout(playbackTimeout);
+        playbackTimeout = null;
+      }
+      if (typeof clearInterval === "function" && typeof playbackInterval === "number") {
+        clearInterval(playbackInterval);
+      }
       playbackInterval = null;
       playBtn.classList.add("bg-console-accent", "text-console-bg");
       playBtn.classList.remove("bg-console-red", "text-console-text");

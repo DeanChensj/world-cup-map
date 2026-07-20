@@ -411,6 +411,22 @@ class TacticalAudio {
     osc.start(now);
     osc.stop(now + 0.012);
   }
+
+  // 11. Specialized Goal Sound Effect (Regular, Penalty, Own Goal, Late Drama)
+  playGoalSFX(type = 'regular') {
+    if (this.muted) return;
+    this.init();
+    if (type === 'penalty') {
+      this.playLaserShot();
+      setTimeout(() => this.playMatchWin(), 100);
+    } else if (type === 'og') {
+      this.playAlert();
+    } else if (type === 'late') {
+      this.playUpset();
+    } else {
+      this.playChime(true);
+    }
+  }
 }
 
 var audio = (typeof window !== "undefined" && window.audio) ? window.audio : new TacticalAudio();
