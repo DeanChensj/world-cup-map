@@ -61,12 +61,34 @@ class TacticalAudio {
       .catch(e => {
         this.loadingSiuuu = false;
       });
+  getSiuuuDurationMs() {
+    if (this.siuuuBuffer && this.siuuuBuffer.duration) {
+      return Math.round(this.siuuuBuffer.duration * 1000);
+    }
+    if (this.siuuuAudio && this.siuuuAudio.duration) {
+      return Math.round(this.siuuuAudio.duration * 1000);
+    }
+    return 6660; // Exact duration of assets/audio/siuuu.mp3
+  }
+
+  stopSiuuu() {
+    if (this.activeSiuuuSource) {
+      try { this.activeSiuuuSource.stop(); } catch (e) {}
+      this.activeSiuuuSource = null;
+    }
+    if (this.siuuuAudio) {
+      try {
+        this.siuuuAudio.pause();
+        this.siuuuAudio.currentTime = 0;
+      } catch (e) {}
+    }
   }
 
   // 13. Authentic Cristiano Ronaldo "SIUUU!" Audio Sample Playback (Mobile Web Audio Ready)
   playSiuuuSFX(side = '1') {
     if (this.muted) return;
     this.init();
+    this.stopSiuuu();
 
     // If Web Audio buffer is loaded, play via Web Audio (100% mobile Safari compatible + 3D panning)
     if (this.siuuuBuffer && this.ctx) {
@@ -88,6 +110,12 @@ class TacticalAudio {
 
       source.connect(gainNode);
       gainNode.connect(outputNode);
+      this.activeSiuuuSource = source;
+      source.onended = () => {
+        if (this.activeSiuuuSource === source) {
+          this.activeSiuuuSource = null;
+        }
+      };
       source.start(now);
       return;
     }
@@ -517,28 +545,6 @@ class TacticalAudio {
       osc.start(start);
       osc.stop(start + 0.3);
     });
-  }
-
-  // 13. Authentic Cristiano Ronaldo "SIUUU!" Audio Sample Playback
-  playSiuuuSFX(side = '1') {
-    if (this.muted) return;
-    this.init();
-
-    try {
-      if (!this.siuuuAudio) {
-        this.siuuuAudio = new Audio('assets/audio/siuuu.mp3');
-      }
-      this.siuuuAudio.volume = Math.min(1.0, this.volume * 1.1);
-      this.siuuuAudio.currentTime = 0;
-      const playPromise = this.siuuuAudio.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(err => {
-          this.playSiuuuSynth(side);
-        });
-      }
-    } catch (e) {
-      this.playSiuuuSynth(side);
-    }
   }
 
   // Fallback Synthesizer for SIUUU

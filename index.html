@@ -2199,6 +2199,9 @@
     function playClashCardAnimation(match, activeWinner, code1, code2, name1, name2) {
       clashAnimationTimeouts.forEach(clearTimeout);
       clashAnimationTimeouts = [];
+      if (typeof audio !== "undefined" && audio.stopSiuuu) {
+        audio.stopSiuuu();
+      }
       const scorersContainer = document.getElementById("clash-scorers-container");
       const scorersA = document.getElementById("clash-scorers-teamA");
       const scorersB = document.getElementById("clash-scorers-teamB");
@@ -2233,7 +2236,23 @@
 
       const goalInterval = Math.max(250, Math.round(500 * ((typeof playbackSpeedMs !== "undefined" ? playbackSpeedMs : 1500) / 1500)));
 
+      let cumulativeDelay = 0;
       goalsList.forEach((goal, idx) => {
+        const goalTeamCode = goal.team || (goal.side === '1' ? code1 : code2);
+        const isPortugal = (goalTeamCode === 'PRT' || goalTeamCode === 'POR');
+        const pName = (goal.player || "").toLowerCase().trim();
+        const isRonaldinho = pName.includes("ronaldinho");
+
+        const isRonaldoGoal = !isRonaldinho && (
+          pName.includes("cristiano ronaldo") ||
+          pName.includes("c. ronaldo") ||
+          pName.includes("cr7") ||
+          (pName.includes("ronaldo") && isPortugal)
+        );
+
+        cumulativeDelay += goalInterval;
+        const currentGoalDelay = cumulativeDelay;
+
         clashAnimationTimeouts.push(setTimeout(() => {
           const item = document.createElement("div");
           item.className = "animate-pulse text-amber-300 font-bold text-shadow-glow transition duration-300";
@@ -2250,11 +2269,6 @@
           scoreEl.innerHTML = `${currentA} - ${currentB}`;
 
           const teamGoalCount = (goal.side === '1') ? currentA : currentB;
-          const isRonaldoGoal = goal.player && (
-            goal.player.toLowerCase().includes("ronaldo") ||
-            goal.player.toLowerCase().includes("cr7") ||
-            goal.player.toLowerCase().includes("c. ronaldo")
-          );
 
           const isStoppageTime = goal.minute.includes("90+") || goal.minute.includes("120+") || goal.minute.includes("105+");
           const isEqualizer = (currentA === currentB);
@@ -2291,14 +2305,24 @@
           }
 
           setTimeout(() => item.classList.remove("animate-pulse", "font-bold"), 400);
-        }, (idx + 1) * goalInterval));
+        }, currentGoalDelay));
+
+        if (isRonaldoGoal) {
+          const isMuted = typeof audio !== "undefined" && audio.muted;
+          const siuuuDuration = isMuted
+            ? 1200
+            : ((typeof audio !== "undefined" && audio.getSiuuuDurationMs)
+                ? audio.getSiuuuDurationMs()
+                : 6660);
+          cumulativeDelay += siuuuDuration;
+        }
       });
 
       clashAnimationTimeouts.push(setTimeout(() => {
         scoreEl.innerHTML = formatScoreDisplay(effectiveScore);
         revealClashCardWinner(activeWinner, code1, code2, name1, name2);
         if (typeof audio !== "undefined" && audio.playMatchWin) audio.playMatchWin();
-      }, (goalsList.length + 1) * goalInterval));
+      }, cumulativeDelay + goalInterval));
     }
 
     function replayClashCardScorers() {
@@ -2357,6 +2381,9 @@
       clashAnimationTimeouts = [];
       animationTimeouts.forEach(clearTimeout);
       animationTimeouts = [];
+      if (typeof audio !== "undefined" && audio.stopSiuuu) {
+        audio.stopSiuuu();
+      }
       const overlay = document.getElementById("clash-card-overlay");
       if (overlay) overlay.classList.add("hidden");
     }
