@@ -39,16 +39,29 @@ class TacticalAudio {
     if (this.ctx.state === 'suspended') {
       this.ctx.resume();
     }
-    this.loadSiuuuBuffer();
+    if (this.rawSiuuuBuffer && !this.siuuuBuffer) {
+      this.ctx.decodeAudioData(this.rawSiuuuBuffer.slice(0)).then(decoded => {
+        if (decoded) this.siuuuBuffer = decoded;
+      }).catch(() => {});
+    } else {
+      this.loadSiuuuBuffer();
+    }
   }
 
   // Preload and decode SIUUU audio sample into Web Audio buffer for 100% mobile Safari compatibility
   loadSiuuuBuffer() {
-    if (this.siuuuBuffer || this.loadingSiuuu || !this.ctx) return;
+    if (this.siuuuBuffer || this.loadingSiuuu) return;
     this.loadingSiuuu = true;
+
+    if (!this.siuuuAudio) {
+      this.siuuuAudio = new Audio('assets/audio/siuuu.mp3');
+      this.siuuuAudio.load();
+    }
+
     fetch('assets/audio/siuuu.mp3')
       .then(res => res.arrayBuffer())
       .then(buffer => {
+        this.rawSiuuuBuffer = buffer;
         if (this.ctx) {
           return this.ctx.decodeAudioData(buffer);
         }
@@ -57,10 +70,13 @@ class TacticalAudio {
         if (decoded) {
           this.siuuuBuffer = decoded;
         }
+        this.loadingSiuuu = false;
       })
       .catch(e => {
         this.loadingSiuuu = false;
       });
+  }
+
   getSiuuuDurationMs() {
     if (this.siuuuBuffer && this.siuuuBuffer.duration) {
       return Math.round(this.siuuuBuffer.duration * 1000);
@@ -691,12 +707,44 @@ function updateAudioUI() {
 if (typeof window !== "undefined") {
   window.addEventListener("DOMContentLoaded", () => {
     updateAudioUI();
+    if (typeof audio !== "undefined") {
+      audio.loadSiuuuBuffer();
+    }
   });
 
   const unlockMobileAudio = () => {
     if (typeof audio !== "undefined") {
       audio.init();
-      audio.loadSiuuuBuffer();
+
+      // Explicitly unlock Web Audio Context on iOS Safari with a 1-frame silent buffer
+      if (audio.ctx) {
+        if (audio.ctx.state === 'suspended') {
+          audio.ctx.resume();
+        }
+        try {
+          const buf = audio.ctx.createBuffer(1, 1, 22050);
+          const src = audio.ctx.createBufferSource();
+          src.buffer = buf;
+          src.connect(audio.ctx.destination);
+          src.start(0);
+        } catch (e) {}
+      }
+
+      // Prime HTML5 Audio for iOS Safari autoplay permission
+      if (!audio.siuuuAudio) {
+        audio.siuuuAudio = new Audio('assets/audio/siuuu.mp3');
+      }
+      try {
+        audio.siuuuAudio.volume = 0;
+        const playPromise = audio.siuuuAudio.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            audio.siuuuAudio.pause();
+            audio.siuuuAudio.currentTime = 0;
+            audio.siuuuAudio.volume = Math.min(1.0, audio.volume * 1.1);
+          }).catch(() => {});
+        }
+      } catch (e) {}
     }
     window.removeEventListener("touchstart", unlockMobileAudio);
     window.removeEventListener("touchend", unlockMobileAudio);
