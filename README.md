@@ -9,30 +9,41 @@ An interactive, state-of-the-art web application that visualizes World Cup tourn
 
 ---
 
+## 📸 Screenshots & Highlights
+
+| 🌍 Tactical Map & Clash Card | ⚔️ Knockout Battle Focus |
+| :---: | :---: |
+| ![Main Map](assets/screenshots/main_map_2026.png) | ![Clash Card](assets/screenshots/clash_card_match.png) |
+
+---
+
 ## 🔥 Key Features
 
-- 🏆 **Multi-Edition World Cup Datasets (2018 / 2022 / 2026)**
-  - **2018 Russia World Cup**: 32 teams, 16 knockout matches.
-  - **2022 Qatar World Cup**: 32 teams, Argentina's iconic title run.
-  - **2026 USA/Canada/Mexico World Cup**: 48 teams, 32 knockout matches.
+- 🏆 **Comprehensive Multi-Edition World Cup Datasets (1998 – 2026)**
+  - Includes historical editions (1998 France, 2002 Korea/Japan, 2006 Germany, 2010 South Africa, 2014 Brazil, 2018 Russia, 2022 Qatar) and the expanded **2026 USA/Canada/Mexico World Cup** (48 teams, 32 knockout matches).
+  - Fully populated with official player goal scorers, exact match minutes, own goals `(OG)`, and penalty kick markers `(p)`.
 
-- ⚡ **Parallel Universe Override Engine**
-  - Click any match in the schedule feed to override its winner (e.g., engineer an upset or rewrite history).
-  - The simulation timeline automatically recalculates all downstream match setups, team advancers, and global territory annexations in real-time.
+- ⏱️ **Chronological Goal Playback & Suspenseful Winner Reveal**
+  - **Sequential Goal Sequence**: Matches reveal goals chronologically by minute (e.g., 3', 18', 37', 48', 90+6') with glowing pulse text animations.
+  - **Dynamic Running Score**: Score ticks up live (e.g. `0-0` ➔ `1-0` ➔ `1-1` ➔ `2-1`) during goal playback.
+  - **Dramatized Winner Reveal**: Cards keep a neutral state during goals, dramatically revealing the golden winner highlight & `[WINNER]` badge only after the final score completes.
+
+- 🎵 **Broadcast-Grade Audio Engine (Web Audio API)**
+  - **TV Broadcast Goal Chime**: Pure melodic sine arpeggios (`C5-E5-G5-C6`) free of harsh noise transients or gunshot snaps.
+  - **Team-Based Dynamic Pitch Escalation**: Pitch steps higher as each team scores more goals in a match, elevating comeback tension.
+  - **3D Stereo Spatial Panning**: Home team goals sound from the left speaker/earbud (`pan: -0.35`); away team goals sound from the right speaker (`pan: +0.35`).
+  - **Official Referee Whistle**: Synthesized 35Hz dual-tone referee whistle (`playWhistle`) for penalty kicks.
+
+- ⏳ **Adaptive Match Playback Pace**
+  - Timeline simulation automatically scales step delay based on total match goals (e.g., allocating 6.2s for 10-goal high-scoring thrillers like England 6-4 France), ensuring every goal gets its complete animation and sound effect.
+
+- ⚡ **Parallel Universe Sandbox Override Engine**
+  - Click any match card to override the winner and engineer custom sandbox timelines.
+  - The engine instantly recalculates downstream bracket advancers, territory annexations, and URL sandbox state strings.
 
 - 🌲 **Symmetrical 1-to-1 Tournament Bracket Diagram**
-  - Built with a **Graph Tree Feeder Resolution Algorithm** that traces parent-child match relationships to guarantee 100% accurate 1-to-1 feeder alignment.
-  - **Golden Champion Path Glow**: Highlights the champion's exact conquest route with glowing optical lines and trophy badges.
-  - **Dynamic Edition Scaling**: Automatically scales bracket cards between 2018/2022 (16 teams) and 2026 (32 teams) for optimal visual clarity.
-
-- ⚔️ **Rich Motion & Audio Experience**
-  - **Laser Ray Clash**: Dynamic SVG laser rays firing between rival national capitals during knockout battles.
-  - **Capital Ripples & Red Alert Flashes**: Pulse wave rings on capital pins and red border alert flashes during territory annexations and upsets.
-  - **Web Audio API Engine**: Built-in sound effects (chimes, battle signals) with muting toggles.
-
-- 📱 **Pure Panoramic Screenshot View**
-  - Pure, minimal modal interface removing header and footer clutter.
-  - Designed for mobile landscape mode to take 100% full, pristine tournament bracket screenshots for social sharing.
+  - Built with a Graph Tree Feeder Resolution Algorithm guaranteeing 100% accurate 1-to-1 match feeder alignment.
+  - Highlights the champion's golden conquest route with optical glowing lines and trophy badges.
 
 ---
 
@@ -57,12 +68,14 @@ Then open your browser and visit: `http://localhost:8080`
 
 ```text
 world-cup-map/
-├── index.html                # Main application (UI, D3 Map, Bracket Engine, Simulation Logic)
-├── data/                     # World Cup datasets
-│   ├── 2018/
-│   │   └── world_cup_data.json
-│   ├── 2022/
-│   │   └── world_cup_data.json
+├── index.html                # Main application (UI, D3 Map, Bracket Engine, Simulation Loop)
+├── assets/
+│   └── screenshots/          # Embedded UI showcase screenshots
+├── js/
+│   ├── audio.js              # Web Audio API Synthesizer (Pitch escalation, 3D panning, goal chimes)
+│   └── i18n.js               # Internationalization engine (English & Chinese)
+├── data/                     # World Cup datasets (1998 - 2026)
+│   ├── 1998/ ... 2022/
 │   └── 2026/
 │       └── world_cup_data.json
 ├── geo/                      # Geographic TopoJSON map boundary data
@@ -77,8 +90,8 @@ world-cup-map/
 - **Core Frontend**: HTML5, Vanilla JavaScript (ES6+), CSS3
 - **Visualization & Maps**: D3.js v7, TopoJSON v3
 - **Styling & UI**: TailwindCSS, Cyberpunk Console Palette
-- **Icons & Typography**: Phosphor Icons (Font/SVG), JetBrains Mono, Inter Font
-- **Audio Engine**: Web Audio API Synthesizer
+- **Audio Architecture**: Web Audio API (Oscillators, DynamicsCompressor, StereoPannerNode)
+- **Internationalization**: Full English & Chinese i18n support
 
 ---
 
