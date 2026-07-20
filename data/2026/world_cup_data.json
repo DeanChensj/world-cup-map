@@ -1494,53 +1494,53 @@
       "scorers": [
         {
           "team": "ENG",
-          "player": "Kane",
-          "minute": "9'"
+          "player": "Rice",
+          "minute": "3'"
         },
         {
-          "team": "FRA",
-          "player": "Mbappé",
-          "minute": "17'"
+          "team": "ENG",
+          "player": "Konsa",
+          "minute": "18'"
         },
         {
           "team": "ENG",
           "player": "Saka",
-          "minute": "22'"
+          "minute": "37'"
+        },
+        {
+          "team": "ENG",
+          "player": "Saka",
+          "minute": "45+1'"
+        },
+        {
+          "team": "FRA",
+          "player": "Mbappé",
+          "minute": "48'"
         },
         {
           "team": "FRA",
           "player": "Barcola",
-          "minute": "35'"
-        },
-        {
-          "team": "ENG",
-          "player": "Palmer",
-          "minute": "41'"
-        },
-        {
-          "team": "ENG",
-          "player": "Foden",
-          "minute": "59'"
+          "minute": "54'"
         },
         {
           "team": "FRA",
-          "player": "Olise",
-          "minute": "68'"
+          "player": "Mbappé",
+          "minute": "66'"
+        },
+        {
+          "team": "ENG",
+          "player": "Saka",
+          "minute": "87' (p)"
+        },
+        {
+          "team": "FRA",
+          "player": "Dembélé",
+          "minute": "90+6'"
         },
         {
           "team": "ENG",
           "player": "Bellingham",
-          "minute": "74'"
-        },
-        {
-          "team": "FRA",
-          "player": "Kolo Muani",
-          "minute": "81'"
-        },
-        {
-          "team": "ENG",
-          "player": "Watkins",
-          "minute": "88'"
+          "minute": "90+8'"
         }
       ]
     },
