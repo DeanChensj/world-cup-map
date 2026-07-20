@@ -536,11 +536,33 @@
       const match = matches[matchIndex];
       if (!match) return;
 
-      if (userOverrides[matchIndex] === winnerCode) {
+      const defaultWinner = match.winner;
+      const homeEff = getEffectiveTeamCode(match.home);
+      const awayEff = getEffectiveTeamCode(match.away);
+      let normWinner = getEffectiveTeamCode(winnerCode);
+      if (normWinner === match.home) normWinner = homeEff;
+      else if (normWinner === match.away) normWinner = awayEff;
+
+      const normDefault = defaultWinner ? getEffectiveTeamCode(defaultWinner) : null;
+
+      if (userOverrides[matchIndex] === normWinner || normWinner === normDefault) {
         delete userOverrides[matchIndex];
       } else {
-        userOverrides[matchIndex] = winnerCode;
+        userOverrides[matchIndex] = normWinner;
       }
+
+      // Sync URL alt parameter
+      const overridePairs = Object.entries(userOverrides)
+        .map(([idx, code]) => `${idx}:${code}`)
+        .join(",");
+      const url = new URL(window.location.href);
+      if (overridePairs) {
+        url.searchParams.set("alt", overridePairs);
+      } else {
+        url.searchParams.delete("alt");
+      }
+      window.history.replaceState({}, "", url.toString());
+
       jumpToMatchStep(matchIndex);
       isSandboxAction = true;
       updateUI();
