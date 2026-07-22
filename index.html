@@ -2255,6 +2255,7 @@
           pName.includes("cr7") ||
           (pName.includes("ronaldo") && isPortugal)
         );
+        const isMessiGoal = pName.includes("messi");
         const isBellinghamGoal = pName.includes("bellingham");
         const isHaalandGoal = pName.includes("haaland");
         const isMbappeGoal = pName.includes("mbappé") || pName.includes("mbappe");
@@ -2290,6 +2291,12 @@
             }
             const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
             triggerAlert(isZh ? "🔥 SIUUUUU! C罗破门得分！ 🇵🇹" : "🔥 SIUUUUU! CRISTIANO RONALDO SCORES! 🇵🇹");
+          } else if (isMessiGoal) {
+            if (typeof audio !== "undefined" && audio.playMessiSFX) {
+              audio.playMessiSFX(goal.side);
+            }
+            const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+            triggerAlert(isZh ? "🇦🇷 ⚡ ANKARA MESSI! 梅西连过数人霸气破门！ 👑" : "🇦🇷 ⚡ ANKARA MESSI! LIONEL MESSI SCORES! 👑");
           } else if (isBellinghamGoal) {
             if (typeof audio !== "undefined" && audio.playBellinghamSFX) {
               audio.playBellinghamSFX(goal.side);
@@ -2342,6 +2349,14 @@
                 ? audio.getSiuuuDurationMs()
                 : 6660);
           cumulativeDelay += siuuuDuration;
+        } else if (isMessiGoal) {
+          const isMuted = typeof audio !== "undefined" && audio.muted;
+          const messiDuration = isMuted
+            ? 1200
+            : ((typeof audio !== "undefined" && audio.getStarGoalDurationMs)
+                ? audio.getStarGoalDurationMs('messi')
+                : 3800);
+          cumulativeDelay += messiDuration;
         } else if (isBellinghamGoal) {
           cumulativeDelay += (typeof audio !== "undefined" && audio.getStarGoalDurationMs) ? audio.getStarGoalDurationMs('bellingham') : 1800;
         } else if (isHaalandGoal) {
@@ -3397,12 +3412,15 @@
               pName.includes("cr7") ||
               (pName.includes("ronaldo") && isPortugal)
             );
+            const isMessiGoal = pName.includes("messi");
             const isBellinghamGoal = pName.includes("bellingham");
             const isHaalandGoal = pName.includes("haaland");
             const isMbappeGoal = pName.includes("mbappé") || pName.includes("mbappe");
 
             if (isRonaldoGoal) {
               matchDelay += defaultSiuuuDuration;
+            } else if (isMessiGoal) {
+              matchDelay += (typeof audio !== "undefined" && audio.getStarGoalDurationMs) ? audio.getStarGoalDurationMs('messi') : 3800;
             } else if (isBellinghamGoal) {
               matchDelay += (typeof audio !== "undefined" && audio.getStarGoalDurationMs) ? audio.getStarGoalDurationMs('bellingham') : 1800;
             } else if (isHaalandGoal) {

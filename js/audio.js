@@ -44,6 +44,7 @@ class TacticalAudio {
   loadStarBuffers() {
     this.starAudioFiles = {
       siuuu: 'assets/audio/siuuu.mp3',
+      messi: 'assets/audio/messi.mp3',
       bellingham: 'assets/audio/bellingham.mp3',
       haaland: 'assets/audio/haaland.mp3',
       mbappe: 'assets/audio/mbappe.wav'
@@ -113,7 +114,7 @@ class TacticalAudio {
       const dur = this.starAudios[key].duration * 1000;
       return key === 'haaland' ? Math.min(3500, Math.round(dur)) : Math.round(dur);
     }
-    const defaults = { siuuu: 6660, ronaldo: 6660, bellingham: 2870, haaland: 3500, mbappe: 2700 };
+    const defaults = { siuuu: 6660, ronaldo: 6660, messi: 3800, bellingham: 2870, haaland: 3500, mbappe: 2700 };
     return defaults[starType] || 1800;
   }
 
@@ -176,6 +177,12 @@ class TacticalAudio {
   playSiuuuSFX(side = '1') {
     if (!this.playStarSampleSFX('siuuu', side)) {
       this.playGoalPop(4, side === '1' ? -0.35 : 0.35);
+    }
+  }
+
+  playMessiSFX(side = '1') {
+    if (!this.playStarSampleSFX('messi', side)) {
+      this.playGoalPop(6, side === '1' ? -0.35 : 0.35);
     }
   }
 
