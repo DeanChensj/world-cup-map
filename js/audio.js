@@ -1,4 +1,4 @@
-// --- Tactical Web Audio Synthesizer Engine (V2 Modernized) ---
+// --- Tactical Web Audio Synthesizer & Star Audio Engine ---
 class TacticalAudio {
   constructor() {
     this.ctx = null;
@@ -12,8 +12,6 @@ class TacticalAudio {
     this.muted = savedMuted === "true";
     this.volume = savedVol !== null ? parseFloat(savedVol) : 0.7;
     if (isNaN(this.volume)) this.volume = 0.7;
-    
-    this.noiseBuffer = null;
   }
 
   init() {
@@ -39,75 +37,96 @@ class TacticalAudio {
     if (this.ctx.state === 'suspended') {
       this.ctx.resume();
     }
-    if (this.rawSiuuuBuffer && !this.siuuuBuffer) {
-      this.ctx.decodeAudioData(this.rawSiuuuBuffer.slice(0)).then(decoded => {
-        if (decoded) this.siuuuBuffer = decoded;
-      }).catch(() => {});
-    } else {
-      this.loadSiuuuBuffer();
-    }
+    this.loadStarBuffers();
   }
 
-  // Preload and decode SIUUU audio sample into Web Audio buffer for 100% mobile Safari compatibility
-  loadSiuuuBuffer() {
-    if (this.siuuuBuffer || this.loadingSiuuu) return;
-    this.loadingSiuuu = true;
+  // Preload and decode star MP3 audio samples into Web Audio buffers for 100% mobile Safari compatibility
+  loadStarBuffers() {
+    this.starAudioFiles = {
+      siuuu: 'assets/audio/siuuu.mp3',
+      bellingham: 'assets/audio/bellingham.mp3',
+      haaland: 'assets/audio/haaland.mp3',
+      mbappe: 'assets/audio/mbappe.wav'
+    };
 
-    if (!this.siuuuAudio) {
-      this.siuuuAudio = new Audio('assets/audio/siuuu.mp3');
-      this.siuuuAudio.load();
+    if (!this.starBuffers) this.starBuffers = {};
+    if (!this.starAudios) this.starAudios = {};
+    if (!this.rawStarBuffers) this.rawStarBuffers = {};
+    if (!this.loadingStarBuffers) this.loadingStarBuffers = {};
+
+    Object.keys(this.starAudioFiles).forEach(key => {
+      const url = this.starAudioFiles[key];
+      if (!this.starAudios[key]) {
+        this.starAudios[key] = new Audio(url);
+        this.starAudios[key].load();
+      }
+      if (!this.starBuffers[key] && !this.loadingStarBuffers[key]) {
+        this.loadingStarBuffers[key] = true;
+        fetch(url)
+          .then(res => res.arrayBuffer())
+          .then(buf => {
+            this.rawStarBuffers[key] = buf;
+            if (this.ctx) {
+              return this.ctx.decodeAudioData(buf.slice(0));
+            }
+          })
+          .then(decoded => {
+            if (decoded) {
+              this.starBuffers[key] = decoded;
+            }
+            this.loadingStarBuffers[key] = false;
+          })
+          .catch(() => {
+            this.loadingStarBuffers[key] = false;
+          });
+      }
+    });
+  }
+
+  stopStarAudio() {
+    if (this.activeStarSource) {
+      try { this.activeStarSource.stop(); } catch (e) {}
+      this.activeStarSource = null;
     }
-
-    fetch('assets/audio/siuuu.mp3')
-      .then(res => res.arrayBuffer())
-      .then(buffer => {
-        this.rawSiuuuBuffer = buffer;
-        if (this.ctx) {
-          return this.ctx.decodeAudioData(buffer);
-        }
-      })
-      .then(decoded => {
-        if (decoded) {
-          this.siuuuBuffer = decoded;
-        }
-        this.loadingSiuuu = false;
-      })
-      .catch(e => {
-        this.loadingSiuuu = false;
+    if (this.starAudios) {
+      Object.keys(this.starAudios).forEach(key => {
+        try {
+          this.starAudios[key].pause();
+          this.starAudios[key].currentTime = 0;
+        } catch (e) {}
       });
-  }
-
-  getSiuuuDurationMs() {
-    if (this.siuuuBuffer && this.siuuuBuffer.duration) {
-      return Math.round(this.siuuuBuffer.duration * 1000);
     }
-    if (this.siuuuAudio && this.siuuuAudio.duration) {
-      return Math.round(this.siuuuAudio.duration * 1000);
-    }
-    return 6660; // Exact duration of assets/audio/siuuu.mp3
   }
 
   stopSiuuu() {
-    if (this.activeSiuuuSource) {
-      try { this.activeSiuuuSource.stop(); } catch (e) {}
-      this.activeSiuuuSource = null;
-    }
-    if (this.siuuuAudio) {
-      try {
-        this.siuuuAudio.pause();
-        this.siuuuAudio.currentTime = 0;
-      } catch (e) {}
-    }
+    this.stopStarAudio();
   }
 
-  // 13. Authentic Cristiano Ronaldo "SIUUU!" Audio Sample Playback (Mobile Web Audio Ready)
-  playSiuuuSFX(side = '1') {
-    if (this.muted) return;
-    this.init();
-    this.stopSiuuu();
+  getStarGoalDurationMs(starType) {
+    if (this.muted) return 1200;
+    const key = (starType === 'ronaldo') ? 'siuuu' : starType;
+    if (this.starBuffers?.[key]?.duration) {
+      const dur = this.starBuffers[key].duration * 1000;
+      return key === 'haaland' ? Math.min(3500, Math.round(dur)) : Math.round(dur);
+    }
+    if (this.starAudios?.[key]?.duration) {
+      const dur = this.starAudios[key].duration * 1000;
+      return key === 'haaland' ? Math.min(3500, Math.round(dur)) : Math.round(dur);
+    }
+    const defaults = { siuuu: 6660, ronaldo: 6660, bellingham: 2870, haaland: 3500, mbappe: 2700 };
+    return defaults[starType] || 1800;
+  }
 
-    // If Web Audio buffer is loaded, play via Web Audio (100% mobile Safari compatible + 3D panning)
-    if (this.siuuuBuffer && this.ctx) {
+  getSiuuuDurationMs() {
+    return this.getStarGoalDurationMs('siuuu');
+  }
+
+  playStarSampleSFX(key, side = '1', maxDuration = null) {
+    if (this.muted) return false;
+    this.init();
+    this.stopStarAudio();
+
+    if (this.starBuffers?.[key] && this.ctx) {
       const now = this.ctx.currentTime;
       const panVal = (side === '1') ? -0.35 : (side === '2') ? 0.35 : 0;
       let panner = null;
@@ -119,38 +138,62 @@ class TacticalAudio {
       const outputNode = panner || this.compressor;
 
       const source = this.ctx.createBufferSource();
-      source.buffer = this.siuuuBuffer;
+      source.buffer = this.starBuffers[key];
 
       const gainNode = this.ctx.createGain();
       gainNode.gain.setValueAtTime(Math.min(1.2, this.volume * 1.2), now);
 
       source.connect(gainNode);
       gainNode.connect(outputNode);
-      this.activeSiuuuSource = source;
+      this.activeStarSource = source;
       source.onended = () => {
-        if (this.activeSiuuuSource === source) {
-          this.activeSiuuuSource = null;
+        if (this.activeStarSource === source) {
+          this.activeStarSource = null;
         }
       };
       source.start(now);
-      return;
+      if (maxDuration) {
+        source.stop(now + maxDuration);
+      }
+      return true;
     }
 
-    // HTML5 Audio fallback
-    try {
-      if (!this.siuuuAudio) {
-        this.siuuuAudio = new Audio('assets/audio/siuuu.mp3');
-      }
-      this.siuuuAudio.volume = Math.min(1.0, this.volume * 1.1);
-      this.siuuuAudio.currentTime = 0;
-      const playPromise = this.siuuuAudio.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(err => {
-          this.playSiuuuSynth(side);
-        });
-      }
-    } catch (e) {
-      this.playSiuuuSynth(side);
+    if (this.starAudios?.[key]) {
+      try {
+        const audioEl = this.starAudios[key];
+        audioEl.volume = Math.min(1.0, this.volume * 1.1);
+        audioEl.currentTime = 0;
+        const p = audioEl.play();
+        if (p !== undefined) {
+          p.catch(() => {});
+        }
+        return true;
+      } catch (e) {}
+    }
+    return false;
+  }
+
+  playSiuuuSFX(side = '1') {
+    if (!this.playStarSampleSFX('siuuu', side)) {
+      this.playGoalPop(4, side === '1' ? -0.35 : 0.35);
+    }
+  }
+
+  playBellinghamSFX(side = '1') {
+    if (!this.playStarSampleSFX('bellingham', side)) {
+      this.playGoalPop(3, side === '1' ? -0.35 : 0.35);
+    }
+  }
+
+  playHaalandSFX(side = '1') {
+    if (!this.playStarSampleSFX('haaland', side, 3.5)) {
+      this.playGoalPop(5, side === '1' ? -0.35 : 0.35);
+    }
+  }
+
+  playMbappeSFX(side = '1') {
+    if (!this.playStarSampleSFX('mbappe', side)) {
+      this.playGoalPop(2, side === '1' ? -0.35 : 0.35);
     }
   }
 
@@ -180,27 +223,12 @@ class TacticalAudio {
     this.setMuted(!this.muted);
   }
 
-  // Pre-generate 1 sec white noise buffer for transient noise/explosion effects
-  _getNoiseBuffer() {
-    if (!this.ctx) return null;
-    if (this.noiseBuffer) return this.noiseBuffer;
-    const bufferSize = this.ctx.sampleRate * 1.0;
-    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = Math.random() * 2 - 1;
-    }
-    this.noiseBuffer = buffer;
-    return buffer;
-  }
-
   // 1. Refined UI Tactile Click
   playClick() {
     if (this.muted) return;
     this.init();
     const now = this.ctx.currentTime;
     
-    // Subtone click
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = 'sine';
@@ -271,7 +299,6 @@ class TacticalAudio {
     const now = this.ctx.currentTime;
 
     if (isPlay) {
-      // Energetic ascending C5 -> E5 -> G5 arpeggio
       const notes = [523.25, 659.25, 783.99];
       notes.forEach((freq, idx) => {
         const start = now + idx * 0.035;
@@ -289,7 +316,6 @@ class TacticalAudio {
         osc.stop(start + 0.12);
       });
     } else {
-      // Descending G5 -> C5 smooth pause chime
       const notes = [783.99, 523.25];
       notes.forEach((freq, idx) => {
         const start = now + idx * 0.04;
@@ -309,18 +335,16 @@ class TacticalAudio {
     }
   }
 
-  // 5. Official Referee Whistle Sound FX (Replaces sci-fi laser shot)
+  // 5. Official Referee Whistle Sound FX
   playWhistle() {
     if (this.muted) return;
     this.init();
     const now = this.ctx.currentTime;
 
-    // Dual trill sine frequencies for realistic referee whistle
     [2600, 3100].forEach((freq) => {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       
-      // 35Hz fast trill modulation
       const mod = this.ctx.createOscillator();
       const modGain = this.ctx.createGain();
       mod.frequency.value = 35;
@@ -343,25 +367,13 @@ class TacticalAudio {
     });
   }
 
-  playLaserShot() {
-    this.playWhistle();
-  }
-
-  // 6. Clean Stadium Match Annexation Cheer (Replaces heavy missile bombardment boom)
-  playConquestBoom() {
-    if (this.muted) return;
-    this.init();
-    this.playMatchWin();
-  }
-
-  // 7. Dramatic Upset Reclaim Alarm (Underdog Annexation Reclaim)
+  // 6. Dramatic Upset Reclaim Alarm
   playUpset() {
     if (this.muted) return;
     this.init();
     const now = this.ctx.currentTime;
 
-    // Ascending tension triad resolving into a triumphant resonant chord
-    const tensionNotes = [261.63, 311.13, 369.99]; // C4, Eb4, F#4
+    const tensionNotes = [261.63, 311.13, 369.99];
     tensionNotes.forEach((freq, idx) => {
       const start = now + idx * 0.08;
       const osc = this.ctx.createOscillator();
@@ -383,12 +395,11 @@ class TacticalAudio {
       osc.stop(start + 0.3);
     });
 
-    // Resolving triumphant chime note
     const resolveTime = now + 0.26;
     const resOsc = this.ctx.createOscillator();
     const resGain = this.ctx.createGain();
     resOsc.type = 'sine';
-    resOsc.frequency.setValueAtTime(523.25, resolveTime); // C5
+    resOsc.frequency.setValueAtTime(523.25, resolveTime);
     resGain.gain.setValueAtTime(0.12, resolveTime);
     resGain.gain.exponentialRampToValueAtTime(0.001, resolveTime + 0.6);
 
@@ -398,7 +409,7 @@ class TacticalAudio {
     resOsc.stop(resolveTime + 0.6);
   }
 
-  // 8. Match Score Toggle / Point Win Chime
+  // 7. Match Score Toggle / Point Win Chime
   playMatchWin() {
     if (this.muted) return;
     this.init();
@@ -421,13 +432,12 @@ class TacticalAudio {
     });
   }
 
-  // 9. World Cup Champion Crowning Fanfare
+  // 8. World Cup Champion Crowning Fanfare
   playVictory() {
     if (this.muted) return;
     this.init();
     const now = this.ctx.currentTime;
 
-    // Glorious major chord arpeggio: C4, E4, G4, C5, E5, G5, C6
     const fanfareNotes = [
       { freq: 261.63, time: 0 },
       { freq: 329.63, time: 0.08 },
@@ -445,7 +455,6 @@ class TacticalAudio {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       
-      // Mix triangle & sine for rich synth brass sound
       osc.type = note.time >= 0.6 ? 'triangle' : 'sine';
       osc.frequency.setValueAtTime(note.freq, start);
 
@@ -460,7 +469,7 @@ class TacticalAudio {
     });
   }
 
-  // 10. Timeline Scrubbing Radar Tick
+  // 9. Timeline Scrubbing Radar Tick
   playScan() {
     if (this.muted) return;
     this.init();
@@ -481,7 +490,7 @@ class TacticalAudio {
     osc.stop(now + 0.012);
   }
 
-  // 11. Warm Broadcast Goal Notification Chime with Spatial Stereo Panning & Pitch Escalation
+  // 10. Warm Broadcast Goal Notification Chime
   playGoalPop(semitones = 0, pan = 0) {
     if (this.muted) return;
     this.init();
@@ -489,7 +498,6 @@ class TacticalAudio {
 
     const mult = Math.pow(2, (semitones || 0) / 12);
 
-    // Optional Spatial Stereo Panner
     let panner = null;
     if (this.ctx.createStereoPanner && pan !== 0) {
       panner = this.ctx.createStereoPanner();
@@ -499,7 +507,6 @@ class TacticalAudio {
 
     const outputNode = panner || this.compressor;
 
-    // Melodic bell arpeggio dynamically transposed by pitch escalation factor
     const chord = [
       { freq: 523.25 * mult, time: 0 },
       { freq: 659.25 * mult, time: 0.05 },
@@ -515,7 +522,6 @@ class TacticalAudio {
       osc.type = 'sine';
       osc.frequency.setValueAtTime(note.freq, start);
 
-      // Soft envelope (Soft 15ms ramp, zero click, zero gunshot snap)
       gain.gain.setValueAtTime(0.001, start);
       gain.gain.linearRampToValueAtTime(note.time === 0.16 ? 0.08 : 0.05, start + 0.015);
       gain.gain.exponentialRampToValueAtTime(0.0001, start + (note.time === 0.16 ? 0.45 : 0.25));
@@ -527,7 +533,7 @@ class TacticalAudio {
     });
   }
 
-  // 12. Clean Downward Own Goal (OG) Sound Signature with Stereo Panning
+  // 11. Own Goal (OG) Sound Signature
   playOGPop(pan = 0) {
     if (this.muted) return;
     this.init();
@@ -542,7 +548,6 @@ class TacticalAudio {
 
     const outputNode = panner || this.compressor;
 
-    // Downward 3-note drop: E5 (659Hz) -> C5 (523Hz) -> A4 (440Hz)
     const ogNotes = [659.25, 523.25, 440.00];
     ogNotes.forEach((freq, idx) => {
       const start = now + idx * 0.06;
@@ -563,74 +568,14 @@ class TacticalAudio {
     });
   }
 
-  // Fallback Synthesizer for SIUUU
-  playSiuuuSynth(side = '1') {
-    if (this.muted) return;
-    this.init();
-    const now = this.ctx.currentTime;
-
-    const panVal = (side === '1') ? -0.35 : (side === '2') ? 0.35 : 0;
-    let panner = null;
-    if (this.ctx.createStereoPanner && panVal !== 0) {
-      panner = this.ctx.createStereoPanner();
-      panner.pan.setValueAtTime(panVal, now);
-      panner.connect(this.compressor);
-    }
-    const outputNode = panner || this.compressor;
-
-    // High crisp whistle / "SI..." entrance (0ms -> 120ms)
-    const sOsc = this.ctx.createOscillator();
-    const sGain = this.ctx.createGain();
-    sOsc.type = 'sine';
-    sOsc.frequency.setValueAtTime(1400, now);
-    sOsc.frequency.exponentialRampToValueAtTime(1000, now + 0.12);
-
-    sGain.gain.setValueAtTime(0.001, now);
-    sGain.gain.linearRampToValueAtTime(0.09, now + 0.015);
-    sGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
-
-    sOsc.connect(sGain);
-    sGain.connect(outputNode);
-    sOsc.start(now);
-    sOsc.stop(now + 0.12);
-
-    const chordGlide = [
-      { startFreq: 587.33, endFreq: 440.00, time: 0.10 },
-      { startFreq: 739.99, endFreq: 554.37, time: 0.10 },
-      { startFreq: 880.00, endFreq: 659.25, time: 0.10 },
-      { startFreq: 1174.66, endFreq: 880.00, time: 0.10 }
-    ];
-
-    chordGlide.forEach(note => {
-      const start = now + note.time;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(note.startFreq, start);
-      osc.frequency.exponentialRampToValueAtTime(note.endFreq, start + 0.85);
-
-      gain.gain.setValueAtTime(0.001, start);
-      gain.gain.linearRampToValueAtTime(0.07, start + 0.03);
-      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.90);
-
-      osc.connect(gain);
-      gain.connect(outputNode);
-      osc.start(start);
-      osc.stop(start + 0.90);
-    });
-  }
-
   playGoalSFX(type = 'regular', teamGoalCount = 1, side = '1') {
     if (this.muted) return;
     this.init();
 
-    // Side 1 (Home/Left) starts at base, Side 2 (Away/Right) starts slightly higher for tonal contrast
     const baseOffset = (side === '2') ? 2 : 0;
     const teamCountShift = Math.min(6, (teamGoalCount - 1) * 2);
     const pitchShift = baseOffset + teamCountShift;
 
-    // Spatial stereo panning (-0.35 for Team A / +0.35 for Team B)
     const panVal = (side === '1') ? -0.35 : (side === '2') ? 0.35 : 0;
 
     if (type === 'penalty') {
@@ -652,7 +597,6 @@ if (typeof window !== "undefined") {
   window.audio = audio;
 }
 
-// Backward compatible global toggle & UI update helpers
 function toggleAudio() {
   audio.toggleMute();
   if (!audio.muted && audio.playClick) {
@@ -708,7 +652,7 @@ if (typeof window !== "undefined") {
   window.addEventListener("DOMContentLoaded", () => {
     updateAudioUI();
     if (typeof audio !== "undefined") {
-      audio.loadSiuuuBuffer();
+      audio.loadStarBuffers();
     }
   });
 
@@ -730,21 +674,23 @@ if (typeof window !== "undefined") {
         } catch (e) {}
       }
 
-      // Prime HTML5 Audio for iOS Safari autoplay permission
-      if (!audio.siuuuAudio) {
-        audio.siuuuAudio = new Audio('assets/audio/siuuu.mp3');
+      // Prime HTML5 Audios for iOS Safari autoplay permission
+      if (audio.starAudios) {
+        Object.keys(audio.starAudios).forEach(key => {
+          try {
+            const el = audio.starAudios[key];
+            el.volume = 0;
+            const p = el.play();
+            if (p !== undefined) {
+              p.then(() => {
+                el.pause();
+                el.currentTime = 0;
+                el.volume = Math.min(1.0, audio.volume * 1.1);
+              }).catch(() => {});
+            }
+          } catch (e) {}
+        });
       }
-      try {
-        audio.siuuuAudio.volume = 0;
-        const playPromise = audio.siuuuAudio.play();
-        if (playPromise !== undefined) {
-          playPromise.then(() => {
-            audio.siuuuAudio.pause();
-            audio.siuuuAudio.currentTime = 0;
-            audio.siuuuAudio.volume = Math.min(1.0, audio.volume * 1.1);
-          }).catch(() => {});
-        }
-      } catch (e) {}
     }
     window.removeEventListener("touchstart", unlockMobileAudio);
     window.removeEventListener("touchend", unlockMobileAudio);

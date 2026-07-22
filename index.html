@@ -2255,6 +2255,9 @@
           pName.includes("cr7") ||
           (pName.includes("ronaldo") && isPortugal)
         );
+        const isBellinghamGoal = pName.includes("bellingham");
+        const isHaalandGoal = pName.includes("haaland");
+        const isMbappeGoal = pName.includes("mbappé") || pName.includes("mbappe");
 
         cumulativeDelay += goalInterval;
         const currentGoalDelay = cumulativeDelay;
@@ -2287,6 +2290,24 @@
             }
             const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
             triggerAlert(isZh ? "🔥 SIUUUUU! C罗破门得分！ 🇵🇹" : "🔥 SIUUUUU! CRISTIANO RONALDO SCORES! 🇵🇹");
+          } else if (isBellinghamGoal) {
+            if (typeof audio !== "undefined" && audio.playBellinghamSFX) {
+              audio.playBellinghamSFX(goal.side);
+            }
+            const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+            triggerAlert(isZh ? "👑 HEY JUDE! 贝林厄姆展开双臂霸气破门！ 🏴󠁧󠁢󠁥󠁮󠁧󠁿" : "👑 HEY JUDE! BELLINGHAM SCORES WITH OPEN ARMS! 🏴󠁧󠁢󠁥󠁮󠁧󠁿");
+          } else if (isHaalandGoal) {
+            if (typeof audio !== "undefined" && audio.playHaalandSFX) {
+              audio.playHaalandSFX(goal.side);
+            }
+            const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+            triggerAlert(isZh ? "🤖 HAALAND HAALAND! 哈兰德魔人打坐破门！ 🇳🇴" : "🤖 HAALAND HAALAND! NORDIC KID HAALAND SCORES! 🇳🇴");
+          } else if (isMbappeGoal) {
+            if (typeof audio !== "undefined" && audio.playMbappeSFX) {
+              audio.playMbappeSFX(goal.side);
+            }
+            const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+            triggerAlert(isZh ? "💧 “我是姆巴佩，补水啦！” 🇫🇷" : "💧 MBAPPÉ SCORES! HYDRATION TIME! 🇫🇷");
           } else {
             let soundType = 'regular';
             if (goal.minute.includes("(p)") || goal.minute.includes("(pen.)")) soundType = 'penalty';
@@ -2321,6 +2342,12 @@
                 ? audio.getSiuuuDurationMs()
                 : 6660);
           cumulativeDelay += siuuuDuration;
+        } else if (isBellinghamGoal) {
+          cumulativeDelay += (typeof audio !== "undefined" && audio.getStarGoalDurationMs) ? audio.getStarGoalDurationMs('bellingham') : 1800;
+        } else if (isHaalandGoal) {
+          cumulativeDelay += (typeof audio !== "undefined" && audio.getStarGoalDurationMs) ? audio.getStarGoalDurationMs('haaland') : 1800;
+        } else if (isMbappeGoal) {
+          cumulativeDelay += (typeof audio !== "undefined" && audio.getStarGoalDurationMs) ? audio.getStarGoalDurationMs('mbappe') : 1600;
         }
       });
 
@@ -2387,8 +2414,9 @@
       clashAnimationTimeouts = [];
       animationTimeouts.forEach(clearTimeout);
       animationTimeouts = [];
-      if (typeof audio !== "undefined" && audio.stopSiuuu) {
-        audio.stopSiuuu();
+      if (typeof audio !== "undefined") {
+        if (audio.stopStarAudio) audio.stopStarAudio();
+        else if (audio.stopSiuuu) audio.stopSiuuu();
       }
       const overlay = document.getElementById("clash-card-overlay");
       if (overlay) overlay.classList.add("hidden");
@@ -2401,6 +2429,10 @@
       animationTimeouts = [];
       clashAnimationTimeouts.forEach(clearTimeout);
       clashAnimationTimeouts = [];
+      if (typeof audio !== "undefined") {
+        if (audio.stopStarAudio) audio.stopStarAudio();
+        else if (audio.stopSiuuu) audio.stopSiuuu();
+      }
 
       // Run simulation step FIRST to ensure ownership state is 100% synchronized for currentStepIndex (forwards & backwards)
       const logs = runSimulationToStep(currentStepIndex);
@@ -3365,9 +3397,18 @@
               pName.includes("cr7") ||
               (pName.includes("ronaldo") && isPortugal)
             );
+            const isBellinghamGoal = pName.includes("bellingham");
+            const isHaalandGoal = pName.includes("haaland");
+            const isMbappeGoal = pName.includes("mbappé") || pName.includes("mbappe");
 
             if (isRonaldoGoal) {
               matchDelay += defaultSiuuuDuration;
+            } else if (isBellinghamGoal) {
+              matchDelay += (typeof audio !== "undefined" && audio.getStarGoalDurationMs) ? audio.getStarGoalDurationMs('bellingham') : 1800;
+            } else if (isHaalandGoal) {
+              matchDelay += (typeof audio !== "undefined" && audio.getStarGoalDurationMs) ? audio.getStarGoalDurationMs('haaland') : 1800;
+            } else if (isMbappeGoal) {
+              matchDelay += (typeof audio !== "undefined" && audio.getStarGoalDurationMs) ? audio.getStarGoalDurationMs('mbappe') : 1600;
             }
           });
           matchDelay += goalInterval + postPause;
