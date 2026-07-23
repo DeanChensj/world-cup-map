@@ -148,6 +148,10 @@
         <div id="current-date-badge" class="bg-console-bg border border-console-border px-1.5 py-0.5 sm:px-2.5 sm:py-1 font-mono text-[9px] sm:text-xs font-bold text-console-accent tracking-normal sm:tracking-wider rounded shrink-0">
           2026-06-11
         </div>
+        <button id="btn-show-standings" onclick="openGroupStandingsModal()" title="View 32-Team Group Stage Standings" class="bg-emerald-500/20 border border-emerald-500/60 text-emerald-300 hover:bg-emerald-500/30 px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded font-mono text-[9px] sm:text-xs font-bold flex items-center space-x-1 transition cursor-pointer shrink-0 shadow-sm">
+          <i class="ph-bold ph-trophy text-[11px] sm:text-xs text-emerald-400"></i>
+          <span id="standings-btn-text" class="inline">STANDINGS</span>
+        </button>
         <button id="btn-share-universe" onclick="shareUniverse()" title="Share Parallel Universe & Tournament Bracket" class="bg-amber-500/20 border border-amber-500/60 text-amber-300 hover:bg-amber-500/30 px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded font-mono text-[9px] sm:text-xs font-bold flex items-center space-x-1 transition cursor-pointer shrink-0 shadow-sm">
           <i class="ph-bold ph-tree-structure text-[11px] sm:text-xs text-amber-400"></i>
           <span id="share-btn-text" class="inline">SHARE</span>
@@ -181,10 +185,6 @@
             <span id="leaderboard-title">Territorial Holdings</span>
           </h2>
           <div class="flex items-center space-x-1.5">
-            <button id="btn-sidebar-share" onclick="shareUniverse()" title="View Tournament Bracket & Share" class="bg-amber-500/20 border border-amber-500/60 hover:bg-amber-500/30 text-amber-300 px-2 py-0.5 rounded text-[10px] font-mono font-bold flex items-center space-x-1 transition cursor-pointer shrink-0">
-              <i class="ph-bold ph-tree-structure text-[11px] text-amber-400"></i>
-              <span id="sidebar-share-btn-text">BRACKET & SHARE</span>
-            </button>
             <span id="active-factions" class="text-[10px] font-mono text-console-accent bg-console-accent/10 px-1.5 py-0.5 rounded">48 Factions</span>
           </div>
         </div>
@@ -233,7 +233,7 @@
 
       <!-- Cyberpunk Black Gold Clash Card Overlay -->
       <!-- Cyberpunk Black Gold Clash Card Overlay -->
-      <div id="clash-card-overlay" class="absolute top-1 sm:top-6 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-[#0d0f12]/95 via-[#161a22]/95 to-[#0d0f12]/95 border border-amber-500/60 shadow-[0_0_20px_rgba(245,158,11,0.2)] rounded-lg p-1.5 sm:p-3.5 z-40 hidden transition-all duration-300 w-[90%] sm:w-auto max-w-[275px] sm:max-w-sm backdrop-blur-md">
+      <div id="clash-card-overlay" class="absolute top-1 sm:top-6 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-[#0d0f12]/95 via-[#161a22]/95 to-[#0d0f12]/95 border border-amber-500/60 shadow-[0_0_20px_rgba(245,158,11,0.2)] rounded-lg p-1.5 sm:p-3.5 z-40 hidden transition-all duration-300 w-[92%] sm:w-auto max-w-[340px] sm:max-w-sm backdrop-blur-md">
         <!-- Card Top Bar -->
         <div class="flex items-center justify-between border-b border-amber-500/20 pb-0.5 mb-1 sm:pb-2 sm:mb-2.5">
           <div class="flex items-center space-x-1">
@@ -1232,14 +1232,39 @@
           tournamentGroups.push(group);
         }
       });
-      tournamentGroups.sort((a, b) => a[0].localeCompare(b[0]));
+
+      // Sort tournamentGroups by authentic World Cup group letter or match appearance order
+      tournamentGroups.sort((groupA, groupB) => {
+        const matchA = groupMatches.find(m => groupA.includes(getEffectiveTeamCode(m.home)));
+        const matchB = groupMatches.find(m => groupB.includes(getEffectiveTeamCode(m.home)));
+
+        const getGroupIndexFromStage = (match) => {
+          if (!match || !match.stage) return 999;
+          const matchLetter = match.stage.match(/Group\s+([A-L])\b/i);
+          if (matchLetter && matchLetter[1]) {
+            return matchLetter[1].toUpperCase().charCodeAt(0) - 65;
+          }
+          return 999;
+        };
+
+        const explicitA = getGroupIndexFromStage(matchA);
+        const explicitB = getGroupIndexFromStage(matchB);
+
+        if (explicitA !== 999 || explicitB !== 999) {
+          return explicitA - explicitB;
+        }
+
+        const idxA = matchA ? (matchA.originalIndex !== undefined ? matchA.originalIndex : matches.indexOf(matchA)) : 999;
+        const idxB = matchB ? (matchB.originalIndex !== undefined ? matchB.originalIndex : matches.indexOf(matchB)) : 999;
+        return idxA - idxB;
+      });
 
       function rankGroupTeams(overrideMap) {
         const rankings = {};
         const groupStatsMap = {};
         tournamentGroups.forEach((group, gIdx) => {
           const stats = {};
-          group.forEach(t => { stats[t] = { pts: 0, gd: 0, gf: 0, code: t }; });
+          group.forEach(t => { stats[t] = { pts: 0, gd: 0, gf: 0, w: 0, d: 0, l: 0, code: t }; });
 
           const gMatches = groupMatches.filter(m => group.includes(getEffectiveTeamCode(m.home)));
           gMatches.forEach(m => {
@@ -1271,20 +1296,29 @@
 
             if (winnerEff === homeEff) {
               stats[homeEff].pts += 3;
+              stats[homeEff].w += 1;
               stats[homeEff].gd += (sh - sa);
               stats[homeEff].gf += sh;
+
+              stats[awayEff].l += 1;
               stats[awayEff].gd += (sa - sh);
               stats[awayEff].gf += sa;
             } else if (winnerEff === awayEff) {
               stats[awayEff].pts += 3;
+              stats[awayEff].w += 1;
               stats[awayEff].gd += (sa - sh);
               stats[awayEff].gf += sa;
+
+              stats[homeEff].l += 1;
               stats[homeEff].gd += (sh - sa);
               stats[homeEff].gf += sh;
             } else {
               stats[homeEff].pts += 1;
-              stats[awayEff].pts += 1;
+              stats[homeEff].d += 1;
               stats[homeEff].gf += sh;
+
+              stats[awayEff].pts += 1;
+              stats[awayEff].d += 1;
               stats[awayEff].gf += sa;
             }
           });
@@ -1300,6 +1334,8 @@
         });
         return { rankings, groupStatsMap };
       }
+
+      window._lastGroupRankResult = rankGroupTeams(userOverrides);
 
       const origRes = rankGroupTeams({});
       const newRes = rankGroupTeams(userOverrides);
@@ -1346,6 +1382,127 @@
           advancingTeams.add(t.code);
         });
       }
+    }
+
+    function getGroupStandingsData(overrideMap = userOverrides, maxStepIndex = (typeof currentStepIndex !== "undefined" ? currentStepIndex : 999)) {
+      if (typeof calculateDynamicGroupStandings === "function") {
+        calculateDynamicGroupStandings();
+      }
+
+      // Collect played group matches up to maxStepIndex
+      const playedGroupMatchIndices = new Set();
+      if (typeof timelineSteps !== "undefined" && timelineSteps.length > 0 && maxStepIndex > 0) {
+        for (let s = 1; s <= maxStepIndex && s < timelineSteps.length; s++) {
+          const step = timelineSteps[s];
+          if (step && step.type === "group_day" && step.matches) {
+            step.matches.forEach(m => {
+              const idx = (m.originalIndex !== undefined) ? m.originalIndex : matches.indexOf(m);
+              playedGroupMatchIndices.add(idx);
+            });
+          } else if (step && step.type === "knockout_match") {
+            // Once knockout matches start, all group matches are completed
+            matches.forEach((m, idx) => {
+              if (!m.stage || m.stage === "Group Stage" || m.stage.includes("Group")) {
+                playedGroupMatchIndices.add(idx);
+              }
+            });
+          }
+        }
+      }
+
+      const groupMatches = matches.filter(m => (!m.stage || m.stage === "Group Stage" || m.stage.includes("Group")));
+      const result = {};
+
+      if (!tournamentGroups || tournamentGroups.length === 0) return result;
+
+      tournamentGroups.forEach((group, gIdx) => {
+        const matchInGroup = groupMatches.find(m => group.includes(getEffectiveTeamCode(m.home)));
+        let groupName = `Group ${String.fromCharCode(65 + gIdx)}`;
+        if (matchInGroup && matchInGroup.stage) {
+          const mLetter = matchInGroup.stage.match(/Group\s+([A-L])\b/i);
+          if (mLetter && mLetter[1]) {
+            groupName = `Group ${mLetter[1].toUpperCase()}`;
+          }
+        }
+        const stats = {};
+        group.forEach(t => { stats[t] = { pts: 0, gd: 0, gf: 0, w: 0, d: 0, l: 0, code: t }; });
+
+        const gMatches = groupMatches.filter(m => group.includes(getEffectiveTeamCode(m.home)));
+        gMatches.forEach(m => {
+          const idx = (m.originalIndex !== undefined) ? m.originalIndex : matches.indexOf(m);
+          
+          // Skip match if it has not been played yet at maxStepIndex
+          if (maxStepIndex !== undefined && maxStepIndex < timelineSteps.length - 1 && !playedGroupMatchIndices.has(idx)) {
+            return;
+          }
+
+          const homeEff = getEffectiveTeamCode(m.home);
+          const awayEff = getEffectiveTeamCode(m.away);
+          const isOverridden = (overrideMap && overrideMap[idx] !== undefined);
+          let winnerEff = isOverridden ? getEffectiveTeamCode(overrideMap[idx]) : (m.winner ? getEffectiveTeamCode(m.winner) : null);
+          const scoreStr = m.score || "0-0";
+          const parts = scoreStr.split("-");
+          let sh = (parts.length === 2 && !isNaN(parts[0])) ? parseInt(parts[0], 10) : 0;
+          let sa = (parts.length === 2 && !isNaN(parts[1])) ? parseInt(parts[1], 10) : 0;
+
+          if (!isOverridden && !winnerEff && sh !== sa) {
+            winnerEff = (sh > sa) ? homeEff : awayEff;
+          }
+
+          if (isOverridden) {
+            if (winnerEff === homeEff && sa > sh) { const temp = sh; sh = sa; sa = temp; }
+            else if (winnerEff === awayEff && sh > sa) { const temp = sh; sh = sa; sa = temp; }
+            else if (!winnerEff && sh !== sa) {
+              const avg = Math.floor((sh + sa) / 2);
+              sh = avg; sa = avg;
+            } else if (winnerEff && sh === sa) {
+              if (winnerEff === homeEff) sh += 1;
+              else sa += 1;
+            }
+          }
+
+          if (stats[homeEff] && stats[awayEff]) {
+            if (winnerEff === homeEff) {
+              stats[homeEff].pts += 3;
+              stats[homeEff].w += 1;
+              stats[homeEff].gd += (sh - sa);
+              stats[homeEff].gf += sh;
+
+              stats[awayEff].l += 1;
+              stats[awayEff].gd += (sa - sh);
+              stats[awayEff].gf += sa;
+            } else if (winnerEff === awayEff) {
+              stats[awayEff].pts += 3;
+              stats[awayEff].w += 1;
+              stats[awayEff].gd += (sa - sh);
+              stats[awayEff].gf += sa;
+
+              stats[homeEff].l += 1;
+              stats[homeEff].gd += (sh - sa);
+              stats[homeEff].gf += sh;
+            } else {
+              stats[homeEff].pts += 1;
+              stats[homeEff].d += 1;
+              stats[homeEff].gf += sh;
+
+              stats[awayEff].pts += 1;
+              stats[awayEff].d += 1;
+              stats[awayEff].gf += sa;
+            }
+          }
+        });
+
+        const sorted = Object.values(stats).sort((a, b) => {
+          if (b.pts !== a.pts) return b.pts - a.pts;
+          if (b.gd !== a.gd) return b.gd - a.gd;
+          if (b.gf !== a.gf) return b.gf - a.gf;
+          return a.code.localeCompare(b.code);
+        });
+
+        result[groupName] = sorted;
+      });
+
+      return result;
     }
 
     function processSingleMatch(match, isLatestStep, logs) {
@@ -1561,6 +1718,55 @@
         toast.classList.add("-translate-y-4", "opacity-0");
         setTimeout(() => toast.remove(), 300);
       }, 3500);
+    }
+
+    function triggerStarCardAlert(starKey, playerName, minute, slogan, side) {
+      let toastContainer = document.getElementById("toast-container");
+      if (!toastContainer) {
+        toastContainer = document.createElement("div");
+        toastContainer.id = "toast-container";
+        toastContainer.className = "fixed bottom-20 sm:bottom-28 left-1/2 transform -translate-x-1/2 z-[9999] flex flex-col items-center space-y-2 pointer-events-none w-[92%] max-w-sm sm:max-w-md px-2";
+        document.body.appendChild(toastContainer);
+      }
+
+      const starBadges = {
+        ronaldo: { title: "CRISTIANO RONALDO", tag: "PORTUGAL", icon: "", slogan: slogan || "SIUUUUU!", img: "assets/images/cards/ronaldo.jpg" },
+        messi: { title: "LIONEL MESSI", tag: "ARGENTINA", icon: "", slogan: slogan || "ANKARA MESSI!", img: "assets/images/cards/messi.jpg" },
+        bellingham: { title: "JUDE BELLINGHAM", tag: "ENGLAND", icon: "", slogan: slogan || "HEY JUDE!", img: "assets/images/cards/bellingham.jpg" },
+        haaland: { title: "ERLING HAALAND", tag: "NORWAY", icon: "", slogan: slogan || "HAALAND!", img: "assets/images/cards/haaland.jpg" },
+        mbappe: { title: "KYLIAN MBAPPÉ", tag: "FRANCE", icon: "", slogan: slogan || "我是姆巴佩，补水啦！", img: "assets/images/cards/mbappe.jpg" }
+      };
+
+      const badge = starBadges[starKey] || { title: playerName, tag: "WORLD CUP STAR", icon: "", slogan: slogan, img: "" };
+
+      const cardToast = document.createElement("div");
+      cardToast.className = "pointer-events-auto bg-gradient-to-r from-[#2a1b06]/98 via-[#0d0f12]/98 to-[#2a1b06]/98 border-2 border-amber-400 rounded-3xl p-3.5 sm:p-5 shadow-[0_0_60px_rgba(245,158,11,0.95)] text-amber-300 flex items-center space-x-4 sm:space-x-6 transition-all duration-300 transform translate-y-4 opacity-0 uppercase tracking-wider backdrop-blur-2xl w-[94%] max-w-md sm:max-w-xl z-[9999]";
+
+      cardToast.innerHTML = `
+        ${badge.img ? `<img src="${badge.img}" alt="${badge.title}" class="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl object-cover border-2 border-amber-400 shadow-2xl shrink-0">` : `<div class="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-amber-400 shrink-0"><i class="ph-bold ph-trophy text-4xl sm:text-5xl"></i></div>`}
+        <div class="flex-1 min-w-0 font-mono text-left space-y-1 sm:space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs sm:text-lg font-black tracking-widest text-amber-400 break-words">${badge.title}</span>
+            <span class="text-xs sm:text-sm bg-amber-400/30 text-amber-200 px-2 py-0.5 rounded-lg font-black shrink-0 ml-2 border border-amber-400/50">${minute}</span>
+          </div>
+          <div class="text-sm sm:text-xl font-black text-white leading-snug break-words drop-shadow-lg">${badge.slogan}</div>
+          <div class="text-xs sm:text-sm text-amber-400/80 font-bold tracking-wider break-words">${badge.tag}</div>
+        </div>
+      `;
+
+      toastContainer.appendChild(cardToast);
+
+      setTimeout(() => {
+        cardToast.classList.remove("translate-y-4", "opacity-0");
+      }, 10);
+
+      const isMuted = typeof audio !== "undefined" && audio.muted;
+      const displayDuration = isMuted ? 2000 : ((typeof audio !== "undefined" && audio.getStarGoalDurationMs) ? audio.getStarGoalDurationMs(starKey) : 3500);
+
+      setTimeout(() => {
+        cardToast.classList.add("-translate-y-4", "opacity-0");
+        setTimeout(() => cardToast.remove(), 300);
+      }, displayDuration);
     }
 
     // --- D3 Map rendering with Graticules ---
@@ -1858,7 +2064,8 @@
           .attr("fill", "#161a22") // Default unmapped background color
           .on("mouseover", showTooltip)
           .on("mousemove", moveTooltip)
-          .on("mouseout", hideTooltip);
+          .on("mouseout", hideTooltip)
+          .on("click", (event, d) => handleCountryClick(event, d));
 
       g.selectAll(".micro-nation")
         .data(microNations)
@@ -1886,6 +2093,14 @@
               code: d.code
             };
             hideTooltip(event, mockedD);
+          })
+          .on("click", (event, d) => {
+            const mockedD = {
+              id: null,
+              properties: { name: d.name },
+              code: d.code
+            };
+            handleCountryClick(event, mockedD);
           });
 
       // Vector layer for tactical flow arcs
@@ -2057,6 +2272,78 @@
       }
     }
 
+    // --- Country & Leaderboard Click Handlers (Map Mode & Head-to-Head Dialog) ---
+    function handleCountryClick(event, d) {
+      if (event && event.stopPropagation) event.stopPropagation();
+      const alpha3 = d.code || getWCCodeFromMap(d.properties ? d.properties.name : "", d.id);
+      if (!alpha3) return;
+
+      const ownerCode = getCurrentOwner(alpha3) || alpha3;
+
+      // Focus map camera & highlight owner
+      focusMapOnTeams([ownerCode]);
+      highlightOwner(ownerCode);
+
+      // Search if country is in today's active matches or matches list
+      let targetMatch = null;
+      if (activeDayMatches && activeDayMatches.length > 0) {
+        targetMatch = activeDayMatches.find(m => {
+          const hEff = getEffectiveTeamCode(m.home);
+          const aEff = getEffectiveTeamCode(m.away);
+          return hEff === ownerCode || aEff === ownerCode || m.home === ownerCode || m.away === ownerCode;
+        });
+      }
+
+      if (!targetMatch && typeof matches !== "undefined" && matches.length > 0) {
+        targetMatch = matches.find(m => {
+          const hEff = getEffectiveTeamCode(m.home);
+          const aEff = getEffectiveTeamCode(m.away);
+          return hEff === ownerCode || aEff === ownerCode || m.home === ownerCode || m.away === ownerCode;
+        });
+      }
+
+      if (targetMatch) {
+        const mIdx = (targetMatch.originalIndex !== undefined) ? targetMatch.originalIndex : matches.indexOf(targetMatch);
+        const logs = runSimulationToStep(currentStepIndex);
+        const latestLog = (logs.length > 0 && (logs[0].matchIndex === mIdx || logs[0].matchIndex === matches.indexOf(targetMatch))) ? logs[0] : null;
+        showClashCard(targetMatch, latestLog);
+      } else if (originalTeams.includes(alpha3) || originalTeams.includes(ownerCode)) {
+        const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+        const name = getTeamName(ownerCode, teamMetadata[ownerCode]?.name);
+        triggerAlert(isZh ? `已聚焦领土: ${name} (${ownerCode})` : `FACTION FOCUSED: ${name.toUpperCase()} (${ownerCode})`);
+      }
+    }
+
+    function handleLeaderboardClick(code) {
+      if (!code) return;
+      focusMapOnTeams([code]);
+      highlightOwner(code);
+
+      let targetMatch = null;
+      if (activeDayMatches && activeDayMatches.length > 0) {
+        targetMatch = activeDayMatches.find(m => {
+          const hEff = getEffectiveTeamCode(m.home);
+          const aEff = getEffectiveTeamCode(m.away);
+          return hEff === code || aEff === code || m.home === code || m.away === code;
+        });
+      }
+
+      if (!targetMatch && typeof matches !== "undefined" && matches.length > 0) {
+        targetMatch = matches.find(m => {
+          const hEff = getEffectiveTeamCode(m.home);
+          const aEff = getEffectiveTeamCode(m.away);
+          return hEff === code || aEff === code || m.home === code || m.away === code;
+        });
+      }
+
+      if (targetMatch) {
+        const mIdx = (targetMatch.originalIndex !== undefined) ? targetMatch.originalIndex : matches.indexOf(targetMatch);
+        const logs = runSimulationToStep(currentStepIndex);
+        const latestLog = (logs.length > 0 && (logs[0].matchIndex === mIdx || logs[0].matchIndex === matches.indexOf(targetMatch))) ? logs[0] : null;
+        showClashCard(targetMatch, latestLog);
+      }
+    }
+
     // --- Interactive Linkage Highlight / Fade ---
     function highlightOwner(ownerCode) {
       d3.selectAll(".country")
@@ -2200,6 +2487,10 @@
       if (cardB) {
         cardB.className = `flex-1 flex flex-col items-center text-center space-y-0.5 sm:space-y-1 p-1 sm:p-1.5 rounded-lg cursor-pointer transition border ${activeWinner === code2 ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)] animate-pulse' : 'border-transparent hover:border-amber-500/50 hover:bg-amber-500/5'} group`;
       }
+
+      if (activeClashContext && activeClashContext.match && activeClashContext.match.stage === "Final") {
+        setTimeout(() => showWorldCupTrophyCeremony(activeWinner), 600);
+      }
     }
 
     function playClashCardAnimation(match, activeWinner, code1, code2, name1, name2) {
@@ -2237,12 +2528,13 @@
       scorersContainer.classList.remove("hidden");
       scorersA.innerHTML = ""; scorersB.innerHTML = "";
       let currentA = 0; let currentB = 0;
-
       scoreEl.innerHTML = `0 - 0`;
 
       const goalInterval = Math.max(250, Math.round(500 * ((typeof playbackSpeedMs !== "undefined" ? playbackSpeedMs : 1500) / 1500)));
-
+      const celebratedStarPlayers = new Set();
+      const animatedStarPlayers = new Set();
       let cumulativeDelay = 0;
+
       goalsList.forEach((goal, idx) => {
         const goalTeamCode = goal.team || (goal.side === '1' ? code1 : code2);
         const isPortugal = (goalTeamCode === 'PRT' || goalTeamCode === 'POR');
@@ -2257,8 +2549,20 @@
         );
         const isMessiGoal = pName.includes("messi");
         const isBellinghamGoal = pName.includes("bellingham");
-        const isHaalandGoal = pName.includes("haaland");
+        const isHaalandGoal = pName.includes("haaland") || pName.includes("håland");
         const isMbappeGoal = pName.includes("mbappé") || pName.includes("mbappe");
+
+        let starKey = null;
+        if (isRonaldoGoal) starKey = 'ronaldo';
+        else if (isMessiGoal) starKey = 'messi';
+        else if (isBellinghamGoal) starKey = 'bellingham';
+        else if (isHaalandGoal) starKey = 'haaland';
+        else if (isMbappeGoal) starKey = 'mbappe';
+
+        const isFirstForStar = starKey && !celebratedStarPlayers.has(starKey);
+        if (isFirstForStar) {
+          celebratedStarPlayers.add(starKey);
+        }
 
         cumulativeDelay += goalInterval;
         const currentGoalDelay = cumulativeDelay;
@@ -2277,7 +2581,6 @@
           }
 
           scoreEl.innerHTML = `${currentA} - ${currentB}`;
-
           const teamGoalCount = (goal.side === '1') ? currentA : currentB;
 
           const isStoppageTime = goal.minute.includes("90+") || goal.minute.includes("120+") || goal.minute.includes("105+");
@@ -2285,36 +2588,27 @@
           const isGoAhead = (goal.side === '1' && currentA === currentB + 1) || (goal.side === '2' && currentB === currentA + 1);
           const isTrueLateDrama = isStoppageTime && (isEqualizer || isGoAhead);
 
-          if (isRonaldoGoal) {
-            if (typeof audio !== "undefined" && audio.playSiuuuSFX) {
-              audio.playSiuuuSFX(goal.side);
-            }
+          const isFirstAnimation = starKey && !animatedStarPlayers.has(starKey);
+          if (isFirstAnimation) {
+            animatedStarPlayers.add(starKey);
             const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
-            triggerAlert(isZh ? "🔥 SIUUUUU! C罗破门得分！ 🇵🇹" : "🔥 SIUUUUU! CRISTIANO RONALDO SCORES! 🇵🇹");
-          } else if (isMessiGoal) {
-            if (typeof audio !== "undefined" && audio.playMessiSFX) {
-              audio.playMessiSFX(goal.side);
+            if (starKey === 'ronaldo') {
+              if (typeof audio !== "undefined" && audio.playSiuuuSFX) audio.playSiuuuSFX(goal.side);
+              triggerStarCardAlert('ronaldo', goal.player, goal.minute, "SIUUUUU!", goal.side);
+            } else if (starKey === 'messi') {
+              if (typeof audio !== "undefined" && audio.playMessiSFX) audio.playMessiSFX(goal.side);
+              triggerStarCardAlert('messi', goal.player, goal.minute, "ANKARA MESSI!", goal.side);
+            } else if (starKey === 'bellingham') {
+              if (typeof audio !== "undefined" && audio.playBellinghamSFX) audio.playBellinghamSFX(goal.side);
+              triggerStarCardAlert('bellingham', goal.player, goal.minute, "HEY JUDE!", goal.side);
+            } else if (starKey === 'haaland') {
+              if (typeof audio !== "undefined" && audio.playHaalandSFX) audio.playHaalandSFX(goal.side);
+              triggerStarCardAlert('haaland', goal.player, goal.minute, "HAALAND!", goal.side);
+            } else if (starKey === 'mbappe') {
+              if (typeof audio !== "undefined" && audio.playMbappeSFX) audio.playMbappeSFX(goal.side);
+              const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+              triggerStarCardAlert('mbappe', goal.player, goal.minute, isZh ? "我是姆巴佩，补水啦！" : "HYDRATION TIME!", goal.side);
             }
-            const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
-            triggerAlert(isZh ? "🇦🇷 ⚡ ANKARA MESSI! 梅西连过数人霸气破门！ 👑" : "🇦🇷 ⚡ ANKARA MESSI! LIONEL MESSI SCORES! 👑");
-          } else if (isBellinghamGoal) {
-            if (typeof audio !== "undefined" && audio.playBellinghamSFX) {
-              audio.playBellinghamSFX(goal.side);
-            }
-            const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
-            triggerAlert(isZh ? "👑 HEY JUDE! 贝林厄姆展开双臂霸气破门！ 🏴󠁧󠁢󠁥󠁮󠁧󠁿" : "👑 HEY JUDE! BELLINGHAM SCORES WITH OPEN ARMS! 🏴󠁧󠁢󠁥󠁮󠁧󠁿");
-          } else if (isHaalandGoal) {
-            if (typeof audio !== "undefined" && audio.playHaalandSFX) {
-              audio.playHaalandSFX(goal.side);
-            }
-            const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
-            triggerAlert(isZh ? "🤖 HAALAND HAALAND! 哈兰德魔人打坐破门！ 🇳🇴" : "🤖 HAALAND HAALAND! NORDIC KID HAALAND SCORES! 🇳🇴");
-          } else if (isMbappeGoal) {
-            if (typeof audio !== "undefined" && audio.playMbappeSFX) {
-              audio.playMbappeSFX(goal.side);
-            }
-            const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
-            triggerAlert(isZh ? "💧 “我是姆巴佩，补水啦！” 🇫🇷" : "💧 MBAPPÉ SCORES! HYDRATION TIME! 🇫🇷");
           } else {
             let soundType = 'regular';
             if (goal.minute.includes("(p)") || goal.minute.includes("(pen.)")) soundType = 'penalty';
@@ -2327,12 +2621,9 @@
 
             if (isTrueLateDrama) {
               const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
-              let bannerMsg = "";
-              if (isEqualizer) {
-                bannerMsg = isZh ? "⚡ 90+分钟读秒绝平！绝处逢生！ ⚽" : "⚡ 90+ DRAMATIC EQUALIZER! LATE EQUALIZER! ⚽";
-              } else {
-                bannerMsg = isZh ? "🔥 90+分钟读秒绝杀！全场点燃！ ⚽" : "🔥 90+ DRAMATIC LATE WINNER! STADIUM EXPLODES! ⚽";
-              }
+              let bannerMsg = isEqualizer
+                ? (isZh ? "⚡ 90+分钟读秒绝平！绝处逢生！ ⚽" : "⚡ 90+ DRAMATIC EQUALIZER! LATE EQUALIZER! ⚽")
+                : (isZh ? "🔥 90+分钟读秒绝杀！全场点燃！ ⚽" : "🔥 90+ DRAMATIC LATE WINNER! STADIUM EXPLODES! ⚽");
               triggerAlert(bannerMsg);
               triggerLateGoalVisualEffect(goal.side === '1' ? code1 : code2);
             }
@@ -2341,28 +2632,14 @@
           setTimeout(() => item.classList.remove("animate-pulse", "font-bold"), 400);
         }, currentGoalDelay));
 
-        if (isRonaldoGoal) {
+        if (isFirstForStar) {
           const isMuted = typeof audio !== "undefined" && audio.muted;
-          const siuuuDuration = isMuted
-            ? 1200
-            : ((typeof audio !== "undefined" && audio.getSiuuuDurationMs)
-                ? audio.getSiuuuDurationMs()
-                : 6660);
-          cumulativeDelay += siuuuDuration;
-        } else if (isMessiGoal) {
-          const isMuted = typeof audio !== "undefined" && audio.muted;
-          const messiDuration = isMuted
+          const starDuration = isMuted
             ? 1200
             : ((typeof audio !== "undefined" && audio.getStarGoalDurationMs)
-                ? audio.getStarGoalDurationMs('messi')
-                : 3800);
-          cumulativeDelay += messiDuration;
-        } else if (isBellinghamGoal) {
-          cumulativeDelay += (typeof audio !== "undefined" && audio.getStarGoalDurationMs) ? audio.getStarGoalDurationMs('bellingham') : 1800;
-        } else if (isHaalandGoal) {
-          cumulativeDelay += (typeof audio !== "undefined" && audio.getStarGoalDurationMs) ? audio.getStarGoalDurationMs('haaland') : 1800;
-        } else if (isMbappeGoal) {
-          cumulativeDelay += (typeof audio !== "undefined" && audio.getStarGoalDurationMs) ? audio.getStarGoalDurationMs('mbappe') : 1600;
+                ? audio.getStarGoalDurationMs(starKey)
+                : 3500);
+          cumulativeDelay += starDuration;
         }
       });
 
@@ -2514,14 +2791,9 @@
         
         if (activeCampaignTeam) {
           isCampaignPlayingToday = (ownerHome === activeCampaignTeam || ownerAway === activeCampaignTeam);
-          if (isCampaignPlayingToday) {
-            showClashCard(step.match, latestLog);
-          } else {
-            closeClashCard();
-          }
-        } else {
-          showClashCard(step.match, latestLog);
         }
+
+        showClashCard(step.match, latestLog);
 
         document.getElementById("current-date-badge").innerText = `${formatDateString(currentDate)} • ${step.match.stage}`;
       } else {
@@ -2888,6 +3160,7 @@
 
           return `
             <div 
+              onclick="handleLeaderboardClick('${entry.code}')"
               onmouseenter="highlightOwner('${entry.code}')" 
               onmouseleave="resetHighlight()"
               title="${entry.name} • ${capTooltip} • ${entry.count} ${isZh ? '版图' : 'Sectors'}"
@@ -3083,6 +3356,12 @@
             `;
           }).join("");
         }
+      }
+
+      // Auto-refresh Group Standings Modal in real-time if open
+      const groupModal = document.getElementById("group-standings-modal");
+      if (groupModal && !groupModal.classList.contains("hidden")) {
+        renderGroupStandingsModal();
       }
     }
 
@@ -3756,5 +4035,236 @@
       </div>
     </div>
   </div>
+
+  <!-- 32-Team Group Stage Standings Modal (100% Mobile Responsive) -->
+  <div id="group-standings-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-5 hidden">
+    <div class="bg-gradient-to-b from-[#161a22] to-[#0d0f12] border border-emerald-500/60 rounded-xl p-3 sm:p-5 w-full max-w-4xl shadow-[0_0_50px_rgba(16,185,129,0.25)] flex flex-col max-h-[90vh] relative font-mono text-xs">
+      <div class="flex items-center justify-between border-b border-emerald-500/20 pb-2 mb-3">
+        <div class="flex items-center space-x-2">
+          <i class="ph-bold ph-trophy text-emerald-400 text-lg"></i>
+          <div>
+            <h3 id="group-modal-title" class="font-bold text-emerald-300 text-sm tracking-wider uppercase">32-TEAM GROUP STAGE STANDINGS</h3>
+            <p id="group-modal-sub" class="text-[9px] text-console-dimText">Group A - Group L Rank & Points Table</p>
+          </div>
+        </div>
+        <button onclick="closeGroupStandingsModal()" class="text-console-dimText hover:text-white text-lg px-2 py-1 transition cursor-pointer">✕</button>
+      </div>
+
+      <div id="group-tabs-bar" class="flex items-center space-x-1.5 overflow-x-auto pb-2 mb-3 border-b border-console-border shrink-0 scrollbar-thin">
+        <!-- Injected via JS -->
+      </div>
+
+      <div id="group-standings-content" class="overflow-y-auto flex-1 pr-1 space-y-4">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Sparkling World Cup Trophy Ceremony Modal -->
+  <div id="trophy-ceremony-modal" class="fixed inset-0 bg-black/90 backdrop-blur-lg z-50 flex items-center justify-center p-3 sm:p-6 hidden">
+    <div class="relative w-full max-w-xl bg-gradient-to-b from-[#1a1405]/95 via-[#0d0f12]/98 to-black border-2 border-amber-400/80 rounded-2xl p-5 sm:p-8 text-center shadow-[0_0_80px_rgba(245,158,11,0.4)] flex flex-col items-center overflow-hidden">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.18)_0%,transparent_70%)] pointer-events-none animate-pulse"></div>
+
+      <button onclick="closeTrophyCeremonyModal()" class="absolute top-3 right-4 z-20 text-amber-400/80 hover:text-amber-300 text-xl cursor-pointer">✕</button>
+
+      <div class="relative my-2">
+        <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-amber-500 via-yellow-300 to-amber-600 p-1 shadow-[0_0_35px_rgba(245,158,11,0.7)] animate-bounce flex items-center justify-center">
+          <i class="ph-bold ph-trophy text-black text-4xl sm:text-5xl drop-shadow-md"></i>
+        </div>
+      </div>
+
+      <div id="trophy-ceremony-subtitle" class="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-amber-400 font-bold mt-2">
+        🏆 WORLD CUP CHAMPION CONQUEROR 🏆
+      </div>
+
+      <h2 id="trophy-ceremony-winner-name" class="text-2xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-amber-300 to-yellow-500 my-2 tracking-wide drop-shadow-md">
+        ARGENTINA
+      </h2>
+
+      <div id="trophy-ceremony-details" class="font-mono text-xs sm:text-sm text-amber-200/90 space-y-1 mb-5">
+        <p>Conquered 47 Factions across 104 Battle Rounds</p>
+      </div>
+
+      <div class="flex items-center justify-center z-10">
+        <button onclick="closeTrophyCeremonyModal()" class="px-6 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-mono font-bold text-xs rounded-lg shadow-lg transition transform hover:scale-105 cursor-pointer">
+          CLOSE
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleWinnerOverrideForActiveMatch() {
+      if (!activeClashContext || !activeClashContext.match) return;
+      const match = activeClashContext.match;
+      const matchIdx = (match.originalIndex !== undefined) ? match.originalIndex : matches.indexOf(match);
+      const currentW = (userOverrides[matchIdx] !== undefined) ? userOverrides[matchIdx] : match.winner;
+      const code1 = activeClashContext.code1;
+      const code2 = activeClashContext.code2;
+
+      const newWinner = (currentW === code1 || currentW === match.home) ? code2 : code1;
+      
+      if (newWinner === match.winner) {
+        delete userOverrides[matchIdx];
+      } else {
+        userOverrides[matchIdx] = newWinner;
+      }
+
+      updateUI();
+      showClashCard(match);
+      if (typeof audio !== "undefined" && audio.playClick) audio.playClick();
+    }
+
+    function createStarPlayerCardHTML(starKey, playerName, minute, text) {
+      const starBadges = {
+        ronaldo: { title: "CRISTIANO RONALDO", tag: "PORTUGAL", icon: "", slogan: "SIUUUUU!", img: "assets/images/cards/ronaldo.jpg" },
+        messi: { title: "LIONEL MESSI", tag: "ARGENTINA", icon: "", slogan: "ANKARA MESSI!", img: "assets/images/cards/messi.jpg" },
+        bellingham: { title: "JUDE BELLINGHAM", tag: "ENGLAND", icon: "", slogan: "HEY JUDE!", img: "assets/images/cards/bellingham.jpg" },
+        haaland: { title: "ERLING HAALAND", tag: "NORWAY", icon: "", slogan: "HAALAND!", img: "assets/images/cards/haaland.jpg" },
+        mbappe: { title: "KYLIAN MBAPPÉ", tag: "FRANCE", icon: "", slogan: "我是姆巴佩，补水啦！", img: "assets/images/cards/mbappe.jpg" }
+      };
+
+      const badge = starBadges[starKey] || { title: playerName, tag: "WORLD CUP STAR", icon: "", slogan: text, img: "" };
+
+      return `
+        <div class="my-3 p-3 sm:p-4 rounded-2xl border-2 border-amber-400 bg-gradient-to-r from-amber-950/95 via-black/95 to-amber-950/95 shadow-[0_0_35px_rgba(245,158,11,0.7)] text-amber-300 flex items-center space-x-4">
+          ${badge.img ? `<img src="${badge.img}" alt="${badge.title}" class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl object-cover border-2 border-amber-400 shadow-xl shrink-0">` : `<div class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-amber-400 shrink-0"><i class="ph-bold ph-trophy text-3xl sm:text-4xl"></i></div>`}
+          <div class="flex-1 text-left min-w-0 font-mono space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-xs sm:text-base font-black tracking-widest text-amber-400 break-words">${badge.title}</span>
+              <span class="text-xs bg-amber-400/30 text-amber-200 px-2 py-0.5 rounded-md font-extrabold shrink-0 ml-2 border border-amber-400/40">${minute}</span>
+            </div>
+            <div class="text-sm sm:text-lg font-black text-white leading-snug break-words drop-shadow-md">${badge.slogan}</div>
+            <div class="text-xs text-amber-400/80 font-bold tracking-wider break-words">${badge.tag}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    let activeGroupFilter = "ALL";
+
+    function openGroupStandingsModal() {
+      const modal = document.getElementById("group-standings-modal");
+      if (modal) modal.classList.remove("hidden");
+      renderGroupStandingsModal();
+    }
+
+    function closeGroupStandingsModal() {
+      const modal = document.getElementById("group-standings-modal");
+      if (modal) modal.classList.add("hidden");
+    }
+
+    function renderGroupStandingsModal() {
+      const tabsBar = document.getElementById("group-tabs-bar");
+      const content = document.getElementById("group-standings-content");
+      if (!tabsBar || !content) return;
+
+      const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+      const titleEl = document.getElementById("group-modal-title");
+      const subEl = document.getElementById("group-modal-sub");
+      if (titleEl) titleEl.innerText = isZh ? "小组赛动态积分榜" : "GROUP STAGE STANDINGS";
+
+      const currentStep = (typeof timelineSteps !== "undefined" && timelineSteps[currentStepIndex]) ? timelineSteps[currentStepIndex] : null;
+      if (subEl) {
+        if (currentStepIndex === 0) {
+          subEl.innerText = isZh ? "开幕战前夕 · 初始 0 积分与零战绩起步" : "Kickoff • Initial 0-0-0 Standings";
+        } else if (currentStep && currentStep.type === "group_day") {
+          const dateStr = formatDateString(currentStep.date);
+          subEl.innerText = isZh ? `截至 ${dateStr} 比赛日实时积分战绩` : `Standings as of ${dateStr}`;
+        } else {
+          subEl.innerText = isZh ? "小组赛全赛程最终战绩榜" : "Final Group Stage Standings";
+        }
+      }
+
+      const standings = getGroupStandingsData(userOverrides, currentStepIndex);
+      const groupKeys = Object.keys(standings).sort();
+
+      tabsBar.innerHTML = `
+        <button onclick="setGroupFilter('ALL')" class="px-2.5 py-1 rounded text-[10px] font-bold font-mono transition shrink-0 cursor-pointer ${activeGroupFilter === 'ALL' ? 'bg-emerald-500/20 border border-emerald-400 text-emerald-300' : 'bg-console-bg border border-console-border text-console-dimText hover:text-white'}">
+          ${isZh ? '全部小组' : 'ALL GROUPS'}
+        </button>
+        ${groupKeys.map(grp => `
+          <button onclick="setGroupFilter('${grp}')" class="px-2 py-1 rounded text-[10px] font-bold font-mono transition shrink-0 cursor-pointer ${activeGroupFilter === grp ? 'bg-emerald-500/20 border border-emerald-400 text-emerald-300' : 'bg-console-bg border border-console-border text-console-dimText hover:text-white'}">
+            ${grp}
+          </button>
+        `).join("")}
+      `;
+
+      const displayGroups = activeGroupFilter === "ALL" ? groupKeys : groupKeys.filter(g => g === activeGroupFilter);
+
+      content.innerHTML = displayGroups.map(grp => {
+        const teams = standings[grp] || [];
+        return `
+          <div class="p-3 bg-console-bg/60 border border-console-border rounded-xl">
+            <div class="flex items-center justify-between border-b border-console-border pb-1.5 mb-2 font-mono font-bold text-emerald-400 text-xs">
+              <span>${grp}</span>
+              <span class="text-[9px] text-console-dimText font-normal">${isZh ? '前两名晋级32强淘汰赛' : 'Top 2 Qualify'}</span>
+            </div>
+            <div class="space-y-1.5">
+              ${teams.map((t, rankIdx) => {
+                const isQual = rankIdx < 2;
+                const name = (typeof getTeamName === "function") ? getTeamName(t.code) : t.code;
+                return `
+                  <div class="flex items-center justify-between p-1.5 rounded text-xs font-mono border ${isQual ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200' : 'border-console-border/60 bg-console-bg/40 text-console-dimText'}">
+                    <div class="flex items-center space-x-2 min-w-0 flex-1">
+                      <span class="w-4 text-center font-bold text-[10px] ${isQual ? 'text-emerald-400' : 'text-console-dimText'}">${rankIdx + 1}</span>
+                      ${getFlagImg(t.code)}
+                      <span class="font-bold truncate text-white">${name}</span>
+                      ${isQual ? '<span class="text-[8px] bg-emerald-500/30 text-emerald-300 px-1 rounded font-bold shrink-0">Q</span>' : ''}
+                    </div>
+                    <div class="flex items-center space-x-2 text-[10px] font-mono shrink-0 ml-2">
+                      <span class="w-8 text-center text-console-dimText">${t.w}-${t.d}-${t.l}</span>
+                      <span class="w-8 text-center text-console-dimText">${t.gd > 0 ? '+' + t.gd : t.gd}</span>
+                      <span class="w-8 text-right font-bold text-amber-400 text-xs">${t.pts} PTS</span>
+                    </div>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function setGroupFilter(grp) {
+      activeGroupFilter = grp;
+      renderGroupStandingsModal();
+    }
+
+    function showWorldCupTrophyCeremony(winnerCode) {
+      const modal = document.getElementById("trophy-ceremony-modal");
+      if (!modal || !winnerCode) return;
+
+      const isZh = (typeof currentLang !== "undefined" && currentLang === "zh");
+      const winnerName = (typeof getTeamName === "function") ? getTeamName(winnerCode) : winnerCode;
+      const winnerCap = (typeof getCapitalName === "function") ? getCapitalName(winnerCode) : winnerCode;
+      const year = document.getElementById("header-year")?.innerText || "2026";
+
+      const titleEl = document.getElementById("trophy-ceremony-subtitle");
+      const nameEl = document.getElementById("trophy-ceremony-winner-name");
+      const detailsEl = document.getElementById("trophy-ceremony-details");
+
+      if (titleEl) titleEl.innerText = isZh ? `🏆 ${year} 世界杯无上荣耀 · 全境征服者 🏆` : `🏆 ${year} WORLD CUP CHAMPION CONQUEROR 🏆`;
+      if (nameEl) nameEl.innerText = isZh ? winnerName : winnerName.toUpperCase();
+      if (detailsEl) {
+        detailsEl.innerHTML = `
+          <p class="font-bold text-amber-300">${isZh ? `帝国首都：${winnerCap}` : `Capital: ${winnerCap}`}</p>
+          <p>${isZh ? '征服 47 个对决阵营 · 荣登世界之巅' : 'Conquered 47 Factions across 104 Battle Rounds'}</p>
+        `;
+      }
+
+      modal.classList.remove("hidden");
+      if (typeof audio !== "undefined" && audio.playVictory) audio.playVictory();
+    }
+
+    function closeTrophyCeremonyModal() {
+      const modal = document.getElementById("trophy-ceremony-modal");
+      if (modal) modal.classList.add("hidden");
+    }
+
+    function replayTrophyCeremony() {
+      if (typeof audio !== "undefined" && audio.playVictory) audio.playVictory();
+    }
+  </script>
 </body>
 </html>

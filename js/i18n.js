@@ -66,6 +66,8 @@ const I18N = {
     sfxOff: "SFX: OFF",
     editionLabel: "Edition:",
     shareBtn: "BRACKET & SHARE",
+    standingsBtn: "STANDINGS",
+    clashOverride: "OVERRIDE WINNER",
     resetOverridesBtn: "RESET",
     tabMap: "MAP VIEW",
     tabLeaderboard: "HOLDINGS",
@@ -175,6 +177,8 @@ const I18N = {
     swapSlot: "目标席位",
     swapCurrent: "当前阵营",
     clashReplay: "重播进球",
+    standingsBtn: "小组积分榜",
+    clashOverride: "改写胜者",
     clashSkip: "跳过 ⏩"
   }
 };
@@ -238,6 +242,12 @@ function updateLanguageUI() {
 
   const shareText = document.getElementById("share-btn-text");
   if (shareText) shareText.innerText = t.shareBtn;
+
+  const standingsText = document.getElementById("standings-btn-text");
+  if (standingsText) standingsText.innerText = t.standingsBtn;
+
+  const overrideText = document.getElementById("clash-override-label");
+  if (overrideText) overrideText.innerText = t.clashOverride;
   const sidebarShareText = document.getElementById("sidebar-share-btn-text");
   if (sidebarShareText) sidebarShareText.innerText = t.shareBtn;
 
